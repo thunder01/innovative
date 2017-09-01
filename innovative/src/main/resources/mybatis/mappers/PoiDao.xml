@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.innovative.dao.PoiDao">
+
+
+
+
+
+
+	<!--添加专家信息-->
+	<insert id="addPoiExpert" parameterType="Expert">
+		INSERT INTO "Experts"
+		( "Avatar", "Contact", "CooperationStatus", "CreatedAt", "CreatedBy", "Deleted", "DeletedAt", "DeletedBy", "Education", "HFactor", "IsActive", "JobTitle", "Name", "Rank", "ResearchAchievement", "ResearchDirection", "Resume", "RowVersion", "Sectors", "Tags", "Unit", "UpdatedAt", "UpdatedBy", "File")
+	VALUES ( #{avatar}, #{contact}, #{cooperationStatus}, #{createdAt}, #{createdBy}, #{deleted}, #{createdAt}, #{deletedBy}, #{education}, #{hFactor}, #{isActive}, #{jobTitle}, #{name}, #{rank}, #{researchAchievement}, #{researchDirection}, #{resume}, #{rowVersion}, '${sectors}',  #{unit}, #{createdAt}, #{updatedBy}, '${file}')
+	</insert>
+
+
+<!--批量添加专家信息-->
+	<insert id="batchAddPoiExpert" parameterType="java.util.List">
+		INSERT INTO "Experts"
+		( "Avatar", "Contact", "CooperationStatus", "CreatedAt", "CreatedBy", "Deleted", "DeletedAt", "DeletedBy", "Education", "HFactor", "IsActive", "JobTitle", "Name", "Rank", "ResearchAchievement", "ResearchDirection", "Resume", "RowVersion", "Sectors",  "Unit", "UpdatedAt", "UpdatedBy", "File")
+		VALUES 
+	<foreach collection="list" item="item" open="(" separator="),(" close=")">
+		 <foreach item="v" index="key" collection="item.values" >
+          		#{v.avatar}, #{v.contact}, ${v.cooperationStatus}, now(), #{v.createdBy}, false, now(), #{v.deletedBy}, #{v.education}, ${v.hFactor}, true, #{v.jobTitle}, #{v.name}, ${v.rank}, #{v.researchAchievement}, #{v.researchDirection}, #{v.resume}, ${v.rowVersion}, '${v.sectors}',  #{v.unit}, now(), #{v.updatedBy}, #{v.file}
+          		
+    	</foreach>  
+        
+    </foreach>  
+	
+	</insert>
+
+
+
+
+
+	
+
+</mapper>

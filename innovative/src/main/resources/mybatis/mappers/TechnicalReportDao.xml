@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.innovative.dao.TechnicalReportDao">
+
+    <!--根据id获取技术报告-->
+    <select id="getTechnicalReportById" resultType="TechnicalReport">
+		SELECT "Name","Summary","Content","Pictures","Sectors","Tags","Rank","Id","File","CreatedAt","UpdatedAt"
+		FROM "TechnicalReports"
+		WHERE "Id" =  #{id}
+	</select>
+
+    <!--根据查询条件获取列表-->
+    <select id="getTechnicalReportListByCondition" resultType="TechnicalReport">
+        SELECT "Name","Summary","Content","Pictures","Sectors","Tags","Rank","Id","File","CreatedAt","UpdatedAt" FROM "TechnicalReports"
+        <where>
+            <if test="sectors != null and sectors != ''">
+                AND "Sectors" @> '${sectors}'
+            </if>
+            AND "Deleted" = 'f' AND "IsActive" = 't'
+        </where>
+        limit #{pageSize} offset #{startIndex}
+    </select>
+
+    <!--条件查询获取总条数-->
+    <select id="getCountByCondition" resultType="int">
+        SELECT COUNT("Id") FROM "TechnicalReports"
+        <where>
+            <if test="sectors != null and sectors != ''">
+                AND "Sectors" @> '${sectors}'
+            </if>
+            AND "Deleted" = 'f' AND "IsActive" = 't'
+        </where>
+    </select>
+
+    <!--新增技术报告-->
+    <insert id="insertTechnicalReport" parameterType="map">
+        INSERT INTO "TechnicalReports" ("Id", "Name", "Summary", "Content", "Sectors", "Tags", "Rank", "IsActive", "File", "Pictures", "CreatedBy", "RowVersion", "CreatedAt") VALUES (#{id}, #{name}, #{summary}, #{content}, '${sectors}', '${tags}', #{rank}, #{isActive}, '${fileUrls}', '${imageUrls}', '', 0, #{createdAt})
+    </insert>
+
+    <!--修改技术报告-->
+    <update id="updateTechnicalReport" parameterType="map">
+        UPDATE "TechnicalReports"
+        <set>
+            <if test="name != null and name != ''">
+                "Name" = #{name},
+            </if>
+            <if test="summary != null and summary != ''">
+                "Summary" = #{summary},
+            </if>
+            <if test="content != null and content != ''">
+                "Content" = #{content},
+            </if>
+            <if test="sector != null and sector != '{}'">
+                "Sector" = '${sector}',
+            </if>
+            <if test="tags != null and tags != '{}'">
+                "Tags" = '${tags}',
+            </if>
+            <if test="rank != null and rank != ''">
+                "Rank" = #{rank},
+            </if>
+            <if test="isActive != null and isActive != ''">
+                "IsActive" = #{isActive},
+            </if>
+            <if test="newId != null and newId != ''">
+                "Id" = #{newId},
+            </if>
+            "UpdatedAt" = #{updatedAt}
+        </set>
+        <where>
+            "Id" = #{id}
+        </where>
+    </update>
+
+</mapper>

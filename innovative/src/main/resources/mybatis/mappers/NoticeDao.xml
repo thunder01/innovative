@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.innovative.dao.NoticeDao">
+
+
+
+	<!--添加公告-->
+	<insert id="addNotice" parameterType="map">
+		INSERT INTO "Notices"
+		("Content", "CreatedAt", "CreatedBy", "Deleted", "DeletedAt", "DeletedBy", "FileName", "IsActive", "Rank", "RowVersion", "Summary", "Tags", "Title", "UpdatedAt", "UpdatedBy", "file")
+		VALUES (#{content}, #{createdAt}, #{createdBy}, #{deleted}, #{createdAt}, #{deletedBy}, #{fileName}, #{isActive}, #{rank}, #{rowVersion}, #{summary}, '${tags}', #{title}, #{createdAt}, #{updatedBy}, #{file})
+	</insert>
+
+
+
+
+
+	<!--公告列表-->
+	<select id="getNotices" resultType="Notice">
+		SELECT * FROM "Notices" WHERE "Deleted" = 'f' AND "IsActive" = 't' ORDER BY "CreatedAt" DESC
+	</select>
+
+
+
+
+	<!--公告逻辑删除-->
+	<update id="delNotice" parameterType="Integer">
+		UPDATE "Notices"
+		<set>
+			"Deleted" = 't',
+
+			"IsActive" = 'f'
+		</set>
+		where "Id"=#{id}
+	</update>
+
+
+
+	
+
+</mapper>

@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.innovative.dao.OrganizationDao">
+
+    <!--根据id获取机构详情-->
+	<select id="getOrganization" resultType="Organization">
+		SELECT * FROM "Organizations" WHERE "Id" =  #{id};
+	</select>
+
+
+
+	<!--根据查询条件获取列表-->
+	<select id="getOrganizationList" resultType="Organization">
+		SELECT * FROM "Organizations"
+		<where>
+			<if test="sectors!=null and sectors!=''">
+				 "Sectors" @> '${sectors}'
+			</if>
+		</where>
+		limit #{pageSize} offset #{startIndex}
+	</select>
+
+
+	<!--查询行业领域搜索条件的总条数-->
+	<select id="getTotalCount" resultType="int">
+		SELECT count(1) FROM "Organizations"
+		<where>
+			<if test="sectors!=null and sectors!=''">
+				"Sectors" @> '${sectors}'
+			</if>
+			AND "Deleted" = 'f' AND "IsActive" = 't'
+		</where>
+	</select>
+
+
+	<!--添加机构信息-->
+	<insert id="addOrganization" parameterType="map">
+		INSERT INTO "Organizations"
+		("Id", "Achievements", "Contact", "CooperationStatus", "CreatedAt", "CreatedBy", "Deleted", "DeletedAt", "DeletedBy", "Introduction", "IsActive", "Logo", "Name", "Nature", "Rank", "RowVersion", "Sectors", "Tags", "UpdatedAt", "UpdatedBy", "Website", "File")
+	VALUES (#{id}, #{achievements}, #{contact}, #{cooperationStatus}, #{createdAt}, #{createdBy}, #{deleted}, #{createdAt}, #{deletedBy}, #{introduction}, #{isActive}, '${logo}', #{name}, #{nature}, #{rank}, #{rowVersion}, '${sectors}', '${tags}', #{createdAt}, #{updatedBy}, #{website}, '${file}')
+	</insert>
+
+
+
+
+
+	<!--修改机构信息-->
+	<update id="updateOrganization" parameterType="map">
+		UPDATE "Organizations"
+		<set>
+			<if test="name!=null and name!=''">
+				"Name"=#{name},
+			</if>
+			<if test="introduction!=null and introduction!=''">
+				"Introduction"=#{introduction},
+			</if>
+			<if test="nature!=null and nature!=''">
+				"Nature"=#{nature},
+			</if>
+			<if test="achievements!=null and achievements!=''">
+				"Achievements"=#{achievements},
+			</if>
+			<if test="cooperationStatus!=null and cooperationStatus!=''">
+				"CooperationStatus"=#{cooperationStatus},
+			</if>
+			<if test="contact!=null and contact!=''">
+				"Contact"=#{contact},
+			</if>
+			<if test="website!=null and website!=''">
+				"Website"=#{website},
+			</if>
+			<if test="sectors!=null and sectors!=''">
+				"Sectors"='${sectors}',
+			</if>
+			<if test="tags!=null and tags!=''">
+				"Tags"='${tags}',
+			</if>
+			<if test="rank!=null and rank!=''">
+				"Rank"=#{rank},
+			</if>
+			<if test="isActive!=null and isActive!=''">
+				"IsActive"=#{isActive},
+			</if>
+			<if test="updateId!=null and updateId!=''">
+				"Id"=#{updateId},
+			</if>
+			<if test="updatedBy!=null and updatedBy!=''">
+				"UpdatedBy"=#{updatedBy},
+			</if>
+				"UpdatedAt"=#{updateTime}
+		</set>
+		where "Id"=#{id}
+	</update>
+
+
+
+
+
+	
+
+</mapper>

@@ -1,0 +1,15 @@
+package com.innovative.dao;
+
+import com.innovative.bean.Expert;
+
+public interface PoiDao {
+
+
+
+    //批量添加专家信息
+    int addPoiExpert(Expert addExpert);
+
+
+
+
+}

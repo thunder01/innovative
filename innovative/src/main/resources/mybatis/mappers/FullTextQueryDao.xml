@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.innovative.dao.FullTextQueryDao">
+
+    <!--根据查询条件获取列表-->
+    <select id="getExpertList" resultType="Expert">
+        SELECT * FROM "Experts"
+        <where>
+            <if test="key1!='%%' and key1!='%null%'">
+                OR "Name" LIKE #{key1}
+            </if>
+            <if test="key1!='%%' and key1!='%null%'">
+                OR "Unit" LIKE #{key1}
+            </if>
+            <if test="key1!='%%' and key1!='%null%'">
+                OR "ResearchDirection" LIKE #{key1}
+            </if>
+            <if test="key1!='%%' and key1!='%null%'">
+                OR "Education" LIKE #{key1}
+            </if>
+            <if test="key1!='%%' and key1!='%null%'">
+                OR "JobTitle" LIKE #{key1}
+            </if>
+            <if test="key2!='{}' and key2!='{null}'">
+                OR "Sectors" @> '${key2}'
+            </if>
+        </where>
+    </select>
+
+
+    <select id="getOrganizationList" resultType="Organization">
+        SELECT * FROM "Organizations"
+        <where>
+            <if test="key1!='%%' and key1!='%null%'">
+                OR "Name" LIKE #{key1}
+            </if>
+            <if test="key2!='{}' and key2!='{null}'">
+                OR "Sectors" @> '${key2}'
+            </if>
+        </where>
+    </select>
+
+
+    <select id="getTechnicalReportList" resultType="TechnicalReport">
+        SELECT * FROM "TechnicalReports"
+        <where>
+            <if test="key1!='%%' and key1!='%null%'">
+                OR "Name" LIKE #{key1}
+            </if>
+            <if test="key2!='{}' and key2!='{null}'">
+                OR "Sectors" @> '${key2}'
+            </if>
+            <if test="key2!='{}' and key2!='{null}'">
+                OR "Tags" @> '${key2}'
+            </if>
+        </where>
+    </select>
+
+
+    <select id="getSolutionList" resultType="Solution">
+        SELECT * FROM "Solutions"
+        <where>
+            <if test="key1!='%%' and key1!='%null%'">
+                OR "Name" LIKE #{key1}
+            </if>
+            <if test="key2!='{}' and key2!='{null}'">
+                OR "Sectors" @> '${key2}'
+            </if>
+            <if test="key2!='{}' and key2!='{null}'">
+                OR "Tags" @> '${key2}'
+            </if>
+        </where>
+    </select>
+
+
+    <select id="getEquipmentList" resultType="Equipment">
+        SELECT * FROM "Equipments"
+        <where>
+            <if test="key1!='%%' and key1!='%null%'">
+                OR "Unit" LIKE #{key1}
+            </if>
+            <if test="key2!='{}' and key2!='{null}'">
+                OR "Sectors" @> '${key2}'
+            </if>
+        </where>
+    </select>
+
+
+    <!--根据查询条件获取列表-->
+    <select id="getAssociationList" resultType="Association">
+        SELECT * FROM "Associations"
+        <where>
+            <if test="key1!='%%' and key1!='%null%'">
+                OR "Name" LIKE #{key1}
+            </if>
+            <if test="key2!='{}' and key2!='{null}'">
+                OR "Sectors" @> '${key2}'
+            </if>
+        </where>
+    </select>
+
+
+</mapper>

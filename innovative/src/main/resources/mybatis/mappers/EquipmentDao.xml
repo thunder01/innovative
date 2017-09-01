@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.innovative.dao.EquipmentDao">
+
+    <!--根据id获取设备信息-->
+    <select id="getEquipmentById" resultType="Equipment">
+		SELECT "Name","Picture","Unit","State","Manufacturer","Introduction","Sharing","Contact","Sectors","Tags","Rank","RowVersion","IsActive","Id","File","Deleted","CreatedAt","UpdatedAt"
+		FROM "Equipments"
+		WHERE "Id" =  #{id}
+	</select>
+
+    <!--根据查询条件获取列表-->
+    <select id="getEquipmentListByCondition" resultType="Equipment">
+        SELECT "Name","Picture","Unit","State","Manufacturer","Introduction","Sharing","Contact","Sectors","Tags","Rank","RowVersion","IsActive","Id","File","Deleted","CreatedAt","UpdatedAt"
+        FROM "Equipments"
+        <where>
+            <if test="sectors != null and sectors != ''">
+                AND "Sectors" @> '${sectors}'
+            </if>
+            AND "Deleted" = 'f' AND "IsActive" = 't'
+        </where>
+        limit #{pageSize} offset #{startIndex}
+    </select>
+
+    <!--条件查询获取总条数-->
+    <select id="getCountByCondition" resultType="int">
+        SELECT COUNT("Id") FROM "Equipments"
+        <where>
+            <if test="sectors != null and sectors != ''">
+                AND "Sectors" @> '${sectors}'
+            </if>
+            AND "Deleted" = 'f' AND "IsActive" = 't'
+        </where>
+    </select>
+
+    <!--新增设备-->
+    <insert id="insertEquipment" parameterType="map">
+        INSERT INTO "Equipments"
+        ("Id", "Sharing", "Name", "Unit", "State", "Manufacturer", "PurchasedAt", "Introduction", "Picture", "Contact", "Sectors", "Tags", "Rank", "IsActive", "File", "CreatedBy", "RowVersion", "CreatedAt")
+        VALUES
+        (#{id}, #{sharing}, #{name}, #{unit}, #{state}, #{manufacturer}, #{purchasedAt}, #{introduction}, #{picture}, #{contact}, '${sectors}', '${tags}', #{rank}, #{isActive}, #{file}, '', 0, #{createdAt})
+    </insert>
+
+    <!--修改设备-->
+    <update id="updateEquipment" parameterType="map">
+        UPDATE "Equipments"
+        <set>
+            <if test="sharing != null and sharing != ''">
+                "Sharing" = #{sharing},
+            </if>
+            <if test="name != null and name != ''">
+                "Name" = #{name},
+            </if>
+            <if test="unit != null and unit != ''">
+                "Unit" = #{unit},
+            </if>
+            <if test="state != null and state != ''">
+                "State" = #{state},
+            </if>
+            <if test="manufacturer != null and manufacturer != ''">
+                "Manufacturer" = #{manufacturer},
+            </if>
+            <if test="purchasedAt != null and purchasedAt != ''">
+                "PurchasedAt" = #{purchasedAt},
+            </if>
+            <if test="introduction != null and introduction != ''">
+                "Introduction" = #{introduction},
+            </if>
+            <if test="contact != null and contact != ''">
+                "Contact" = #{contact},
+            </if>
+            <if test="sector != null and sector != '{}'">
+                "Sector" = '${sector}',
+            </if>
+            <if test="tags != null and tags != '{}'">
+                "Tags" = '${tags}',
+            </if>
+            <if test="rank != null and rank != ''">
+                "Rank" = #{rank},
+            </if>
+            <if test="isActive != null and isActive != ''">
+                "IsActive" = #{isActive},
+            </if>
+            <if test="newId != null and newId != ''">
+                "Id" = #{newId},
+            </if>
+            "UpdatedAt" = #{updatedAt}
+        </set>
+        <where>
+            "Id" = #{id}
+        </where>
+    </update>
+
+</mapper>
