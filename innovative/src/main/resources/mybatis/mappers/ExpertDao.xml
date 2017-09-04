@@ -30,13 +30,6 @@
 	  <result property="tags" column="tags" typeHandler="com.innovative.mybatisHandler.ArrayTypeHandler"/>
 	   <result property="sectors" column="sectors" typeHandler="com.innovative.mybatisHandler.ArrayTypeHandler"/>
 	</resultMap> 
-	
-	<resultMap id="statusMap" type="Map">
-	  <result property="name" column="value"/>
-	  <result property="value" column="code"/>
-	  <result property="status" column="title"/>
-	   <result property="rank" column="rank"/>
-	</resultMap> 
 
     <!--根据id获取专家详情-->
 	<select id="getExpert" resultMap="expertMap">
@@ -179,17 +172,6 @@
 	</update>
 
 
-<!--查询行业领域搜索条件的总条数-->
-	<select id="getCodeAtatusList" resultMap="statusMap">
-		SELECT "code","value","rank","title" FROM "app_codeitem"
-		<where>
-				"type" = #{cooperType}
-			<if test="cooperationStatus!=null and cooperationStatus!=''">
-				 and "code" = '${cooperationStatus}'
-			</if>
-				
-		</where>
-	</select>
 
 
 	

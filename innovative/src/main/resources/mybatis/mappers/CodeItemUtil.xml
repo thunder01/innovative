@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.innovative.utils.CodeItemUtil">
+	
+	<resultMap id="statusMap" type="Map">
+	  <result property="name" column="value"/>
+	  <result property="value" column="code"/>
+	  <result property="status" column="title"/>
+	   <result property="rank" column="rank"/>
+	</resultMap> 
+
+
+
+<!--查询行业领域搜索条件的总条数-->
+	<select id="getCodeItemList" resultMap="statusMap">
+		SELECT "code","value","rank","title" FROM "app_codeitem"
+		<where>
+				"type" = #{type}
+			<if test="code!=null and code!=''">
+				 and "code" = '${code}'
+			</if>
+				and "isActive" = 't'
+		</where>
+	</select>
+
+
+	
+
+</mapper>

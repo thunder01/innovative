@@ -3,6 +3,7 @@ package com.innovative.service;
 import com.alibaba.druid.util.StringUtils;
 import com.innovative.bean.Expert;
 import com.innovative.dao.ExpertDao;
+import com.innovative.utils.CodeItemUtil;
 import com.innovative.utils.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,8 @@ public class ExpertService {
 
     @Autowired
     ExpertDao expertDao;
+    @Autowired
+    CodeItemUtil codeItemUtil;
 
 
     /**
@@ -26,7 +29,7 @@ public class ExpertService {
     public Expert getExpert(Integer id){
     	
         		Expert expert =	expertDao.getExpert(id);
-        		List<Map<String,Object>> statusMap = expertDao.getCodeAtatusList("EXPERT_COOPERSTATUS",expert.getCooperationStatus());
+        		List<Map<String,Object>> statusMap = codeItemUtil.getCodeItemList("EXPERT_COOPERSTATUS",expert.getCooperationStatus());
         		expert.setCooperationStatusMap(statusMap.get(0));
         		return expert;
     }
