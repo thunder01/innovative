@@ -3,22 +3,15 @@ package com.innovative.controller;
 import com.innovative.bean.Expert;
 import com.innovative.service.ExpertService;
 import com.innovative.utils.BaseController;
-import com.innovative.utils.FileUpload;
 import com.innovative.utils.JsonResult;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.sql.Timestamp;
-import java.util.HashMap;
-import java.util.Map;
 
 
 @RestController
@@ -30,8 +23,7 @@ public class ExpertController extends BaseController {
 
     @Autowired
     ExpertService expertService;
-
-
+  
     /**
      * 根据id获取专家详情
      *
@@ -40,7 +32,7 @@ public class ExpertController extends BaseController {
      */
     @RequestMapping(value = "/getExpert/{id}", method = RequestMethod.GET)
     public JsonResult getExpert(@PathVariable(name = "id") Integer id) {
-
+    	
         Expert expert = expertService.getExpert(id);
         if (expert != null) {
             return new JsonResult(true, expert);
@@ -95,34 +87,7 @@ public class ExpertController extends BaseController {
     @ResponseBody
     public JsonResult addExpert(@RequestBody Expert expert) {
 
-       /* //map集合存放请求参数
-        Map<String, Object> params = new HashMap<>();
-        params.put("name", expert.getName());
-        params.put("unit", expert.getUnit());
-        params.put("education", expert.getEducation());
-        params.put("jobTitle", expert.getJobTitle());
-        params.put("hFactor", expert.gethFactor());
-        params.put("researchDirection", expert.getResearchDirection());
-        params.put("researchAchievement", expert.getResearchAchievement());
-        params.put("resume", expert.getName());
-        params.put("contact", expert.getContact());
-        params.put("cooperationStatus", expert.getCooperationStatus());
-        params.put("sectors",   expert.getSectors());//需要处理
-        params.put("tags",  expert.getTags() );//需要处理
-        params.put("rank", expert.getRank());
-        params.put("isActive", expert.isActive());
-        params.put("id", expert.getId());
-        params.put("createdBy", "");
-        params.put("deleted", false);
-        params.put("deletedBy", "");
-        params.put("rowVersion", 0);
-        params.put("updatedBy", "");
-        params.put("createdAt", new Timestamp(System.currentTimeMillis()));*/
 
-
-        //获取上传文件和图片后返回的url地址
-       /* params.put("avatar", "{" + FileUpload.getUrls(avatar, "Experts") + "}");
-        params.put("file", "{" + FileUpload.getUrls(file, "Experts") + "}");*/
 
         if (!expertService.addForExpert(expert)) {
             return new JsonResult(false, "新增失败，请重试！");

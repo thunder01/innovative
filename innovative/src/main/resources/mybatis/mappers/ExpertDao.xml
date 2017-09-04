@@ -28,7 +28,7 @@
 	  <result property="updatedBy" column="updatedBy"/>
 	  <result property="file" column="file"/>
 	  <result property="tags" column="tags" typeHandler="com.innovative.mybatisHandler.ArrayTypeHandler"/>
-	   <result property="sectors" column="sectors" typeHandler="com.innovative.mybatisHandler.ArrayTypeHandler"/>
+	  <result property="sectors" column="sectors" typeHandler="com.innovative.mybatisHandler.ArrayTypeHandler"/>
 	</resultMap> 
 
     <!--根据id获取专家详情-->
@@ -75,7 +75,7 @@
 	<insert id="addForExpert" parameterType="Expert" >
 		INSERT INTO "Experts"
 		( "Avatar", "Contact", "CooperationStatus", "CreatedAt", "CreatedBy", "Deleted", "DeletedAt", "DeletedBy", "Education", "HFactor", "IsActive", "JobTitle", "Name", "Rank", "ResearchAchievement", "ResearchDirection", "Resume", "RowVersion", "Sectors", "Tags", "Unit", "UpdatedAt", "UpdatedBy", "File")
-		VALUES ( '${avatar}', #{contact}, #{cooperationStatus}, now(), 'test', false, now(), 'test', #{education}, #{hFactor}, #{isActive}, #{jobTitle}, #{name}, #{rank}, #{researchAchievement}, #{researchDirection}, #{resume}, #{rowVersion},
+		VALUES ( '${avatar}', #{contact}, #{cooperationStatus}, now(), #{createdBy}, false, now(), #{createdBy}, #{education}, #{hFactor}, #{isActive}, #{jobTitle}, #{name}, #{rank}, #{researchAchievement}, #{researchDirection}, #{resume}, #{rowVersion},
 	
 	<choose>
 		<when test="sectors != null">
@@ -93,7 +93,7 @@
 		</when>
 		<otherwise>null,</otherwise>
 	</choose>
-	  #{unit}, now(), 'test', '${file}')
+	  #{unit}, now(), #{createdBy}, '${file}')
 	</insert>
 
 

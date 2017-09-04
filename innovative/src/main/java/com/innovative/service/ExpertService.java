@@ -19,6 +19,8 @@ public class ExpertService {
     ExpertDao expertDao;
     @Autowired
     CodeItemUtil codeItemUtil;
+  
+    
 
 
     /**
@@ -69,6 +71,8 @@ public class ExpertService {
      * @return
      */
     public boolean addExpert(Map<String, Object> params) {
+    	
+    	
         return (expertDao.addExpert(params) > 0);
     }
 
@@ -88,7 +92,11 @@ public class ExpertService {
 
 
 	public boolean addForExpert(Expert expert) {
-		  return (expertDao.addForExpert(expert) > 0);
+		/*String username = CookiesUtil.getCookieValue("user_uid");
+		if(username!=null&&username.length()>0)
+			expert.setCreatedBy(username);*/
+		
+		 return (expertDao.addForExpert(expert) > 0);
 	}
 
 
