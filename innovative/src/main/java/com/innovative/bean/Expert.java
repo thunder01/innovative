@@ -3,6 +3,7 @@ package com.innovative.bean;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Arrays;
+import java.util.Map;
 
 import com.innovative.mybatisHandler.ArrayTypeHandler;
 
@@ -16,6 +17,9 @@ public class Expert implements Serializable{
 	private String avatar;//头像
 	private String contact;//联系方式
 	private int cooperationStatus;//合作状态
+	private String cooperName;//合作状态
+	private Map cooperationStatusMap;
+	private String title;//合作状态
 	private Timestamp createdAt; //创建时间
 	private String createdBy; //创建来源
 	private boolean deleted;  //是否删除
@@ -38,6 +42,26 @@ public class Expert implements Serializable{
 	private Timestamp updatedAt; //修改时间
 	private String updatedBy;   //修改来源
 	private String file;  //文件
+	
+	
+	public Map getCooperationStatusMap() {
+		return cooperationStatusMap;
+	}
+	public void setCooperationStatusMap(Map cooperationStatusMap) {
+		this.cooperationStatusMap = cooperationStatusMap;
+	}
+	public String getCooperName() {
+		return cooperName;
+	}
+	public void setCooperName(String cooperName) {
+		this.cooperName = cooperName;
+	}
+	public String getTitle() {
+		return title;
+	}
+	public void setTitle(String title) {
+		this.title = title;
+	}
 	public int getId() {
 		return id;
 	}

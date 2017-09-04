@@ -60,4 +60,13 @@ public interface ExpertDao {
 
 
 
+	/**
+	 * 获取配置表中的合作状态对应的 name value  title rank 等信息 （这个方法需要挪动到 util 类中）
+	 * @param cooperType  类型
+	 * @param cooperationStatus  合作状态
+	 */
+	Map getCodeAtatus(@Param("cooperType")String cooperType, @Param("cooperationStatus")int cooperationStatus);
+
+
+
 }

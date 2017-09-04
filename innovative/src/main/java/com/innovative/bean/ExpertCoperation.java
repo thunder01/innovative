@@ -16,15 +16,8 @@ public class ExpertCoperation implements Serializable{
 	private String  name;
 	private String  value;
 	private String  status;
-	private String  id;
+	private Integer  rank;
 	
-	
-	public ExpertCoperation(String name, String value, String status, String id) {
-		this.name = name;
-		this.value = value;
-		this.status = status;
-		this.id = id;
-	}
 	public String getName() {
 		return name;
 	}
@@ -43,15 +36,11 @@ public class ExpertCoperation implements Serializable{
 	public void setStatus(String status) {
 		this.status = status;
 	}
-	public String getId() {
-		return id;
+	public Integer getRank() {
+		return rank;
 	}
-	public void setId(String id) {
-		this.id = id;
-	}
-	@Override
-	public String toString() {
-		return "ExpertCoperation [name=" + name + ", value=" + value + ", status=" + status + ", id=" + id + "]";
+	public void setRank(Integer rank) {
+		this.rank = rank;
 	}
 	
 	
