@@ -26,8 +26,8 @@ public class ExpertService {
     public Expert getExpert(Integer id){
     	
         		Expert expert =	expertDao.getExpert(id);
-        		Map statusMap = expertDao.getCodeAtatus("EXPERT_COOPERSTATUS",expert.getCooperationStatus());
-        		expert.setCooperationStatusMap(statusMap);
+        		List<Map<String,Object>> statusMap = expertDao.getCodeAtatusList("EXPERT_COOPERSTATUS",expert.getCooperationStatus());
+        		expert.setCooperationStatusMap(statusMap.get(0));
         		return expert;
     }
 

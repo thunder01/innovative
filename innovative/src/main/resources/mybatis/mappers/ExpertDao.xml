@@ -31,7 +31,7 @@
 	   <result property="sectors" column="sectors" typeHandler="com.innovative.mybatisHandler.ArrayTypeHandler"/>
 	</resultMap> 
 	
-	<resultMap id="statusMap" type="com.innovative.bean.ExpertCoperation">
+	<resultMap id="statusMap" type="Map">
 	  <result property="name" column="value"/>
 	  <result property="value" column="code"/>
 	  <result property="status" column="title"/>
@@ -180,13 +180,14 @@
 
 
 <!--查询行业领域搜索条件的总条数-->
-	<select id="getCodeAtatus" resultMap="statusMap">
+	<select id="getCodeAtatusList" resultMap="statusMap">
 		SELECT "code","value","rank","title" FROM "app_codeitem"
 		<where>
-			<if test="cooperationStatus!=null and cooperationStatus!=''">
 				"type" = #{cooperType}
+			<if test="cooperationStatus!=null and cooperationStatus!=''">
+				 and "code" = '${cooperationStatus}'
 			</if>
-				 and "code" = #{cooperationStatus}
+				
 		</where>
 	</select>
 

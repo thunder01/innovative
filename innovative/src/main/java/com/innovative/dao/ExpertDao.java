@@ -65,7 +65,7 @@ public interface ExpertDao {
 	 * @param cooperType  类型
 	 * @param cooperationStatus  合作状态
 	 */
-	Map getCodeAtatus(@Param("cooperType")String cooperType, @Param("cooperationStatus")int cooperationStatus);
+	List<Map<String,Object>> getCodeAtatusList(@Param("cooperType")String cooperType, @Param("cooperationStatus")int cooperationStatus);
 
 
 
