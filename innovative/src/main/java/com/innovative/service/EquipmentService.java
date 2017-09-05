@@ -59,11 +59,12 @@ public class EquipmentService {
 
         //数据组装
         Map<String, Object> map = new HashMap<>();
-        map.put("items", items);
+        map.put("equipments", items);
         map.put("totalCount", totalCount);
-        map.put("offset", offset);
-        map.put("limit", limit);
-        map.put("count", items.size());
+        map.put("equipmentsCount", items.size());
+        map.put("pageSize()", pageInfo.getPageSize());
+        map.put("currentPageNum()", pageInfo.getCurrentPageNum());
+        
 
         return map;
 

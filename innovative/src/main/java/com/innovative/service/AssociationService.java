@@ -54,6 +54,8 @@ public class AssociationService {
         map.put("associations", associations);
         map.put("totalCount", totalCount);
         map.put("associationCount", associations.size());
+        map.put("pageSize()", pageInfo.getPageSize());
+        map.put("currentPageNum()", pageInfo.getCurrentPageNum());
         return map;
     }
 

@@ -58,11 +58,12 @@ public class SolutionService {
 
         //数据组装
         Map<String, Object> map = new HashMap<>();
-        map.put("items", items);
+        map.put("solution", items);
         map.put("totalCount", totalCount);
-        map.put("offset", offset);
-        map.put("limit", limit);
-        map.put("count", items.size());
+        //map.put("offset", offset);
+        map.put("solutionCount", items.size());
+        map.put("pageSize()", pageInfo.getPageSize());
+        map.put("currentPageNum()", pageInfo.getCurrentPageNum());
 
         return map;
 

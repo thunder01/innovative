@@ -12,7 +12,7 @@ import tk.mybatis.mapper.annotation.ColumnType;
 //专家表
 public class Expert implements Serializable{
 
-	private static final long serialVersionUID = -5311404303222383742L;
+	//private static final long serialVersionUID = -5311404303222383742L;
 	private int id;//主键
 	private String avatar;//头像
 	private String contact;//联系方式

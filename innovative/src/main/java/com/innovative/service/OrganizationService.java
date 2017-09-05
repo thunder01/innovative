@@ -51,6 +51,9 @@ public class OrganizationService {
         map.put("organizations", organizations);
         map.put("totalCount", totalCount);
         map.put("organizationCount", organizations.size());
+        map.put("pageSize()", pageInfo.getPageSize());
+        map.put("currentPageNum()", pageInfo.getCurrentPageNum());
+        
         return map;
     }
 

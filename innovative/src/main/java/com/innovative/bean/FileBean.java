@@ -18,7 +18,7 @@ public class FileBean  {
 	
     public FileBean() {
     }
-
+ 
 
 
 	public MultipartFile[] getFile() {

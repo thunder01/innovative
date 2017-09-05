@@ -60,6 +60,8 @@ public class ExpertService {
         map.put("experts", experts);
         map.put("totalCount", totalCount);
         map.put("expertCount", experts.size());
+        map.put("pageSize()", pageInfo.getPageSize());
+        map.put("currentPageNum()", pageInfo.getCurrentPageNum());
         return map;
     }
 
