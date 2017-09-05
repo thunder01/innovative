@@ -9,21 +9,18 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class CookiesUtil {
+public  class CookiesUtil {
 
 
-    
-	 @Autowired
-    private static HttpServletRequest request;
     
 	/**
 	 * 根据cookie名字获取值
 	 * @param cookiename
 	 * @return
 	 */
-	 public static  String getCookieValue(String cookiename){
+	 public static  String getCookieValue(HttpServletRequest request,String cookiename){
 		  String username = "admin";
-			Cookie[] cookies = getCookies();
+			Cookie[] cookies = getCookies(request);
 			if (null==cookies) {//如果没有cookie数组
 		        return username;
 		    } else {
@@ -39,7 +36,7 @@ public class CookiesUtil {
 	  * 拿出所有cookies
 	  * @return
 	  */
-	 public static  Cookie[] getCookies(){
+	 public static  Cookie[] getCookies(HttpServletRequest request){
 			Cookie[] cookies = request.getCookies();
 			
 			return request.getCookies();

@@ -38,7 +38,7 @@
 
 
 	<!--根据查询条件获取列表-->
-	<select id="getExpertList" resultType="Expert">
+	<select id="getExpertList" resultMap="expertMap">
 		SELECT * FROM "Experts"
 		<where>
 			<if test="sectors!=null and sectors!=''">
@@ -67,7 +67,7 @@
 	<insert id="addExpert" parameterType="map">
 		INSERT INTO "Experts"
 		("Id", "Avatar", "Contact", "CooperationStatus", "CreatedAt", "CreatedBy", "Deleted", "DeletedAt", "DeletedBy", "Education", "HFactor", "IsActive", "JobTitle", "Name", "Rank", "ResearchAchievement", "ResearchDirection", "Resume", "RowVersion", "Sectors", "Tags", "Unit", "UpdatedAt", "UpdatedBy", "File")
-	VALUES (#{id}, '${avatar}', #{contact}, #{cooperationStatus}, now(), #{createdBy}, false, now(), #{deletedBy}, #{education}, #{hFactor}, #{isActive}, #{jobTitle}, #{name}, #{rank}, #{researchAchievement}, #{researchDirection}, #{resume}, #{rowVersion}, '${sectors}', '${tags}', #{unit}, #{createdAt}, #{updatedBy}, '${file}')
+	VALUES (#{id}, '${avatar}', #{contact}, #{cooperationStatus}, now(), #{createdBy}, false, now(), #{deletedBy}, #{education}, #{hFactor}, #{isActive}, #{jobTitle}, #{name}, #{rank}, #{researchAchievement}, #{researchDirection}, #{resume}, #{rowVersion}, '${sectors}', '${tags}', #{unit}, #{createdAt}, #{createdBy}, '${file}')
 	</insert>
 
 
@@ -100,7 +100,7 @@
 
 
 	<!--修改专家信息-->
-	<update id="updateExpert" parameterType="map">
+	<update id="updateExpert" parameterType="Expert">
 		UPDATE "Experts"
 		<set>
 			<if test="name!=null and name!=''">
@@ -160,13 +160,13 @@
 			<if test="isActive!=null and isActive!=''">
 				"IsActive"=#{isActive},
 			</if>
-			<if test="updateId!=null and updateId!=''">
+			<!-- <if test="updateId!=null and updateId!=''">
 				"Id"=#{updateId},
-			</if>
+			</if> -->
 			<if test="updatedBy!=null and updatedBy!=''">
 				"UpdatedBy"=#{updatedBy},
 			</if>
-				"UpdatedAt"=#{updateTime}
+				"UpdatedAt"=now()
 		</set>
 		where "Id"=#{id}
 	</update>

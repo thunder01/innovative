@@ -38,19 +38,19 @@ public interface OrganizationDao {
 
     /**
      * 添加机构信息
-     * @param params 新增参数
+     * @param organization 新增参数
      * @return
      */
-    int addOrganization(Map<String, Object> params);
+    int addOrganization(Organization organization);
 
 
 
     /**
      * 修改机构信息
-     * @param params 修改参数
+     * @param organization 修改参数
      * @return
      */
-    int updateOrganization(Map<String, Object> params);
+    int updateOrganization(Organization organization);
 
 
 

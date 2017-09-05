@@ -40,18 +40,18 @@ public interface AssociationDao {
 
     /**
      * 添加行业协会
-     * @param params 新增参数
+     * @param association 新增参数
      * @return
      */
-    int addAssociation(Map<String, Object> params);
+    int addAssociation(Association association);
 
 
     /**
      * 修改行业协会
-     * @param params 修改参数
+     * @param association 修改参数
      * @return
      */
-    int updateAssociation(Map<String, Object> params);
+    int updateAssociation(Association association);
 
 
 

@@ -3,7 +3,11 @@ package com.innovative.controller;
 import com.innovative.bean.Expert;
 import com.innovative.service.ExpertService;
 import com.innovative.utils.BaseController;
+import com.innovative.utils.CookiesUtil;
 import com.innovative.utils.JsonResult;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -62,33 +66,16 @@ public class ExpertController extends BaseController {
 
 
 
-    /**
-     * 添加专家信息
-     * @param name              专家名称
-     * @param unit              所在单位
-     * @param education         最高学历
-     * @param jobTitle          职称
-     * @param hFactor           H因子
-     * @param researchDirection 研发方向
-     * @param researchAchievement    研发成果
-     * @param resume           个人简历
-     * @param avatar           头像
-     * @param contact           联系方式
-     * @param cooperationStatus   合作状态
-     * @param sectors          部门，领域
-     * @param tags                标签
-     * @param rank              等级
-     * @param isActive          是否在线
-     * @param id                    id
-     * @param file                  文件
-     * @return
-     */
+/**
+ * 新增专家
+ * @param expert 专家对象封装
+ * @return
+ */
     @RequestMapping(value = "/addExpert", method = RequestMethod.POST,produces="application/json;charset=UTF-8")
     @ResponseBody
-    public JsonResult addExpert(@RequestBody Expert expert) {
+    public JsonResult addExpert(@RequestBody Expert expert,HttpServletRequest req) {
 
-
-
+    	expert.setCreatedBy(CookiesUtil.getCookieValue(req,"user_name"));
         if (!expertService.addForExpert(expert)) {
             return new JsonResult(false, "新增失败，请重试！");
         }
@@ -100,62 +87,20 @@ public class ExpertController extends BaseController {
 
 
 
-    /**
-     * 根据专家id修改专家信息
-     *
-     * @param name              专家名称
-     * @param unit              所在单位
-     * @param education         最高学历
-     * @param jobTitle          职称
-     * @param hFactor           H因子
-     * @param researchDirection 研发方向
-     * @param researchAchievement    研发成果
-     * @param resume           个人简历
-     * @param contact           联系方式
-     * @param cooperationStatus   合作状态
-     * @param sectors          部门，领域
-     * @param tags                标签
-     * @param rank              等级
-     * @param isActive          是否在线
-     * @param id                    id
-     * @param updateId          修改后的id
-     * @return
-     */
+  /**
+   * 根据专家id 修改专家
+   * @param expert 专家对象
+   * @param req
+   * @return
+   */
     @RequestMapping(value = "/updateExpert", method = RequestMethod.POST)
     @ResponseBody
-    public JsonResult updateExpert(@RequestBody Expert expert) {
-
+    public JsonResult updateExpert(@RequestBody Expert expert,HttpServletRequest req) {
 
         if(expertService.getExpert(expert.getId()) == null){
             return new JsonResult(false, "此记录不存在");
         }
-
-       /* //map集合存放请求参数
-        Map<String, Object> params = new HashMap<>();
-
-        params.put("name", name);
-        params.put("unit", unit);
-        params.put("education", education);
-        params.put("jobTitle", jobTitle);
-        params.put("hFactor", hFactor);
-        params.put("researchDirection", researchDirection);
-        params.put("researchAchievement", researchAchievement);
-        params.put("resume", resume);
-        params.put("contact", contact);
-        params.put("cooperationStatus", cooperationStatus);
-        if(!StringUtils.isEmpty(sectors)){
-            params.put("sectors", "{" + sectors + "}");//需要处理
-        }
-        if(!StringUtils.isEmpty(tags)){
-            params.put("tags", "{" + tags + "}");//需要处理
-        }
-        params.put("rank", rank);
-        params.put("isActive", isActive);
-        params.put("id", id);
-        params.put("updateId", updateId);
-        params.put("updatedBy", "");
-        params.put("updateTime", new Timestamp(System.currentTimeMillis()));*/
-
+        expert.setUpdatedBy(CookiesUtil.getCookieValue(req,"user_name"));
         if (!expertService.updateExpert(expert)) {
             return new JsonResult(false, "修改失败，请重试！");
         }

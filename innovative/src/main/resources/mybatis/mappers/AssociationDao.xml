@@ -3,16 +3,41 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.innovative.dao.AssociationDao">
+	<resultMap id="associationMap" type="Association">
+	  <id property="id" column="id" />
+	  <result property="availableResources" column="availableResources"/>
+	  <result property="contact" column="contact"/>
+	  <result property="cooperationStatus" column="cooperationStatus"/>
+	  <result property="createdAt" column="createdAt"/>
+	  <result property="createdBy" column="createdBy"/>
+	  <result property="deleted" column="deleted"/>
+	  <result property="deletedAt" column="deletedAt"/>
+	  <result property="deletedBy" column="deletedBy"/>
+	  <result property="duration" column="duration"/>
+	  <result property="introduction" column="introduction"/>
+	  <result property="isActive" column="isActive"/>
+	  <result property="logo" column="logo"/>
+	  <result property="name" column="name"/>
+	  <result property="nature" column="nature"/>
+	  <result property="rank" column="rank"/>
+	  <result property="rowVersion" column="rowVersion"/>
+	  <result property="updatedAt" column="updatedAt"/>
+	  <result property="updatedBy" column="updatedBy"/>
+	  <result property="file" column="file"/>
+	  <result property="website" column="website"/>
+	  <result property="tags" column="tags" typeHandler="com.innovative.mybatisHandler.ArrayTypeHandler"/>
+	  <result property="sectors" column="sectors" typeHandler="com.innovative.mybatisHandler.ArrayTypeHandler"/>
+	</resultMap> 
 
     <!--根据id获取行业协会详情-->
-	<select id="getAssociation" resultType="Association">
+	<select id="getAssociation" resultMap="associationMap">
 		SELECT * FROM "Associations" WHERE "Id" =  #{id};
 	</select>
 
 
 
 	<!--根据查询条件获取列表-->
-	<select id="getAssociationList" resultType="Association">
+	<select id="getAssociationList" resultMap="associationMap">
 		SELECT * FROM "Associations"
 		<where>
 			<if test="sectors!=null and sectors!=''">
@@ -46,16 +71,33 @@
 
 
 	<!--添加行业协会-->
-	<insert id="addAssociation" parameterType="map">
+	<insert id="addAssociation" parameterType="Association">
 		INSERT INTO "Associations"
-		("Id", "AvailableResources", "Contact", "CooperationStatus", "CreatedAt", "CreatedBy", "Deleted", "DeletedAt", "DeletedBy", "Duration", "Introduction", "IsActive", "Logo", "Name", "Nature", "Rank", "RowVersion", "Sectors", "Tags", "UpdatedAt", "UpdatedBy", "Website", "File")
-	VALUES (#{id}, #{availableResources}, #{contact}, #{cooperationStatus}, #{createdAt}, #{createdBy}, #{deleted}, #{createdAt}, #{deletedBy}, #{duration}, #{introduction}, #{isActive}, '${logo}', #{name}, #{nature}, #{rank}, #{rowVersion}, '${sectors}', '${tags}', #{createdAt}, #{updatedBy}, #{website}, '${file}')
+		( "AvailableResources", "Contact", "CooperationStatus", "CreatedAt", "CreatedBy", "Deleted", "DeletedAt", "DeletedBy", "Duration", "Introduction", "IsActive", "Logo", "Name", "Nature", "Rank", "RowVersion", "Sectors", "Tags", "UpdatedAt", "UpdatedBy", "Website", "File")
+		VALUES ( #{availableResources}, #{contact}, #{cooperationStatus}, now(), #{createdBy}, #{deleted}, now(), #{deletedBy}, #{duration}, #{introduction}, #{isActive}, '${logo}', #{name}, #{nature}, #{rank}, #{rowVersion}, 
+		
+		<choose>
+		<when test="sectors != null">
+			<foreach item="sector" collection="sectors" separator="," open="'{" close="}'," index="">  
+		      ${sector}
+		    </foreach>  
+		</when>
+		<otherwise>null,</otherwise>
+	  </choose>
+	<choose>
+		<when test="tags != null">
+			<foreach item="tag" collection="tags" separator="," open="'{" close="}'," index="">  
+		      ${tag}
+		    </foreach>  
+		</when>
+		<otherwise>null,</otherwise>
+	</choose>
+		now(), #{createdBy}, #{website}, '${file}')
 	</insert>
 
 
-
 	<!--修改行业协会-->
-	<update id="updateAssociation" parameterType="map">
+	<update id="updateAssociation" parameterType="Association">
 		UPDATE "Associations"
 		<set>
 			<if test="name!=null and name!=''">
@@ -83,10 +125,25 @@
 				"Website"=#{website},
 			</if>
 			<if test="sectors!=null and sectors!=''">
-				"Sectors"='${sectors}',
+				"Sectors"=
+				<choose>
+					<when test="sectors != null">
+						<foreach item="sector" collection="sectors" separator="," open="'{" close="}'," index="">  
+					      ${sector}
+					    </foreach>  
+					</when>
+					<otherwise>null,</otherwise>
+				</choose>
 			</if>
 			<if test="tags!=null and tags!=''">
-				"Tags"='${tags}',
+				"Tags"=
+				<choose>
+					<when test="tags != null">
+						<foreach item="tag" collection="tags" separator="," open="'{" close="}'," index="">  
+					      ${tag}
+					    </foreach>  
+					</when>
+				</choose>
 			</if>
 			<if test="rank!=null and rank!=''">
 				"Rank"=#{rank},
@@ -94,13 +151,13 @@
 			<if test="isActive!=null and isActive!=''">
 				"IsActive"=#{isActive},
 			</if>
-			<if test="updateId!=null and updateId!=''">
-				"Id"=#{updateId},
+			<if test="id!=null and id!=''">
+				"Id"=#{id},
 			</if>
 			<if test="updatedBy!=null and updatedBy!=''">
 				"UpdatedBy"=#{updatedBy},
 			</if>
-				"UpdatedAt"=#{updateTime}
+				"UpdatedAt"=now()
 		</set>
 		where "Id"=#{id}
 	</update>

@@ -4,6 +4,7 @@ package com.innovative.service;
 import com.alibaba.druid.util.StringUtils;
 import com.innovative.bean.Association;
 import com.innovative.dao.AssociationDao;
+import com.innovative.utils.CookiesUtil;
 import com.innovative.utils.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -60,12 +61,12 @@ public class AssociationService {
 
     /**
      * 添加行业协会
-     * @param params 新增参数
+     * @param association 新增参数
      * @return
      */
-    public boolean addAssociation(Map<String, Object> params) {
+    public boolean addAssociation(Association association) {
 
-        return (associationDao.addAssociation(params) > 0);
+        return (associationDao.addAssociation(association) > 0);
     }
 
 
@@ -73,12 +74,12 @@ public class AssociationService {
 
     /**
      * 修改行业协会
-     * @param params 修改参数
+     * @param association 修改参数
      * @return
      */
-    public boolean updateAssociation(Map<String, Object> params) {
-
-        return (associationDao.updateAssociation(params) > 0);
+    public boolean updateAssociation(Association association) {
+    	
+        return (associationDao.updateAssociation(association) > 0);
     }
 
 

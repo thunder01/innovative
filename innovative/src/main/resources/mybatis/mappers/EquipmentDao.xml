@@ -3,21 +3,46 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.innovative.dao.EquipmentDao">
+	
+	<resultMap id="equipmentMap" type="Equipment">
+		  <id property="id" column="user_id" />
+		  <result property="contact" column="contact"/>
+		  <result property="createdBy" column="createdBy"/>
+		  <result property="createdAt" column="createdAt"/>
+		  <result property="deleted" column="deleted"/>
+		  <result property="deletedAt" column="deletedAt"/>
+		  <result property="deletedBy" column="deletedBy"/>
+		  <result property="introduction" column="introduction"/>
+		  <result property="isActive" column="isActive"/>
+		  <result property="manufacturer" column="manufacturer"/>
+		  <result property="name" column="name"/>
+		  <result property="picture" column="picture"/>
+		  <result property="purchasedAt" column="purchasedAt"/>
+		  <result property="rank" column="rank"/>
+		  <result property="rowVersion" column="rowVersion"/>
+		  <result property="sharing" column="sharing"/>
+		  <result property="state" column="state"/>
+		  <result property="unit" column="unit"/>
+		  <result property="updatedAt" column="updatedAt"/>
+		  <result property="updatedBy" column="updatedBy"/>
+		  <result property="tags" column="tags" typeHandler="com.innovative.mybatisHandler.ArrayTypeHandler"/>
+		  <result property="sectors" column="sectors" typeHandler="com.innovative.mybatisHandler.ArrayTypeHandler"/>
+		</resultMap> 
 
     <!--根据id获取设备信息-->
-    <select id="getEquipmentById" resultType="Equipment">
+    <select id="getEquipmentById" resultMap="equipmentMap">
 		SELECT "Name","Picture","Unit","State","Manufacturer","Introduction","Sharing","Contact","Sectors","Tags","Rank","RowVersion","IsActive","Id","File","Deleted","CreatedAt","UpdatedAt"
 		FROM "Equipments"
 		WHERE "Id" =  #{id}
 	</select>
 
     <!--根据查询条件获取列表-->
-    <select id="getEquipmentListByCondition" resultType="Equipment">
+    <select id="getEquipmentListByCondition" resultMap="equipmentMap">
         SELECT "Name","Picture","Unit","State","Manufacturer","Introduction","Sharing","Contact","Sectors","Tags","Rank","RowVersion","IsActive","Id","File","Deleted","CreatedAt","UpdatedAt"
         FROM "Equipments"
         <where>
             <if test="sectors != null and sectors != ''">
-                AND "Sectors" @> '${sectors}'
+                 "Sectors" @> '${sectors}'
             </if>
             AND "Deleted" = 'f' AND "IsActive" = 't'
         </where>
@@ -36,15 +61,32 @@
     </select>
 
     <!--新增设备-->
-    <insert id="insertEquipment" parameterType="map">
+    <insert id="insertEquipment" parameterType="Equipment">
         INSERT INTO "Equipments"
-        ("Id", "Sharing", "Name", "Unit", "State", "Manufacturer", "PurchasedAt", "Introduction", "Picture", "Contact", "Sectors", "Tags", "Rank", "IsActive", "File", "CreatedBy", "RowVersion", "CreatedAt")
+        ( "Sharing", "Name", "Unit", "State", "Manufacturer", "PurchasedAt", "Introduction", "Picture", "Contact", "Sectors", "Tags", "Rank", "IsActive", "File", "CreatedBy", "RowVersion", "CreatedAt")
         VALUES
-        (#{id}, #{sharing}, #{name}, #{unit}, #{state}, #{manufacturer}, #{purchasedAt}, #{introduction}, #{picture}, #{contact}, '${sectors}', '${tags}', #{rank}, #{isActive}, #{file}, '', 0, #{createdAt})
+        (#{sharing}, #{name}, #{unit}, #{state}, #{manufacturer}, now(), #{introduction}, #{picture}, #{contact}, 
+	        <choose>
+				<when test="sectors != null">
+					<foreach item="sector" collection="sectors" separator="," open="'{" close="}'," index="">
+				      ${sector}
+				    </foreach>  
+				</when>
+				<otherwise>null,</otherwise>
+			</choose>
+			<choose>
+				<when test="tags != null">
+					<foreach item="tag" collection="tags" separator="," open="'{" close="}'," index="">  
+				      ${tag}
+				    </foreach>  
+				</when>
+			<otherwise>null,</otherwise>
+		</choose>
+        #{rank}, #{isActive}, #{file}, '', 0, now())
     </insert>
 
     <!--修改设备-->
-    <update id="updateEquipment" parameterType="map">
+    <update id="updateEquipment" parameterType="Equipment">
         UPDATE "Equipments"
         <set>
             <if test="sharing != null and sharing != ''">
@@ -71,11 +113,28 @@
             <if test="contact != null and contact != ''">
                 "Contact" = #{contact},
             </if>
-            <if test="sector != null and sector != '{}'">
-                "Sector" = '${sector}',
+            <if test="sectors != null and sectors != '{}'">
+            	"Sectors"=
+                <choose>
+					<when test="sectors != null">
+						<foreach item="sector" collection="sectors" separator="," open="'{" close="}'," index="">  
+					      ${sector}
+					    </foreach>  
+					</when>
+					<otherwise>null,</otherwise>
+				</choose>
+		
             </if>
             <if test="tags != null and tags != '{}'">
-                "Tags" = '${tags}',
+            	"Tags" =
+                <choose>
+						<when test="tags != null">
+							<foreach item="tag" collection="tags" separator="," open="'{" close="}'," index="">  
+						      ${tag}
+						    </foreach>  
+						</when>
+					<otherwise>null,</otherwise>
+				</choose>
             </if>
             <if test="rank != null and rank != ''">
                 "Rank" = #{rank},
@@ -83,10 +142,10 @@
             <if test="isActive != null and isActive != ''">
                 "IsActive" = #{isActive},
             </if>
-            <if test="newId != null and newId != ''">
+            <!-- <if test="newId != null and newId != ''">
                 "Id" = #{newId},
-            </if>
-            "UpdatedAt" = #{updatedAt}
+            </if> -->
+            "UpdatedAt" = now()
         </set>
         <where>
             "Id" = #{id}

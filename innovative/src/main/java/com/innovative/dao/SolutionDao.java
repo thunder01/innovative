@@ -38,16 +38,16 @@ public interface SolutionDao {
     /**
      * 新增技术报告
      *
-     * @param p 参数集合
+     * @param solution 参数集合
      * @return
      */
-    int insertSolution(Map<String, Object> p);
+    int insertSolution(Solution solution);
 
     /**
      * 修改方案信息
      *
-     * @param params 参数集合
+     * @param solution 参数集合
      * @return
      */
-    int updateSolution(Map<String, Object> params);
+    int updateSolution(Solution solution);
 }

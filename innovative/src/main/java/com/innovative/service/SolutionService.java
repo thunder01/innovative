@@ -71,12 +71,12 @@ public class SolutionService {
     /**
      * 新增技术报告
      *
-     * @param params 参数集合
+     * @param solution 参数集合
      * @return
      */
-    public boolean insertSolution(Map<String, Object> params) {
+    public boolean insertSolution(Solution solution) {
 
-        int result = solutionDao.insertSolution(params);
+        int result = solutionDao.insertSolution(solution);
 
         return result > 0 ? true : false;
     }
@@ -84,12 +84,12 @@ public class SolutionService {
     /**
      * 修改技术报告信息
      *
-     * @param params 参数集合
+     * @param solution 参数集合
      * @return
      */
-    public boolean updateSolution(Map<String, Object> params) {
+    public boolean updateSolution(Solution solution) {
 
-        int result = solutionDao.updateSolution(params);
+        int result = solutionDao.updateSolution(solution);
 
         return result > 0 ? true : false;
     }

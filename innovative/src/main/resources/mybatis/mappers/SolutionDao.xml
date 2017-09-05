@@ -4,15 +4,33 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.innovative.dao.SolutionDao">
 
+<resultMap id="solutionMap" type="Solution">
+	  <result property="content" column="content"/>
+	  <result property="createdBy" column="createdBy"/>
+	  <result property="createdAt" column="createdAt"/>
+	  <result property="deleted" column="deleted"/>
+	  <result property="deletedAt" column="deletedAt"/>
+	  <result property="deletedBy" column="deletedBy"/>
+	  <result property="summary" column="summary"/>
+	  <result property="isActive" column="isActive"/>
+	  <result property="name" column="name"/>
+	  <result property="rank" column="rank"/>
+	  <result property="updatedAt" column="updatedAt"/>
+	  <result property="updatedBy" column="updatedBy"/>
+	  <result property="file" column="file"/>
+	  <result property="pictures" column="pictures"  typeHandler="com.innovative.mybatisHandler.ArrayTypeHandler"/>
+	  <result property="tags" column="tags" typeHandler="com.innovative.mybatisHandler.ArrayTypeHandler"/>
+	  <result property="sectors" column="sectors" typeHandler="com.innovative.mybatisHandler.ArrayTypeHandler"/>
+	</resultMap> 
     <!--根据id获取技术报告-->
-    <select id="getSolutionById" resultType="Solution">
+    <select id="getSolutionById" resultMap="solutionMap">
 		SELECT "Name","Summary","Content","Pictures","Sectors","Tags","Rank","Id","File","CreatedAt","UpdatedAt"
 		FROM "Solutions"
 		WHERE "Id" =  #{id};
 	</select>
 
     <!--根据查询条件获取列表-->
-    <select id="getSolutionListByCondition" resultType="Solution">
+    <select id="getSolutionListByCondition" resultMap="solutionMap">
         SELECT "Name","Summary","Content","Pictures","Sectors","Tags","Rank","Id","File","CreatedAt","UpdatedAt" FROM "Solutions"
         <where>
             <if test="sectors != null and sectors != ''">
@@ -35,12 +53,39 @@
     </select>
 
     <!--新增技术报告-->
-    <insert id="insertSolution" parameterType="map">
-        INSERT INTO "Solutions" ("Id", "Name", "Summary", "Content", "Sectors", "Tags", "Rank", "IsActive", "File", "Pictures", "CreatedBy", "RowVersion", "CreatedAt") VALUES (#{id}, #{name}, #{summary}, #{content}, '${sectors}', '${tags}', #{rank}, #{isActive}, '${fileUrls}', '${imageUrls}', '', 0, #{createdAt})
+    <insert id="insertSolution" parameterType="Solution">
+        INSERT INTO "Solutions" ( "Name", "Summary", "Content", "Sectors", "Tags", "Rank", "IsActive", "File", "Pictures", "CreatedBy", "RowVersion", "CreatedAt") VALUES
+         ( #{name}, #{summary}, #{content}, 
+         		<choose>
+					<when test="sectors != null">
+						<foreach item="sector" collection="sectors" separator="," open="'{" close="}'," index="">  
+					      ${sector}
+					    </foreach>  
+					</when>
+					<otherwise>null,</otherwise>
+				</choose>
+				<choose>
+					<when test="tags != null">
+						<foreach item="tag" collection="tags" separator="," open="'{" close="}'," index="">  
+					      ${tag}
+					    </foreach>  
+					</when>
+					<otherwise>null,</otherwise>
+				</choose>
+          #{rank}, #{isActive}, '${file}', 
+          	<choose>
+					<when test="pictures != null">
+						<foreach item="picture" collection="pictures" separator="," open="'{" close="}'," index="">  
+					       ${picture}
+					    </foreach>  
+					</when>
+					<otherwise>null,</otherwise>
+				</choose>
+           '', 0, now())
     </insert>
 
     <!--修改技术报告-->
-    <update id="updateSolution" parameterType="map">
+    <update id="updateSolution" parameterType="Solution">
         UPDATE "Solutions"
         <set>
             <if test="name != null and name != ''">
@@ -52,22 +97,37 @@
             <if test="content != null and content != ''">
                 "Content" = #{content},
             </if>
-            <if test="sector != null and sector != '{}'">
-                "Sector" = '${sector}',
-            </if>
-            <if test="tags != null and tags != '{}'">
-                "Tags" = '${tags}',
-            </if>
+           <if test="sectors!=null and sectors!=''">
+				"Sectors"=
+				<choose>
+					<when test="sectors != null">
+						<foreach item="sector" collection="sectors" separator="," open="'{" close="}'," index="">  
+					      ${sector}
+					    </foreach>  
+					</when>
+					<otherwise>null,</otherwise>
+				</choose>
+			</if>
+			<if test="tags!=null and tags!=''">
+				"Tags"=
+				<choose>
+					<when test="tags != null">
+						<foreach item="tag" collection="tags" separator="," open="'{" close="}'," index="">  
+					      ${tag}
+					    </foreach>  
+					</when>
+				</choose>
+			</if>
             <if test="rank != null and rank != ''">
                 "Rank" = #{rank},
             </if>
             <if test="isActive != null and isActive != ''">
                 "IsActive" = #{isActive},
             </if>
-            <if test="newId != null and newId != ''">
+            <!-- <if test="newId != null and newId != ''">
                 "Id" = #{newId},
-            </if>
-            "UpdatedAt" = #{updatedAt}
+            </if> -->
+            "UpdatedAt" = now()
         </set>
         <where>
             "Id" = #{id}

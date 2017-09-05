@@ -24,8 +24,8 @@ public class Organization implements Serializable{
 	private String nature;//机构性质
 	private int rank;   //等级
 	private int rowVersion;  //版本
-	private String sectors;//行业领域
-	private String tags;//标签
+	private String[] sectors;//行业领域
+	private String[] tags;//标签
 	private Timestamp updatedAt;//修改时间
 	private String updatedBy;//修改来源
 	private String website;//网站链接
@@ -35,7 +35,11 @@ public class Organization implements Serializable{
 	public Organization() {
 	}
 
-	public Organization(int id, String achievements, String contact, int cooperationStatus, Timestamp createdAt, String createdBy, boolean deleted, Timestamp deletedAt, String deletedBy, String introduction, boolean isActive, String logo, String name, String nature, int rank, int rowVersion, String sectors, String tags, Timestamp updatedAt, String updatedBy, String website, String file) {
+
+	public Organization(int id, String achievements, String contact, int cooperationStatus, Timestamp createdAt,
+			String createdBy, boolean deleted, Timestamp deletedAt, String deletedBy, String introduction,
+			boolean isActive, String logo, String name, String nature, int rank, int rowVersion, String[] sectors,
+			String[] tags, Timestamp updatedAt, String updatedBy, String website, String file) {
 		this.id = id;
 		this.achievements = achievements;
 		this.contact = contact;
@@ -60,9 +64,31 @@ public class Organization implements Serializable{
 		this.file = file;
 	}
 
+
 	public static long getSerialVersionUID() {
 		return serialVersionUID;
 	}
+
+	
+	public String[] getSectors() {
+		return sectors;
+	}
+
+
+	public void setSectors(String[] sectors) {
+		this.sectors = sectors;
+	}
+
+
+	public String[] getTags() {
+		return tags;
+	}
+
+
+	public void setTags(String[] tags) {
+		this.tags = tags;
+	}
+
 
 	public int getId() {
 		return id;
@@ -192,21 +218,6 @@ public class Organization implements Serializable{
 		this.rowVersion = rowVersion;
 	}
 
-	public String getSectors() {
-		return sectors;
-	}
-
-	public void setSectors(String sectors) {
-		this.sectors = sectors;
-	}
-
-	public String getTags() {
-		return tags;
-	}
-
-	public void setTags(String tags) {
-		this.tags = tags;
-	}
 
 	public Timestamp getUpdatedAt() {
 		return updatedAt;

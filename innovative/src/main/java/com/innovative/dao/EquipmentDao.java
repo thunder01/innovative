@@ -38,16 +38,16 @@ public interface EquipmentDao {
     /**
      * 新增设备
      *
-     * @param p 参数集合
+     * @param equipment 参数集合
      * @return
      */
-    int insertEquipment(Map<String, Object> p);
+    int insertEquipment(Equipment equipment);
 
     /**
      * 修改设备信息
      *
-     * @param params 参数集合
+     * @param equipment 参数集合
      * @return
      */
-    int updateEquipment(Map<String, Object> params);
+    int updateEquipment(Equipment equipment);
 }

@@ -57,22 +57,22 @@ public class OrganizationService {
 
     /**
      * 添加机构信息
-     * @param params 新增参数
+     * @param organization 新增参数
      * @return
      */
-    public boolean addOrganization(Map<String, Object> params) {
-        return (organizationDao.addOrganization(params) > 0);
+    public boolean addOrganization(Organization organization) {
+        return (organizationDao.addOrganization(organization) > 0);
     }
 
 
 
     /**
      * 修改机构信息
-     * @param params 修改参数
+     * @param organization 修改参数
      * @return
      */
-    public boolean updateOrganization(Map<String, Object> params) {
-        return (organizationDao.updateOrganization(params) > 0);
+    public boolean updateOrganization(Organization organization) {
+        return (organizationDao.updateOrganization(organization) > 0);
     }
 
 

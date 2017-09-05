@@ -22,43 +22,98 @@ public class Equipment {
     private Timestamp purchasedAt;//购买时间
     private int rank;
     private int rowVersion;
-    private String sectors;//领域
+    private String[] sectors;//领域
     private String sharing;//内部共享说明
     private String state;//状态
-    private String tags;//标签
+    private String[] tags;//标签
     private String unit;//单位
     private Timestamp updatedAt;//更新时间
     private String updatedBy;//更新人
+    private String file;//更新人
 
     public Equipment() {
     }
 
-    public Equipment(int id, String contact, Timestamp createdAt, String createdBy, boolean deleted, Timestamp deletedAt, String deletedBy, String introduction, boolean isActive, String manufacturer, String name, String picture, Timestamp purchasedAt, int rank, int rowVersion, String sectors, String sharing, String state, String tags, String unit, Timestamp updatedAt, String updatedBy) {
-        this.id = id;
-        this.contact = contact;
-        this.createdAt = createdAt;
-        this.createdBy = createdBy;
-        this.deleted = deleted;
-        this.deletedAt = deletedAt;
-        this.deletedBy = deletedBy;
-        this.introduction = introduction;
-        this.isActive = isActive;
-        this.manufacturer = manufacturer;
-        this.name = name;
-        this.picture = picture;
-        this.purchasedAt = purchasedAt;
-        this.rank = rank;
-        this.rowVersion = rowVersion;
-        this.sectors = sectors;
-        this.sharing = sharing;
-        this.state = state;
-        this.tags = tags;
-        this.unit = unit;
-        this.updatedAt = updatedAt;
-        this.updatedBy = updatedBy;
-    }
+   
 
-    public int getId() {
+   
+
+
+
+	public Equipment(int id, String contact, Timestamp createdAt, String createdBy, boolean deleted,
+			Timestamp deletedAt, String deletedBy, String introduction, boolean isActive, String manufacturer,
+			String name, String picture, Timestamp purchasedAt, int rank, int rowVersion, String[] sectors,
+			String sharing, String state, String[] tags, String unit, Timestamp updatedAt, String updatedBy,
+			String file) {
+		super();
+		this.id = id;
+		this.contact = contact;
+		this.createdAt = createdAt;
+		this.createdBy = createdBy;
+		this.deleted = deleted;
+		this.deletedAt = deletedAt;
+		this.deletedBy = deletedBy;
+		this.introduction = introduction;
+		this.isActive = isActive;
+		this.manufacturer = manufacturer;
+		this.name = name;
+		this.picture = picture;
+		this.purchasedAt = purchasedAt;
+		this.rank = rank;
+		this.rowVersion = rowVersion;
+		this.sectors = sectors;
+		this.sharing = sharing;
+		this.state = state;
+		this.tags = tags;
+		this.unit = unit;
+		this.updatedAt = updatedAt;
+		this.updatedBy = updatedBy;
+		this.file = file;
+	}
+
+
+
+
+
+
+
+	public String getFile() {
+		return file;
+	}
+
+
+
+	public void setFile(String file) {
+		this.file = file;
+	}
+
+
+
+	public String[] getSectors() {
+		return sectors;
+	}
+
+
+
+	public void setSectors(String[] sectors) {
+		this.sectors = sectors;
+	}
+
+
+
+	public String[] getTags() {
+		return tags;
+	}
+
+
+
+	public void setTags(String[] tags) {
+		this.tags = tags;
+	}
+
+
+
+	public int getId() {
         return id;
     }
 
@@ -178,14 +233,7 @@ public class Equipment {
         this.rowVersion = rowVersion;
     }
 
-    public String getSectors() {
-        return sectors;
-    }
-
-    public void setSectors(String sectors) {
-        this.sectors = sectors;
-    }
-
+   
     public String getSharing() {
         return sharing;
     }
@@ -202,13 +250,7 @@ public class Equipment {
         this.state = state;
     }
 
-    public String getTags() {
-        return tags;
-    }
-
-    public void setTags(String tags) {
-        this.tags = tags;
-    }
+  
 
     public String getUnit() {
         return unit;

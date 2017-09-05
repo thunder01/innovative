@@ -72,12 +72,12 @@ public class EquipmentService {
     /**
      * 新增设备
      *
-     * @param params 参数集合
+     * @param equipment 参数bean
      * @return
      */
-    public boolean insertEquipment(Map<String, Object> params) {
+    public boolean insertEquipment(Equipment equipment) {
 
-        int result = equipmentDao.insertEquipment(params);
+        int result = equipmentDao.insertEquipment(equipment);
 
         return result > 0 ? true : false;
     }
@@ -85,12 +85,12 @@ public class EquipmentService {
     /**
      * 修改设备信息
      *
-     * @param params 参数集合
+     * @param equipment 参数bean
      * @return
      */
-    public boolean updateEquipment(Map<String, Object> params) {
+    public boolean updateEquipment(Equipment equipment) {
 
-        int result = equipmentDao.updateEquipment(params);
+        int result = equipmentDao.updateEquipment(equipment);
 
         return result > 0 ? true : false;
     }

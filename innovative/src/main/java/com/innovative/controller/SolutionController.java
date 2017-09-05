@@ -4,18 +4,24 @@ package com.innovative.controller;
 import com.innovative.utils.JsonResult;
 import com.innovative.bean.Solution;
 import com.innovative.service.SolutionService;
+import com.innovative.utils.CookiesUtil;
 import com.innovative.utils.FileUpload;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("/solution")
@@ -32,8 +38,8 @@ public class SolutionController {
      * @param id 方案id
      * @return
      */
-    @RequestMapping(value = "/getById", method = RequestMethod.GET)
-    public JsonResult getSolutionById(@RequestParam(name = "id", required = true) Integer id) {
+    @RequestMapping(value = "/getById/{id}", method = RequestMethod.GET)
+    public JsonResult getSolutionById(@PathVariable(name = "id", required = true) Integer id) {
 
         Solution solution = solutionService.getSolutionById(id);
         if (solution == null) {
@@ -51,11 +57,11 @@ public class SolutionController {
      * @param pageNum  页码
      * @return
      */
-    @RequestMapping(value = "/getListByCondition", method = RequestMethod.GET)
-    public JsonResult getSolutionByCondition(@RequestParam(name = "sectors", required = false) String sectors,
-                                             @RequestParam(name = "pageNum", defaultValue = "1") Integer pageNum) {
+    @RequestMapping(value = "/getListByCondition/{sectors}/{pageNum}", method = RequestMethod.GET)
+    public JsonResult getSolutionByCondition(@PathVariable(name = "sectors", required = false) String sectors,
+    			                             @PathVariable(name = "pageNum") Integer pageNum) {
 
-        if (pageNum == null || pageNum < 1) {
+        if (pageNum == null || pageNum <= 0) {
             return new JsonResult(false, "参数不合法！");
         }
 
@@ -65,56 +71,16 @@ public class SolutionController {
     /**
      * 新增方案
      *
-     * @param name     标题
-     * @param summary  摘要
-     * @param content  正文内容
-     * @param files    上传文件
-     * @param images   上传图片
-     * @param sectors  行业领域
-     * @param tags     标签
-     * @param rank
-     * @param isActive 是否显示
-     * @param id       id
+     * @param solution   方案bean    
      * @return
      */
-    @RequestMapping(value = "/insert", method = RequestMethod.POST)
-    public JsonResult insertSolution(@RequestParam(name = "name", required = true) String name,
-                                     @RequestParam(name = "summary", required = false) String summary,
-                                     @RequestParam(name = "content", required = false) String content,
-                                     @RequestParam(name = "files", required = false) MultipartFile[] files,
-                                     @RequestParam(name = "images", required = false) MultipartFile[] images,
-                                     @RequestParam(name = "sectors", required = false) String sectors,
-                                     @RequestParam(name = "tags", required = false) String tags,
-                                     @RequestParam(name = "rank", required = true) Integer rank,
-                                     @RequestParam(name = "isActive", required = true) boolean isActive,
-                                     @RequestParam(name = "id", required = true) Integer id) {
+    @RequestMapping(value = "/insertSolution", method = RequestMethod.POST)
+    @ResponseBody
+    public JsonResult insertSolution(@RequestBody Solution solution,HttpServletRequest req) {
 
-        //map集合存放请求参数
-        Map<String, Object> params = new HashMap<>();
-        params.put("name", name);
-        params.put("summary", summary);
-        params.put("content", content);
-        if (!StringUtils.isEmpty(sectors)) {
-            params.put("sectors", "{" + sectors + "}");
-        } else {
-            params.put("sectors", "{}");
-        }
-        if (!StringUtils.isEmpty(tags)) {
-            params.put("tags", "{" + tags + "}");
-        } else {
-            params.put("tags", "{}");
-        }
-        params.put("rank", rank);
-        params.put("isActive", isActive);
-        params.put("id", id);
-        params.put("createdAt", new Timestamp(System.currentTimeMillis()));
-
-        //获取上传文件和图片后返回的url地址
-        params.put("fileUrls", "{" + FileUpload.getUrls(files, "solution") + "}");
-        params.put("imageUrls", "{" + FileUpload.getUrls(images, "solution") + "}");
-
+    	solution.setCreatedBy(CookiesUtil.getCookieValue(req,"user_name"));
         //新增
-        boolean result = solutionService.insertSolution(params);
+        boolean result = solutionService.insertSolution(solution);
 
         if (!result) {
             return new JsonResult(false, "新增方案失败，请重试！");
@@ -126,53 +92,23 @@ public class SolutionController {
     /**
      * 修改方案信息
      *
-     * @param id       id
-     * @param name     标题
-     * @param summary  摘要
-     * @param content  内容正文
-     * @param sectors  行业领域
-     * @param tags     标签
-     * @param rank
-     * @param isActive 是否显示
-     * @param newId    新id
+     * @param solution    方案bean
      * @return
      */
-    @RequestMapping(value = "update", method = RequestMethod.POST)
-    public JsonResult updateSolution(@RequestParam(name = "id", required = true) Integer id,
-                                     @RequestParam(name = "name", required = true) String name,
-                                     @RequestParam(name = "summary", required = false) String summary,
-                                     @RequestParam(name = "content", required = false) String content,
-                                     @RequestParam(name = "sectors", required = false) String sectors,
-                                     @RequestParam(name = "tags", required = false) String tags,
-                                     @RequestParam(name = "rank", required = true) Integer rank,
-                                     @RequestParam(name = "isActive", required = true) boolean isActive,
-                                     @RequestParam(name = "newId", required = false) Integer newId) {
+    @RequestMapping(value = "updateSolution", method = RequestMethod.POST)
+    @ResponseBody
+    public JsonResult updateSolution(@RequestBody Solution solution,HttpServletRequest req) {
 
         //判断有无此方案
-        Solution t = solutionService.getSolutionById(id);
+        Solution t = solutionService.getSolutionById(solution.getId());
         if (t == null) {
             return new JsonResult(false, "无此方案，请重试！");
         }
+        solution.setCreatedBy(CookiesUtil.getCookieValue(req,"user_name"));
 
-        //map集合存放请求参数
-        Map<String, Object> params = new HashMap<>();
-        params.put("id", id);
-        params.put("name", name);
-        params.put("summary", summary);
-        params.put("content", content);
-        if (!StringUtils.isEmpty(sectors)) {
-            params.put("sectors", "{" + sectors + "}");
-        }
-        if (!StringUtils.isEmpty(tags)) {
-            params.put("tags", "{" + tags + "}");
-        }
-        params.put("rank", rank);
-        params.put("isActive", isActive);
-        params.put("newId", newId);
-        params.put("updatedAt", new Timestamp(System.currentTimeMillis()));
 
         //修改
-        boolean result = solutionService.updateSolution(params);
+        boolean result = solutionService.updateSolution(solution);
 
         if (!result) {
             return new JsonResult(false, "修改方案失败，请重试！");

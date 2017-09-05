@@ -73,12 +73,12 @@ public class TechnicalReportService {
     /**
      * 新增技术报告
      *
-     * @param params 参数集合
+     * @param technicalReport 参数集合
      * @return
      */
-    public boolean insertTechnicalReport(Map<String, Object> params) {
+    public boolean insertTechnicalReport(TechnicalReport technicalReport) {
 
-        int result = technicalReportDao.insertTechnicalReport(params);
+        int result = technicalReportDao.insertTechnicalReport(technicalReport);
 
         return result > 0 ? true : false;
     }
@@ -86,12 +86,12 @@ public class TechnicalReportService {
     /**
      * 修改技术报告信息
      *
-     * @param params 参数集合
+     * @param technicalReport 参数集合
      * @return
      */
-    public boolean updateTechnicalReport(Map<String, Object> params) {
+    public boolean updateTechnicalReport(TechnicalReport technicalReport) {
 
-        int result = technicalReportDao.updateTechnicalReport(params);
+        int result = technicalReportDao.updateTechnicalReport(technicalReport);
 
         return result > 0 ? true : false;
     }

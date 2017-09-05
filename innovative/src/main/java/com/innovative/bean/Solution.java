@@ -17,12 +17,12 @@ public class Solution implements Serializable {
     private String deletedBy;//删除人
     private boolean isActive;//设置显示或隐藏
     private String name;//名称
-    private String pictures;//图片
+    private String[] pictures;//图片
     private int rank;
     private int rowVersion;
-    private String sectors;//行业领域
+    private String[] sectors;//行业领域
     private String summary;//摘要
-    private String tags;//标签
+    private String[] tags;//标签
     private Timestamp updatedAt;//更新时间
     private String updatedBy;//更新人
     private String file; //文件
@@ -31,28 +31,74 @@ public class Solution implements Serializable {
     public Solution() {
     }
 
-    public Solution(int id, String content, Timestamp createdAt, String createdBy, boolean deleted, Timestamp deletedAt, String deletedBy, boolean isActive, String name, String pictures, int rank, int rowVersion, String sectors, String summary, String tags, Timestamp updatedAt, String updatedBy, String file) {
-        this.id = id;
-        this.content = content;
-        this.createdAt = createdAt;
-        this.createdBy = createdBy;
-        this.deleted = deleted;
-        this.deletedAt = deletedAt;
-        this.deletedBy = deletedBy;
-        this.isActive = isActive;
-        this.name = name;
-        this.pictures = pictures;
-        this.rank = rank;
-        this.rowVersion = rowVersion;
-        this.sectors = sectors;
-        this.summary = summary;
-        this.tags = tags;
-        this.updatedAt = updatedAt;
-        this.updatedBy = updatedBy;
-        this.file = file;
-    }
 
-    public int getId() {
+
+
+
+	public Solution(int id, String content, Timestamp createdAt, String createdBy, boolean deleted, Timestamp deletedAt,
+			String deletedBy, boolean isActive, String name, String[] pictures, int rank, int rowVersion,
+			String[] sectors, String summary, String[] tags, Timestamp updatedAt, String updatedBy, String file) {
+		this.id = id;
+		this.content = content;
+		this.createdAt = createdAt;
+		this.createdBy = createdBy;
+		this.deleted = deleted;
+		this.deletedAt = deletedAt;
+		this.deletedBy = deletedBy;
+		this.isActive = isActive;
+		this.name = name;
+		this.pictures = pictures;
+		this.rank = rank;
+		this.rowVersion = rowVersion;
+		this.sectors = sectors;
+		this.summary = summary;
+		this.tags = tags;
+		this.updatedAt = updatedAt;
+		this.updatedBy = updatedBy;
+		this.file = file;
+	}
+
+
+
+
+
+	public String[] getSectors() {
+		return sectors;
+	}
+
+
+
+	public void setSectors(String[] sectors) {
+		this.sectors = sectors;
+	}
+
+
+
+	public String getSummary() {
+		return summary;
+	}
+
+
+
+	public void setSummary(String summary) {
+		this.summary = summary;
+	}
+
+
+
+	public String[] getTags() {
+		return tags;
+	}
+
+
+
+	public void setTags(String[] tags) {
+		this.tags = tags;
+	}
+
+
+
+	public int getId() {
         return id;
     }
 
@@ -124,15 +170,17 @@ public class Solution implements Serializable {
         this.name = name;
     }
 
-    public String getPictures() {
-        return pictures;
-    }
+    public void setPictures(String[] pictures) {
+		this.pictures = pictures;
+	}
 
-    public void setPictures(String pictures) {
-        this.pictures = pictures;
-    }
 
-    public int getRank() {
+    public String[] getPictures() {
+		return pictures;
+	}
+
+
+	public int getRank() {
         return rank;
     }
 
@@ -148,29 +196,7 @@ public class Solution implements Serializable {
         this.rowVersion = rowVersion;
     }
 
-    public String getSectors() {
-        return sectors;
-    }
 
-    public void setSectors(String sectors) {
-        this.sectors = sectors;
-    }
-
-    public String getSummary() {
-        return summary;
-    }
-
-    public void setSummary(String summary) {
-        this.summary = summary;
-    }
-
-    public String getTags() {
-        return tags;
-    }
-
-    public void setTags(String tags) {
-        this.tags = tags;
-    }
 
     public Timestamp getUpdatedAt() {
         return updatedAt;

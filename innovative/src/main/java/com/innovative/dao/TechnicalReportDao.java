@@ -37,16 +37,16 @@ public interface TechnicalReportDao {
     /**
      * 新增技术报告
      *
-     * @param p 参数集合
+     * @param technicalReport 参数集合
      * @return
      */
-    int insertTechnicalReport(Map<String, Object> p);
+    int insertTechnicalReport(TechnicalReport technicalReport);
 
     /**
      * 修改技术报告信息
      *
-     * @param params 参数集合
+     * @param technicalReport 参数集合
      * @return
      */
-    int updateTechnicalReport(Map<String, Object> params);
+    int updateTechnicalReport(TechnicalReport technicalReport);
 }

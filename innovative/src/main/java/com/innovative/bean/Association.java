@@ -26,8 +26,8 @@ public class Association implements Serializable {
 	private String nature;  //协会性质
 	private int rank;  //等级
 	private int rowVersion;  //版本
-	private String sectors;  //行业领域
-	private String tags;   //标签
+	private String[] sectors;  //行业领域
+	private String[] tags;   //标签
 	private Timestamp updatedAt;  //修改时间
 	private String updatedBy;   //修改来源
 	private String website;   //网站链接
@@ -37,7 +37,13 @@ public class Association implements Serializable {
 	public Association() {
 	}
 
-	public Association(int id, String availableResources, String contact, int cooperationStatus, Timestamp createdAt, String createdBy, boolean deleted, Timestamp deletedAt, String deletedBy, String duration, String introduction, boolean isActive, String logo, String name, String nature, int rank, int rowVersion, String sectors, String tags, Timestamp updatedAt, String updatedBy, String website, String file) {
+
+
+	public Association(int id, String availableResources, String contact, int cooperationStatus, Timestamp createdAt,
+			String createdBy, boolean deleted, Timestamp deletedAt, String deletedBy, String duration,
+			String introduction, boolean isActive, String logo, String name, String nature, int rank, int rowVersion,
+			String[] sectors, String[] tags, Timestamp updatedAt, String updatedBy, String website, String file) {
+		super();
 		this.id = id;
 		this.availableResources = availableResources;
 		this.contact = contact;
@@ -62,6 +68,7 @@ public class Association implements Serializable {
 		this.website = website;
 		this.file = file;
 	}
+
 
 
 	public int getId() {
@@ -200,19 +207,19 @@ public class Association implements Serializable {
 		this.rowVersion = rowVersion;
 	}
 
-	public String getSectors() {
+	public String[] getSectors() {
 		return sectors;
 	}
 
-	public void setSectors(String sectors) {
+	public void setSectors(String[] sectors) {
 		this.sectors = sectors;
 	}
 
-	public String getTags() {
+	public String[] getTags() {
 		return tags;
 	}
 
-	public void setTags(String tags) {
+	public void setTags(String[] tags) {
 		this.tags = tags;
 	}
 
