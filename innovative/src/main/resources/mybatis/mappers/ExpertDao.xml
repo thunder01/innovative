@@ -5,7 +5,7 @@
 <mapper namespace="com.innovative.dao.ExpertDao">
 
 	<resultMap id="expertMap" type="Expert">
-	  <id property="id" column="user_id" />
+	  <id property="id" column="id" />
 	  <result property="contact" column="contact"/>
 	  <result property="cooperationStatus" column="cooperationStatus"/>
 	  <result property="createdBy" column="createdBy"/>
@@ -47,6 +47,11 @@
 		</where>
 		limit #{pageSize} offset #{startIndex}
 	</select>
+	<!--根据查询条件获取列表-->
+	<select id="getExpertLists" resultMap="expertMap">
+		SELECT * FROM "Experts"
+		limit #{pageSize} offset #{startIndex}
+	</select>
 
 
 
@@ -59,6 +64,10 @@
 			</if>
 			AND "Deleted" = 'f' AND "IsActive" = 't'
 		</where>
+	</select>
+	
+	<select id="getTotalCountNum" resultType="int">
+		SELECT count(1) FROM "Experts"
 	</select>
 
 

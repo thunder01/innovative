@@ -5,6 +5,7 @@
 <mapper namespace="com.innovative.dao.SolutionDao">
 
 <resultMap id="solutionMap" type="Solution">
+	  <id property="id" column="id" />
 	  <result property="content" column="content"/>
 	  <result property="createdBy" column="createdBy"/>
 	  <result property="createdAt" column="createdAt"/>
@@ -33,10 +34,10 @@
     <select id="getSolutionListByCondition" resultMap="solutionMap">
         SELECT "Name","Summary","Content","Pictures","Sectors","Tags","Rank","Id","File","CreatedAt","UpdatedAt" FROM "Solutions"
         <where>
-            <if test="sectors != null and sectors != ''">
+            <!-- <if test="sectors != null and sectors != ''">
                 AND "Sectors" @> '${sectors}'
-            </if>
-            AND "Deleted" = 'f' AND "IsActive" = 't'
+            </if> -->
+             "Deleted" = 'f' AND "IsActive" = 't'
         </where>
         limit #{pageSize} offset #{startIndex}
     </select>
@@ -45,10 +46,10 @@
     <select id="getCountByCondition" resultType="int">
         SELECT COUNT("Id") FROM "Solutions"
         <where>
-            <if test="sectors != null and sectors != ''">
+            <!-- <if test="sectors != null and sectors != ''">
                 AND "Sectors" @> '${sectors}'
-            </if>
-            AND "Deleted" = 'f' AND "IsActive" = 't'
+            </if> -->
+             "Deleted" = 'f' AND "IsActive" = 't'
         </where>
     </select>
 

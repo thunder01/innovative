@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -52,15 +53,14 @@ public class TechnicalReportController {
      * @param pageNum  页码
      * @return
      */
-    @RequestMapping(value = "/getListByCondition/{sectors}/{pageNum}", method = RequestMethod.GET)
-    public JsonResult getTechnicalReportListByCondition(@PathVariable(name = "sectors", required = false) String sectors,
-    													@PathVariable(name = "pageNum") Integer pageNum) {
+    @RequestMapping(value = "/getListByCondition", method = RequestMethod.GET)
+    public JsonResult getTechnicalReportListByCondition(@RequestParam(name="page" , defaultValue="1") Integer page) {
 
-        if (pageNum <= 0) {
+        if (page <= 0) {
             return new JsonResult(false, "参数不合法！");
         }
 
-        return new JsonResult(true, technicalReportService.getTechnicalReportListByCondition(sectors, pageNum));
+        return new JsonResult(true, technicalReportService.getTechnicalReportListByCondition( page));
     }
 
     /**

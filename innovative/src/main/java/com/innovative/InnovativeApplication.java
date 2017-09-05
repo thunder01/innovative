@@ -15,7 +15,7 @@ public class InnovativeApplication {
 		SpringApplication.run(InnovativeApplication.class, args);
 	}
 
-	/*打war包时使用，然后将pom.xml中的jar改成war, 此类需要继承SpringBootServletInitializer*/
+  /*打war包时使用，然后将pom.xml中的jar改成war, 此类需要继承SpringBootServletInitializer*/
 //	@Override
 //	protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
 //		return builder.sources(InnovativeApplication.class);

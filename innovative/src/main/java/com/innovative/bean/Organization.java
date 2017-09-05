@@ -2,6 +2,7 @@ package com.innovative.bean;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.Map;
 
 //机构表
 public class Organization implements Serializable{
@@ -30,6 +31,18 @@ public class Organization implements Serializable{
 	private String updatedBy;//修改来源
 	private String website;//网站链接
 	private String file;  //文件
+	private Map cooperationStatusMap;
+	
+
+
+	public Map getCooperationStatusMap() {
+		return cooperationStatusMap;
+	}
+
+
+	public void setCooperationStatusMap(Map cooperationStatusMap) {
+		this.cooperationStatusMap = cooperationStatusMap;
+	}
 
 
 	public Organization() {

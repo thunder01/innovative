@@ -40,8 +40,9 @@ public class FileUpload {
 
         //创建文件路径和文件夹
         String dir = Config.FILE_URL + tableName + "/" + DateUtil.getDay() + "/";
-
+        
         File f = mkdirsmy(dir, file.getOriginalFilename());
+        System.out.println(f.getAbsolutePath());
 
         //上传到指定位置
         FileOutputStream write = new FileOutputStream(f);
@@ -67,7 +68,9 @@ public class FileUpload {
                 }
             } catch (IOException e) {
                 e.printStackTrace();
+                return  "error";
             }
+            
         }
         return fileUrls.toString();
     }

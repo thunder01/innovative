@@ -29,16 +29,16 @@ public class NoticeController extends BaseController {
      */
     @RequestMapping(value = "/addNotice", method = RequestMethod.POST)
     public JsonResult addNotice(@RequestParam(name = "title") String title,
-                                @RequestParam(name = "file") MultipartFile[] file) {
+                                @RequestParam(name = "FileData") MultipartFile[] FileData) {
 
-        if (file == null || file.length <= 0) {
+        if (FileData == null || FileData.length <= 0) {
             return new JsonResult(false, "请选择文件");
         }
         //文件后缀维护  可以自己添加或者减少
         String[] fileSufixs = {"pdf", "doc", "excel", "word", "docx"};
         //判断文件后缀
-        for (int i = 0; i < file.length; i++) {
-            String file_name = file[i].getOriginalFilename();
+        for (int i = 0; i < FileData.length; i++) {
+            String file_name = FileData[i].getOriginalFilename();
             String fileSufix = file_name.split("\\.")[1];
             if(fileSufix != null){
                 if (!isExsitSufix(fileSufixs, fileSufix)){
@@ -46,7 +46,7 @@ public class NoticeController extends BaseController {
                 }
             }
         }
-        if(!noticeService.addNotice(title, file)){
+        if(!noticeService.addNotice(title, FileData)){
             return new JsonResult(false, "发布失败");
         }
         return new JsonResult(true, "发布成功");

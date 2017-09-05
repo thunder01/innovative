@@ -69,4 +69,14 @@ public interface ExpertDao {
 
 
 
+
+	List<Expert> getExpertLists(@Param("startIndex") int startIndex, @Param("pageSize") int pageSize);
+
+
+
+
+	int getTotalCountNum();
+
+
+
 }

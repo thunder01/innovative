@@ -1,11 +1,9 @@
 package com.innovative.dao;
 
-import com.innovative.bean.Association;
 import com.innovative.bean.Carousel;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
-import java.util.Map;
 
 public interface CarouselDao {
 

@@ -27,8 +27,8 @@ public class PoiController {
      * @return
      */
     @RequestMapping(value = "/importExcel", method = RequestMethod.POST)
-    public JsonResult importExcel(@RequestParam(name = "file") MultipartFile[] file) {
-            if(!poiService.importExcel(file)){
+    public JsonResult importExcel(@RequestParam(name = "FileData") MultipartFile[] FileData) {
+            if(!poiService.importExcel(FileData)){
                 return new JsonResult(false, "导入失败");
             }
             return new JsonResult(true, "导入成功");

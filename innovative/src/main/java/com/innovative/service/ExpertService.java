@@ -31,8 +31,9 @@ public class ExpertService {
     public Expert getExpert(Integer id){
     	
         		Expert expert =	expertDao.getExpert(id);
-        		List<Map<String,Object>> statusMap = codeItemUtil.getCodeItemList("EXPERT_COOPERSTATUS",expert.getCooperationStatus());
-        		expert.setCooperationStatusMap(statusMap.get(0));
+	        		List<Map<String,Object>> statusMap = codeItemUtil.getCodeItemList("EXPERT_COOPERSTATUS",expert.getCooperationStatus());
+	        		if(statusMap!=null)
+	        			expert.setCooperationStatusMap(statusMap.get(0));
         		return expert;
     }
 
@@ -99,6 +100,25 @@ public class ExpertService {
 			expert.setCreatedBy(username);*/
 		
 		 return (expertDao.addForExpert(expert) > 0);
+	}
+
+
+
+
+	public Map<String, Object> getExpertLists(Integer page) {
+		 PageInfo pageInfo = new PageInfo();
+	       pageInfo.setCurrentPageNum(page);
+	       List<Expert> experts = expertDao.getExpertLists( pageInfo.getStartIndex(), pageInfo.getPageSize());
+	       int totalCount = expertDao.getTotalCountNum();
+		
+	        Map<String, Object> map = new HashMap<>();
+	        map.put("items", experts);
+	        map.put("totalCount", totalCount);
+	        map.put("Count", pageInfo.getPageSize());
+	        map.put("itemCount", pageInfo.getPageSize());
+	        map.put("offset", pageInfo.getStartIndex());
+	        map.put("limit", pageInfo.getPageSize());
+		 return map;
 	}
 
 

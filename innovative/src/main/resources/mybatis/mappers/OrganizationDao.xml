@@ -4,6 +4,7 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.innovative.dao.OrganizationDao">
 	<resultMap id="organizationMap" type="Organization">
+		<id property="id" column="id" />
 	  <result property="achievements" column="achievements"/>
 	  <result property="contact" column="contact"/>
 	  <result property="cooperationStatus" column="cooperationStatus"/>
@@ -38,10 +39,10 @@
 	<select id="getOrganizationList"  resultMap="organizationMap">
 		SELECT * FROM "Organizations"
 		<where>
-			<if test="sectors!=null and sectors!=''">
+			<!-- <if test="sectors!=null and sectors!=''">
 				 "Sectors" @> '${sectors}'
-			</if>
-			AND "Deleted" = 'f' AND "IsActive" = 't'
+			</if> -->
+			 "Deleted" = 'f' AND "IsActive" = 't'
 		</where>
 		limit #{pageSize} offset #{startIndex}
 	</select>
@@ -51,10 +52,10 @@
 	<select id="getTotalCount" resultType="int">
 		SELECT count(1) FROM "Organizations"
 		<where>
-			<if test="sectors!=null and sectors!=''">
+			<!-- <if test="sectors!=null and sectors!=''">
 				"Sectors" @> '${sectors}'
-			</if>
-			AND "Deleted" = 'f' AND "IsActive" = 't'
+			</if> -->
+			 "Deleted" = 'f' AND "IsActive" = 't'
 		</where>
 	</select>
 

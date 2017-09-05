@@ -4,6 +4,7 @@ package com.innovative.service;
 import com.alibaba.druid.util.StringUtils;
 import com.innovative.bean.Association;
 import com.innovative.dao.AssociationDao;
+import com.innovative.utils.CodeItemUtil;
 import com.innovative.utils.CookiesUtil;
 import com.innovative.utils.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,8 @@ public class AssociationService {
 
     @Autowired
     AssociationDao associationDao;
+    @Autowired
+    CodeItemUtil codeItemUtil;
 
 
     /**
@@ -28,34 +31,39 @@ public class AssociationService {
      */
     public Association getAssociation(Integer id){
 
-        return associationDao.getAssociation(id);
+         
+    	Association association	= associationDao.getAssociation(id);
+	        List<Map<String,Object>> statusMap = codeItemUtil.getCodeItemList("EXPERT_COOPERSTATUS",association.getCooperationStatus());
+			if(statusMap!=null)
+				association.setCooperationStatusMap(statusMap.get(0));
+			return association;
     }
 
 
 
     /**
      * 行业协会列表页
-     * @param sectors 行业领域（多个用逗号隔开）
      * @param pageNum 页数（默认为1）
      * @return
      */
-    public Map<String, Object> getAssociationList(String sectors, Integer pageNum){
+    public Map<String, Object> getAssociationList(Integer pageNum){
 
-        if (!StringUtils.isEmpty(sectors)) {
+       /* if (!StringUtils.isEmpty(sectors)) {
             sectors = "{" + sectors + "}";
-        }
+        }*/
         PageInfo pageInfo = new PageInfo();
         pageInfo.setCurrentPageNum(pageNum);
 
-        List<Association> associations = associationDao.getAssociationList(sectors, pageInfo.getStartIndex(), pageInfo.getPageSize());
-        int totalCount = associationDao.getTotalCount(sectors);
+        List<Association> associations = associationDao.getAssociationList( pageInfo.getStartIndex(), pageInfo.getPageSize());
+        int totalCount = associationDao.getTotalCount();
 
         Map<String, Object> map = new HashMap<>();
-        map.put("associations", associations);
+        map.put("items", associations);
         map.put("totalCount", totalCount);
-        map.put("associationCount", associations.size());
-        map.put("pageSize()", pageInfo.getPageSize());
-        map.put("currentPageNum()", pageInfo.getCurrentPageNum());
+        map.put("Count", pageInfo.getPageSize());
+        map.put("itemCount", pageInfo.getPageSize());
+        map.put("offset", pageInfo.getStartIndex());
+        map.put("limit", pageInfo.getPageSize());
         return map;
     }
 

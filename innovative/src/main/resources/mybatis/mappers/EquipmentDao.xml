@@ -5,7 +5,7 @@
 <mapper namespace="com.innovative.dao.EquipmentDao">
 	
 	<resultMap id="equipmentMap" type="Equipment">
-		  <id property="id" column="user_id" />
+		  <id property="id" column="id" />
 		  <result property="contact" column="contact"/>
 		  <result property="createdBy" column="createdBy"/>
 		  <result property="createdAt" column="createdAt"/>
@@ -40,11 +40,11 @@
     <select id="getEquipmentListByCondition" resultMap="equipmentMap">
         SELECT "Name","Picture","Unit","State","Manufacturer","Introduction","Sharing","Contact","Sectors","Tags","Rank","RowVersion","IsActive","Id","File","Deleted","CreatedAt","UpdatedAt"
         FROM "Equipments"
-        <where>
-            <if test="sectors != null and sectors != ''">
+       <where>
+            <!--  <if test="sectors != null and sectors != ''">
                  "Sectors" @> '${sectors}'
-            </if>
-            AND "Deleted" = 'f' AND "IsActive" = 't'
+            </if> -->
+               "Deleted" = 'f' AND "IsActive" = 't'
         </where>
         limit #{pageSize} offset #{startIndex}
     </select>
@@ -53,10 +53,10 @@
     <select id="getCountByCondition" resultType="int">
         SELECT COUNT("Id") FROM "Equipments"
         <where>
-            <if test="sectors != null and sectors != ''">
+            <!-- <if test="sectors != null and sectors != ''">
                 AND "Sectors" @> '${sectors}'
-            </if>
-            AND "Deleted" = 'f' AND "IsActive" = 't'
+            </if> -->
+             "Deleted" = 'f' AND "IsActive" = 't'
         </where>
     </select>
 

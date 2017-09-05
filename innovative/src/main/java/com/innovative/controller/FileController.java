@@ -7,8 +7,9 @@ import com.innovative.utils.JsonResult;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 
@@ -25,23 +26,14 @@ public class FileController extends BaseController {
      * @return
      */
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
-    @ResponseBody
-    public JsonResult getAssociation(@RequestBody FileBean filebean ) {
-
-         if (filebean != null && filebean.getFile().length > 0 && filebean.getModname() != null &&  filebean.getModname().length()>0) {
-             try {
-                 for (int i = 0; i < filebean.getFile().length; i++) {
-
-                      FileUpload.copyInputStreamToFile((filebean.getFile())[i], filebean.getModname());
-                 }
-             } catch (IOException e) {
-                 e.printStackTrace();
-                 return new JsonResult(false, "上传失败!");
-             }
-         }else{
-        	 return new JsonResult(false,"参数不合法！");
+    public JsonResult getAssociation(@RequestParam("FileData") MultipartFile [] FileData ,@RequestParam(name="modname",required=false) String modname) {
+    	
+    	if(modname == null)
+    		modname="file";
+    	String url = FileUpload.getUrls(FileData, modname);
+         if("error".equals(url)){
+        	 return new JsonResult(false, "上传失败!");
          }
-         
          
         return new JsonResult(true, "上传成功!");
     }

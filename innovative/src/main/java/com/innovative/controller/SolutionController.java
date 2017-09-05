@@ -57,15 +57,14 @@ public class SolutionController {
      * @param pageNum  页码
      * @return
      */
-    @RequestMapping(value = "/getListByCondition/{sectors}/{pageNum}", method = RequestMethod.GET)
-    public JsonResult getSolutionByCondition(@PathVariable(name = "sectors", required = false) String sectors,
-    			                             @PathVariable(name = "pageNum") Integer pageNum) {
+    @RequestMapping(value = "/getListByCondition", method = RequestMethod.GET)
+    public JsonResult getSolutionByCondition(@RequestParam(name="page",defaultValue="1") Integer pageNum) {
 
         if (pageNum == null || pageNum <= 0) {
             return new JsonResult(false, "参数不合法！");
         }
 
-        return new JsonResult(true, solutionService.getSolutionListByCondition(sectors, pageNum));
+        return new JsonResult(true, solutionService.getSolutionListByCondition( pageNum));
     }
 
     /**

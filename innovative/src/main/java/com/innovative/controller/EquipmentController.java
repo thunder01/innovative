@@ -59,15 +59,14 @@ public class EquipmentController {
      * @param pageNum  页码
      * @return
      */
-    @RequestMapping(value = "/getListByCondition/{sectors}/{pageNum}", method = RequestMethod.GET)
-    public JsonResult getEquipmentListByCondition(@PathVariable String sectors,
-    												@PathVariable Integer pageNum) {
+    @RequestMapping(value = "/getListByCondition", method = RequestMethod.GET)
+    public JsonResult getEquipmentListByCondition(@RequestParam(name="page" ,defaultValue="1") Integer page) {
 
-        if (pageNum == null || pageNum <= 0) {
+        if (page == null || page <= 0) {
             return new JsonResult(false, "参数不合法！");
         }
 
-        return new JsonResult(true, equipmentService.getEquipmentListByCondition(sectors, pageNum));
+        return new JsonResult(true, equipmentService.getEquipmentListByCondition( page));
     }
 
     /**

@@ -35,17 +35,16 @@ public class SolutionService {
     /**
      * 分页条件查询方案list
      *
-     * @param sectors 关键字
      * @param pageNum  页码
      * @return
      */
-    public Map<String, Object> getSolutionListByCondition(String sectors, int pageNum) {
+    public Map<String, Object> getSolutionListByCondition(int pageNum) {
 
 
-        if (sectors != null) {
+      /*  if (sectors != null) {
             sectors = "{" + sectors + "}";
         }
-
+*/
         //获取分页信息
         PageInfo pageInfo = new PageInfo();
         pageInfo.setCurrentPageNum(pageNum);
@@ -53,17 +52,17 @@ public class SolutionService {
         int limit = pageInfo.getPageSize();
 
         //分页条件查询
-        List<Solution> items = solutionDao.getSolutionListByCondition(sectors, offset, limit);
-        int totalCount = solutionDao.getCountByCondition(sectors);
+        List<Solution> items = solutionDao.getSolutionListByCondition( offset, limit);
+        int totalCount = solutionDao.getCountByCondition();
 
         //数据组装
         Map<String, Object> map = new HashMap<>();
-        map.put("solution", items);
+        map.put("items", items);
         map.put("totalCount", totalCount);
-        //map.put("offset", offset);
-        map.put("solutionCount", items.size());
-        map.put("pageSize()", pageInfo.getPageSize());
-        map.put("currentPageNum()", pageInfo.getCurrentPageNum());
+        map.put("Count", pageInfo.getPageSize());
+        map.put("itemCount", pageInfo.getPageSize());
+        map.put("offset", pageInfo.getStartIndex());
+        map.put("limit", pageInfo.getPageSize());
 
         return map;
 

@@ -31,18 +31,18 @@ public class CarouselController {
      * @return
      */
     @RequestMapping(value = "/insert", method = RequestMethod.POST)
-    public JsonResult insertImg(@RequestParam(name = "images", required = true) MultipartFile[] images) {
+    public JsonResult insertImg(@RequestParam(name = "FileData", required = true) MultipartFile[] FileData) {
 
         //用于存储上传后的图片地址
         List<String> list = new ArrayList();
 
         //上传图片操作
-        if (images != null && images.length > 0) {
+        if (FileData != null && FileData.length > 0) {
             try {
                 String url = null;
-                for (int i = 0; i < images.length; i++) {
+                for (int i = 0; i < FileData.length; i++) {
 
-                    url = FileUpload.copyInputStreamToFile(images[i], "carousel");
+                    url = FileUpload.copyInputStreamToFile(FileData[i], "carousel");
                     list.add(url);
 
                 }

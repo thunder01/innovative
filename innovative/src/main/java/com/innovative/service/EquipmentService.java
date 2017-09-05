@@ -36,16 +36,15 @@ public class EquipmentService {
     /**
      * 分页条件查询设备list
      *
-     * @param sectors 关键字
      * @param pageNum  页码
      * @return
      */
-    public Map<String, Object> getEquipmentListByCondition(String sectors,  int pageNum) {
+    public Map<String, Object> getEquipmentListByCondition(int pageNum) {
 
 
-        if (!StringUtil.isEmpty(sectors)) {
+       /* if (!StringUtil.isEmpty(sectors)) {
             sectors = "{" + sectors + "}";
-        }
+        }*/
 
         //获取分页信息
         PageInfo pageInfo = new PageInfo();
@@ -54,16 +53,18 @@ public class EquipmentService {
         int limit = pageInfo.getPageSize();
 
         //分页条件查询
-        List<Equipment> items = equipmentDao.getEquipmentListByCondition(sectors, offset, limit);
-        int totalCount = equipmentDao.getCountByCondition(sectors);
+        List<Equipment> items = equipmentDao.getEquipmentListByCondition( offset, limit);
+        int totalCount = equipmentDao.getCountByCondition();
 
         //数据组装
         Map<String, Object> map = new HashMap<>();
-        map.put("equipments", items);
+        
+        map.put("items", items);
         map.put("totalCount", totalCount);
-        map.put("equipmentsCount", items.size());
-        map.put("pageSize()", pageInfo.getPageSize());
-        map.put("currentPageNum()", pageInfo.getCurrentPageNum());
+        map.put("Count", pageInfo.getPageSize());
+        map.put("itemCount", pageInfo.getPageSize());
+        map.put("offset", pageInfo.getStartIndex());
+        map.put("limit", pageInfo.getPageSize());
         
 
         return map;

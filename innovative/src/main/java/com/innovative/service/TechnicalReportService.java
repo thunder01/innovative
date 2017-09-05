@@ -37,17 +37,16 @@ public class TechnicalReportService {
     /**
      * 分页条件查询技术报告list
      *
-     * @param sectors 关键字
      * @param pageNum  页码
      * @return
      */
-    public Map<String, Object> getTechnicalReportListByCondition(String sectors, int pageNum) {
+    public Map<String, Object> getTechnicalReportListByCondition(int pageNum) {
 
-
+/*
         if (sectors != null) {
             sectors = "{" + sectors + "}";
         }
-
+*/
         //获取分页信息
         PageInfo pageInfo = new PageInfo();
         pageInfo.setCurrentPageNum(pageNum);
@@ -55,18 +54,17 @@ public class TechnicalReportService {
         int limit = pageInfo.getPageSize();
 
         //分页条件查询
-        List<TechnicalReport> items = technicalReportDao.getTechnicalReportListByCondition(sectors, offset, limit);
-        int totalCount = technicalReportDao.getCountByCondition(sectors);
+        List<TechnicalReport> items = technicalReportDao.getTechnicalReportListByCondition(offset, limit);
+        int totalCount = technicalReportDao.getCountByCondition();
 
         //数据组装
         Map<String, Object> map = new HashMap<>();
-        map.put("technicalReports", items);
+        map.put("items", items);
         map.put("totalCount", totalCount);
-       // map.put("offset", offset);
-        //map.put("limit", limit);
-        map.put("technicalReportscount", items.size());
-        map.put("pageSize()", pageInfo.getPageSize());
-        map.put("currentPageNum()", pageInfo.getCurrentPageNum());
+        map.put("Count", pageInfo.getPageSize());
+        map.put("itemCount", pageInfo.getPageSize());
+        map.put("offset", pageInfo.getStartIndex());
+        map.put("limit", pageInfo.getPageSize());
 
         return map;
 

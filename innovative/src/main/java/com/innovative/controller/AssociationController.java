@@ -57,14 +57,13 @@ public class AssociationController extends BaseController {
      * @param pageNum 页数（默认为1）
      * @return
      */
-    @RequestMapping(value = "/getAssociationList/{sectors}/{pageNum}", method = RequestMethod.GET)
-    public JsonResult getAssociationList(@PathVariable String sectors,
-    									 @PathVariable Integer pageNum) {
+    @RequestMapping(value = "/getAssociationList", method = RequestMethod.GET)
+    public JsonResult getAssociationList(@RequestParam(name="page",defaultValue="1") Integer page) {
 
-        if (pageNum <= 0) {
+        if (page <= 0) {
             return new JsonResult(false, "参数不合法！");
         }
-        return new JsonResult(true, associationService.getAssociationList(sectors, pageNum));
+        return new JsonResult(true, associationService.getAssociationList( page));
     }
 
 

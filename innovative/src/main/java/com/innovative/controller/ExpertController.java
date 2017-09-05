@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -54,14 +55,10 @@ public class ExpertController extends BaseController {
      * @param pageNum 页数（默认为1）
      * @return
      */
-    @RequestMapping(value = "/getExpertList/{sectors}/{pageNum}", method = RequestMethod.GET)
-    public JsonResult getExpertList(@PathVariable(name = "sectors", required = false) String sectors,
-    								@PathVariable(name = "pageNum") Integer pageNum) {
+    @RequestMapping(value = "/getExpertList", method = RequestMethod.GET)
+    public JsonResult getExpertList(@RequestParam(name="page",defaultValue="1" ) Integer page) {
 
-        if (pageNum <= 0) {
-            return new JsonResult(false, "参数不合法！");
-        }
-        return new JsonResult(true, expertService.getExpertList(sectors, pageNum));
+        return new JsonResult(true, expertService.getExpertLists(page));
     }
 
 

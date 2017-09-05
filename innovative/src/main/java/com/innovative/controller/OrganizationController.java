@@ -56,14 +56,13 @@ public class OrganizationController extends BaseController {
      * @param pageNum 页数（默认为1）
      * @return
      */
-    @RequestMapping(value = "/getOrganizationList/{sectors}/{pageNum}", method = RequestMethod.GET)
-    public JsonResult getOrganizationList(@PathVariable(name = "sectors", required = false) String sectors,
-    				@PathVariable(name = "pageNum") Integer pageNum){
+    @RequestMapping(value = "/getOrganizationList", method = RequestMethod.GET)
+    public JsonResult getOrganizationList(@RequestParam(name="page" ,defaultValue="1") Integer page){
 
-        if (pageNum <= 0) {
+        if (page <= 0) {
             return new JsonResult(false, "参数不合法！");
         }
-        return new JsonResult(true, organizationService.getOrganizationList(sectors, pageNum));
+        return new JsonResult(true, organizationService.getOrganizationList(page));
     }
 
 

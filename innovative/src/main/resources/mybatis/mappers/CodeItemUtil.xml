@@ -5,9 +5,9 @@
 <mapper namespace="com.innovative.utils.CodeItemUtil">
 	
 	<resultMap id="statusMap" type="Map">
-	  <result property="name" column="value"/>
+	  <result property="title" column="title"/>
 	  <result property="value" column="code"/>
-	  <result property="status" column="title"/>
+	  <result property="name" column="value"/>
 	   <result property="rank" column="rank"/>
 	</resultMap> 
 

@@ -4,6 +4,7 @@ package com.innovative.service;
 import com.alibaba.druid.util.StringUtils;
 import com.innovative.bean.Organization;
 import com.innovative.dao.OrganizationDao;
+import com.innovative.utils.CodeItemUtil;
 import com.innovative.utils.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,8 @@ public class OrganizationService {
 
     @Autowired
     OrganizationDao organizationDao;
+    @Autowired
+    CodeItemUtil codeItemUtil;
 
     /**
      * 根据id获取机构详情
@@ -25,34 +28,38 @@ public class OrganizationService {
      * @return
      */
     public Organization getOrganization(Integer id){
-        return organizationDao.getOrganization(id);
+    		Organization organization =	organizationDao.getOrganization(id);
+    		List<Map<String,Object>> statusMap = codeItemUtil.getCodeItemList("EXPERT_COOPERSTATUS",organization.getCooperationStatus());
+			if(statusMap!=null)
+				organization.setCooperationStatusMap(statusMap.get(0));
+        return organization;
     }
 
 
 
     /**
      * 创新资源列表页（根据行业领域查询对应机构的列表页）
-     * @param sectors 行业领域（多个用逗号隔开）
      * @param pageNum 页数（默认为1）
      * @return
      */
-    public Map<String, Object> getOrganizationList(String sectors, Integer pageNum){
+    public Map<String, Object> getOrganizationList(Integer pageNum){
 
-        if (!StringUtils.isEmpty(sectors)) {
+        /*if (!StringUtils.isEmpty(sectors)) {
             sectors = "{" + sectors + "}";
-        }
+        }*/
         PageInfo pageInfo = new PageInfo();
         pageInfo.setCurrentPageNum(pageNum);
 
-        List<Organization> organizations = organizationDao.getOrganizationList(sectors, pageInfo.getStartIndex(), pageInfo.getPageSize());
-        int totalCount = organizationDao.getTotalCount(sectors);
+        List<Organization> organizations = organizationDao.getOrganizationList( pageInfo.getStartIndex(), pageInfo.getPageSize());
+        int totalCount = organizationDao.getTotalCount();
 
         Map<String, Object> map = new HashMap<>();
-        map.put("organizations", organizations);
+        map.put("items", organizations);
         map.put("totalCount", totalCount);
-        map.put("organizationCount", organizations.size());
-        map.put("pageSize()", pageInfo.getPageSize());
-        map.put("currentPageNum()", pageInfo.getCurrentPageNum());
+        map.put("Count", pageInfo.getPageSize());
+        map.put("itemCount", pageInfo.getPageSize());
+        map.put("offset", pageInfo.getStartIndex());
+        map.put("limit", pageInfo.getPageSize());
         
         return map;
     }
