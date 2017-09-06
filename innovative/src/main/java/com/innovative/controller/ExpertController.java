@@ -5,6 +5,7 @@ import com.innovative.service.ExpertService;
 import com.innovative.utils.BaseController;
 import com.innovative.utils.CookiesUtil;
 import com.innovative.utils.JsonResult;
+import com.innovative.utils.PageInfo;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -56,8 +57,8 @@ public class ExpertController extends BaseController {
      * @return
      */
     @RequestMapping(value = "/getExpertList", method = RequestMethod.GET)
-    public JsonResult getExpertList(@RequestParam(name="page",defaultValue="1" ) Integer page) {
-
+    public JsonResult getExpertList(@RequestParam(name="offset",defaultValue="0" ) Integer offset) {
+    	Integer page = offset/(new PageInfo().getPageSize()) +1;
         return new JsonResult(true, expertService.getExpertLists(page));
     }
 

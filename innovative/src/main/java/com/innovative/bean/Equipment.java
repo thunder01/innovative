@@ -19,6 +19,7 @@ public class Equipment {
     private String manufacturer;//制造商
     private String name;//标题
     private String picture;//图片
+    
     private Timestamp purchasedAt;//购买时间
     private int rank;
     private int rowVersion;

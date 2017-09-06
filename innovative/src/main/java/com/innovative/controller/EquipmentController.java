@@ -8,6 +8,8 @@ import com.innovative.service.SolutionService;
 import com.innovative.utils.CookiesUtil;
 import com.innovative.utils.FileUpload;
 import com.innovative.utils.JsonResult;
+import com.innovative.utils.PageInfo;
+
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -60,11 +62,9 @@ public class EquipmentController {
      * @return
      */
     @RequestMapping(value = "/getListByCondition", method = RequestMethod.GET)
-    public JsonResult getEquipmentListByCondition(@RequestParam(name="page" ,defaultValue="1") Integer page) {
+    public JsonResult getEquipmentListByCondition(@RequestParam(name="offset" ,defaultValue="0") Integer offset) {
 
-        if (page == null || page <= 0) {
-            return new JsonResult(false, "参数不合法！");
-        }
+    	Integer page = offset/(new PageInfo().getPageSize()) +1;
 
         return new JsonResult(true, equipmentService.getEquipmentListByCondition( page));
     }

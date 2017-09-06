@@ -74,7 +74,7 @@
 	<insert id="addAssociation" parameterType="Association">
 		INSERT INTO "Associations"
 		( "AvailableResources", "Contact", "CooperationStatus", "CreatedAt", "CreatedBy", "Deleted", "DeletedAt", "DeletedBy", "Duration", "Introduction", "IsActive", "Logo", "Name", "Nature", "Rank", "RowVersion", "Sectors", "Tags", "UpdatedAt", "UpdatedBy", "Website", "File")
-		VALUES ( #{availableResources}, #{contact}, #{cooperationStatus}, now(), #{createdBy}, #{deleted}, now(), #{deletedBy}, #{duration}, #{introduction}, #{isActive}, '${logo}', #{name}, #{nature}, #{rank}, #{rowVersion}, 
+		VALUES ( #{availableResources}, #{contact}, #{cooperationStatus}, now(), #{createdBy}, false, now(), #{deletedBy}, #{duration}, #{introduction}, true, '${logo}', #{name}, #{nature}, #{rank}, #{rowVersion}, 
 		
 		<choose>
 		<when test="sectors != null">

@@ -64,7 +64,7 @@
 	<insert id="addOrganization" parameterType="map">
 		INSERT INTO "Organizations"
 		( "Achievements", "Contact", "CooperationStatus", "CreatedAt", "CreatedBy", "Deleted", "DeletedAt", "DeletedBy", "Introduction", "IsActive", "Logo", "Name", "Nature", "Rank", "RowVersion", "Sectors", "Tags", "UpdatedAt", "UpdatedBy", "Website", "File")
-	VALUES ( #{achievements}, #{contact}, #{cooperationStatus}, now(), #{createdBy}, #{deleted}, #{createdAt}, #{deletedBy}, #{introduction}, #{isActive}, '${logo}', #{name}, #{nature}, #{rank}, #{rowVersion},
+	VALUES ( #{achievements}, #{contact}, #{cooperationStatus}, now(), #{createdBy}, false, #{createdAt}, #{deletedBy}, #{introduction}, true, '${logo}', #{name}, #{nature}, #{rank}, #{rowVersion},
 	 <choose>
 		<when test="sectors != null">
 			<foreach item="sector" collection="sectors" separator="," open="'{" close="}'," index="">  

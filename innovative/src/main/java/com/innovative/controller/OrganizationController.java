@@ -6,6 +6,8 @@ import com.innovative.utils.BaseController;
 import com.innovative.utils.CookiesUtil;
 import com.innovative.utils.FileUpload;
 import com.innovative.utils.JsonResult;
+import com.innovative.utils.PageInfo;
+
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -57,11 +59,9 @@ public class OrganizationController extends BaseController {
      * @return
      */
     @RequestMapping(value = "/getOrganizationList", method = RequestMethod.GET)
-    public JsonResult getOrganizationList(@RequestParam(name="page" ,defaultValue="1") Integer page){
+    public JsonResult getOrganizationList(@RequestParam(name="offset" ,defaultValue="0") Integer offset){
 
-        if (page <= 0) {
-            return new JsonResult(false, "参数不合法！");
-        }
+    	Integer page = offset/(new PageInfo().getPageSize()) +1;
         return new JsonResult(true, organizationService.getOrganizationList(page));
     }
 

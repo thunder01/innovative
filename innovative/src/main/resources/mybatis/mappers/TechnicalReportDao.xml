@@ -72,7 +72,7 @@
 				</when>
 				<otherwise>null,</otherwise>
 			</choose> 
-        #{rank}, #{isActive}, '${file}', 
+        #{rank}, true, '${file}', 
         <choose>
 			<when test="pictures != null">
 				<foreach item="picture" collection="pictures" separator="," open="'{" close="}'," index="">  

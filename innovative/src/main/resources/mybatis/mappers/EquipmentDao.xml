@@ -82,7 +82,7 @@
 				</when>
 			<otherwise>null,</otherwise>
 		</choose>
-        #{rank}, #{isActive}, #{file}, '', 0, now())
+        #{rank}, true, #{file}, '', 0, now())
     </insert>
 
     <!--修改设备-->

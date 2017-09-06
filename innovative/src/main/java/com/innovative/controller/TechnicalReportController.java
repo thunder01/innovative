@@ -14,6 +14,7 @@ import com.innovative.bean.TechnicalReport;
 import com.innovative.service.TechnicalReportService;
 import com.innovative.utils.CookiesUtil;
 import com.innovative.utils.JsonResult;
+import com.innovative.utils.PageInfo;
 
 import java.sql.Timestamp;
 
@@ -54,12 +55,9 @@ public class TechnicalReportController {
      * @return
      */
     @RequestMapping(value = "/getListByCondition", method = RequestMethod.GET)
-    public JsonResult getTechnicalReportListByCondition(@RequestParam(name="page" , defaultValue="1") Integer page) {
+    public JsonResult getTechnicalReportListByCondition(@RequestParam(name="offset" , defaultValue="0") Integer offset) {
 
-        if (page <= 0) {
-            return new JsonResult(false, "参数不合法！");
-        }
-
+    	Integer page = offset/(new PageInfo().getPageSize()) +1;
         return new JsonResult(true, technicalReportService.getTechnicalReportListByCondition( page));
     }
 

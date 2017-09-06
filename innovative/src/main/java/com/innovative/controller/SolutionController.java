@@ -2,6 +2,7 @@ package com.innovative.controller;
 
 
 import com.innovative.utils.JsonResult;
+import com.innovative.utils.PageInfo;
 import com.innovative.bean.Solution;
 import com.innovative.service.SolutionService;
 import com.innovative.utils.CookiesUtil;
@@ -58,13 +59,10 @@ public class SolutionController {
      * @return
      */
     @RequestMapping(value = "/getListByCondition", method = RequestMethod.GET)
-    public JsonResult getSolutionByCondition(@RequestParam(name="page",defaultValue="1") Integer pageNum) {
+    public JsonResult getSolutionByCondition(@RequestParam(name="offset",defaultValue="0") Integer offset) {
 
-        if (pageNum == null || pageNum <= 0) {
-            return new JsonResult(false, "参数不合法！");
-        }
-
-        return new JsonResult(true, solutionService.getSolutionListByCondition( pageNum));
+    	Integer page = offset/(new PageInfo().getPageSize()) +1;
+        return new JsonResult(true, solutionService.getSolutionListByCondition( page));
     }
 
     /**

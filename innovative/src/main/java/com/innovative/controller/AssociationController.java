@@ -6,6 +6,8 @@ import com.innovative.utils.BaseController;
 import com.innovative.utils.CookiesUtil;
 import com.innovative.utils.FileUpload;
 import com.innovative.utils.JsonResult;
+import com.innovative.utils.PageInfo;
+
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -58,11 +60,8 @@ public class AssociationController extends BaseController {
      * @return
      */
     @RequestMapping(value = "/getAssociationList", method = RequestMethod.GET)
-    public JsonResult getAssociationList(@RequestParam(name="page",defaultValue="1") Integer page) {
-
-        if (page <= 0) {
-            return new JsonResult(false, "参数不合法！");
-        }
+    public JsonResult getAssociationList(@RequestParam(name="offset",defaultValue="0") Integer offset) {
+    	Integer page = offset/(new PageInfo().getPageSize()) +1;
         return new JsonResult(true, associationService.getAssociationList( page));
     }
 
