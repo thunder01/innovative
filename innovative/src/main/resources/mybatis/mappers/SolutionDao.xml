@@ -55,7 +55,7 @@
 
     <!--新增技术报告-->
     <insert id="insertSolution" parameterType="Solution">
-        INSERT INTO "Solutions" ( "Name", "Summary", "Content", "Sectors", "Tags", "Rank", "IsActive", "File", "Pictures", "CreatedBy", "RowVersion", "CreatedAt") VALUES
+        INSERT INTO "Solutions" ( "Name", "Summary", "Content", "Sectors", "Tags", "Rank", "IsActive", "File", "Pictures", "CreatedBy", "RowVersion", "CreatedAt","Deleted") VALUES
          ( #{name}, #{summary}, #{content}, 
          		<choose>
 					<when test="sectors != null">
@@ -82,7 +82,7 @@
 					</when>
 					<otherwise>null,</otherwise>
 				</choose>
-           '', 0, now())
+           '', 0, now(),false)
     </insert>
 
     <!--修改技术报告-->

@@ -102,7 +102,39 @@
 		    <artifactId>commons-io</artifactId>
 		    <version>2.4</version>
 		</dependency>
-	
+		
+		<!-- webservice  -->
+		<!-- <dependency>
+			    <groupId>org.springframework.boot</groupId>
+			    <artifactId>spring-boot-starter-ws</artifactId>
+			</dependency>
+			<dependency>
+			    <groupId>wsdl4j</groupId>
+			    <artifactId>wsdl4j</artifactId>
+			</dependency> -->
+		
+		 <!-- <dependency>
+              <groupId>org.apache.cxf</groupId>
+              <artifactId>cxf-rt-frontend-jaxws</artifactId>
+              <version>3.1.6</version>
+          </dependency>
+          <dependency>
+              <groupId>org.apache.cxf</groupId>
+              <artifactId>cxf-rt-transports-http</artifactId>
+             <version>3.1.6</version>
+         </dependency>
+			<dependency>
+			    <groupId>org.apache.cxf</groupId>
+			    <artifactId>cxf-core</artifactId>
+			    <version>3.1.12</version>
+			</dependency> -->
+			
+		<!-- <dependency>
+				<groupId>org.apache.cxf</groupId>
+				<artifactId>cxf-spring-boot-starter-jaxws</artifactId>
+				<version>3.1.11</version>
+			</dependency> -->
+			
 	</dependencies>
 
 	<build>

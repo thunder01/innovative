@@ -42,7 +42,6 @@ public class FileUpload {
         String dir = Config.FILE_URL + tableName + "/" + DateUtil.getDay() + "/";
         
         File f = mkdirsmy(dir, file.getOriginalFilename());
-        System.out.println(f.getAbsolutePath());
 
         //上传到指定位置
         FileOutputStream write = new FileOutputStream(f);
@@ -50,7 +49,7 @@ public class FileUpload {
         write.write(decoderBytes);
         write.close();
 
-        return dir + file.getOriginalFilename();
+        return f.getAbsolutePath() + file.getOriginalFilename();
     }
 
     public static String getUrls(MultipartFile[] files, String tableName) {

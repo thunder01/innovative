@@ -35,7 +35,7 @@ public class FileController extends BaseController {
         	 return new JsonResult(false, "上传失败!");
          }
          
-        return new JsonResult(true, "上传成功!");
+        return new JsonResult(true,url);
     }
 
 
