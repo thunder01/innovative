@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.innovative.dao.ProjectApprovalDao">
+	<resultMap type="ProjectApproval" id="ProjectApproval">
+		<id property="id" column="id"/>
+		<result property="proname" column="proname"/>
+		<result property="pronum" column="pronum"/>
+		<result property="eoms" column="eoms"/>
+		<result property="demander" column="demander"/>
+		<result property="contact" column="contact"/>
+		<result property="demand_bg" column="demand_bg"/>
+		<result property="demand_core" column="demand_core"/>
+		<result property="demand_count" column="demand_count"/>
+		<result property="keyword" column="keyword"/>
+		<result property="coopmodel" column="coopmodel"/>
+		<result property="require" column="require"/>
+		<result property="cost" column="cost"/>
+		<result property="completion" column="completion"/>
+		<result property="remark" column="remark"/>
+		<result property="create_date" column="create_date"/>
+		<result property="create_by" column="create_by"/>
+		<result property="late_date" column="late_date"/>
+		<result property="late_by" column="late_by"/>
+	</resultMap>
+	<!-- 添加立项表单 -->
+	<insert id="addProjectApproval" parameterType="ProjectApproval">
+		INSERT INTO xacx_project_approval(proname,pronum,eoms,demander,contact,demand_bg,demand_core,
+		demand_count,keyword,coopmodel,require,cost,completion,remark,create_date,create_by) 
+		VALUES(#{proname},#{pronum},#{eoms},#{demander},#{contact},#{demand_bg},#{demand_core},
+		#{demand_count},#{keyword},#{coopmodel},#{require},#{cost},#{completion},#{remark},current_date,#{create_by})
+	</insert>
+	
+	<!-- 删除立项表单 -->
+	<delete id="deleteProjectApproval" parameterType="int">
+		DELETE FROM xacx_project_approval WHERE id = #{id}
+	</delete>
+	
+	<!-- 通过id查询立项表单 -->
+	<select id="getProjectApprovalById" parameterType="int" resultMap="ProjectApproval">
+		SELECT id,proname,pronum,eoms,demander,contact,demand_bg,demand_core,demand_count,keyword,coopmodel,
+		require,cost,completion,remark,create_date,create_by,late_date,late_by FROM xacx_project_approval WHERE id = #{id}
+	</select>
+	
+	<!-- 查询所有的立项表单 -->
+	<select id="getProjectApprovals" resultMap="ProjectApproval">
+		SELECT id,proname,pronum,eoms,demander,contact,demand_bg,demand_core,demand_count,keyword,coopmodel,
+		require,cost,completion,remark,create_date,create_by,late_date,late_by FROM xacx_project_approval
+	</select>
+</mapper>
