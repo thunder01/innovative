@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.innovative.dao.DisassembleReportDao">
+
+    <!--将拆解报告保存到服务器，并将记录保存到数据库-->
+    <insert id="saveDisassembleReport" parameterType="com.innovative.bean.DisassembleReport">
+        INSERT INTO "xacx_disassemble_report"
+        (title ,file,create_date,create_by)
+        VALUES
+        (#{title},#{file},now(),#{create_by})
+    </insert>
+
+</mapper>
