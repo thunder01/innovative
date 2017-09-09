@@ -2,6 +2,7 @@ package com.innovative.controller;
 
 import java.io.IOException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -63,5 +64,38 @@ public class DisassembleReportController {
         }
         return new JsonResult(true, "报告上传成功！");
         
+	}
+	
+	/**
+	 * 删除拆解报告
+	 * @param id
+	 * @return
+	 * */
+	@RequestMapping(value="/delete/{id}", method = RequestMethod.GET)
+	public JsonResult deleteDisassembleReportById(@PathVariable(name="id") Integer id){
+		disassembleService.deleteDisassembleReportById(id);
+		return new JsonResult(true, "删除成功");
+	}
+	
+	/**
+	 * 查找拆解报告
+	 * @param id
+	 * @return
+	 * */
+	@RequestMapping(value="/getDisassemble/{id}", method=RequestMethod.GET)
+	public JsonResult a(@PathVariable(name="id") Integer id){
+		DisassembleReport report=disassembleService.getDisassembleReportById(id);
+		return new JsonResult(true, report);
+	}
+	
+	/**
+	 * 修改拆解报告
+	 * @param report
+	 * @return
+	 * */
+	@RequestMapping(value="/update" ,method=RequestMethod.POST)
+	public JsonResult updateDisassembleReport(DisassembleReport report) {
+		disassembleService.updateDisassembleReport(report);
+		return new JsonResult(true, "修改成功");
 	}
 }
