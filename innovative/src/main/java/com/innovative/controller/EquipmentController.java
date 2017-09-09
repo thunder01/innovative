@@ -2,15 +2,11 @@ package com.innovative.controller;
 
 
 import com.innovative.bean.Equipment;
-import com.innovative.bean.Solution;
 import com.innovative.service.EquipmentService;
-import com.innovative.service.SolutionService;
 import com.innovative.utils.CookiesUtil;
-import com.innovative.utils.FileUpload;
 import com.innovative.utils.JsonResult;
 import com.innovative.utils.PageInfo;
 
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,12 +15,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.sql.Timestamp;
-import java.util.HashMap;
-import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
 
 @RestController
