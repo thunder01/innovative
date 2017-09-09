@@ -43,6 +43,7 @@ public class FileUpload {
         
         File f = mkdirsmy(dir, file.getOriginalFilename());
 
+        
         //上传到指定位置
         FileOutputStream write = new FileOutputStream(f);
         byte[] decoderBytes = file.getBytes();
@@ -62,6 +63,7 @@ public class FileUpload {
                 for (int i = 0; i < files.length; i++) {
 
                     url = FileUpload.copyInputStreamToFile(files[i], tableName);
+                    
 
                     fileUrls.append(url).append(",");
                 }
@@ -73,5 +75,7 @@ public class FileUpload {
         }
         return fileUrls.toString();
     }
+    
+    
 
 }

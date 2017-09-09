@@ -3,17 +3,14 @@ package com.innovative.bean;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
-
-import com.innovative.mybatisHandler.ArrayTypeHandler;
-
-import tk.mybatis.mapper.annotation.ColumnType;
 
 //专家表
 public class Expert implements Serializable{
 
 	//private static final long serialVersionUID = -5311404303222383742L;
-	private int id;//主键
+	private String id;//主键
 	private String avatar;//头像
 	private String contact;//联系方式
 	private int cooperationStatus;//合作状态
@@ -44,6 +41,12 @@ public class Expert implements Serializable{
 	private String file;  //文件
 	
 	
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
 	public Map getCooperationStatusMap() {
 		return cooperationStatusMap;
 	}
@@ -61,12 +64,6 @@ public class Expert implements Serializable{
 	}
 	public void setTitle(String title) {
 		this.title = title;
-	}
-	public int getId() {
-		return id;
-	}
-	public void setId(int id) {
-		this.id = id;
 	}
 	public String getAvatar() {
 		return avatar;

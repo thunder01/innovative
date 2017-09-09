@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.innovative.webservice.dao.UserDao">
+
+   <!--添加用户信息-->
+	<insert id="insertUser" parameterType="map">
+		INSERT INTO "xacx_user"
+		 ("UserId", "UserName",   "UserPost", "CreateAt", "UserSex", "UserAge")
+		VALUES 
+		(#{userId}, #{userName},  #{userPost}, now(),#{userSex}, #{userAge})
+	</insert>
+
+
+	<!--批量添加用户信息-->
+	<insert id="insertUserList" parameterType="java.util.List">
+			INSERT INTO "Experts"
+			("UserId", "UserName",   "UserPost", "CreateAt", "UserSex", "UserAge")
+			VALUES 
+		 <foreach collection="userList" item="item" open="(" separator="),(" close=")">
+	        (#{item.userId}, #{item.userName},  #{item.userPost}, now(),#{item.userSex}, #{item.userAge})
+	    </foreach>  
+		
+	</insert>
+
+
+
+	
+
+</mapper>

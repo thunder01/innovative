@@ -22,7 +22,7 @@
 		INSERT INTO "Experts"
 		( "Avatar", "Contact", "CooperationStatus", "CreatedAt", "CreatedBy", "Deleted", "DeletedAt", "DeletedBy", "Education", "HFactor", "IsActive", "JobTitle", "Name", "Rank", "ResearchAchievement", "ResearchDirection", "Resume", "RowVersion", "Sectors",  "Unit", "UpdatedAt", "UpdatedBy", "File")
 		VALUES 
-	<foreach collection="list" item="item" open="(" separator="),(" close=")">
+	<foreach collection="urllist" item="item" open="(" separator="),(" close=")">
 		 <foreach item="v" index="key" collection="item.values" >
           		#{v.avatar}, #{v.contact}, ${v.cooperationStatus}, now(), #{v.createdBy}, false, now(), #{v.deletedBy}, #{v.education}, ${v.hFactor}, true, #{v.jobTitle}, #{v.name}, ${v.rank}, #{v.researchAchievement}, #{v.researchDirection}, #{v.resume}, ${v.rowVersion}, '${v.sectors}',  #{v.unit}, now(), #{v.updatedBy}, #{v.file}
           		
