@@ -1,7 +1,6 @@
 package com.innovative.mybatisHandler;
 import java.sql.Array;
 import java.sql.CallableStatement;
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -9,7 +8,6 @@ import java.sql.SQLException;
 import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.JdbcType;
 import org.apache.ibatis.type.TypeException;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 @Service
 public class ArrayTypeHandler extends BaseTypeHandler<Object[]>{

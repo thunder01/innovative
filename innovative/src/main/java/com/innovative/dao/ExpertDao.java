@@ -15,7 +15,7 @@ public interface ExpertDao {
      * @param id 专家id
      * @return
      */
-    Expert getExpert(@Param("id") Integer id);
+    Expert getExpert(@Param("id") String id);
 
 
 

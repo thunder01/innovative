@@ -2,9 +2,7 @@ package com.innovative.service;
 
 
 import com.innovative.bean.Solution;
-import com.innovative.bean.TechnicalReport;
 import com.innovative.dao.SolutionDao;
-import com.innovative.dao.TechnicalReportDao;
 import com.innovative.utils.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

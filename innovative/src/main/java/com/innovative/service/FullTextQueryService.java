@@ -5,14 +5,9 @@ import com.innovative.dao.FullTextQueryDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.xml.ws.ServiceMode;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 @Service
 public class FullTextQueryService {
@@ -39,6 +34,14 @@ public class FullTextQueryService {
         map.put("solution", solutionList);
         map.put("association", associationList);
         map.put("technicalReport", technicalReportList);
+        
+        
+//        map.put("items", experts);
+//        map.put("totalCount", totalCount);
+//        map.put("Count", pageInfo.getPageSize());
+//        map.put("itemCount", pageInfo.getPageSize());
+//        map.put("offset", pageInfo.getStartIndex());
+//        map.put("limit", pageInfo.getPageSize());
 
         return map;
     }

@@ -37,7 +37,7 @@ public class ExpertController extends BaseController {
      * @return
      */
     @RequestMapping(value = "/getExpert/{id}", method = RequestMethod.GET)
-    public JsonResult getExpert(@PathVariable(name = "id") Integer id) {
+    public JsonResult getExpert(@PathVariable(name = "id") String id) {
     	
         Expert expert = expertService.getExpert(id);
         if (expert != null) {

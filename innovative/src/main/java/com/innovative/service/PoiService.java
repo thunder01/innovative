@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.InputStream;
-import java.sql.Timestamp;
 import java.util.*;
 
 
@@ -58,7 +57,7 @@ public class PoiService {
                 String fileSufix = file[i].getOriginalFilename().substring(file[i].getOriginalFilename().lastIndexOf("."));
                 //根据后缀判断excel 2003 or 2007+
                 if (fileSufix.equals(".xls")) {
-                    wb = (HSSFWorkbook) WorkbookFactory.create(inputStream);
+                    wb = WorkbookFactory.create(inputStream);
                 } else {
                     wb = new XSSFWorkbook(inputStream);
                 }

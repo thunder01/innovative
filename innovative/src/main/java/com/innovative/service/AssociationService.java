@@ -1,11 +1,9 @@
 package com.innovative.service;
 
 
-import com.alibaba.druid.util.StringUtils;
 import com.innovative.bean.Association;
 import com.innovative.dao.AssociationDao;
 import com.innovative.utils.CodeItemUtil;
-import com.innovative.utils.CookiesUtil;
 import com.innovative.utils.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -3,10 +3,12 @@ package com.innovative.service;
 import com.alibaba.druid.util.StringUtils;
 import com.innovative.bean.Expert;
 import com.innovative.dao.ExpertDao;
+import com.innovative.dao.FileDao;
 import com.innovative.utils.CodeItemUtil;
 import com.innovative.utils.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.List;
@@ -19,6 +21,8 @@ public class ExpertService {
     ExpertDao expertDao;
     @Autowired
     CodeItemUtil codeItemUtil;
+    @Autowired
+    FileDao fileDao;
   
     
 
@@ -28,12 +32,12 @@ public class ExpertService {
      * @param id 专家id
      * @return
      */
-    public Expert getExpert(Integer id){
+    public Expert getExpert(String id){
     	
         		Expert expert =	expertDao.getExpert(id);
-	        		List<Map<String,Object>> statusMap = codeItemUtil.getCodeItemList("EXPERT_COOPERSTATUS",expert.getCooperationStatus());
-	        		if(statusMap!=null)
-	        			expert.setCooperationStatusMap(statusMap.get(0));
+	        		List<Map<String,Object>> statusList = codeItemUtil.getCodeItemList("EXPERT_COOPERSTATUS",expert.getCooperationStatus());
+	        		if(statusList!=null&&statusList.size()>0)
+	        			expert.setCooperationStatusMap(statusList.get(0));
         		return expert;
     }
 
@@ -58,11 +62,19 @@ public class ExpertService {
         int totalCount = expertDao.getTotalCount(sectors);
 
         Map<String, Object> map = new HashMap<>();
-        map.put("experts", experts);
+        /*map.put("experts", experts);
         map.put("totalCount", totalCount);
         map.put("expertCount", experts.size());
         map.put("pageSize()", pageInfo.getPageSize());
-        map.put("currentPageNum()", pageInfo.getCurrentPageNum());
+        map.put("currentPageNum()", pageInfo.getCurrentPageNum());*/
+        
+        
+        map.put("items", experts);
+        map.put("totalCount", totalCount);
+        map.put("Count", pageInfo.getPageSize());
+        map.put("itemCount", pageInfo.getPageSize());
+        map.put("offset", pageInfo.getStartIndex());
+        map.put("limit", pageInfo.getPageSize());
         return map;
     }
 
@@ -93,13 +105,12 @@ public class ExpertService {
 
 
 
-
+    @Transactional
 	public boolean addForExpert(Expert expert) {
-		/*String username = CookiesUtil.getCookieValue("user_uid");
-		if(username!=null&&username.length()>0)
-			expert.setCreatedBy(username);*/
-		
-		 return (expertDao.addForExpert(expert) > 0);
+    	boolean falg =false;
+    	if (expertDao.addForExpert(expert)>0);
+    	 	falg = fileDao.updateFile(expert.getId());
+		 return falg;
 	}
 
 

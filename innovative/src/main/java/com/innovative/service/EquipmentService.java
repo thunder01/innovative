@@ -1,11 +1,8 @@
 package com.innovative.service;
 
 
-import com.github.pagehelper.StringUtil;
 import com.innovative.bean.Equipment;
-import com.innovative.bean.Solution;
 import com.innovative.dao.EquipmentDao;
-import com.innovative.dao.SolutionDao;
 import com.innovative.utils.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

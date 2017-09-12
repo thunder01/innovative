@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.innovative.dao.FileDao">
+
+    <!--将图片保存到服务器，将记录保存到数据库,confim代表已上传还未确定 add代表已确认  delete 代表已删除-->
+    <insert id="addFile" parameterType="map">
+        INSERT INTO "xacx_file"
+        ("refType", "refId", "url", "createAt", "sign",createBy)
+        VALUES
+           (#{reftype}, #{refid}, #{url}, now(), 'confim','')
+    </insert>
+    <!-- 批量上传文档 -->
+      <insert id="addFileList" parameterType="map">
+        INSERT INTO "xacx_file"
+        ("refType", "refId", "url", "createAt", "sign","createBy","introductions")
+        VALUES
+        <foreach collection="urllist" item="item" open="(" separator="),(" close=")">
+            #{reftype}, #{refid}, #{item}, now(), 'confim','',#{introductions}
+        </foreach>
+    </insert> 
+    
+    <!--修改专家信息-->
+	<update id="updateFile" parameterType="map">
+		UPDATE "xacx_file"
+		<set>
+			"sign" = 'add';
+		</set>
+		<where>
+			 "refId"=#{refid}
+		</where>
+	</update>
+	
+	  <!--删除图片-->
+	<update id="deleteFile" parameterType="map">
+		UPDATE "xacx_file"
+		<set>
+			"sign" = 'delete';
+		</set>
+		<where>
+			 "refId"=#{refid}
+		</where>
+	</update>
+
+  
+    <!--根据id判断有无此图片-->
+    <select id="getFileById" resultType="FileBean">
+    
+        SELECT "refType","refId","url" FROM  "xacx_file"
+        <where>
+            <if test="refid!=null and refid!=''">
+				"refId" = #{refid}
+			</if>
+            <if test="reftype!=null and reftype!=''">
+				AND "refType" = #{reftype}
+			</if>
+             AND "sign" = 'add' 
+        </where>
+    </select>
+
+</mapper>

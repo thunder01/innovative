@@ -1,16 +1,11 @@
 package com.innovative.service;
 
 
-import com.github.pagehelper.PageHelper;
 import com.innovative.bean.TechnicalReport;
 import com.innovative.dao.TechnicalReportDao;
-import com.innovative.utils.FileUpload;
 import com.innovative.utils.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
