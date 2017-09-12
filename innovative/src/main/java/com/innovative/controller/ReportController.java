@@ -1,16 +1,21 @@
 package com.innovative.controller;
 
+import java.io.IOException;
+
 import javax.annotation.Resource;
 
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.innovative.bean.Report;
 import com.innovative.service.ReportService;
+import com.innovative.utils.FileUpload;
 import com.innovative.utils.JsonResult;
 
 @RestController
@@ -20,7 +25,27 @@ public class ReportController {
 	private ReportService reportService;
 	@RequestMapping(value = "/reportSave", method = RequestMethod.POST)
 	@ResponseBody
-	public JsonResult reportSave(@RequestBody Report report){
+	public JsonResult reportSave(@RequestBody Report report,@RequestParam(name = "FileData", required = true) MultipartFile[] FileData){
+		//用于存储上传后报告的地址
+        StringBuffer buffer=new StringBuffer();
+		//上传报告的操作
+        if (FileData != null && FileData.length > 0) {
+            try {
+                String url = null;
+                for (int i = 0; i < FileData.length; i++) {
+                    url = FileUpload.copyInputStreamToFile(FileData[i], "disassemble");
+                    
+                    if(i==FileData.length-1){
+                    	buffer.append(url);
+                    }else{
+                    	buffer.append(url+",");
+                    }
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        report.setFile(buffer.toString());
 		if(reportService.addReportAndOrder_report(report)>0){
 			return new JsonResult(true, "添加成功");
 		}
