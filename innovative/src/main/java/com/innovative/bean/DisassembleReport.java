@@ -1,5 +1,6 @@
 package com.innovative.bean;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 /**
@@ -7,7 +8,7 @@ import java.sql.Timestamp;
  * @author fzy
  * @version 1.0
  * */
-public class DisassembleReport {
+public class DisassembleReport implements Serializable{
 	private Integer id;//
 	private String title;//标题
 	private String file;//拆解报告，文件路径
