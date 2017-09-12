@@ -5,37 +5,37 @@ import java.sql.Timestamp;
 /**
  * 订单信息
  * @author fzy
- * @version 1.0
+ * @version 2.0
  * */
 public class Order {
 	private Integer id;
 	private Integer demandId;//需求id
 	private Integer reportId;//报告id
 	private Integer approvalId;//立项报告的id
-	private Integer disassembleid;//拆解报告的id
+	private Integer disassembleId;//拆解报告的id
 	private Integer status;//订单的状态，暂定，默认为1
-	private Timestamp create_date;//创建时间 
-	private String create_by;//创建人
-	private Timestamp late_date;//创建时间
-	private String late_by;//最后修改者
+	private Timestamp create_date;//需求工程师的接单时间 
+	private Integer create_byId;//需求工程师(用户表主键)
+	private Timestamp late_date;//寻源工程师的接单时间
+	private Integer late_byId;//寻源工程师
 	
 	public Order() {
 		super();
 	}
 
-	public Order(Integer id, Integer demandId, Integer reportId, Integer approvalId, Integer disassembleid,
-			Integer status, Timestamp create_date, String create_by, Timestamp late_date, String late_by) {
+	public Order(Integer id, Integer demandId, Integer reportId, Integer approvalId, Integer disassembleId,
+			Integer status, Timestamp create_date, Integer create_byId, Timestamp late_date, Integer late_byId) {
 		super();
 		this.id = id;
 		this.demandId = demandId;
 		this.reportId = reportId;
 		this.approvalId = approvalId;
-		this.disassembleid = disassembleid;
+		this.disassembleId = disassembleId;
 		this.status = status;
 		this.create_date = create_date;
-		this.create_by = create_by;
+		this.create_byId = create_byId;
 		this.late_date = late_date;
-		this.late_by = late_by;
+		this.late_byId = late_byId;
 	}
 
 	public Integer getId() {
@@ -70,12 +70,12 @@ public class Order {
 		this.approvalId = approvalId;
 	}
 
-	public Integer getDisassembleid() {
-		return disassembleid;
+	public Integer getDisassembleId() {
+		return disassembleId;
 	}
 
-	public void setDisassembleid(Integer disassembleid) {
-		this.disassembleid = disassembleid;
+	public void setDisassembleId(Integer disassembleId) {
+		this.disassembleId = disassembleId;
 	}
 
 	public Integer getStatus() {
@@ -94,12 +94,12 @@ public class Order {
 		this.create_date = create_date;
 	}
 
-	public String getCreate_by() {
-		return create_by;
+	public Integer getCreate_byId() {
+		return create_byId;
 	}
 
-	public void setCreate_by(String create_by) {
-		this.create_by = create_by;
+	public void setCreate_byId(Integer create_byId) {
+		this.create_byId = create_byId;
 	}
 
 	public Timestamp getLate_date() {
@@ -110,20 +110,19 @@ public class Order {
 		this.late_date = late_date;
 	}
 
-	public String getLate_by() {
-		return late_by;
+	public Integer getLate_byId() {
+		return late_byId;
 	}
 
-	public void setLate_by(String late_by) {
-		this.late_by = late_by;
+	public void setLate_byId(Integer late_byId) {
+		this.late_byId = late_byId;
 	}
 
 	@Override
 	public String toString() {
 		return "Order [id=" + id + ", demandId=" + demandId + ", reportId=" + reportId + ", approvalId=" + approvalId
-				+ ", disassembleid=" + disassembleid + ", status=" + status + ", create_date=" + create_date
-				+ ", create_by=" + create_by + ", late_date=" + late_date + ", late_by=" + late_by + "]";
+				+ ", disassembleId=" + disassembleId + ", status=" + status + ", create_date=" + create_date
+				+ ", create_byId=" + create_byId + ", late_date=" + late_date + ", late_byId=" + late_byId + "]";
 	}
-	
-	
+
 }

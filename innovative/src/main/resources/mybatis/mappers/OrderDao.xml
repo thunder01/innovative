@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.innovative.dao.OrderDao">
+	<!-- 订单实体类属性与表字段的映射 -->
+	<resultMap type="Order" id="OrderMap">
+		<id property="id" column="id"/>
+		<result property="demandId" column="demandid"/>
+		<result property="reportId" column="reportid"/>
+		<result property="approvalId" column="approvalid"/>
+		<result property="disassembleId" column="disassembleid"/>
+		<result property="status" column="status"/>
+		<result property="create_date" column="create_date"/>
+		<result property="create_byId" column="create_by_id"/>
+		<result property="late_date" column="late_date"/>
+		<result property="late_byId" column="late_by_id"/>
+	</resultMap>
+
+	<!-- 添加订单信息 -->
+	<insert id="insertOrder" parameterType="Order">
+		INSERT INTO "xacx_order"("demandid","status","create_date","create_by_id") 
+		VALUES(#{demandId},0,now(),#{create_byId})
+	</insert>
+	
+	<!-- 若用户为需求工程师，则根据用户id查找出所有的订单 -->
+	<select id="selectDemandByUserId" parameterType="int" resultMap="OrderMap">
+		SELECT * FROM "xacx_order" WHERE create_by_id=#{id}
+	</select>
+	
+	<!-- 若用户为寻源工程师，则根据用户id查找出所有的订单 -->
+	<select id="selectSourceByUserId" parameterType="int" resultMap="OrderMap">
+		SELECT * FROM "xacx_order" WHERE late_by_id=#{id}
+	</select>
+	
+	<!-- 根据立项表单的id,查找出对应的订单id -->
+	<select id="selectOrderIdByApproval" parameterType="int" resultType="int">
+		SELECT "id" FROM "xacx_order" WHERE approvalid=#{id}
+	</select>
+	
+	<!-- 寻源工程师下单操作，更新已有的订单 -->
+	<update id="updateOrderLate_byId" parameterType="Order">
+		UPDATE "xacx_order" SET "late_date"=NOW(),late_by_id=#{late_byId} 
+		WHERE "id"=#{id}
+	</update>
+	
+	
+</mapper>
