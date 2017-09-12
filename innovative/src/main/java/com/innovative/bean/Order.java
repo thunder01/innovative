@@ -1,5 +1,6 @@
 package com.innovative.bean;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 /**
@@ -7,7 +8,7 @@ import java.sql.Timestamp;
  * @author fzy
  * @version 2.0
  * */
-public class Order {
+public class Order implements Serializable{
 	private Integer id;
 	private Integer demandId;//需求id
 	private Integer reportId;//报告id

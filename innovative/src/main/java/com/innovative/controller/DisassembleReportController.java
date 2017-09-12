@@ -3,9 +3,11 @@ package com.innovative.controller;
 import java.io.IOException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -31,7 +33,7 @@ public class DisassembleReportController {
 	 * @param DisassembleReport
 	 * @return
 	 * */
-	@RequestMapping(value = "/upload", method = RequestMethod.POST)
+	@RequestMapping(value = "/save", method = RequestMethod.POST)
 	public JsonResult saveDisassembleReport(@RequestParam(name = "FileData", required = true) MultipartFile[] FileData,DisassembleReport report){
 		
 		//用于存储上传后拆解报告的地址
@@ -73,19 +75,31 @@ public class DisassembleReportController {
 	 * */
 	@RequestMapping(value="/delete/{id}", method = RequestMethod.GET)
 	public JsonResult deleteDisassembleReportById(@PathVariable(name="id") Integer id){
-		disassembleService.deleteDisassembleReportById(id);
-		return new JsonResult(true, "删除成功");
+		int flag=disassembleService.deleteDisassembleReportById(id);
+		/*判断是否删除成功*/
+		if (flag>0) {
+			return new JsonResult(true, "删除成功");
+		}else {
+			return new JsonResult(false, "删除失败");
+		}
+		
 	}
 	
 	/**
-	 * 查找拆解报告
+	 * 根据id查找拆解报告
 	 * @param id
 	 * @return
 	 * */
-	@RequestMapping(value="/getDisassemble/{id}", method=RequestMethod.GET)
+	@RequestMapping(value="/select/{id}", method=RequestMethod.GET)
 	public JsonResult a(@PathVariable(name="id") Integer id){
 		DisassembleReport report=disassembleService.getDisassembleReportById(id);
-		return new JsonResult(true, report);
+		/*判断结果是否存在*/
+		if (report!=null) {
+			return new JsonResult(true, report);
+		}else {
+			return new JsonResult(false, "没有结果");
+		}
+		
 	}
 	
 	/**
@@ -93,9 +107,15 @@ public class DisassembleReportController {
 	 * @param report
 	 * @return
 	 * */
-	@RequestMapping(value="/update" ,method=RequestMethod.POST)
-	public JsonResult updateDisassembleReport(DisassembleReport report) {
-		disassembleService.updateDisassembleReport(report);
-		return new JsonResult(true, "修改成功");
+	@RequestMapping(value="/edit" ,method=RequestMethod.POST)
+	@ResponseBody
+	public JsonResult updateDisassembleReport(@RequestBody DisassembleReport report) {
+		int flag=disassembleService.updateDisassembleReport(report);
+		/*判断是否修改成功*/
+		if (flag>0) {
+			return new JsonResult(true, "修改成功");
+		}else {
+			return new JsonResult(false, "修改失败");
+		}	
 	}
 }
