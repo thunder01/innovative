@@ -3,6 +3,7 @@ package com.innovative.controller;
 import java.io.IOException;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,28 +25,28 @@ public class ReportController {
 	@Resource
 	private ReportService reportService;
 	@RequestMapping(value = "/reportSave", method = RequestMethod.POST)
-	@ResponseBody
-	public JsonResult reportSave(@RequestBody Report report,@RequestParam(name = "FileData", required = true) MultipartFile[] FileData){
+	public JsonResult reportSave(@RequestBody Report report/*,@RequestParam(name = "FileData", required = true) MultipartFile[] FileData*/,HttpServletRequest request){
+		System.out.println(">>>>>>>>>>>>>");
 		//用于存储上传后报告的地址
         StringBuffer buffer=new StringBuffer();
 		//上传报告的操作
-        if (FileData != null && FileData.length > 0) {
-            try {
-                String url = null;
-                for (int i = 0; i < FileData.length; i++) {
-                    url = FileUpload.copyInputStreamToFile(FileData[i], "disassemble");
-                    
-                    if(i==FileData.length-1){
-                    	buffer.append(url);
-                    }else{
-                    	buffer.append(url+",");
-                    }
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        report.setFile(buffer.toString());
+//        if (FileData != null && FileData.length > 0) {
+//            try {
+//                String url = null;
+//                for (int i = 0; i < FileData.length; i++) {
+//                    url = FileUpload.copyInputStreamToFile(FileData[i], "disassemble");
+//                    
+//                    if(i==FileData.length-1){
+//                    	buffer.append(url);
+//                    }else{
+//                    	buffer.append(url+",");
+//                    }
+//                }
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//        report.setFile(buffer.toString());
 		if(reportService.addReportAndOrder_report(report)>0){
 			return new JsonResult(true, "添加成功");
 		}
@@ -53,12 +54,14 @@ public class ReportController {
 	}
 	
 	@RequestMapping(value="/reportDelete/{id}",method=RequestMethod.GET)
-	public JsonResult reportDelete(Integer id){
+	public JsonResult reportDelete(@PathVariable(name="id")Integer id){
 		if(reportService.updateReportDeleted(id)>0){
 			return new JsonResult(true, "删除成功");
 		}
 		return new JsonResult(false, "删除失败");
 	}
+	
+	
 	@RequestMapping(value="/reportEdit",method=RequestMethod.POST)
 	@ResponseBody
 	public JsonResult reportEdit(@RequestBody Report report){
@@ -67,7 +70,9 @@ public class ReportController {
 		}
 		return new JsonResult(false, "修改失败");
 	}
-	@RequestMapping(value="/reportSelect/{orderid}/{type}",method=RequestMethod.POST)
+	
+	
+	@RequestMapping(value="/reportSelect/{orderid}/{type}",method=RequestMethod.GET)
 	public JsonResult reportSelect(@PathVariable(name = "orderid") Integer orderid,@PathVariable(name = "type") String type){
 		Report report = reportService.findReportById(orderid, type);
 		if(null!=report){
