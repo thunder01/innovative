@@ -41,21 +41,6 @@ public class ProjectApprovalController {
 	}
 	
 	/**
-	 * 通过id删除立项表单
-	 * @param id
-	 * @return
-	 */
-	@RequestMapping(value = "/deleteProjectApproval/{id}", method = RequestMethod.GET)
-	public JsonResult deleteProjectApproval(@PathVariable(name = "id") Integer id){
-		try {
-			projectApprovalService.deleteProjectApproval(id);
-			return new JsonResult(true, "删除成功！");
-		} catch (Exception e) {
-			e.printStackTrace();
-			return new JsonResult(false, "删除失败，请重试！");
-		}
-	}
-	/**
 	 * 通过id查询立项表单
 	 * @return
 	 */

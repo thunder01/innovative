@@ -20,8 +20,8 @@ public class ProjectApprovalService {
 	 * 添加一个立项表单
 	 * @param projectApproval
 	 */
-	public void addProjectApproval(ProjectApproval projectApproval) {
-		projectApprovalDao.addProjectApproval(projectApproval);
+	public int addProjectApproval(ProjectApproval projectApproval) {
+		return projectApprovalDao.addProjectApproval(projectApproval);
 	}
 	/**
 	 * 通过id来查询立项表单
@@ -38,4 +38,5 @@ public class ProjectApprovalService {
 	public List<ProjectApproval> getProjectApprovals() {
 		return projectApprovalDao.getProjectApprovals();
 	}
+	
 }
