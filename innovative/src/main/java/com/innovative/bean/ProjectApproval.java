@@ -31,13 +31,14 @@ public class ProjectApproval implements Serializable{
 	private String create_by;//创建人
 	private Date late_date;//最后修改时间
 	private String late_by;//最后修改人
+	private Integer status;//立项表单的状态，默认0未接单，1是已结单
 	public ProjectApproval() {
 		super();
 	}
 	public ProjectApproval(Integer id, String proname, String pronum, String eoms, String demander, String contact,
 			String demand_bg, String demand_core, Integer demand_count, String keyword, String coopmodel,
 			String require, String cost, Date completion, String remark, Date create_date, String create_by,
-			Date late_date, String late_by) {
+			Date late_date, String late_by, Integer status) {
 		super();
 		this.id = id;
 		this.proname = proname;
@@ -58,6 +59,7 @@ public class ProjectApproval implements Serializable{
 		this.create_by = create_by;
 		this.late_date = late_date;
 		this.late_by = late_by;
+		this.status = status;
 	}
 	public Integer getId() {
 		return id;
@@ -173,6 +175,12 @@ public class ProjectApproval implements Serializable{
 	public void setLate_by(String late_by) {
 		this.late_by = late_by;
 	}
+	public Integer getStatus() {
+		return status;
+	}
+	public void setStatus(Integer status) {
+		this.status = status;
+	}
 	@Override
 	public String toString() {
 		return "ProjectApproval [id=" + id + ", proname=" + proname + ", pronum=" + pronum + ", eoms=" + eoms
@@ -180,7 +188,7 @@ public class ProjectApproval implements Serializable{
 				+ demand_core + ", demand_count=" + demand_count + ", keyword=" + keyword + ", coopmodel=" + coopmodel
 				+ ", require=" + require + ", cost=" + cost + ", completion=" + completion + ", remark=" + remark
 				+ ", create_date=" + create_date + ", create_by=" + create_by + ", late_date=" + late_date
-				+ ", late_by=" + late_by + "]";
+				+ ", late_by=" + late_by + ", status=" + status + "]";
 	}
 	
 }
