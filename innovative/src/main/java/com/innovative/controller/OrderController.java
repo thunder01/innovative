@@ -4,8 +4,10 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;import com.fasterxml.jackson.databind.ser.impl.FailingSerializer;
 import com.innovative.bean.DisassembleReport;
 import com.innovative.bean.Order;
@@ -108,7 +110,7 @@ public class OrderController {
 	 * @param orderid
 	 * */
 	@RequestMapping(value="approvalSave/{orderid}",method=RequestMethod.POST)
-	public JsonResult approvalSave(@PathVariable(name="orderid") Integer orderid,ProjectApproval projectApproval){
+	public JsonResult approvalSave(@RequestBody ProjectApproval projectApproval,@PathVariable(name="orderid") Integer orderid){
 		/*保存立项表单*/
 		projectApprovalService.addProjectApproval(projectApproval,orderid);
 		return new JsonResult(true, "添加成功");
