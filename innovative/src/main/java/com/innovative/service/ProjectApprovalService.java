@@ -20,8 +20,8 @@ public class ProjectApprovalService {
 	 * 添加一个立项表单
 	 * @param projectApproval
 	 */
-	public void addProjectApproval(ProjectApproval projectApproval) {
-		projectApprovalDao.addProjectApproval(projectApproval);
+	public int addProjectApproval(ProjectApproval projectApproval) {
+		return projectApprovalDao.addProjectApproval(projectApproval);
 	}
 	/**
 	 * 通过id来查询立项表单
@@ -38,4 +38,13 @@ public class ProjectApprovalService {
 	public List<ProjectApproval> getProjectApprovals() {
 		return projectApprovalDao.getProjectApprovals();
 	}
+	/**
+	 * 通过id查询立项表单的状态  0是未接单，1是已接单
+	 * @param id
+	 * @return 立项表单的状态
+	 */
+	public int getProjectApprovalStatusById(Integer id){
+		return projectApprovalDao.getProjectApprovalStatusById(id);
+	}
+	
 }

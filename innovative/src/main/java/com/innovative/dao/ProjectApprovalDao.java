@@ -9,7 +9,7 @@ public interface ProjectApprovalDao {
 	 * 添加一个立项表单
 	 * @param projectApproval
 	 */
-	public void addProjectApproval(ProjectApproval projectApproval);
+	public int addProjectApproval(ProjectApproval projectApproval);
 	/**
 	 * 通过id来查询立项表单
 	 * @param id
@@ -25,6 +25,12 @@ public interface ProjectApprovalDao {
 	 * 更改立项表单的状态
 	 * @param id
 	 */
-	public void updateProjectApprovalStatus(Integer id);
+	public int updateProjectApprovalStatus(Integer id);
+	/**
+	 * 通过id查询立项表单的状态  0是未接单，1是已接单
+	 * @param id
+	 * @return 
+	 */
+	public int getProjectApprovalStatusById(Integer id);
 	
 }

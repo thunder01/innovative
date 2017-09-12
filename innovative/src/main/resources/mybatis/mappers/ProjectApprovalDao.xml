@@ -27,17 +27,24 @@
 	</resultMap>
 	<!-- 添加立项表单 -->
 	<insert id="addProjectApproval" parameterType="ProjectApproval">
+		<selectKey keyProperty="id"  order="AFTER" resultType="int">
+			SELECT currval('xacx_project_approval_id_seq'::regclass)
+		</selectKey>
 		INSERT INTO xacx_project_approval(proname,pronum,eoms,demander,contact,demand_bg,demand_core,
 		demand_count,keyword,coopmodel,require,cost,completion,remark,create_date,create_by,status) 
 		VALUES(#{proname},#{pronum},#{eoms},#{demander},#{contact},#{demand_bg},#{demand_core},
 		#{demand_count},#{keyword},#{coopmodel},#{require},#{cost},#{completion},#{remark},current_date,#{create_by},0)
 	</insert>
-	
+		
 	<!-- 通过订单id查询立项表单 -->
 	<select id="getProjectApprovalById" parameterType="int" resultMap="ProjectApproval">
 		SELECT id,proname,pronum,eoms,demander,contact,demand_bg,demand_core,demand_count,keyword,coopmodel,
 		require,cost,completion,remark,create_date,create_by,late_date,late_by,status FROM xacx_project_approval 
-		WHERE (SELECT report_id FROM xacx_order_report WHERE order_id = #{order_id})
+		WHERE id = (SELECT approvalid FROM xacx_order WHERE id = #{order_id})
+	</select>
+	<!-- 通过id查询立项表单的状态  0是未接单，1是已接单 -->
+	<select id="getProjectApprovalStatusById" parameterType="int" resultType="int">
+		SELECT status FROM xacx_project_approval WHERE id = #{id}
 	</select>
 	
 	<!-- 查询所有的立项表单 -->
