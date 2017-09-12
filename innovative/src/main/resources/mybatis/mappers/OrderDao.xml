@@ -38,11 +38,29 @@
 		SELECT "id" FROM "xacx_order" WHERE approvalid=#{id}
 	</select>
 	
+	<!-- 根据订单id，查找出订单信息 -->
+	<select id="selectOrderById" parameterType="int" resultMap="OrderMap">
+		SELECT * FROM "xacx_order" WHERE "id"=#{orderid}
+	</select>
+	
 	<!-- 寻源工程师下单操作，更新已有的订单 -->
 	<update id="updateOrderLate_byId" parameterType="Order">
 		UPDATE "xacx_order" SET "late_date"=NOW(),late_by_id=#{late_byId} 
 		WHERE "id"=#{id}
 	</update>
 	
+	<!-- 根据订单id，查出拆解报告的id -->
+	<select id="selectDisassemble" parameterType="int" resultType="int">
+		SELECT "disassembleid" FROM "xacx_order" WHERE "orderid"=#{orderid}
+	</select>
 	
+	<!-- 根据订单id，查立项id -->
+	<select id="selectApproval" parameterType="int" resultType="int">
+		SELECT "approvalid" FROM "xacx_order" WHERE "id"=#{orderid}
+	</select>
+	
+	<!-- 修改订单的立项id -->
+	<update id="updateOrderSoucer" parameterType="Order">
+		UPDATE "xacx_order" SET "approvalid"=#{approvalid} WHERE "id"=#{id}
+	</update>
 </mapper>

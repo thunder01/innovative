@@ -44,4 +44,32 @@ public interface OrderDao {
 	 * */
 	public int updateOrderLate_byId(Order order);
 	
+	/**
+	 * 根据id查询出订单信息
+	 * @param orderid 订单id
+	 * @return
+	 * */
+	public Order selectOrderById(Integer orderid);
+	
+	/**
+	 * 根据订单id查询对应的需求id
+	 * @param orderid 订单id
+	 * @return
+	 * */
+	public int selectDisassemble(Integer orderid);
+	
+	/**
+	 * 根据定单id，查询出立项表单 的id
+	 * @param order
+	 * @return
+	 * */
+	public int selectApproval(Integer orderid);
+	
+	/**
+	 * 修改订单表
+	 * @param order
+	 * @return
+	 * */
+	public int updateOrderSoucer(Order order);
+	
 }
