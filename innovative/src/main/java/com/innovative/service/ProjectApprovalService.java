@@ -40,8 +40,10 @@ public class ProjectApprovalService {
 	 * @param id
 	 * @return
 	 */
-	public ProjectApproval getProjectApprovalById(Integer id) {
-		return projectApprovalDao.getProjectApprovalById(id);
+	public ProjectApproval getProjectApprovalById(Integer orderid) {
+		/*先根据订单id查出立项表单id*/
+		int approvalId=orderDao.selectApproval(orderid);
+		return projectApprovalDao.getProjectApprovalById(approvalId);
 	}
 	/**
 	 * 查询所有的立项表单

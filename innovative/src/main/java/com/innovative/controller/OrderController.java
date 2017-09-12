@@ -37,13 +37,7 @@ public class OrderController {
 	@RequestMapping(value="/receive/{userid}/{demandid}",method=RequestMethod.GET)
 	public JsonResult insertOrder(@PathVariable(name="userid")Integer userid,
 			@PathVariable(name="demandid")Integer demandid){
-		//首先查询该需求是否可接
-		
-		//若可接则生成订单，否则返回"此需求已被接单"
-		Order order = new Order();
-		order.setCreate_byId(userid);
-		order.setDemandId(demandid);
-		orderService.insertOrder(order);
+		orderService.insertOrder(userid,demandid);
 		
 		return new JsonResult(true, "订单生成成功");
 	}
@@ -56,19 +50,9 @@ public class OrderController {
 	@RequestMapping(value="/sourceOrder/{userid}/{approvalid}",method=RequestMethod.GET)
 	public JsonResult updateOrderLate_byId(@PathVariable(name="approvalid")Integer approvalid,
 			@PathVariable(name="userid")Integer userid){	
-		/*根据立项表单id,查询状态(0是为接单，1是已接单)*/
-		int status=projectApprovalService.getProjectApprovalStatusById(approvalid);
-		if (1==status) {
-			return new JsonResult(false, "已接单");
-		}else {//未接单
-			int orderId=orderService.selectOrderIdByApproval(approvalid);//根据立项id查出订单id	
-			Order order = new Order();
-			order.setId(orderId);//补全订单信息
-			order.setLate_byId(userid);
-
-			orderService.updateOrderLate_byId(order,approvalid);//修改订单信息
+			
+			orderService.updateOrderLate_byId(userid,approvalid);//修改订单信息
 			return new JsonResult(true, "生成订单成功");
-		}	
 	}
 	
 	/**
@@ -108,10 +92,8 @@ public class OrderController {
 	 * */
 	@RequestMapping(value="/disassembleDetail/{orderid}",method=RequestMethod.GET)
 	public JsonResult selectDisassemble(@PathVariable(name="orderid") Integer orderid){
-		/*先查询拆解报告id*/
-		int disassembleId=orderService.selectDisassemble(orderid);
 		/*查询需求报告信息*/
-		DisassembleReport report=disassembleService.getDisassembleReportById(disassembleId);
+		DisassembleReport report=disassembleService.getDisassembleReportById(orderid);
 		
 		/*判断结果是否为空*/
 		if (null!=report){
@@ -139,10 +121,8 @@ public class OrderController {
 	 * */
 	@RequestMapping(value="/approvalSelect/{orderid}",method=RequestMethod.GET)
 	public JsonResult selectApproval(@PathVariable(name="orderid") Integer orderid){
-		/*先查出立项表单id*/
-		int approvalId=orderService.selectApproval(orderid);
-		/*根据立项表单的id*/
-		ProjectApproval projectApproval=projectApprovalService.getProjectApprovalById(approvalId);
+		/*根据订单*/
+		ProjectApproval projectApproval=projectApprovalService.getProjectApprovalById(orderid);
 		
 		/*判断结果是否为空*/
 		if (projectApproval!=null) {

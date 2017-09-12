@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.innovative.bean.Order;
 import com.innovative.dao.OrderDao;
 import com.innovative.dao.ProjectApprovalDao;
+import com.innovative.utils.JsonResult;
 
 
 /**
@@ -27,7 +28,13 @@ public class OrderService {
 	 * @param order 订单对象
 	 * @return 受影响的行数
 	 * */
-	public int insertOrder(Order order){
+	public int insertOrder(Integer userid,Integer demandid){
+		//首先查询该需求是否可接
+		
+		//若可接则生成订单，否则返回"此需求已被接单"
+		Order order = new Order();
+		order.setCreate_byId(userid);
+		order.setDemandId(demandid);
 		return orderDao.insertOrder(order);
 	}
 	
@@ -37,10 +44,21 @@ public class OrderService {
 	 * @return
 	 * */
 	@Transactional
-	public int updateOrderLate_byId(Order order,Integer approvalId){
+	public int updateOrderLate_byId(Integer userid,Integer approvalId){
 		/*首先将立项表单的状态更改为已接单*/
 		projectApprovalDao.updateProjectApprovalStatus(approvalId);
-		return orderDao.updateOrderLate_byId(order);//插入订单数据
+		
+		/*根据立项表单id,查询状态(0是为接单，1是已接单)*/
+		int status=projectApprovalDao.getProjectApprovalStatusById(approvalId);
+		if (1==status) {
+			return 0;
+		}else {//未接单
+			int orderId=orderDao.selectOrderIdByApproval(approvalId);//根据立项id查出订单id	
+			Order order = new Order();
+			order.setId(orderId);//补全订单信息
+			order.setLate_byId(userid);
+			return orderDao.updateOrderLate_byId(order);//插入订单数据
+		}	
 	}
 	
 	/**
