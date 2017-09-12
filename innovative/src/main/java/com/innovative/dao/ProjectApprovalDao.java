@@ -11,20 +11,20 @@ public interface ProjectApprovalDao {
 	 */
 	public void addProjectApproval(ProjectApproval projectApproval);
 	/**
-	 * 删除一个立项表单
-	 * @param id
-	 */
-	public void deleteProjectApproval(Integer id);
-	/**
 	 * 通过id来查询立项表单
 	 * @param id
 	 * @return
 	 */
-	public ProjectApproval getProjectApprovalById(Integer id);
+	public ProjectApproval getProjectApprovalById(Integer order_id);
 	/**
 	 * 查询所有的立项表单
 	 * @return
 	 */
 	public List<ProjectApproval> getProjectApprovals();
+	/**
+	 * 更改立项表单的状态
+	 * @param id
+	 */
+	public void updateProjectApprovalStatus(Integer id);
 	
 }
