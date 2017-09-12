@@ -47,6 +47,9 @@
 		SELECT status FROM xacx_project_approval WHERE id = #{id}
 	</select>
 	
+	
+	
+	
 	<!-- 查询所有的立项表单 -->
 	<select id="getProjectApprovals" resultMap="ProjectApproval">
 		SELECT id,proname,pronum,eoms,demander,contact,demand_bg,demand_core,demand_count,keyword,coopmodel,

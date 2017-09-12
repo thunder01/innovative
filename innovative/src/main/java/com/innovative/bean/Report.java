@@ -1,13 +1,18 @@
 package com.innovative.bean;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 /**
  * 报告，方案线索、寻源报告、会议记录、出差报告、问题记录、项目总结
- * @author fzy
- * @version 1.0
- * */
-public class Report {
+ * @author huang
+ *
+ */
+public class Report implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private Integer id;//生成的主键id
 	private String title;//标题
 	private String content;//内容信息
@@ -20,15 +25,22 @@ public class Report {
 	private String create_by;//创建人
 	private Timestamp late_date;//创建时间
 	private String late_by;//最后修改者
+	private Integer deleted;//删除的状态
+	private Timestamp delete_date;//删除的状态的时间
+	private String delete_by;//谁删除的
 	
+	private Integer order_id;//订单id
+	private String demand_name;//需求名
 	public Report() {
 		super();
 	}
 
-	public Report(Integer id, String title, String content, String sector, String lable, String abstracts,
-			String type, String file, Timestamp create_date, String create_by, Timestamp late_date, String late_by) {
+	public Report(Integer id, String demand_name, String title, String content, String sector, String lable,
+			String abstracts, String type, String file, Timestamp create_date, String create_by, Timestamp late_date,
+			String late_by, Integer deleted, Timestamp delete_date, String delete_by) {
 		super();
 		this.id = id;
+		this.demand_name = demand_name;
 		this.title = title;
 		this.content = content;
 		this.sector = sector;
@@ -40,6 +52,9 @@ public class Report {
 		this.create_by = create_by;
 		this.late_date = late_date;
 		this.late_by = late_by;
+		this.deleted = deleted;
+		this.delete_date = delete_date;
+		this.delete_by = delete_by;
 	}
 
 	public Integer getId() {
@@ -48,6 +63,14 @@ public class Report {
 
 	public void setId(Integer id) {
 		this.id = id;
+	}
+
+	public String getDemand_name() {
+		return demand_name;
+	}
+
+	public void setDemand_name(String demand_name) {
+		this.demand_name = demand_name;
 	}
 
 	public String getTitle() {
@@ -138,11 +161,36 @@ public class Report {
 		this.late_by = late_by;
 	}
 
-	@Override
-	public String toString() {
-		return "XacxReport [id=" + id + ", title=" + title + ", content=" + content + ", sector=" + sector + ", lable="
-				+ lable + ", abstracts=" + abstracts + ", type=" + type + ", file=" + file + ", create_date="
-				+ create_date + ", create_by=" + create_by + ", late_date=" + late_date + ", late_by=" + late_by + "]";
+	public Integer getDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(Integer deleted) {
+		this.deleted = deleted;
+	}
+
+	public Timestamp getDelete_date() {
+		return delete_date;
+	}
+
+	public void setDelete_date(Timestamp delete_date) {
+		this.delete_date = delete_date;
+	}
+
+	public String getDelete_by() {
+		return delete_by;
+	}
+
+	public void setDelete_by(String delete_by) {
+		this.delete_by = delete_by;
+	}
+
+	public Integer getOrder_id() {
+		return order_id;
+	}
+
+	public void setOrder_id(Integer order_id) {
+		this.order_id = order_id;
 	}
 	
 	
