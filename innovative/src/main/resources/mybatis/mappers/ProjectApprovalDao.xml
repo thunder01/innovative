@@ -42,6 +42,10 @@
 		require,cost,completion,remark,create_date,create_by,late_date,late_by,status FROM xacx_project_approval 
 		WHERE id = (SELECT approvalid FROM xacx_order WHERE id = #{order_id})
 	</select>
+	<!-- 通过id查询立项表单的状态  0是未接单，1是已接单 -->
+	<select id="getProjectApprovalStatusById" parameterType="int" resultType="int">
+		SELECT status FROM xacx_project_approval WHERE id = #{id}
+	</select>
 	
 	<!-- 查询所有的立项表单 -->
 	<select id="getProjectApprovals" resultMap="ProjectApproval">

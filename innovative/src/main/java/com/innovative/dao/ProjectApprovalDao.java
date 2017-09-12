@@ -26,5 +26,11 @@ public interface ProjectApprovalDao {
 	 * @param id
 	 */
 	public int updateProjectApprovalStatus(Integer id);
+	/**
+	 * 通过id查询立项表单的状态  0是未接单，1是已接单
+	 * @param id
+	 * @return 
+	 */
+	public int getProjectApprovalStatusById(Integer id);
 	
 }

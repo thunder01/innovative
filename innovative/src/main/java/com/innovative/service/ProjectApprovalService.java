@@ -38,5 +38,13 @@ public class ProjectApprovalService {
 	public List<ProjectApproval> getProjectApprovals() {
 		return projectApprovalDao.getProjectApprovals();
 	}
+	/**
+	 * 通过id查询立项表单的状态  0是未接单，1是已接单
+	 * @param id
+	 * @return 立项表单的状态
+	 */
+	public int getProjectApprovalStatusById(Integer id){
+		return projectApprovalDao.getProjectApprovalStatusById(id);
+	}
 	
 }
