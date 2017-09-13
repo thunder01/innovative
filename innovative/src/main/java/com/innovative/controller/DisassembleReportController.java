@@ -45,7 +45,7 @@ public class DisassembleReportController {
                 String url = null;
                 for (int i = 0; i < FileData.length; i++) {
 
-                    url = FileUpload.copyInputStreamToFile(FileData[i], "disassemble");
+                    url = FileUpload.copyFile(FileData[i], "disassemble");
                     
                     if(i==FileData.length-1){
                     	buffer.append(url);
