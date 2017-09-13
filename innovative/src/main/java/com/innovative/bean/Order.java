@@ -24,6 +24,11 @@ public class Order implements Serializable{
 		super();
 	}
 
+	public Order(Integer id,Integer disassembleId) {
+		this.id = id;
+		this.disassembleId = disassembleId;
+	}
+	
 	public Order(Integer id, Integer demandId, Integer reportId, Integer approvalId, Integer disassembleId,
 			Integer status, Timestamp create_date, Integer create_byId, Timestamp late_date, Integer late_byId) {
 		super();

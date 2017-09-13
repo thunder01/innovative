@@ -15,7 +15,10 @@
 	</resultMap>
 
     <!--将拆解报告保存到服务器，并将记录保存到数据库-->
-    <insert id="saveDisassembleReport" parameterType="com.innovative.bean.DisassembleReport">
+    <insert id="saveDisassembleReport" parameterType="DisassembleReport">
+    	<selectKey resultType="int" keyProperty="id" order="AFTER">
+			SELECT currval('xacx_disassemble_report_id_seq'::regclass)
+		</selectKey>
         INSERT INTO "xacx_disassemble_report"
         (title ,file,create_date,create_by)
         VALUES

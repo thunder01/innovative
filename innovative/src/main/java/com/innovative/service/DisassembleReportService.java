@@ -2,15 +2,17 @@ package com.innovative.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.innovative.bean.DisassembleReport;
+import com.innovative.bean.Order;
 import com.innovative.dao.DisassembleReportDao;
 import com.innovative.dao.OrderDao;
 
 /**
  * 拆解报告的业务逻辑类
  * @author fzy
- * @version 1.0
+ * @version 2.0
  * */
 @Service
 public class DisassembleReportService {
@@ -21,11 +23,16 @@ public class DisassembleReportService {
 	
 	/**
 	 * 拆解报告上传后，在数据库中保存添加记录
-	 * @param list 图片地址，批量新增
+	 * @param repor 拆解报告信息
+	 * @param orderid 订单id
      * @return
 	 * */
-	public int saveDisassembleReport(DisassembleReport report){
-		return reportDao.saveDisassembleReport(report);
+	@Transactional
+	public int saveDisassembleReport(DisassembleReport report,Integer orderid){
+		/*首先向拆解报告表中添加一条记录，并返回其主键*/
+		reportDao.saveDisassembleReport(report);
+		/*然后更新订单表中的拆解报告id信息*/
+		return orderDao.updateDisassembleReport(new Order(orderid,report.getId()));	 
 	}
 	
 	/**

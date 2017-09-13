@@ -39,9 +39,12 @@ public class OrderController {
 	@RequestMapping(value="/receive/{userid}/{demandid}",method=RequestMethod.GET)
 	public JsonResult insertOrder(@PathVariable(name="userid")Integer userid,
 			@PathVariable(name="demandid")Integer demandid){
-		orderService.insertOrder(userid,demandid);
-		
-		return new JsonResult(true, "订单生成成功");
+		int flag=orderService.insertOrder(userid,demandid);
+		if (flag==1) {
+			return new JsonResult(true, "订单生成成功");
+		}else{
+			return new JsonResult(false, "订单生成失败");
+		}	
 	}
 	
 	/**
@@ -51,10 +54,13 @@ public class OrderController {
 	 * */
 	@RequestMapping(value="/sourceOrder/{userid}/{approvalid}",method=RequestMethod.GET)
 	public JsonResult updateOrderLate_byId(@PathVariable(name="approvalid")Integer approvalid,
-			@PathVariable(name="userid")Integer userid){	
-			
-			orderService.updateOrderLate_byId(userid,approvalid);//修改订单信息
-			return new JsonResult(true, "生成订单成功");
+			@PathVariable(name="userid")Integer userid){			
+			int flag=orderService.updateOrderLate_byId(userid,approvalid);//修改订单信息
+			if (flag==1) {
+				return new JsonResult(true, "订单生成成功");
+			}else{
+				return new JsonResult(false, "订单生成失败");
+			}
 	}
 	
 	/**
@@ -81,7 +87,7 @@ public class OrderController {
 	public JsonResult selectById(@PathVariable(name="orderid") Integer orderid){
 		Order order=orderService.selectOrderById(orderid);
 		/*判断结果是否为空*/
-		if (null!=order) {
+		if (order!=null) {
 			return new JsonResult(true, order);
 		}else {
 			return new JsonResult(false, "结果为空");
@@ -110,7 +116,7 @@ public class OrderController {
 	 * @param orderid
 	 * */
 	@RequestMapping(value="approvalSave/{orderid}",method=RequestMethod.POST)
-	public JsonResult approvalSave(@RequestBody ProjectApproval projectApproval,@PathVariable(name="orderid") Integer orderid){
+	public JsonResult approvalSave(ProjectApproval projectApproval,@PathVariable(name="orderid") Integer orderid){
 		/*保存立项表单*/
 		projectApprovalService.addProjectApproval(projectApproval,orderid);
 		return new JsonResult(true, "添加成功");
@@ -125,7 +131,7 @@ public class OrderController {
 	public JsonResult selectApproval(@PathVariable(name="orderid") Integer orderid){
 		/*根据订单*/
 		ProjectApproval projectApproval=projectApprovalService.getProjectApprovalById(orderid);
-		
+
 		/*判断结果是否为空*/
 		if (projectApproval!=null) {
 			return new JsonResult(true, projectApproval);
@@ -138,7 +144,7 @@ public class OrderController {
 	 * 需求广场列表
 	 * @return
 	 * */
-	@RequestMapping(value="demandSquare",method=RequestMethod.GET)
+	@RequestMapping(value="/demandSquare",method=RequestMethod.GET)
 	public JsonResult getProjectApprovals(){
 		List<ProjectApproval> list=projectApprovalService.getProjectApprovals();
 		/*判断结果*/

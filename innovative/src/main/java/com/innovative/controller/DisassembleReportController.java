@@ -33,12 +33,12 @@ public class DisassembleReportController {
 	 * @param DisassembleReport
 	 * @return
 	 * */
-	@RequestMapping(value = "/save", method = RequestMethod.POST)
-	public JsonResult saveDisassembleReport(@RequestParam(name = "FileData", required = true) MultipartFile[] FileData,DisassembleReport report){
+	@RequestMapping(value = "/upload/{orderid}", method = RequestMethod.POST)
+	public JsonResult saveDisassembleReport(@RequestParam(name = "FileData", required = true) MultipartFile[] FileData,
+			DisassembleReport report,@PathVariable(name="orderid") Integer orderid){
 		
 		//用于存储上传后拆解报告的地址
         StringBuffer buffer=new StringBuffer();
-        
 		//上传拆解报告的操作
         if (FileData != null && FileData.length > 0) {
             try {
@@ -60,7 +60,7 @@ public class DisassembleReportController {
 
         //向数据库插入上传信息
         report.setFile(buffer.toString());//添加上传记录中的文件路径
-        int result = disassembleService.saveDisassembleReport(report);
+        int result = disassembleService.saveDisassembleReport(report,orderid);
         if (result==0) {
             return new JsonResult(false, "报告上传失败！");
         }

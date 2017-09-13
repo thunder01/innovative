@@ -44,10 +44,7 @@ public class OrderService {
 	 * @return
 	 * */
 	@Transactional
-	public int updateOrderLate_byId(Integer userid,Integer approvalId){
-		/*首先将立项表单的状态更改为已接单*/
-		projectApprovalDao.updateProjectApprovalStatus(approvalId);
-		
+	public int updateOrderLate_byId(Integer userid,Integer approvalId){	
 		/*根据立项表单id,查询状态(0是为接单，1是已接单)*/
 		int status=projectApprovalDao.getProjectApprovalStatusById(approvalId);
 		if (1==status) {
@@ -57,7 +54,10 @@ public class OrderService {
 			Order order = new Order();
 			order.setId(orderId);//补全订单信息
 			order.setLate_byId(userid);
-			return orderDao.updateOrderLate_byId(order);//插入订单数据
+			/*首先更新订单表中的立项表单id信息*/
+			orderDao.updateOrderLate_byId(order);
+			/*将立项表单的状态置为1*/
+			return projectApprovalDao.updateProjectApprovalStatus(approvalId);
 		}	
 	}
 	
