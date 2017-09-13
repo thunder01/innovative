@@ -10,7 +10,7 @@ import com.innovative.bean.DisassembleReport;
 public interface DisassembleReportDao {
 	/**
 	 * 拆解报告上传后，在数据库中保存添加记录
-	 * @param list 图片地址，批量新增
+	 * @param report
      * @return
 	 * */
 	public int saveDisassembleReport(DisassembleReport report);

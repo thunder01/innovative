@@ -51,7 +51,7 @@
 	
 	<!-- 根据订单id，查出拆解报告的id -->
 	<select id="selectDisassemble" parameterType="int" resultType="int">
-		SELECT "disassembleid" FROM "xacx_order" WHERE "orderid"=#{orderid}
+		SELECT "disassembleid" FROM "xacx_order" WHERE "id"=#{orderid}
 	</select>
 	
 	<!-- 根据订单id，查立项id -->
@@ -59,8 +59,13 @@
 		SELECT "approvalid" FROM "xacx_order" WHERE "id"=#{orderid}
 	</select>
 	
-	<!-- 修改订单的立项id -->
-	<update id="updateOrderSoucer" parameterType="Order">
-		UPDATE "xacx_order" SET "approvalid"=#{approvalid} WHERE "id"=#{id}
+	<!-- 更新订单的拆解报告信息 -->
+	<update id="updateDisassembleReport" parameterType="Order">
+		UPDATE "xacx_order" SET "disassembleid"=#{disassembleId} WHERE "id"=#{id}
+	</update>
+	
+	<!-- 更新立项表单信息 -->
+	<update id="updateProjectApproval" parameterType="Order">
+		UPDATE "xacx_order" SET "approvalid"=#{approvalId} WHERE "id"=#{id}
 	</update>
 </mapper>

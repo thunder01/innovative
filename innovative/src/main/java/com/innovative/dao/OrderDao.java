@@ -66,10 +66,16 @@ public interface OrderDao {
 	public int selectApproval(Integer orderid);
 	
 	/**
-	 * 修改订单表
+	 * 更新订单表的拆解报告id信息
 	 * @param order
 	 * @return
 	 * */
-	public int updateOrderSoucer(Order order);
+	public int updateDisassembleReport(Order order);
 	
+	/**
+	 * 更新订单的立项表单信息
+	 * @param order
+	 * @return
+	 * */
+	public int updateProjectApproval(Order order);	
 }

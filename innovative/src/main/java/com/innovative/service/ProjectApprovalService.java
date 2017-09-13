@@ -28,22 +28,21 @@ public class ProjectApprovalService {
 	 * @param projectApproval
 	 */
 	public int addProjectApproval(ProjectApproval projectApproval,Integer orderid) {
+		/*添加一条立项表单信息*/
 		int approvalId=projectApprovalDao.addProjectApproval(projectApproval);
 		/*往订单表中添加一条数据*/
 		Order order=new Order();
 		order.setId(orderid);
-		order.setApprovalId(approvalId);
-		return orderDao.updateOrderSoucer(order);
+		order.setApprovalId(projectApproval.getId());
+		return orderDao.updateProjectApproval(order);
 	}
 	/**
 	 * 通过id来查询立项表单
-	 * @param id
+	 * @param 订单id
 	 * @return
 	 */
 	public ProjectApproval getProjectApprovalById(Integer orderid) {
-		/*先根据订单id查出立项表单id*/
-		int approvalId=orderDao.selectApproval(orderid);
-		return projectApprovalDao.getProjectApprovalById(approvalId);
+		return projectApprovalDao.getProjectApprovalById(orderid);
 	}
 	/**
 	 * 查询所有的立项表单
