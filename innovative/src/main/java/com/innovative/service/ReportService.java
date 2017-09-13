@@ -22,10 +22,10 @@ public class ReportService{
 	 */
 	@Transactional
 	public int addReportAndOrder_report(Report report) {
-		int report_id = reportDao.addReport(report);
+		reportDao.addReport(report);
 		Map<String, Object> map = new HashMap<>();
 		map.put("order_id", report.getOrder_id());
-		map.put("report_id", report_id);
+		map.put("report_id", report.getId());
 		return reportDao.addOrder_Report(map);
 		
 	}
@@ -53,6 +53,7 @@ public class ReportService{
 	 * @return
 	 */
 	public Report findReportById(Integer order_id,String type) {
+		System.out.println(">>>>>>>>>>"+order_id+">>>>>>>"+type);
 		Map<String, Object> map = new HashMap<String,Object>();
 		map.put("order_id", order_id);
 		map.put("type", type);
@@ -68,6 +69,18 @@ public class ReportService{
 	 */
 	public List<Report> findReportList(String type) {
 		List<Report> list = reportDao.findReportList(type);
+		//此处也是需要需求的名字
+		return list;
+	}
+	/**
+	 * 查询同一订单下的所有报告，根据创建时间排序
+	 * @param order_id
+	 * @return
+	 */
+	public List<Report> rankReport(Integer order_id){
+		System.out.println("-------"+order_id);
+		List<Report> list = reportDao.rankReport(order_id);
+		System.out.println("======="+list);
 		//此处也是需要需求的名字
 		return list;
 	}

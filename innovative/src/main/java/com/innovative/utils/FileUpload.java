@@ -50,8 +50,33 @@ public class FileUpload {
         write.write(decoderBytes);
         write.close();
 
-        return f.getAbsolutePath() + file.getOriginalFilename();
+        return f.getAbsolutePath();
     }
+    /**
+     * 上传文件到指定路径
+     *
+     * @param file
+     * @param tableName
+     * @throws IOException
+     */
+    public static String copyFile(MultipartFile file, String tableName) throws IOException {
+
+        //创建文件路径和文件夹
+        String dir = Config.FILE2_URL + tableName + "/" + DateUtil.getDay() + "/";
+        
+        File f = mkdirsmy(dir, file.getOriginalFilename());
+
+        
+        //上传到指定位置
+        FileOutputStream write = new FileOutputStream(f);
+        byte[] decoderBytes = file.getBytes();
+        write.write(decoderBytes);
+        write.close();
+
+        return f.getAbsolutePath();
+    }
+    
+    
 
     public static String getUrls(MultipartFile[] files, String tableName) {
 

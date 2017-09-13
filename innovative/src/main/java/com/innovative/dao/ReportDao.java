@@ -42,4 +42,10 @@ public interface ReportDao {
 	 * @return
 	 */
 	public List<Report> findReportList(String type);
+	/**
+	 * 给同一订单的报告排序
+	 * @param order_id
+	 * @return
+	 */
+	public List<Report> rankReport(Integer order_id);
 }
