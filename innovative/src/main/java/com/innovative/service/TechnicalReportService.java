@@ -2,10 +2,13 @@ package com.innovative.service;
 
 
 import com.innovative.bean.TechnicalReport;
+import com.innovative.dao.FileDao;
 import com.innovative.dao.TechnicalReportDao;
 import com.innovative.utils.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,7 +18,8 @@ public class TechnicalReportService {
 
     @Autowired
     private TechnicalReportDao technicalReportDao;
-
+    @Autowired
+    FileDao fileDao;
 
     /**
      * 根据id获取技术报告
@@ -23,10 +27,15 @@ public class TechnicalReportService {
      * @param id 技术报告id
      * @return
      */
-    public TechnicalReport getTechnicalReportById(Integer id) {
+    public TechnicalReport getTechnicalReportById(String id) {
 
-        return technicalReportDao.getTechnicalReportById(id);
-
+    	TechnicalReport technicalReport = technicalReportDao.getTechnicalReportById(id);
+		if(technicalReport!=null){
+		   List<String> url = fileDao.getPhotoByMOdAndId(id, "reportPhoto");
+		   if(url != null && url.size() > 0 )
+			   technicalReport.setPictures(url.get(0));
+		}
+		return technicalReport;
     }
 
     /**
@@ -71,11 +80,12 @@ public class TechnicalReportService {
      * @param technicalReport 参数集合
      * @return
      */
+    @Transactional
     public boolean insertTechnicalReport(TechnicalReport technicalReport) {
 
-        int result = technicalReportDao.insertTechnicalReport(technicalReport);
-
-        return result > 0 ? true : false;
+        technicalReportDao.insertTechnicalReport(technicalReport);
+        //增加成功
+		 return fileDao.updateFile(technicalReport.getId());
     }
 
     /**

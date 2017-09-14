@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,11 +37,12 @@ public class FileController extends BaseController {
 				    		@RequestParam(name="modname",required=true) String modname,
 				    		@RequestParam(name="userid",required=true) String userid,
 				    		@RequestParam(name="introductions",required=false) String introductions,
-				    		HttpServletResponse res) {
+				    		HttpServletResponse res,HttpServletRequest request) {
     	 res.setContentType("application/json;charset=UTF-8");
     	 res.setCharacterEncoding("utf-8");
     	 res.setHeader("Charset", "utf-8");
     	 res.setHeader("Cache-Control", "no-cache");
+    	 System.out.println("<><><><>"+request.getServletContext().getRealPath("/"));
     	 boolean val = false;
     	if(FileData.length<=0){
     		val = false;
@@ -49,7 +51,7 @@ public class FileController extends BaseController {
     		modname="file";
     	PrintWriter print ;
        try {
-    	   boolean flag = fileservice.uploadFile(FileData,modname,userid,introductions);
+    	   boolean flag = fileservice.uploadFile(FileData,modname,userid,introductions,request);
     	   print  = res.getWriter();
     	   print.write(flag+"");
     	   print.flush();
@@ -61,7 +63,7 @@ public class FileController extends BaseController {
     }
 
 
-    @RequestMapping(value = "/loadFile", method = RequestMethod.POST  )
+    @RequestMapping(value = "/loadFile", method = RequestMethod.GET )
     public JsonResult fileload(@RequestParam("userid")String userid , @RequestParam("modname")String modname){
     	List<FileBean> list = null;
     	if( userid!=null && userid.length()>0 && modname!=null && modname.length()>0 )

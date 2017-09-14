@@ -28,6 +28,31 @@
             </if>
         </where>
     </select>
+    
+    <select id="getExpertTotalCount" resultType="int">
+		SELECT count(1) FROM "Experts"
+		 <where>
+            <if test="key1!='%%' and key1!='%null%'">
+                OR "Name" LIKE #{key1}
+            </if>
+            <if test="key1!='%%' and key1!='%null%'">
+                OR "Unit" LIKE #{key1}
+            </if>
+            <if test="key1!='%%' and key1!='%null%'">
+                OR "ResearchDirection" LIKE #{key1}
+            </if>
+            <if test="key1!='%%' and key1!='%null%'">
+                OR "Education" LIKE #{key1}
+            </if>
+            <if test="key1!='%%' and key1!='%null%'">
+                OR "JobTitle" LIKE #{key1}
+            </if>
+            <if test="key2!='{}' and key2!='{null}'">
+                OR "Sectors" @> '${key2}'
+            </if>
+			AND "Deleted" = 'f' AND "IsActive" = 't'
+		</where>
+	</select>
 
 
     <select id="getOrganizationList" resultType="Organization">
@@ -41,6 +66,31 @@
             </if>
         </where>
     </select>
+    
+     <select id="getOrganizationTotalCount" resultType="int">
+		SELECT count(1) FROM "Organizations"
+		 <where>
+            <if test="key1!='%%' and key1!='%null%'">
+                OR "Name" LIKE #{key1}
+            </if>
+            <if test="key1!='%%' and key1!='%null%'">
+                OR "Unit" LIKE #{key1}
+            </if>
+            <if test="key1!='%%' and key1!='%null%'">
+                OR "ResearchDirection" LIKE #{key1}
+            </if>
+            <if test="key1!='%%' and key1!='%null%'">
+                OR "Education" LIKE #{key1}
+            </if>
+            <if test="key1!='%%' and key1!='%null%'">
+                OR "JobTitle" LIKE #{key1}
+            </if>
+            <if test="key2!='{}' and key2!='{null}'">
+                OR "Sectors" @> '${key2}'
+            </if>
+			AND "Deleted" = 'f' AND "IsActive" = 't'
+		</where>
+	</select>
 
 
     <select id="getTechnicalReportList" resultType="TechnicalReport">
@@ -57,6 +107,21 @@
             </if>
         </where>
     </select>
+    
+     <select id="getTechnicalReportsTotalCount" resultType="int">
+		SELECT count(1) FROM "TechnicalReports"
+		 <where>
+            <if test="key1!='%%' and key1!='%null%'">
+                OR "Name" LIKE #{key1}
+            </if>
+            <if test="key2!='{}' and key2!='{null}'">
+                OR "Sectors" @> '${key2}'
+            </if>
+            <if test="key2!='{}' and key2!='{null}'">
+                OR "Tags" @> '${key2}'
+            </if>
+		</where>
+	</select>
 
 
     <select id="getSolutionList" resultType="Solution">
@@ -73,6 +138,7 @@
             </if>
         </where>
     </select>
+    
 
 
     <select id="getEquipmentList" resultType="Equipment">

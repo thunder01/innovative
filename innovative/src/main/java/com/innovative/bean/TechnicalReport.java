@@ -2,13 +2,15 @@ package com.innovative.bean;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.List;
+
 
 /**
  * 技术报告
  */
 public class TechnicalReport implements Serializable {
 
-    private int id;
+    private String id;
     private String content;//正文
     private Timestamp createdAt;//创建时间
     private String createdBy;//创建人
@@ -17,7 +19,7 @@ public class TechnicalReport implements Serializable {
     private String deletedBy;//删除操作人
     private boolean isActive;//显示或隐藏
     private String name;//标题名称
-    private String[] pictures;//图片
+    private String pictures;//图片
     private int rank;
     private int rowVersion;
     private String[] sectors;//行业领域
@@ -26,15 +28,18 @@ public class TechnicalReport implements Serializable {
     private Timestamp updatedAt;//更新时间
     private String updatedBy;//更新人
     private String file; //文件
-
+    List<FileBean> filelist ;
+    private int fileSize;//
     public TechnicalReport() {
     }
 
 
-    public TechnicalReport(int id, String content, Timestamp createdAt, String createdBy, boolean deleted,
-			Timestamp deletedAt, String deletedBy, boolean isActive, String name, String[] pictures, int rank,
+
+	public TechnicalReport(String id, String content, Timestamp createdAt, String createdBy, boolean deleted,
+			Timestamp deletedAt, String deletedBy, boolean isActive, String name, String pictures, int rank,
 			int rowVersion, String[] sectors, String summary, String[] tags, Timestamp updatedAt, String updatedBy,
-			String file) {
+			String file, List<FileBean> filelist) {
+		super();
 		this.id = id;
 		this.content = content;
 		this.createdAt = createdAt;
@@ -53,14 +58,40 @@ public class TechnicalReport implements Serializable {
 		this.updatedAt = updatedAt;
 		this.updatedBy = updatedBy;
 		this.file = file;
+		this.filelist = filelist;
 	}
 
 
-	public int getId() {
+	
+	public int getFileSize() {
+		return filelist==null|| filelist.size()<=0 ? 0 : filelist.size();
+	}
+
+
+
+	public void setFileSize(int fileSize) {
+		this.fileSize = fileSize;
+	}
+
+
+
+	public List<FileBean> getFilelist() {
+		return filelist;
+	}
+
+
+
+	public void setFilelist(List<FileBean> filelist) {
+		this.filelist = filelist;
+	}
+
+
+
+	public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -155,12 +186,12 @@ public class TechnicalReport implements Serializable {
     }
 
 
-    public String[] getPictures() {
+    public String getPictures() {
 		return pictures;
 	}
 
 
-	public void setPictures(String[] pictures) {
+	public void setPictures(String pictures) {
 		this.pictures = pictures;
 	}
 

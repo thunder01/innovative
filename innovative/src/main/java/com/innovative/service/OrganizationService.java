@@ -1,12 +1,15 @@
 package com.innovative.service;
 
 
+import com.innovative.bean.Expert;
 import com.innovative.bean.Organization;
+import com.innovative.dao.FileDao;
 import com.innovative.dao.OrganizationDao;
 import com.innovative.utils.CodeItemUtil;
 import com.innovative.utils.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.List;
@@ -20,18 +23,26 @@ public class OrganizationService {
     OrganizationDao organizationDao;
     @Autowired
     CodeItemUtil codeItemUtil;
+    @Autowired
+    FileDao fileDao;
 
     /**
      * 根据id获取机构详情
      * @param id 机构id
      * @return
      */
-    public Organization getOrganization(Integer id){
+    public Organization getOrganization(String id){
     		Organization organization =	organizationDao.getOrganization(id);
-    		List<Map<String,Object>> statusMap = codeItemUtil.getCodeItemList("EXPERT_COOPERSTATUS",organization.getCooperationStatus());
-			if(statusMap!=null)
-				organization.setCooperationStatusMap(statusMap.get(0));
-        return organization;
+    		if(organization!=null){
+    			//文件图片我们都改到一张专门的表来存储
+    		   List<String> url = fileDao.getPhotoByMOdAndId(id, "expertPhoto");
+    		   if(url != null && url.size() > 0 )
+    			   organization.setLogo( url.get(0));
+        		List<Map<String,Object>> statusList = codeItemUtil.getCodeItemList("EXPERT_COOPERSTATUS",organization.getCooperationStatus());
+        		if(statusList!=null&&statusList.size()>0)
+        			organization.setCooperationStatusMap(statusList.get(0));
+    		}
+    		return organization;
     }
 
 
@@ -69,8 +80,12 @@ public class OrganizationService {
      * @param organization 新增参数
      * @return
      */
+    @Transactional
     public boolean addOrganization(Organization organization) {
-        return (organizationDao.addOrganization(organization) > 0);
+        //增加成功
+        organizationDao.addOrganization(organization);
+    		  
+		 return fileDao.updateFile(organization.getId());
     }
 
 

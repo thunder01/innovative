@@ -95,14 +95,15 @@ public class ExpertController extends BaseController {
     @ResponseBody
     public JsonResult updateExpert(@RequestBody Expert expert,HttpServletRequest req) {
 
-        if(expertService.getExpert(expert.getId()) == null){
+        if("".equals(expert.getId())||expertService.getExpert(expert.getId()) == null){
             return new JsonResult(false, "此记录不存在");
         }
         expert.setUpdatedBy(CookiesUtil.getCookieValue(req,"user_name"));
         if (!expertService.updateExpert(expert)) {
             return new JsonResult(false, "修改失败，请重试！");
         }
-        return new JsonResult(true, "修改成功！");
+        Expert newexpert = expertService.getExpert(expert.getId());
+        return newexpert != null ? new JsonResult(true, newexpert):new JsonResult(false, "获取新对象失败");
     }
 
 

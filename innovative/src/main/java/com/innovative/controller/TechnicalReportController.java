@@ -34,7 +34,7 @@ public class TechnicalReportController {
      * @return
      */
     @RequestMapping(value = "/getById/{id}", method = RequestMethod.GET)
-    public JsonResult getTechnicalReportById(@PathVariable(name = "id", required = true) Integer id) {
+    public JsonResult getTechnicalReportById(@PathVariable(name = "id", required = true) String id) {
 
         TechnicalReport technicalReport = technicalReportService.getTechnicalReportById(id);
         if (technicalReport == null) {
@@ -86,7 +86,7 @@ public class TechnicalReportController {
      * @param technicalReport    技术报告bean
      * @return
      */
-    @RequestMapping(value = "update", method = RequestMethod.POST)
+    @RequestMapping(value = "updateTechnicalReport", method = RequestMethod.POST)
     @ResponseBody
     public JsonResult updateTechnicalReport(@RequestBody TechnicalReport technicalReport,HttpServletRequest req) {
     	
@@ -104,8 +104,8 @@ public class TechnicalReportController {
         if (!result) {
             return new JsonResult(false, "修改技术报告失败，请重试！");
         }
-
-        return new JsonResult(true, "修改技术报告成功！");
+        TechnicalReport tech =  technicalReportService.getTechnicalReportById(technicalReport.getId());
+        return tech != null ? new JsonResult(true, tech) : new JsonResult(true, "获取技术报告失败!") ;
     }
 
 }

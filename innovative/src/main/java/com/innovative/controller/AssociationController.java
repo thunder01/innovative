@@ -32,7 +32,7 @@ public class AssociationController extends BaseController {
      * @return
      */
     @RequestMapping(value = "/getAssociation/{id}", method = RequestMethod.GET)
-    public JsonResult getAssociation(@PathVariable(name = "id") Integer id) {
+    public JsonResult getAssociation(@PathVariable(name = "id") String id) {
 
         Association association = associationService.getAssociation(id);
         if (association != null) {
@@ -102,7 +102,8 @@ public class AssociationController extends BaseController {
         if (!associationService.updateAssociation(association)) {
             return new JsonResult(false, "修改失败，请重试！");
         }
-        return new JsonResult(true, "修改成功！");
+        Association associati = associationService.getAssociation(association.getId());
+        return associati != null ? new JsonResult(true, associati) : new JsonResult(false, "获取协会失败");
     }
 
 

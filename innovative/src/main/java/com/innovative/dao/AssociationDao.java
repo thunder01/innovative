@@ -14,7 +14,7 @@ public interface AssociationDao {
      * @param id 协会id
      * @return
      */
-    Association getAssociation(@Param("id") Integer id);
+    Association getAssociation(@Param("id") String id);
 
 
 
@@ -49,7 +49,6 @@ public interface AssociationDao {
      * @return
      */
     int updateAssociation(Association association);
-
 
 
 

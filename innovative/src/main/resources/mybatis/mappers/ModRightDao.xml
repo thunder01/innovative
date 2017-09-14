@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.innovative.dao.ModRightDao">
+	
+
+
+    <!--根据查询条件获取列表-->
+    <select id="getModRightByType" resultType="ModRight">
+       WITH RECURSIVE T ("Id", "Pid", "RightName", PATH, DEPTH)  AS (
+		    SELECT "Id", "Pid", "RightName", "Id"||'/' AS PATH, 1 AS DEPTH
+		    FROM app_right
+		    <where>
+		      "Pid"  = '0' 
+		       <if test="rightType!=null and rightType!=''">
+		     	    and "RightType" = #{rightType}
+		       </if>
+		    </where>
+		
+		    UNION ALL
+		
+		    SELECT  D."Id",D."Pid", D."RightName", T.PATH || D."Id", T.DEPTH + 1 AS DEPTH
+		    FROM app_right D
+		    JOIN T ON D."Pid" = T."Id"
+		    )
+		    SELECT "Id", "Pid", "RightName", PATH, DEPTH FROM T
+		ORDER BY PATH;
+    </select>
+
+
+</mapper>

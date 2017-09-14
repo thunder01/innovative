@@ -1,11 +1,14 @@
 package com.innovative.service;
 
 
+import com.innovative.bean.Organization;
 import com.innovative.bean.Solution;
+import com.innovative.dao.FileDao;
 import com.innovative.dao.SolutionDao;
 import com.innovative.utils.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.List;
@@ -16,6 +19,8 @@ public class SolutionService {
 
     @Autowired
     private SolutionDao solutionDao;
+    @Autowired
+    FileDao fileDao;
 
 
     /**
@@ -24,9 +29,16 @@ public class SolutionService {
      * @param id 方案id
      * @return
      */
-    public Solution getSolutionById(Integer id) {
+    public Solution getSolutionById(String id) {
 
-        return solutionDao.getSolutionById(id);
+    	Solution solution = solutionDao.getSolutionById(id);
+		if(solution!=null){
+			//文件图片我们都改到一张专门的表来存储
+		   List<String> urllist = fileDao.getPhotoByMOdAndId(id, "programPhoto");
+		   if(urllist != null && urllist.size() > 0 )
+			   solution.setPictures(urllist.get(0));
+		}
+		return solution;
 
     }
 
@@ -72,11 +84,14 @@ public class SolutionService {
      * @param solution 参数集合
      * @return
      */
+    @Transactional
     public boolean insertSolution(Solution solution) {
 
-        int result = solutionDao.insertSolution(solution);
+        solutionDao.insertSolution(solution);
 
-        return result > 0 ? true : false;
+        //增加成功
+    		  
+		 return fileDao.updateFile(solution.getId());
     }
 
     /**
