@@ -5,6 +5,10 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * 文件上传
@@ -29,6 +33,33 @@ public class FileUpload {
         return file;
     }
 
+    /**
+     * 上传文件到指定路径
+     *
+     * @param file
+     * @param tableName
+     * @throws IOException
+     */
+    public static Map<String,String> copyInputStreamToFileForName(MultipartFile file, String tableName) throws IOException {
+
+        //创建文件路径和文件夹
+        String dir = Config.FILE_URL + tableName + "/" + DateUtil.getDay() + "/";
+        File f = mkdirsmy(dir, file.getOriginalFilename());
+        
+        
+        
+        //上传到指定位置
+        FileOutputStream write = new FileOutputStream(f);
+        byte[] decoderBytes = file.getBytes();
+        write.write(decoderBytes);
+        write.close();
+        Map<String,String> map = new HashMap<String,String> ();
+        map.put("url", f.getAbsolutePath());
+        map.put("name", file.getOriginalFilename());
+
+        return map;
+    }
+    
     /**
      * 上传文件到指定路径
      *
@@ -100,6 +131,26 @@ public class FileUpload {
         }
         return fileUrls.toString();
     }
+
+	public static Map<String, String> copyInputStreamToFileForName(MultipartFile file, String tableName,
+			HttpServletRequest req) throws IOException {
+		  //创建文件路径和文件夹
+        String dir = "/data/wwwroot/default/attachments/images/java"+Config.FILE_URL + tableName + "/" + DateUtil.getDay() + "/";
+        File f = mkdirsmy(dir, file.getOriginalFilename());
+        
+        
+        
+        //上传到指定位置
+        FileOutputStream write = new FileOutputStream(f);
+        byte[] decoderBytes = file.getBytes();
+        write.write(decoderBytes);
+        write.close();
+        Map<String,String> map = new HashMap<String,String> ();
+        map.put("url", f.getAbsolutePath());
+        map.put("name", file.getOriginalFilename());
+
+        return map;
+	}
     
     
 

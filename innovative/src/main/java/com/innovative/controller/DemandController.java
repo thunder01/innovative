@@ -2,11 +2,14 @@ package com.innovative.controller;
 
 import com.innovative.bean.Association;
 import com.innovative.bean.Demand;
+import com.innovative.bean.Message;
 import com.innovative.service.DemandService;
+import com.innovative.service.MessageService;
 import com.innovative.utils.BaseController;
 import com.innovative.utils.JsonResult;
 import com.innovative.utils.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -20,10 +23,12 @@ import java.util.Optional;
  */
 @RestController
 @RequestMapping("/demand")
-public class DemandController extends BaseController{
+public class DemandController{
 
     @Autowired
-    DemandService demandService;
+     private DemandService demandService;
+    @Autowired
+     private  MessageService messageService;
 
     /**
      * 根据ID查询内容
@@ -58,10 +63,17 @@ public class DemandController extends BaseController{
      * 添加内容
      */
     @RequestMapping(value = "/add",method = RequestMethod.POST)
+    @Transactional
     public  JsonResult add(@RequestBody Demand demand){
+        Message message=new Message();
+
         String messge="保存成功!";
         boolean code=true;
         if(demandService.addDemand(demand)){
+            System.out.println(">>>>>>>>>>>>"+demand.getId());
+            message.setProjectId(demand.getId());
+            message.setType("0");
+            messageService.addMessage(message);
         }else{
             messge="保存失败";
             code=false;

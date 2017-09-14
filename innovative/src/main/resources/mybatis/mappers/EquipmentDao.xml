@@ -27,12 +27,18 @@
 		  <result property="updatedBy" column="updatedBy"/>
 		  <result property="tags" column="tags" typeHandler="com.innovative.mybatisHandler.ArrayTypeHandler"/>
 		  <result property="sectors" column="sectors" typeHandler="com.innovative.mybatisHandler.ArrayTypeHandler"/>
+		   <collection property="filelist" ofType="FileBean">  
+	           <result property="refId" column="refId"/>
+	           <result property="refType" column="refType"/>
+		  	   <result property="url" column="url"/>
+		  	   <result property="fileName" column="filename"/>
+	       </collection> 
 		</resultMap> 
 
     <!--根据id获取设备信息-->
     <select id="getEquipmentById" resultMap="equipmentMap">
-		SELECT "Name","Picture","Unit","State","Manufacturer","Introduction","Sharing","Contact","Sectors","Tags","Rank","RowVersion","IsActive","Id","File","Deleted","CreatedAt","UpdatedAt"
-		FROM "Equipments"
+		SELECT "Name","Picture","Unit","State","Manufacturer","Introduction","Sharing","Contact","Sectors","Tags","Rank","RowVersion","IsActive","Id","File","Deleted","CreatedAt","UpdatedAt","PurchasedAt",f."url",f."refId",f."refType",f."filename"
+		FROM "Equipments" e LEFT JOIN "xacx_file" f on f."refId" = e."Id" and f."refType" = 'equipmentFile' and f."sign" = 'add'
 		WHERE "Id" =  #{id}
 	</select>
 
@@ -46,6 +52,7 @@
             </if> -->
                "Deleted" = 'f' AND "IsActive" = 't'
         </where>
+        order by "UpdatedAt"  DESC 
         limit #{pageSize} offset #{startIndex}
     </select>
 
@@ -63,16 +70,16 @@
     <!--新增设备-->
     <insert id="insertEquipment" parameterType="Equipment">
         INSERT INTO "Equipments"
-        ( "Sharing", "Name", "Unit", "State", "Manufacturer", "PurchasedAt", "Introduction", "Picture", "Contact", "Sectors", "Tags", "Rank", "IsActive", "File", "CreatedBy", "RowVersion", "CreatedAt")
+        ( "Id","Sharing", "Name", "Unit", "State", "Manufacturer", "PurchasedAt", "Introduction", "Picture", "Contact", "Sectors", "Tags", "Rank", "IsActive", "File", "CreatedBy", "RowVersion", "CreatedAt")
         VALUES
-        (#{sharing}, #{name}, #{unit}, #{state}, #{manufacturer}, now(), #{introduction}, #{picture}, #{contact}, 
+        (#{id},#{sharing}, #{name}, #{unit}, #{state}, #{manufacturer}, #{purchasedAt}, #{introduction}, #{picture}, #{contact}, 
 	        <choose>
 				<when test="sectors != null">
 					<foreach item="sector" collection="sectors" separator="," open="'{" close="}'," index="">
 				      ${sector}
 				    </foreach>  
 				</when>
-				<otherwise>null,</otherwise>
+				<otherwise>'{}',</otherwise>
 			</choose>
 			<choose>
 				<when test="tags != null">
@@ -80,7 +87,7 @@
 				      ${tag}
 				    </foreach>  
 				</when>
-			<otherwise>null,</otherwise>
+			<otherwise>'{}',</otherwise>
 		</choose>
         #{rank}, true, #{file}, '', 0, now())
     </insert>

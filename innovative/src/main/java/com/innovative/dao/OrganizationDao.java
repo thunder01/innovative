@@ -15,7 +15,7 @@ public interface OrganizationDao {
      * @param id 机构id
      * @return
      */
-    Organization getOrganization(@Param("id") Integer id);
+    Organization getOrganization(@Param("id") String id);
 
 
     /**

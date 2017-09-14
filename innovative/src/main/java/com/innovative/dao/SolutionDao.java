@@ -13,7 +13,7 @@ public interface SolutionDao {
      * @param id 方案id
      * @return
      */
-    Solution getSolutionById(@Param("id") Integer id);
+    Solution getSolutionById(@Param("id") String id);
 
     /**
      * 分页条件查询

@@ -39,6 +39,9 @@
     </update>
     <!-- 新增-->
     <insert id="addDemand" parameterType="Demand">
+        <selectKey resultType="int" keyProperty="id" order="AFTER">
+            SELECT currval('xacx_demand_sequence'::regclass)
+        </selectKey>
         INSERT  INTO "xacx_demand"
         ("name","number","iphone","create_date","create_by","late_date","late_by","bgd","demandd","interestpg","ninterestpg",
         "gjc","hzms","hzrequest","productm","product_date","bz","check_name","ddmj","option")

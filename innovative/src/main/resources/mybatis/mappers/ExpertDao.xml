@@ -17,6 +17,7 @@
 	  <result property="hFactor" column="hFactor"/>
 	  <result property="isActive" column="isActive"/>
 	  <result property="jobTitle" column="jobTitle"/>
+	   <result property="avatar" column="avatar"/>
 	  <result property="name" column="name"/>
 	  <result property="rank" column="rank"/>
 	  <result property="researchAchievement" column="researchAchievement"/>
@@ -29,12 +30,20 @@
 	  <result property="file" column="file"/>
 	  <result property="tags" column="tags" typeHandler="com.innovative.mybatisHandler.ArrayTypeHandler"/>
 	  <result property="sectors" column="sectors" typeHandler="com.innovative.mybatisHandler.ArrayTypeHandler"/>
+	   <collection property="filelist" ofType="FileBean">  
+           <result property="refId" column="refId"/>
+           <result property="refType" column="refType"/>
+	  	   <result property="url" column="url"/>
+	  	   <result property="fileName" column="filename"/>
+       </collection> 
 	</resultMap> 
 
     <!--根据id获取专家详情-->
 	<select id="getExpert" resultMap="expertMap">
-		SELECT * FROM "Experts" WHERE "Id" =  #{id};
+		SELECT * FROM "Experts"  e LEFT JOIN "xacx_file" f on f."refId" = e."Id" and f."refType" = 'expertFile' and f."sign" = 'add'
+		 WHERE "Id" =  #{id} ;
 	</select>
+
 
 
 	<!--根据查询条件获取列表-->
@@ -45,11 +54,13 @@
 				 "Sectors" @> '${sectors}'
 			</if>
 		</where>
+		order by "UpdatedAt"  DESC 
 		limit #{pageSize} offset #{startIndex}
 	</select>
 	<!--根据查询条件获取列表-->
 	<select id="getExpertLists" resultMap="expertMap">
 		SELECT * FROM "Experts"
+		order by "UpdatedAt"  DESC 
 		limit #{pageSize} offset #{startIndex}
 	</select>
 
@@ -92,7 +103,7 @@
 		      ${sector}
 		    </foreach>  
 		</when>
-		<otherwise>null,</otherwise>
+		<otherwise>'{}',</otherwise>
 	</choose>
 	<choose>
 		<when test="tags != null">
@@ -100,7 +111,7 @@
 		      ${tag}
 		    </foreach>  
 		</when>
-		<otherwise>null,</otherwise>
+		<otherwise>'{}',</otherwise>
 	</choose>
 	  #{unit}, now(), #{createdBy}, '${file}')
 	</insert>
@@ -150,7 +161,7 @@
 					      ${sector}
 					    </foreach>  
 					</when>
-					<otherwise>null,</otherwise>
+					<otherwise>'{}',</otherwise>
 				</choose>
 			</if>
 			<if test="tags!=null and tags!=''">
@@ -161,6 +172,7 @@
 					      ${tag}
 					    </foreach>  
 					</when>
+					<otherwise>'{}',</otherwise>
 				</choose>
 			</if>
 			<if test="rank!=null and rank!=''">

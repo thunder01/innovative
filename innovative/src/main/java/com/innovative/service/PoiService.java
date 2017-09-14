@@ -4,6 +4,7 @@ package com.innovative.service;
 import com.github.pagehelper.StringUtil;
 import com.innovative.bean.Expert;
 import com.innovative.dao.PoiDao;
+import com.innovative.utils.Misc;
 import com.innovative.utils.PoiUtil;
 import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -101,6 +102,8 @@ public class PoiService {
                         expert.setCreatedBy(row.getCell((short)16).getStringCellValue());
                         expert.setRank((int)row.getCell((short)17).getNumericCellValue());
                         expert.setRowVersion((int)row.getCell((short)18).getNumericCellValue());
+                        expert.setTags((row.getCell((short)19).getStringCellValue().toString()).split(","));
+                        expert.setId(Misc.uuid());
                         /*expert.setTags("{}");*/
                         //封装第a行的对象信息,用map封装expert 对象 key值对应sheet.row下标
                         map.put(String.valueOf(she)+","+String.valueOf(a), expert);

@@ -13,7 +13,7 @@ public interface EquipmentDao {
      * @param id 方案id
      * @return
      */
-    Equipment getEquipmentById(@Param("id") Integer id);
+    Equipment getEquipmentById(@Param("id") String id);
 
     /**
      * 分页条件查询

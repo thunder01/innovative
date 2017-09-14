@@ -3,10 +3,12 @@ package com.innovative.service;
 
 import com.innovative.bean.Association;
 import com.innovative.dao.AssociationDao;
+import com.innovative.dao.FileDao;
 import com.innovative.utils.CodeItemUtil;
 import com.innovative.utils.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.List;
@@ -20,20 +22,27 @@ public class AssociationService {
     AssociationDao associationDao;
     @Autowired
     CodeItemUtil codeItemUtil;
-
+    @Autowired
+    FileDao fileDao;
 
     /**
      * 根据id获取行业协会详情
      * @param id 协会id
      * @return
      */
-    public Association getAssociation(Integer id){
+    public Association getAssociation(String id){
 
          
     	Association association	= associationDao.getAssociation(id);
-	        List<Map<String,Object>> statusMap = codeItemUtil.getCodeItemList("EXPERT_COOPERSTATUS",association.getCooperationStatus());
-			if(statusMap!=null)
-				association.setCooperationStatusMap(statusMap.get(0));
+	       
+			if(association!=null){
+				List<String> urllist = fileDao.getPhotoByMOdAndId(id, "indusinfoPhoto");
+     		   if(urllist != null && urllist.size() > 0 )
+     			 association.setLogo( urllist.get(0));
+				List<Map<String,Object>> statuslist = codeItemUtil.getCodeItemList("EXPERT_COOPERSTATUS",association.getCooperationStatus());
+				if(statuslist!=null&&statuslist.size()>0)
+					association.setCooperationStatusMap(statuslist.get(0));
+			}
 			return association;
     }
 
@@ -72,9 +81,13 @@ public class AssociationService {
      * @param association 新增参数
      * @return
      */
+    @Transactional
     public boolean addAssociation(Association association) {
 
-        return (associationDao.addAssociation(association) > 0);
+        //增加成功
+    	  associationDao.addAssociation(association);
+    		  
+		 return fileDao.updateFile(association.getId());
     }
 
 

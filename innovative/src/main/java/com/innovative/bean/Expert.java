@@ -40,7 +40,65 @@ public class Expert implements Serializable{
 	private String updatedBy;   //修改来源
 	private String file;  //文件
 	
+	List<FileBean> filelist ;
+	private int fileSize;//
 	
+	public Expert(){
+		
+		
+	}
+	
+	public Expert(String id, String avatar, String contact, int cooperationStatus, String cooperName,
+			Map cooperationStatusMap, String title, Timestamp createdAt, String createdBy, boolean deleted,
+			Timestamp deletedAt, String deletedBy, String education, int hFactor, boolean isActive, String jobTitle,
+			String name, int rank, String researchAchievement, String researchDirection, String resume, int rowVersion,
+			String[] sectors, String[] tags, String unit, Timestamp updatedAt, String updatedBy, String file,
+			List<FileBean> filelist) {
+		this.id = id;
+		this.avatar = avatar;
+		this.contact = contact;
+		this.cooperationStatus = cooperationStatus;
+		this.cooperName = cooperName;
+		this.cooperationStatusMap = cooperationStatusMap;
+		this.title = title;
+		this.createdAt = createdAt;
+		this.createdBy = createdBy;
+		this.deleted = deleted;
+		this.deletedAt = deletedAt;
+		this.deletedBy = deletedBy;
+		this.education = education;
+		this.hFactor = hFactor;
+		this.isActive = isActive;
+		this.jobTitle = jobTitle;
+		this.name = name;
+		this.rank = rank;
+		this.researchAchievement = researchAchievement;
+		this.researchDirection = researchDirection;
+		this.resume = resume;
+		this.rowVersion = rowVersion;
+		this.sectors = sectors;
+		this.tags = tags;
+		this.unit = unit;
+		this.updatedAt = updatedAt;
+		this.updatedBy = updatedBy;
+		this.file = file;
+		this.filelist = filelist;
+	}
+	
+	public int getFileSize() {
+		return filelist==null|| filelist.size()<=0 ? 0 : filelist.size();
+	}
+
+	public void setFileSize(int fileSize) {
+		this.fileSize = fileSize;
+	}
+
+	public List<FileBean> getFilelist() {
+		return filelist;
+	}
+	public void setFilelist(List<FileBean> filelist) {
+		this.filelist = filelist;
+	}
 	public String getId() {
 		return id;
 	}
@@ -208,17 +266,6 @@ public class Expert implements Serializable{
 	}
 	public void setFile(String file) {
 		this.file = file;
-	}
-	@Override
-	public String toString() {
-		return "Expert [id=" + id + ", avatar=" + avatar + ", contact=" + contact + ", cooperationStatus="
-				+ cooperationStatus + ", createdAt=" + createdAt + ", createdBy=" + createdBy + ", deleted=" + deleted
-				+ ", deletedAt=" + deletedAt + ", deletedBy=" + deletedBy + ", education=" + education + ", hFactor="
-				+ hFactor + ", isActive=" + isActive + ", jobTitle=" + jobTitle + ", name=" + name + ", rank=" + rank
-				+ ", researchAchievement=" + researchAchievement + ", researchDirection=" + researchDirection
-				+ ", resume=" + resume + ", rowVersion=" + rowVersion + ", sectors=" + Arrays.toString(sectors)
-				+ ", tags=" + Arrays.toString(tags) + ", unit=" + unit + ", updatedAt=" + updatedAt + ", updatedBy="
-				+ updatedBy + ", file=" + file + "]";
 	}
 
 }

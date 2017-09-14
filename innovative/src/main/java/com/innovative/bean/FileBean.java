@@ -1,12 +1,18 @@
 package com.innovative.bean;
 
+import java.io.Serializable;
+
 import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 
  */
-public class FileBean  {
+public class FileBean implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8725184669544134872L;
 	/**
 	 * 
 	 */
@@ -17,13 +23,14 @@ public class FileBean  {
 	private String createBy;
 	private String sign;
 	private String deleteBy;
+	private String fileName;
 	
 	public FileBean() {
 			
 	}
 	
 	public FileBean(String refId, String refType, String url, String createAt, String createBy, String sign,
-			String deleteBy) {
+			String deleteBy, String fileName) {
 		this.refId = refId;
 		this.refType = refType;
 		this.url = url;
@@ -31,7 +38,35 @@ public class FileBean  {
 		this.createBy = createBy;
 		this.sign = sign;
 		this.deleteBy = deleteBy;
+		this.fileName = fileName;
 	}
+
+
+
+
+
+
+
+	public String getFileName() {
+		return fileName;
+	}
+
+
+
+
+
+
+
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
+	}
+
+
+
+
+
+
+
 	public String getRefId() {
 		return refId;
 	}

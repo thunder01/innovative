@@ -35,12 +35,17 @@ public class ExpertService {
     public Expert getExpert(String id){
     	
         		Expert expert =	expertDao.getExpert(id);
+        		if(expert!=null){
+        		   List<String> url = fileDao.getPhotoByMOdAndId(id, "expertPhoto");
+        		   if(url != null && url.size() > 0 )
+        			  	expert.setAvatar( url.get(0));
 	        		List<Map<String,Object>> statusList = codeItemUtil.getCodeItemList("EXPERT_COOPERSTATUS",expert.getCooperationStatus());
 	        		if(statusList!=null&&statusList.size()>0)
 	        			expert.setCooperationStatusMap(statusList.get(0));
+        		}
         		return expert;
     }
-
+    
 
 
 
@@ -107,10 +112,9 @@ public class ExpertService {
 
     @Transactional
 	public boolean addForExpert(Expert expert) {
-    	boolean falg =false;
-    	if (expertDao.addForExpert(expert)>0);
-    	 	falg = fileDao.updateFile(expert.getId());
-		 return falg;
+    	expertDao.addForExpert(expert);
+    		  
+		 return fileDao.updateFile(expert.getId());
 	}
 
 
