@@ -22,7 +22,7 @@ import org.apache.commons.configuration.PropertiesConfiguration;
 public class HttpClientUpload {
 	/**
      * HttpClient上传文件到远程服务器
-     * 
+     * @author fzy
      * @param file 上传的文件
      * @param fileType 文件类型
      * @return 响应结果
