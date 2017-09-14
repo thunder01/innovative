@@ -1,13 +1,14 @@
 package com.innovative.bean;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 /**
  * 设备
  */
 public class Equipment {
 
-    private int id;
+    private String id;
     private String contact;//联系人
     private Timestamp createdAt;//创建时间
     private String createdBy;//创建人
@@ -20,7 +21,7 @@ public class Equipment {
     private String name;//标题
     private String picture;//图片
     
-    private Timestamp purchasedAt;//购买时间
+    private String purchasedAt;//购买时间
     private int rank;
     private int rowVersion;
     private String[] sectors;//领域
@@ -31,21 +32,18 @@ public class Equipment {
     private Timestamp updatedAt;//更新时间
     private String updatedBy;//更新人
     private String file;//更新人
-
+    
+    List<FileBean> filelist ;
+    private int fileSize;//
     public Equipment() {
     }
 
-   
 
-   
-
-
-
-	public Equipment(int id, String contact, Timestamp createdAt, String createdBy, boolean deleted,
+	public Equipment(String id, String contact, Timestamp createdAt, String createdBy, boolean deleted,
 			Timestamp deletedAt, String deletedBy, String introduction, boolean isActive, String manufacturer,
-			String name, String picture, Timestamp purchasedAt, int rank, int rowVersion, String[] sectors,
-			String sharing, String state, String[] tags, String unit, Timestamp updatedAt, String updatedBy,
-			String file) {
+			String name, String picture, String purchasedAt, int rank, int rowVersion, String[] sectors, String sharing,
+			String state, String[] tags, String unit, Timestamp updatedAt, String updatedBy, String file,
+			List<FileBean> filelist) {
 		super();
 		this.id = id;
 		this.contact = contact;
@@ -70,10 +68,30 @@ public class Equipment {
 		this.updatedAt = updatedAt;
 		this.updatedBy = updatedBy;
 		this.file = file;
+		this.filelist = filelist;
+	}
+
+
+	public int getFileSize() {
+		return filelist==null|| filelist.size()<=0 ? 0 : filelist.size();
+	}
+
+
+	public void setFileSize(int fileSize) {
+		this.fileSize = fileSize;
+	}
+
+
+	public List<FileBean> getFilelist() {
+		return filelist;
 	}
 
 
 
+
+	public void setFilelist(List<FileBean> filelist) {
+		this.filelist = filelist;
+	}
 
 
 
@@ -114,11 +132,11 @@ public class Equipment {
 
 
 
-	public int getId() {
+	public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -210,15 +228,19 @@ public class Equipment {
         this.picture = picture;
     }
 
-    public Timestamp getPurchasedAt() {
-        return purchasedAt;
-    }
 
-    public void setPurchasedAt(Timestamp purchasedAt) {
-        this.purchasedAt = purchasedAt;
-    }
+    public String getPurchasedAt() {
+		return purchasedAt;
+	}
 
-    public int getRank() {
+
+	public void setPurchasedAt(String purchasedAt) {
+		this.purchasedAt = purchasedAt;
+	}
+
+
+
+	public int getRank() {
         return rank;
     }
 

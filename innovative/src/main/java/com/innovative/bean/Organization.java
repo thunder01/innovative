@@ -2,6 +2,7 @@ package com.innovative.bean;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.Map;
 
 //机构表
@@ -9,7 +10,7 @@ public class Organization implements Serializable{
 
 	private static final long serialVersionUID = -934356283867468542L;
 
-	private int id;//主键
+	private String id;//主键
 	private String achievements;//已合作项目及成果
 	private String contact;//联系方式
 	private int cooperationStatus;//合作状态
@@ -32,27 +33,20 @@ public class Organization implements Serializable{
 	private String website;//网站链接
 	private String file;  //文件
 	private Map cooperationStatusMap;
-	
-
-
-	public Map getCooperationStatusMap() {
-		return cooperationStatusMap;
-	}
-
-
-	public void setCooperationStatusMap(Map cooperationStatusMap) {
-		this.cooperationStatusMap = cooperationStatusMap;
-	}
+    List<FileBean> filelist ;
+    private int fileSize;//
 
 
 	public Organization() {
 	}
 
 
-	public Organization(int id, String achievements, String contact, int cooperationStatus, Timestamp createdAt,
+	public Organization(String id, String achievements, String contact, int cooperationStatus, Timestamp createdAt,
 			String createdBy, boolean deleted, Timestamp deletedAt, String deletedBy, String introduction,
 			boolean isActive, String logo, String name, String nature, int rank, int rowVersion, String[] sectors,
-			String[] tags, Timestamp updatedAt, String updatedBy, String website, String file) {
+			String[] tags, Timestamp updatedAt, String updatedBy, String website, String file, Map cooperationStatusMap,
+			List<FileBean> filelist) {
+		super();
 		this.id = id;
 		this.achievements = achievements;
 		this.contact = contact;
@@ -75,7 +69,41 @@ public class Organization implements Serializable{
 		this.updatedBy = updatedBy;
 		this.website = website;
 		this.file = file;
+		this.cooperationStatusMap = cooperationStatusMap;
+		this.filelist = filelist;
 	}
+ 
+
+	public int getFileSize() {
+		return filelist==null|| filelist.size()<=0 ? 0 : filelist.size();
+	}
+
+
+	public void setFileSize(int fileSize) {
+		this.fileSize = fileSize;
+	}
+
+
+	public List<FileBean> getFilelist() {
+		return filelist;
+	}
+
+
+	public void setFilelist(List<FileBean> filelist) {
+		this.filelist = filelist;
+	}
+
+
+	public Map getCooperationStatusMap() {
+		return cooperationStatusMap;
+	}
+
+
+	public void setCooperationStatusMap(Map cooperationStatusMap) {
+		this.cooperationStatusMap = cooperationStatusMap;
+	}
+
+
 
 
 	public static long getSerialVersionUID() {
@@ -103,11 +131,11 @@ public class Organization implements Serializable{
 	}
 
 
-	public int getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 

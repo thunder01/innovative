@@ -3,9 +3,12 @@ package com.innovative.service;
 
 import com.innovative.bean.Equipment;
 import com.innovative.dao.EquipmentDao;
+import com.innovative.dao.FileDao;
+import com.innovative.utils.CodeItemUtil;
 import com.innovative.utils.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.List;
@@ -16,7 +19,10 @@ public class EquipmentService {
 
     @Autowired
     private EquipmentDao equipmentDao;
-
+    @Autowired
+    FileDao fileDao;
+    @Autowired
+    CodeItemUtil codeItemUtil;
 
     /**
      * 根据id获取设备信息
@@ -24,9 +30,15 @@ public class EquipmentService {
      * @param id 设备id
      * @return
      */
-    public Equipment getEquipmentById(Integer id) {
+    public Equipment getEquipmentById(String id) {
 
-        return equipmentDao.getEquipmentById(id);
+    	Equipment equipment = equipmentDao.getEquipmentById(id);
+        if(equipment!=null){
+			List<String> urllist = fileDao.getPhotoByMOdAndId(id, "equipmentPhoto");
+ 		   if(urllist != null && urllist.size() > 0 )
+ 			  equipment.setPicture( urllist.get(0));
+		}
+		return equipment;
 
     }
 
@@ -74,11 +86,13 @@ public class EquipmentService {
      * @param equipment 参数bean
      * @return
      */
+    @Transactional
     public boolean insertEquipment(Equipment equipment) {
 
-        int result = equipmentDao.insertEquipment(equipment);
+        //增加成功
+         equipmentDao.insertEquipment(equipment);
+		 return fileDao.updateFile(equipment.getId());
 
-        return result > 0 ? true : false;
     }
 
     /**

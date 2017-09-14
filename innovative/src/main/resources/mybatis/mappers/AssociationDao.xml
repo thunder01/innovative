@@ -27,14 +27,20 @@
 	  <result property="website" column="website"/>
 	  <result property="tags" column="tags" typeHandler="com.innovative.mybatisHandler.ArrayTypeHandler"/>
 	  <result property="sectors" column="sectors" typeHandler="com.innovative.mybatisHandler.ArrayTypeHandler"/>
+	   <collection property="filelist" ofType="FileBean">  
+           <result property="refId" column="refId"/>
+           <result property="refType" column="refType"/>
+	  	   <result property="url" column="url"/>
+	  	   <result property="fileName" column="filename"/>
+       </collection> 
 	</resultMap> 
 
     <!--根据id获取行业协会详情-->
 	<select id="getAssociation" resultMap="associationMap">
-		SELECT * FROM "Associations" WHERE "Id" =  #{id};
+		SELECT * FROM "Associations" e LEFT JOIN "xacx_file" f on f."refId" = e."Id" and f."refType" = 'indusinfoFile' and f."sign" = 'add'
+		WHERE "Id" =  #{id};
 	</select>
-
-
+	
 
 	<!--根据查询条件获取列表-->
 	<select id="getAssociationList" resultMap="associationMap">
@@ -45,6 +51,7 @@
 			</if> -->
 			 "Deleted" = 'f' AND "IsActive" = 't'
 		</where>
+		order by "UpdatedAt"  DESC 
 		limit #{pageSize} offset #{startIndex}
 	</select>
 
@@ -73,8 +80,8 @@
 	<!--添加行业协会-->
 	<insert id="addAssociation" parameterType="Association">
 		INSERT INTO "Associations"
-		( "AvailableResources", "Contact", "CooperationStatus", "CreatedAt", "CreatedBy", "Deleted", "DeletedAt", "DeletedBy", "Duration", "Introduction", "IsActive", "Logo", "Name", "Nature", "Rank", "RowVersion", "Sectors", "Tags", "UpdatedAt", "UpdatedBy", "Website", "File")
-		VALUES ( #{availableResources}, #{contact}, #{cooperationStatus}, now(), #{createdBy}, false, now(), #{deletedBy}, #{duration}, #{introduction}, true, '${logo}', #{name}, #{nature}, #{rank}, #{rowVersion}, 
+		( "Id","AvailableResources", "Contact", "CooperationStatus", "CreatedAt", "CreatedBy", "Deleted", "DeletedAt", "DeletedBy", "Duration", "Introduction", "IsActive", "Logo", "Name", "Nature", "Rank", "RowVersion", "Sectors", "Tags", "UpdatedAt", "UpdatedBy", "Website", "File")
+		VALUES (#{id} ,#{availableResources}, #{contact}, #{cooperationStatus}, now(), #{createdBy}, false, now(), #{deletedBy}, #{duration}, #{introduction}, true, '${logo}', #{name}, #{nature}, #{rank}, #{rowVersion}, 
 		
 		<choose>
 		<when test="sectors != null">
@@ -82,7 +89,7 @@
 		      ${sector}
 		    </foreach>  
 		</when>
-		<otherwise>null,</otherwise>
+		<otherwise>'{}',</otherwise>
 	  </choose>
 	<choose>
 		<when test="tags != null">
@@ -90,7 +97,7 @@
 		      ${tag}
 		    </foreach>  
 		</when>
-		<otherwise>null,</otherwise>
+		<otherwise>'{}',</otherwise>
 	</choose>
 		now(), #{createdBy}, #{website}, '${file}')
 	</insert>

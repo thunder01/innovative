@@ -13,7 +13,7 @@ public interface TechnicalReportDao {
      * @param id 技术报告id
      * @return
      */
-    TechnicalReport getTechnicalReportById(@Param("id") Integer id);
+    TechnicalReport getTechnicalReportById(@Param("id") String id);
 
     /**
      * 分页条件查询

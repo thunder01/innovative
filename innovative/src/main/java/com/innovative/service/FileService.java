@@ -14,6 +14,9 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
 
 @Service
 public class FileService {
@@ -28,17 +31,17 @@ public class FileService {
  * @param modname 模块名字
  * @param refid 上传引用id
  * @param introductions 
+ * @param path 
  * @return
  * @throws IOException
  */
 	public boolean uploadFile(MultipartFile[] files, String modname, String refid, String introductions) throws IOException {
 		   if (files != null && files.length > 0) {
-	               List<String> list = new ArrayList<String>();
+	               List<Map<String,String>> list = new ArrayList<Map<String,String>>();
 	                for (int i = 0; i < files.length; i++) {
-	                	String url = null;
-	                    url = FileUpload.copyInputStreamToFile(files[i], modname);
-	                    list.add(url);
-	                  // return fileDao.addFile(url,modname,refid);
+	                	Map<String,String> urlmap = null;
+	                	urlmap = FileUpload.copyInputStreamToFileForName(files[i], modname);
+	                    list.add(urlmap);
 	                    
 	                }
 	                //新增成功返回true 否则false
@@ -48,6 +51,22 @@ public class FileService {
 		   return false;
 	}
 
+	
+	public boolean uploadFile(MultipartFile[] files, String modname, String refid, String introductions,HttpServletRequest req) throws IOException {
+		   if (files != null && files.length > 0) {
+	               List<Map<String,String>> list = new ArrayList<Map<String,String>>();
+	                for (int i = 0; i < files.length; i++) {
+	                	Map<String,String> urlmap = null;
+	                	urlmap = FileUpload.copyInputStreamToFileForName(files[i], modname,req);
+	                    list.add(urlmap);
+	                    
+	                }
+	                //新增成功返回true 否则false
+	                if (list.size()>0)
+	                	return (fileDao.addFileList(list, modname, refid,introductions))==list.size() ? true:false;
+		   }
+		   return false;
+	}
 
 	public List<FileBean> getFiles(String userid, String modname) {
 		return fileDao.getFileById(userid,modname);

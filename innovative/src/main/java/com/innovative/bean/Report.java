@@ -8,7 +8,7 @@ import java.sql.Timestamp;
  * @version 1.0
  * */
 public class Report {
-	private Integer id;//生成的主键id
+	private String id;//生成的主键id
 	private String title;//标题
 	private String content;//内容信息
 	private String sector;//行业领域
@@ -25,7 +25,7 @@ public class Report {
 		super();
 	}
 
-	public Report(Integer id, String title, String content, String sector, String lable, String abstracts,
+	public Report(String id, String title, String content, String sector, String lable, String abstracts,
 			String type, String file, Timestamp create_date, String create_by, Timestamp late_date, String late_by) {
 		super();
 		this.id = id;
@@ -42,11 +42,11 @@ public class Report {
 		this.late_by = late_by;
 	}
 
-	public Integer getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 

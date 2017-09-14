@@ -33,7 +33,7 @@ public class EquipmentController {
      * @return
      */
     @RequestMapping(value = "/getById/{id}", method = RequestMethod.GET)
-    public JsonResult getEquipmentById(@PathVariable Integer id) {
+    public JsonResult getEquipmentById(@PathVariable String id) {
 
         Equipment equipment = equipmentService.getEquipmentById(id);
         if (equipment == null) {
@@ -103,8 +103,9 @@ public class EquipmentController {
         if (!result) {
             return new JsonResult(false, "修改设备信息失败，请重试！");
         }
-
-        return new JsonResult(true, "修改设备信息成功！");
+        Equipment equi = equipmentService.getEquipmentById(equipment.getId());
+        
+        return equi != null ? new JsonResult(true,equi) : new JsonResult(false, "获取设备信息失败！");
     }
 
 }

@@ -20,11 +20,29 @@
 <!--批量添加专家信息-->
 	<insert id="batchAddPoiExpert" parameterType="java.util.List">
 		INSERT INTO "Experts"
-		( "Avatar", "Contact", "CooperationStatus", "CreatedAt", "CreatedBy", "Deleted", "DeletedAt", "DeletedBy", "Education", "HFactor", "IsActive", "JobTitle", "Name", "Rank", "ResearchAchievement", "ResearchDirection", "Resume", "RowVersion", "Sectors",  "Unit", "UpdatedAt", "UpdatedBy", "File")
+		( "Id","Avatar", "Contact", "CooperationStatus", "CreatedAt", "CreatedBy", "Deleted", "DeletedAt", "DeletedBy", "Education", "HFactor", "IsActive", "JobTitle", "Name", "Rank", "ResearchAchievement", "ResearchDirection", "Resume", "RowVersion", "Sectors","Tags",  "Unit", "UpdatedAt", "UpdatedBy", "File")
 		VALUES 
 	<foreach collection="urllist" item="item" open="(" separator="),(" close=")">
 		 <foreach item="v" index="key" collection="item.values" >
-          		#{v.avatar}, #{v.contact}, ${v.cooperationStatus}, now(), #{v.createdBy}, false, now(), #{v.deletedBy}, #{v.education}, ${v.hFactor}, true, #{v.jobTitle}, #{v.name}, ${v.rank}, #{v.researchAchievement}, #{v.researchDirection}, #{v.resume}, ${v.rowVersion}, '${v.sectors}',  #{v.unit}, now(), #{v.updatedBy}, #{v.file}
+          		#{v.id},#{v.avatar}, #{v.contact}, ${v.cooperationStatus}, now(), #{v.createdBy}, false, now(), #{v.deletedBy}, #{v.education}, ${v.hFactor}, true, #{v.jobTitle}, #{v.name}, ${v.rank}, #{v.researchAchievement}, #{v.researchDirection}, #{v.resume}, ${v.rowVersion},
+          		 
+			       <choose>
+					<when test="v.sectors != null">
+						<foreach item="sector" collection="v.sectors" separator="," open="'{" close="}'," index="">  
+					      ${sector}
+					    </foreach>  
+					</when>
+					<otherwise>'{}',</otherwise>
+				</choose>
+				<choose>
+					<when test="v.tags != null">
+						<foreach item="tag" collection="v.tags" separator="," open="'{" close="}'," index="">  
+					      ${tag}
+					    </foreach>  
+					</when>
+					<otherwise>'{}',</otherwise>
+				</choose>
+          		   #{v.unit}, now(), #{v.updatedBy}, #{v.file}
           		
     	</foreach>  
         

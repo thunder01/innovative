@@ -26,11 +26,18 @@
 	  <result property="file" column="file"/>
 	  <result property="tags" column="tags" typeHandler="com.innovative.mybatisHandler.ArrayTypeHandler"/>
 	  <result property="sectors" column="sectors" typeHandler="com.innovative.mybatisHandler.ArrayTypeHandler"/>
+	   <collection property="filelist" ofType="FileBean">  
+           <result property="refId" column="refId"/>
+           <result property="refType" column="refType"/>
+	  	   <result property="url" column="url"/>
+	  	   <result property="fileName" column="filename"/>
+       </collection> 
 	</resultMap> 
 
     <!--根据id获取机构详情-->
 	<select id="getOrganization" resultMap="organizationMap">
-		SELECT * FROM "Organizations" WHERE "Id" =  #{id};
+		SELECT * FROM "Organizations"  e LEFT JOIN "xacx_file" f on f."refId" = e."Id" and f."refType" = 'addunionFile' and f."sign" = 'add'
+		WHERE "Id" =  #{id};
 	</select>
 
 
@@ -44,6 +51,7 @@
 			</if> -->
 			 "Deleted" = 'f' AND "IsActive" = 't'
 		</where>
+		order by "UpdatedAt"  DESC 
 		limit #{pageSize} offset #{startIndex}
 	</select>
 
@@ -63,15 +71,15 @@
 	<!--添加机构信息-->
 	<insert id="addOrganization" parameterType="map">
 		INSERT INTO "Organizations"
-		( "Achievements", "Contact", "CooperationStatus", "CreatedAt", "CreatedBy", "Deleted", "DeletedAt", "DeletedBy", "Introduction", "IsActive", "Logo", "Name", "Nature", "Rank", "RowVersion", "Sectors", "Tags", "UpdatedAt", "UpdatedBy", "Website", "File")
-	VALUES ( #{achievements}, #{contact}, #{cooperationStatus}, now(), #{createdBy}, false, #{createdAt}, #{deletedBy}, #{introduction}, true, '${logo}', #{name}, #{nature}, #{rank}, #{rowVersion},
+		( "Id","Achievements", "Contact", "CooperationStatus", "CreatedAt", "CreatedBy", "Deleted", "DeletedAt", "DeletedBy", "Introduction", "IsActive", "Logo", "Name", "Nature", "Rank", "RowVersion", "Sectors", "Tags", "UpdatedAt", "UpdatedBy", "Website", "File")
+	VALUES (#{id}, #{achievements}, #{contact}, #{cooperationStatus}, now(), #{createdBy}, false, #{createdAt}, #{deletedBy}, #{introduction}, true, '${logo}', #{name}, #{nature}, #{rank}, #{rowVersion},
 	 <choose>
 		<when test="sectors != null">
 			<foreach item="sector" collection="sectors" separator="," open="'{" close="}'," index="">  
 		      ${sector}
 		    </foreach>  
 		</when>
-		<otherwise>null,</otherwise>
+		<otherwise>'{}',</otherwise>
 	</choose>
 	<choose>
 		<when test="tags != null">
@@ -79,7 +87,7 @@
 		      ${tag}
 		    </foreach>  
 		</when>
-		<otherwise>null,</otherwise>
+		<otherwise>'{}',</otherwise>
 	</choose>
 	  now(), #{createdBy}, #{website}, '${file}')
 	</insert>

@@ -32,7 +32,7 @@ public class SolutionController {
      * @return
      */
     @RequestMapping(value = "/getById/{id}", method = RequestMethod.GET)
-    public JsonResult getSolutionById(@PathVariable(name = "id", required = true) Integer id) {
+    public JsonResult getSolutionById(@PathVariable(name = "id", required = true) String id) {
 
         Solution solution = solutionService.getSolutionById(id);
         if (solution == null) {
@@ -102,8 +102,8 @@ public class SolutionController {
         if (!result) {
             return new JsonResult(false, "修改方案失败，请重试！");
         }
-
-        return new JsonResult(true, "修改方案成功！");
+       Solution solu = solutionService.getSolutionById(solution.getId());
+        return solu!=null ? new JsonResult(true,solu) : new JsonResult(false,"获取对象失败!");
     }
 
 }

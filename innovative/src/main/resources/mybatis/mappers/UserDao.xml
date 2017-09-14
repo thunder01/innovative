@@ -2,27 +2,79 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.innovative.webservice.dao.UserDao">
+<mapper namespace="com.innovative.dao.UserDao">
 
-   <!--添加用户信息-->
+<resultMap id="userMap" type="User">
+	  <id property="userId" column="UserId" />
+	  <result property="userName" column="UserName"/>
+	  <result property="userIntegration" column="UserIntegration"/>
+	  <result property="userPost" column="UserPost"/>
+	  <result property="userSex" column="UserSex"/>
+	  <result property="userAge" column="UserAge"/>
+	</resultMap> 
+
+ <!--添加用户信息-->
 	<insert id="insertUser" parameterType="map">
 		INSERT INTO "xacx_user"
-		 ("UserId", "UserName",   "UserPost", "CreateAt", "UserSex", "UserAge")
+		 ("UserId", "UserName",   "UserPost", "CreateAt", "UserSex", "UserAge","Department","JobNumber")
 		VALUES 
-		(#{userId}, #{userName},  #{userPost}, now(),#{userSex}, #{userAge})
+		(#{userId}, #{userName},  #{userPost}, now(),#{userSex}, #{userAge},#{department},#{jobNumber})
 	</insert>
 
 
 	<!--批量添加用户信息-->
 	<insert id="insertUserList" parameterType="java.util.List">
-			INSERT INTO "Experts"
-			("UserId", "UserName",   "UserPost", "CreateAt", "UserSex", "UserAge")
-			VALUES 
+			INSERT INTO "xacx_user"
+		 ("UserId", "UserName",   "UserPost", "CreateAt", "UserSex", "UserAge","Department","JobNumber")
+		VALUES 
 		 <foreach collection="userList" item="item" open="(" separator="),(" close=")">
-	        (#{item.userId}, #{item.userName},  #{item.userPost}, now(),#{item.userSex}, #{item.userAge})
+	        #{item.userId}, #{item.userName},  #{item.userPost}, now(),#{item.userSex}, #{item.userAge}, #{item.department},#{item.jobNumber}
 	    </foreach>  
 		
 	</insert>
+
+	
+	 <!--根据id获取用户信息-->
+	<select id="getUser" resultType="User">
+		SELECT * FROM "xacx_user"  
+		  WHERE "UserId" =  #{userId};
+	</select>
+
+
+	 <!--根据id获取用户信息-->
+	<select id="getUserByName" resultType="User">
+		SELECT * FROM "xacx_user"  
+		  WHERE "UserName" like   #{name};
+	</select>
+	
+	
+	
+	
+	<!--修改专家信息-->
+	<update id="updateUser" parameterType="User">
+		UPDATE "xacx_user"
+		<set>
+			<if test="userState!=null and userState!=''">
+				"UserState" = #{userState},
+			</if>
+			<if test="updateBy!=null and updateBy!=''">
+				"UpdateBy" = #{updateBy},
+			</if>
+				"UpdateAt" = now()
+		</set>
+		where "UserId" = #{userId}
+	</update>
+	
+		<!--根据查询条件获取列表-->
+	<select id="getUserList" resultType="User">
+		SELECT * FROM "xacx_user"
+		limit #{pageSize} offset #{startIndex}
+	</select>
+
+	<!--查询行业领域搜索条件的总条数-->
+	<select id="getTotalCount" resultType="int">
+		SELECT count(1) FROM "xacx_user"
+	</select>
 
 
 

@@ -2,6 +2,7 @@ package com.innovative.bean;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.Map;
 
 
@@ -10,7 +11,7 @@ public class Association implements Serializable {
 
 
 	private static final long serialVersionUID = 7867013951701463970L;
-	private int id;//主键
+	private String id;//主键
 	private String availableResources; //协会可用资源
 	private String contact;   //联系方式
 	private int cooperationStatus;   //合作状态
@@ -35,29 +36,15 @@ public class Association implements Serializable {
 	private String file;  //文件
 	private Map cooperationStatusMap;
 	
+	List<FileBean> filelist ;
+	private int fileSize;//
+	
 
-	public Map getCooperationStatusMap() {
-		return cooperationStatusMap;
-	}
-
-
-
-	public void setCooperationStatusMap(Map cooperationStatusMap) {
-		this.cooperationStatusMap = cooperationStatusMap;
-	}
-
-
-
-	public Association() {
-	}
-
-
-
-	public Association(int id, String availableResources, String contact, int cooperationStatus, Timestamp createdAt,
+	public Association(String id, String availableResources, String contact, int cooperationStatus, Timestamp createdAt,
 			String createdBy, boolean deleted, Timestamp deletedAt, String deletedBy, String duration,
 			String introduction, boolean isActive, String logo, String name, String nature, int rank, int rowVersion,
-			String[] sectors, String[] tags, Timestamp updatedAt, String updatedBy, String website, String file) {
-		super();
+			String[] sectors, String[] tags, Timestamp updatedAt, String updatedBy, String website, String file,
+			Map cooperationStatusMap, List<FileBean> filelist) {
 		this.id = id;
 		this.availableResources = availableResources;
 		this.contact = contact;
@@ -81,15 +68,48 @@ public class Association implements Serializable {
 		this.updatedBy = updatedBy;
 		this.website = website;
 		this.file = file;
+		this.cooperationStatusMap = cooperationStatusMap;
+		this.filelist = filelist;
+	}
+
+	public int getFileSize() {
+		return filelist==null|| filelist.size()<=0 ? 0 : filelist.size();
+	}
+
+	public Map getCooperationStatusMap() {
+		return cooperationStatusMap;
 	}
 
 
 
-	public int getId() {
+	public void setCooperationStatusMap(Map cooperationStatusMap) {
+		this.cooperationStatusMap = cooperationStatusMap;
+	}
+
+
+
+	public Association() {
+	}
+
+
+
+	public List<FileBean> getFilelist() {
+		return filelist;
+	}
+
+
+
+	public void setFilelist(List<FileBean> filelist) {
+		this.filelist = filelist;
+	}
+
+
+
+	public String getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 

@@ -19,14 +19,20 @@
 	  <result property="updatedAt" column="updatedAt"/>
 	  <result property="updatedBy" column="updatedBy"/>
 	  <result property="file" column="file"/>
-	  <result property="pictures" column="pictures"  typeHandler="com.innovative.mybatisHandler.ArrayTypeHandler"/>
+	  <result property="pictures" column="pictures" />
 	  <result property="tags" column="tags" typeHandler="com.innovative.mybatisHandler.ArrayTypeHandler"/>
 	  <result property="sectors" column="sectors" typeHandler="com.innovative.mybatisHandler.ArrayTypeHandler"/>
+	   <collection property="filelist" ofType="FileBean">  
+           <result property="refId" column="refId"/>
+           <result property="refType" column="refType"/>
+	  	   <result property="url" column="url"/>
+	  	   <result property="fileName" column="filename"/>
+       </collection> 
 	</resultMap> 
     <!--根据id获取技术报告-->
     <select id="getSolutionById" resultMap="solutionMap">
-		SELECT "Name","Summary","Content","Pictures","Sectors","Tags","Rank","Id","File","CreatedAt","UpdatedAt"
-		FROM "Solutions"
+		SELECT "Name","Summary","Content","Pictures","Sectors","Tags","Rank","Id","File","CreatedAt","UpdatedAt",f."url",f."refId",f."refType",f."filename"
+		FROM "Solutions"  e LEFT JOIN "xacx_file" f on f."refId" = e."Id" and f."refType" = 'programFile' and f."sign" = 'add'
 		WHERE "Id" =  #{id};
 	</select>
 
@@ -39,6 +45,7 @@
             </if> -->
              "Deleted" = 'f' AND "IsActive" = 't'
         </where>
+        order by "UpdatedAt"  DESC 
         limit #{pageSize} offset #{startIndex}
     </select>
 
@@ -55,8 +62,8 @@
 
     <!--新增技术报告-->
     <insert id="insertSolution" parameterType="Solution">
-        INSERT INTO "Solutions" ( "Name", "Summary", "Content", "Sectors", "Tags", "Rank", "IsActive", "File", "Pictures", "CreatedBy", "RowVersion", "CreatedAt","Deleted") VALUES
-         ( #{name}, #{summary}, #{content}, 
+        INSERT INTO "Solutions" ("Id", "Name", "Summary", "Content", "Sectors", "Tags", "Rank", "IsActive", "File", "Pictures", "CreatedBy", "RowVersion", "CreatedAt","Deleted") VALUES
+         (#{id}, #{name}, #{summary}, #{content}, 
          		<choose>
 					<when test="sectors != null">
 						<foreach item="sector" collection="sectors" separator="," open="'{" close="}'," index="">  
@@ -74,14 +81,7 @@
 					<otherwise>null,</otherwise>
 				</choose>
           #{rank}, true, '${file}', 
-          	<choose>
-					<when test="pictures != null">
-						<foreach item="picture" collection="pictures" separator="," open="'{" close="}'," index="">  
-					       ${picture}
-					    </foreach>  
-					</when>
-					<otherwise>null,</otherwise>
-				</choose>
+          	#{pictures},
            '', 0, now(),false)
     </insert>
 

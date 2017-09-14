@@ -14,21 +14,26 @@
     <!-- 批量上传文档 -->
       <insert id="addFileList" parameterType="map">
         INSERT INTO "xacx_file"
-        ("refType", "refId", "url", "createAt", "sign","createBy","introductions")
+        ("refType", "refId", "url","filename", "createAt", "sign","createBy","introductions")
         VALUES
         <foreach collection="urllist" item="item" open="(" separator="),(" close=")">
-            #{reftype}, #{refid}, #{item}, now(), 'confim','',#{introductions}
+            #{reftype}, #{refid}, #{item.url},#{item.name}, now(), 'confim','',#{introductions}
         </foreach>
     </insert> 
+    
+    <select id="getPhotoByMOdAndId" resultType="String">
+		SELECT "url"  FROM  "xacx_file"  
+		 WHERE "refId" =  #{id} and  "refType" = #{refType}  and  "sign" = 'add'
+	</select>
     
     <!--修改专家信息-->
 	<update id="updateFile" parameterType="map">
 		UPDATE "xacx_file"
 		<set>
-			"sign" = 'add';
+			"sign" = 'add'
 		</set>
 		<where>
-			 "refId"=#{refid}
+			 "refId" = #{refid} and "sign" = 'confim'
 		</where>
 	</update>
 	
@@ -36,7 +41,7 @@
 	<update id="deleteFile" parameterType="map">
 		UPDATE "xacx_file"
 		<set>
-			"sign" = 'delete';
+			"sign" = 'delete'
 		</set>
 		<where>
 			 "refId"=#{refid}
@@ -47,7 +52,7 @@
     <!--根据id判断有无此图片-->
     <select id="getFileById" resultType="FileBean">
     
-        SELECT "refType","refId","url" FROM  "xacx_file"
+        SELECT "refType","refId","url","filename" FROM  "xacx_file"
         <where>
             <if test="refid!=null and refid!=''">
 				"refId" = #{refid}
@@ -55,7 +60,7 @@
             <if test="reftype!=null and reftype!=''">
 				AND "refType" = #{reftype}
 			</if>
-             AND "sign" = 'add' 
+             AND  "sign" = 'add' 
         </where>
     </select>
 

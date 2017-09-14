@@ -32,7 +32,7 @@ public class OrganizationController extends BaseController {
      * @return
      */
     @RequestMapping(value = "/getOrganization/{id}", method = RequestMethod.GET)
-    public JsonResult getOrganization(@PathVariable(name = "id") Integer id){
+    public JsonResult getOrganization(@PathVariable(name = "id") String id){
 
         Organization organization = organizationService.getOrganization(id);
         if(organization != null){
@@ -100,7 +100,8 @@ public class OrganizationController extends BaseController {
         if (!organizationService.updateOrganization(organization)) {
             return new JsonResult(false, "修改失败，请重试！");
         }
-        return new JsonResult(true, "修改成功！");
+        Organization organ = organizationService.getOrganization(organization.getId());
+        return organ != null ? new JsonResult(true, organ) : new JsonResult(false, "获取对象失败！");
     }
 
 
