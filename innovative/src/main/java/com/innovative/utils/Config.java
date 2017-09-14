@@ -1,5 +1,8 @@
 package com.innovative.utils;
 
+/**
+ * 常量处理类
+ */
 public class Config {
 
 
