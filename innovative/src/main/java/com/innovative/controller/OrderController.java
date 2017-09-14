@@ -116,7 +116,7 @@ public class OrderController {
 	 * @param orderid
 	 * */
 	@RequestMapping(value="approvalSave/{orderid}",method=RequestMethod.POST)
-	public JsonResult approvalSave(ProjectApproval projectApproval,@PathVariable(name="orderid") Integer orderid){
+	public JsonResult approvalSave(@RequestBody ProjectApproval projectApproval,@PathVariable(name="orderid") Integer orderid){
 		/*保存立项表单*/
 		projectApprovalService.addProjectApproval(projectApproval,orderid);
 		return new JsonResult(true, "添加成功");
