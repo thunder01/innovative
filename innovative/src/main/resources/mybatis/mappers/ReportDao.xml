@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.innovative.dao.ReportDao">
+	<resultMap type="Report" id="Report">
+		<id property="id" column="id"/>
+		<result property="title" column="title"/>
+		<result property="content" column="content"/>
+		<result property="sector" column="sector"/>
+		<result property="lable" column="lable"/>
+		<result property="abstracts" column="abstracts"/>
+		<result property="type" column="type"/>
+		<result property="file" column="file"/>
+		<result property="create_date" column="create_date"/>
+		<result property="create_by" column="create_by"/>
+		<result property="late_date" column="late_date"/>
+		<result property="late_by" column="late_by"/>
+		<result property="deleted" column="deleted"/>
+		<result property="delete_date" column="delete_date"/>
+		<result property="delete_by" column="delete_by"/>
+	</resultMap>
+	
+	<!-- 报告的添加 同时把id返回到bean -->
+	<insert id="addReport" parameterType="Report">
+		<selectKey resultType="int" keyProperty="id" order="AFTER">
+			SELECT currval('xacx_report_id_seq'::regclass)
+		</selectKey>
+		INSERT INTO xacx_report(title,content,sector,lable,abstracts,type,file,create_date,create_by,deleted) 
+		VALUES(#{title},#{content},#{sector},#{lable},#{abstracts},#{type},#{file},now(),#{create_by},0)
+	</insert>
+	
+	<!-- 添加报告的同时向 xacx_order_report 插入一个数据-->
+	<insert id="addOrder_Report" parameterType="map">
+		INSERT INTO xacx_order_report(order_id,report_id) VALUES(#{order_id},#{report_id})
+	</insert>
+	
+	<!-- 更改报告的删除状态 -->
+	<update id="updateReportDeleted" parameterType="int">
+		UPDATE xacx_report SET deleted = 1 WHERE id = #{id} 
+	</update>
+	
+	<!-- 更新报告 -->
+	<update id="updateReport" parameterType="Report">
+		UPDATE xacx_report SET title=#{title},content=#{content},sector=#{sector},abstracts=#{abstracts},
+		file=#{file},lable=#{lable} WHERE id=#{id}
+	</update>
+	
+	<!-- 通过订单id和报告类型来找报告 -->
+	<select id="findReportById" parameterType="java.util.Map" resultMap="Report">
+		SELECT id,title,content,sector,lable,abstracts,type,file,create_date,create_by FROM xacx_report 
+		WHERE EXISTS(SELECT report_id FROM xacx_order_report WHERE order_id=#{order_id}) and type=#{type} and
+		deleted = 0
+	</select>
+	
+	<!--  -->
+	<select id="findReportList" parameterType="string" resultMap="Report">
+		SELECT id,title,content,sector,lable,abstracts,type,file,create_date,create_by FROM xacx_report WHERE type =#{type}
+	</select>
+	
+	<!-- 通过订单id来找报告并按创建时间排序 -->
+	<select id="rankReport" parameterType="int" resultMap="Report">
+		SELECT id,title,content,sector,lable,abstracts,type,file,create_date,create_by FROM xacx_report 
+		WHERE EXISTS (SELECT report_id FROM xacx_order_report WHERE order_id = #{order_id}) and deleted =0
+		ORDER BY create_date
+	</select>
+</mapper>
