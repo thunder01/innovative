@@ -30,7 +30,7 @@ public class DisassembleReportService {
 	@Transactional
 	public int saveDisassembleReport(DisassembleReport report,Integer orderid){
 		/*首先向拆解报告表中添加一条记录，并返回其主键*/
-		reportDao.saveDisassembleReport(report);
+		int num = reportDao.saveDisassembleReport(report);
 		/*然后更新订单表中的拆解报告id信息*/
 		return orderDao.updateDisassembleReport(new Order(orderid,report.getId()));	 
 	}
