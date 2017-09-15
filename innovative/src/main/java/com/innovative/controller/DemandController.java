@@ -6,11 +6,13 @@ import com.innovative.bean.Message;
 import com.innovative.service.DemandService;
 import com.innovative.service.MessageService;
 import com.innovative.utils.BaseController;
+import com.innovative.utils.HttpClientUpload;
 import com.innovative.utils.JsonResult;
 import com.innovative.utils.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.util.HashMap;
@@ -66,11 +68,9 @@ public class DemandController{
     @Transactional
     public  JsonResult add(@RequestBody Demand demand){
         Message message=new Message();
-
         String messge="保存成功!";
         boolean code=true;
         if(demandService.addDemand(demand)){
-            System.out.println(">>>>>>>>>>>>"+demand.getId());
             message.setProjectId(demand.getId());
             message.setType("0");
             messageService.addMessage(message);
@@ -87,5 +87,13 @@ public class DemandController{
     public JsonResult getList(@RequestParam(name="offset",defaultValue="0") Integer offset){
         Integer page = offset/(new PageInfo().getPageSize()) +1;
         return new JsonResult(true, demandService.getDemandList(page));
+    }
+    /**
+     * 批量上传文件
+     */
+    @RequestMapping(value ="/upload",method = RequestMethod.POST)
+    public  JsonResult upload(@RequestParam(name = "FileData", required = true) MultipartFile[] FileData){
+        String path= HttpClientUpload.httpClientUploadFile(FileData,"demand");
+        return new JsonResult(true,path);
     }
 }

@@ -23,8 +23,10 @@ public class Demand {
     private  String ddmj;//订单密级
     private  String option;//审批意见
     private  String status;//状态
+    private  String path;//文件路径
 
-    public Demand(int id, String name, String number, String iphone, String createDate, String cteateBy, String lateDate, String lateBy, String bgd, String demandd, String interestpg, String ninterestpg, String gjc, String hzms, String hzrequest, String productm, String productDate, String bz, String checkName, String ddmj, String option, String status) {
+
+    public Demand(int id, String name, String number, String iphone, String createDate, String cteateBy, String lateDate, String lateBy, String bgd, String demandd, String interestpg, String ninterestpg, String gjc, String hzms, String hzrequest, String productm, String productDate, String bz, String checkName, String ddmj, String option, String status,String path) {
         this.id = id;
         this.name = name;
         this.number = number;
@@ -47,6 +49,7 @@ public class Demand {
         this.ddmj = ddmj;
         this.option = option;
         this.status = status;
+        this.path=path;
     }
 
     public Demand() {
@@ -227,5 +230,12 @@ public class Demand {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
     }
 }

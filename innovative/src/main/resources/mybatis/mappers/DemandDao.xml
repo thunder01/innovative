@@ -27,6 +27,7 @@
         <result property="ddmj" column="ddmj"/>
         <result property="option" column="option"/>
         <result property="status" column="status"/>
+        <result property="path" column="file"/>
     </resultMap>
 
     <!--根据id获取内容详情-->
@@ -44,9 +45,9 @@
         </selectKey>
         INSERT  INTO "xacx_demand"
         ("name","number","iphone","create_date","create_by","late_date","late_by","bgd","demandd","interestpg","ninterestpg",
-        "gjc","hzms","hzrequest","productm","product_date","bz","check_name","ddmj","option")
+        "gjc","hzms","hzrequest","productm","product_date","bz","check_name","ddmj","option","file")
         VALUES(#{name},#{number},#{iphone},now(),#{cteateBy},now(),#{lateBy},#{bgd},#{demandd},#{interestpg},#{ninterestpg},
-        #{gjc},#{hzms},#{hzrequest},#{productm},#{productDate},#{bz},#{checkName},#{ddmj},#{option})
+        #{gjc},#{hzms},#{hzrequest},#{productm},#{productDate},#{bz},#{checkName},#{ddmj},#{option}，#{path})
     </insert>
     <!--查询总条数-->
     <select id="getTotalCount" resultType="int">
