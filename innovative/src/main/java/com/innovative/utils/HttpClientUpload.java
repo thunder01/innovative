@@ -20,14 +20,22 @@ import org.apache.commons.configuration.PropertiesConfiguration;
 
 @SuppressWarnings("deprecation")
 public class HttpClientUpload {
-	/**
+
+    /**
+     * 无惨私有构造函数
+     */
+    private HttpClientUpload() {
+
+    }
+    /**
      * HttpClient上传文件到远程服务器
      * @author fzy
      * @param file 上传的文件
-     * @param fileType 文件类型
+     * @param fileType 文件名称
      * @return 响应结果
      */
-    public String httpClientUploadFile(MultipartFile[] file,String fileType) {
+
+    public static  String httpClientUploadFile(MultipartFile[] file,String fileType) {
     	/*加载配置文件*/
     	Configuration config=null;
     	try {
