@@ -68,4 +68,10 @@
 		WHERE EXISTS (SELECT report_id FROM xacx_order_report WHERE order_id = #{order_id}) and deleted =0
 		ORDER BY create_date
 	</select>
+	
+	<!-- 通过订单id来找报告id的集合 -->
+	<select id="findReportIds" parameterType="int" resultMap="Report">
+		SELECT report_id FROM xacx_order_report WHERE id = #{id}
+	</select>
+	
 </mapper>

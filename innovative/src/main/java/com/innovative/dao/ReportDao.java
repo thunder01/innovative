@@ -34,7 +34,7 @@ public interface ReportDao {
 	 */
 	public int updateReport(Report report);
 	/**
-	 * 通过报告的id来查询报告信息
+	 * 通过订单的id和类型来查询报告信息
 	 * @param id
 	 * @return
 	 */
@@ -50,4 +50,5 @@ public interface ReportDao {
 	 * @return
 	 */
 	public List<Report> rankReport(Integer order_id);
+	
 }

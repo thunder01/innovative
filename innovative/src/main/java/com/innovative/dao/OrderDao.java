@@ -45,7 +45,7 @@ public interface OrderDao {
 	public int updateOrderLate_byId(Order order);
 	
 	/**
-	 * 根据id查询出订单信息
+	 * 根据订单id查询出订单信息
 	 * @param orderid 订单id
 	 * @return
 	 * */
@@ -78,4 +78,10 @@ public interface OrderDao {
 	 * @return
 	 * */
 	public int updateProjectApproval(Order order);	
+	/**
+	 * 通过需求id来查询订单信息
+	 * @param demand_id
+	 * @return
+	 */
+	public Order selectOrderByDemand_id(Integer demand_id);
 }

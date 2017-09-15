@@ -11,8 +11,8 @@ public interface ProjectApprovalDao {
 	 */
 	public int addProjectApproval(ProjectApproval projectApproval);
 	/**
-	 * 通过id来查询立项表单
-	 * @param id
+	 * 通过订单id来查询立项表单
+	 * @param order_id
 	 * @return
 	 */
 	public ProjectApproval getProjectApprovalById(Integer order_id);

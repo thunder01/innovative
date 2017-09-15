@@ -1,15 +1,21 @@
 package com.innovative.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.innovative.bean.DisassembleReport;
 import com.innovative.bean.Order;
+import com.innovative.bean.ProjectApproval;
+import com.innovative.bean.Report;
+import com.innovative.dao.DisassembleReportDao;
 import com.innovative.dao.OrderDao;
 import com.innovative.dao.ProjectApprovalDao;
-import com.innovative.utils.JsonResult;
+import com.innovative.dao.ReportDao;
 
 
 /**
@@ -22,6 +28,10 @@ public class OrderService {
 	private OrderDao orderDao;
 	@Autowired
 	private ProjectApprovalDao projectApprovalDao;
+	@Autowired
+	private DisassembleReportDao disassembleReportDao;
+	@Autowired
+	private ReportDao reportDao;
 	
 	/**
 	 * 新增订单信息
@@ -112,5 +122,54 @@ public class OrderService {
 	 * */
 	public int selectApproval(Integer orderid){
 		return orderDao.selectApproval(orderid);
+	}
+	/**
+	 * 通过订单id查询需求工程师和寻源工程师
+	 * @param demand_id
+	 * @return
+	 */
+	public Map<String, Object> getTeamByDemand_id(Integer demand_id){
+		Map<String, Object> map = new HashMap<String, Object>();
+		Order order = orderDao.selectOrderByDemand_id(demand_id);
+		if(null!=order){
+			ProjectApproval projectApproval = projectApprovalDao.getProjectApprovalById(order.getId());
+			map.put("需求工程师", projectApproval.getCreate_by());
+			List<Report> list = reportDao.rankReport(order.getId());
+			if(null!=list &&list.size()>0){
+				map.put("寻源工程师", list.get(0).getCreate_by());
+			}
+		}
+		return map;
+	}
+	/**
+	 * 通过需求id来获得需求工程师上传的文件和时间
+	 * @param demand_id
+	 * @return
+	 */
+	public Map<String, Object> getDemandFile(Integer demand_id){
+		Order order = orderDao.selectOrderByDemand_id(demand_id);
+		Map<String, Object> map = new HashMap<String, Object>();
+//		ProjectApproval projectApproval = projectApprovalDao.getProjectApprovalById(order.getId());
+		if(null!=order){
+			DisassembleReport disassembleReport = disassembleReportDao.getDisassembleReportById(order.getDisassembleId());
+			map.put("拆解报告上传时间", disassembleReport.getCreate_date());
+			map.put("拆解报告的File", disassembleReport.getFile());
+		}
+//		map.put("立项表单的上传时间", projectApproval.getCreate_date());
+//		map.put("立项表单的File", projectApproval.get);
+		return map;
+	}
+	/**
+	 * 通过需求id来查询寻源工程师上传的文件和时间
+	 * @param demand_id
+	 * @return
+	 */
+	public List<Report> getReportFiles(Integer demand_id){
+		Order order = orderDao.selectOrderByDemand_id(demand_id);
+		List<Report> list =null;
+		if(null!=order){
+			list = reportDao.rankReport(order.getId());
+		}
+		return list;
 	}
 }

@@ -1,17 +1,18 @@
 package com.innovative.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;import com.fasterxml.jackson.databind.ser.impl.FailingSerializer;
 import com.innovative.bean.DisassembleReport;
 import com.innovative.bean.Order;
 import com.innovative.bean.ProjectApproval;
+import com.innovative.bean.Report;
 import com.innovative.service.DisassembleReportService;
 import com.innovative.service.OrderService;
 import com.innovative.service.ProjectApprovalService;
@@ -118,7 +119,10 @@ public class OrderController {
 	@RequestMapping(value="approvalSave/{orderid}",method=RequestMethod.POST)
 	public JsonResult approvalSave(@RequestBody ProjectApproval projectApproval,@PathVariable(name="orderid") Integer orderid){
 		/*保存立项表单*/
-		projectApprovalService.addProjectApproval(projectApproval,orderid);
+		int result = projectApprovalService.addProjectApproval(projectApproval,orderid);
+		if(result==0){
+			return new JsonResult(false, "添加失败");
+		}
 		return new JsonResult(true, "添加成功");
 	}
 	
@@ -154,6 +158,44 @@ public class OrderController {
 			return new JsonResult(false, "没有结果");
 		}
 	}
-	
+	/**
+	 * 项目团队 
+	 * @param demand_id 需求id
+	 * @return
+	 */
+	@RequestMapping(value="/getTeam/{demand_id}",method=RequestMethod.GET)
+	public JsonResult getTeam(@PathVariable(name="demand_id",required=true)Integer demand_id){
+			Map<String, Object> map = orderService.getTeamByDemand_id(demand_id);
+			if(map.size()==0){
+				return new JsonResult(false, "没有查到");
+			}
+			return new JsonResult(true, map);
+	}
+	/**
+	 * 项目同队里的需求工程师或者寻源工程师上传过的附件
+	 * @param demand_id 需求id
+	 * @param user_role 需求工程师是eoms 寻源工程师是se
+	 * @return
+	 */
+	@RequestMapping(value="/getTeam/{demand_id}/{user_role}",method=RequestMethod.GET)
+	public JsonResult getTeam(@PathVariable(name="demand_id")Integer demand_id,@PathVariable(name="user_role")String user_role){
+		//需求工程师
+		if("eoms".equals(user_role)){
+			Map<String, Object> map = orderService.getDemandFile(demand_id);
+			if(map.size()==0){
+				return new JsonResult(false, "还没有上传拆解报告");
+			}
+			return new JsonResult(true, map);
+		}
+		//寻源工程师
+		if("se".equals(user_role)){
+			List<Report> list = orderService.getReportFiles(demand_id);
+			if(null==list||list.size()==0){
+				return new JsonResult(false, "没有上传");
+			}
+			return new JsonResult(true, list);
+		}
+		return new JsonResult(false, "传入参数有误");
+	}
 	
 }

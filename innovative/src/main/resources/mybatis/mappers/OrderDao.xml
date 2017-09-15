@@ -68,4 +68,8 @@
 	<update id="updateProjectApproval" parameterType="Order">
 		UPDATE "xacx_order" SET "approvalid"=#{approvalId} WHERE "id"=#{id}
 	</update>
+	<!-- 通过需求id来查询订单信息 -->
+	<select id="selectOrderByDemand_id" parameterType="int" resultMap="OrderMap">
+		SELECT * FROM xacx_order WHERE demandid = #{demand_id}
+	</select>
 </mapper>
