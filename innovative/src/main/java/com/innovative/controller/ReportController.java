@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.innovative.bean.Report;
 import com.innovative.service.ReportService;
 import com.innovative.utils.FileUpload;
+import com.innovative.utils.HttpClientUpload;
 import com.innovative.utils.JsonResult;
 
 @RestController
@@ -32,26 +33,11 @@ public class ReportController {
 	 */
 	@RequestMapping(value = "/reportSave", method = RequestMethod.POST)
 	public JsonResult reportSave( Report report, MultipartFile[] FileData,HttpServletRequest request){
-		//用于存储上传后报告的地址
-        StringBuffer buffer=new StringBuffer();
-		//上传报告的操作
-        if (FileData != null && FileData.length > 0) {
-            try {
-                String url = null;
-                for (int i = 0; i < FileData.length; i++) {
-                    url = FileUpload.copyFile(FileData[i], "report");
-                    
-                    if(i==FileData.length-1){
-                    	buffer.append(url);
-                    }else{
-                    	buffer.append(url+",");
-                    }
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        report.setFile(buffer.toString());
+		if (FileData != null && FileData.length > 0) {
+			/*使用httpclient上传到远程文件服务器*/
+			String path=HttpClientUpload.httpClientUploadFile(FileData,"report");
+			report.setFile(path);//添加上传记录中的文件路径
+		}
 		if(reportService.addReportAndOrder_report(report)>0){
 			return new JsonResult(true, "添加成功");
 		}
@@ -73,25 +59,11 @@ public class ReportController {
 	
 	@RequestMapping(value="/reportEdit",method=RequestMethod.POST)
 	public JsonResult reportEdit( Report report ,MultipartFile[] FileData){
-		//用于存储上传后报告的地址
-        StringBuffer buffer=new StringBuffer();
-		//上传报告的操作
-        if (FileData != null && FileData.length > 0) {
-            try {
-                String url = null;
-                for (int i = 0; i < FileData.length; i++) {
-                    url = FileUpload.copyFile(FileData[i], "report");
-                    if(i==FileData.length-1){
-                    	buffer.append(url);
-                    }else{
-                    	buffer.append(url+",");
-                    }
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        report.setFile(buffer.toString());
+		if (FileData != null && FileData.length > 0) {
+			/*使用httpclient上传到远程文件服务器*/
+			String path=HttpClientUpload.httpClientUploadFile(FileData,"report");
+			report.setFile(path);//添加上传记录中的文件路径
+		}
 		if(reportService.updateReport(report)>0){
 			return new JsonResult(true, "修改成功");
 		}
@@ -120,9 +92,9 @@ public class ReportController {
 	 */
 	@RequestMapping(value="/reportRank/{order_id}",method=RequestMethod.GET)
 	public JsonResult reportRank(@PathVariable(name = "order_id") Integer order_id){
-		System.out.println(order_id);
+//		System.out.println(order_id);
 		List<Report> listReport = reportService.rankReport(order_id);
-		System.out.println(">>>>>>>>>>"+listReport);
+//		System.out.println(">>>>>>>>>>"+listReport);
 		if(listReport.size()>0){
 			return new JsonResult(true, listReport);
 		}

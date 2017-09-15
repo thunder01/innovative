@@ -9,13 +9,20 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.innovative.bean.Demand;
 import com.innovative.bean.Report;
+import com.innovative.dao.DemandDao;
+import com.innovative.dao.OrderDao;
 import com.innovative.dao.ReportDao;
 
 @Service("reportService")
 public class ReportService{
 	@Resource
 	private ReportDao reportDao;
+	@Resource
+	private OrderDao orderDao;
+	@Resource
+	private DemandDao demandDao;
 	/**
 	 * 添加一个报告，并向xacx_order_report添加对应的需求id和添加报告的id
 	 * @param report
@@ -36,7 +43,8 @@ public class ReportService{
 	 */
 	@Transactional
 	public int updateReportDeleted(Integer id) {
-		return reportDao.updateReportDeleted(id);
+		reportDao.updateReportDeleted(id);
+		return reportDao.deleteOrder_reportByReport_id(id);
 	}
 	/**
 	 * 更新报告
@@ -58,8 +66,8 @@ public class ReportService{
 		map.put("order_id", order_id);
 		map.put("type", type);
 		Report report = reportDao.findReportById(map);
-		//还需要需求的名字
-//		report.setDemand_name(demand_name);
+		Demand demand = demandDao.getDemand(orderDao.selectOrderById(order_id).getDemandId());
+		report.setDemand_name(demand.getName());
 		return report;
 	}
 	/**
@@ -78,10 +86,13 @@ public class ReportService{
 	 * @return
 	 */
 	public List<Report> rankReport(Integer order_id){
-		System.out.println("-------"+order_id);
+//		System.out.println("-------"+order_id);
 		List<Report> list = reportDao.rankReport(order_id);
-		System.out.println("======="+list);
-		//此处也是需要需求的名字
+		Demand demand = demandDao.getDemand(orderDao.selectOrderById(order_id).getDemandId());
+		for (Report report : list) {
+			report.setDemand_name(demand.getName());
+		}
+//		System.out.println("======="+list);
 		return list;
 	}
 	

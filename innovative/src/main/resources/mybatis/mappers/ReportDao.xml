@@ -39,6 +39,10 @@
 	<update id="updateReportDeleted" parameterType="int">
 		UPDATE xacx_report SET deleted = 1 WHERE id = #{id} 
 	</update>
+	<!-- 删除xacx_order_report带有report_id当前数据的信息 -->
+	<delete id="deleteOrder_reportByReport_id" parameterType="int">
+		DELETE FROM xacx_order_report WHERE report_id = #{report_id}
+	</delete>
 	
 	<!-- 更新报告 -->
 	<update id="updateReport" parameterType="Report">

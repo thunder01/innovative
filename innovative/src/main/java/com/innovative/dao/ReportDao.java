@@ -26,6 +26,8 @@ public interface ReportDao {
 	 * @param report
 	 */
 	public int updateReportDeleted(Integer id);
+	
+	public int deleteOrder_reportByReport_id(Integer report_id);
 	/**
 	 * 更新报告信息
 	 * @param report
