@@ -27,8 +27,8 @@ public class DisassembleReportController {
 	
 	/**
 	 * 拆解报告上传之后，将上传记录添加到数据库
-	 * @param FileDate
-	 * @param DisassembleReport
+	 * @param FileData
+	 * @param report
 	 * @return
 	 * */
 	@RequestMapping(value = "/upload/{orderid}", method = RequestMethod.POST)
@@ -37,8 +37,7 @@ public class DisassembleReportController {
 		
 		if (FileData != null && FileData.length > 0) {
 			/*使用httpclient上传到远程文件服务器*/
-			HttpClientUpload upload=new HttpClientUpload();
-			String path=upload.httpClientUploadFile(FileData,"disassemble");
+			String path=HttpClientUpload.httpClientUploadFile(FileData,"disassemble");
 			report.setFile(path);//添加上传记录中的文件路径
 		}		
 		int result = disassembleService.saveDisassembleReport(report,orderid);
@@ -48,7 +47,7 @@ public class DisassembleReportController {
         return new JsonResult(true, "报告上传成功！");
         
 	}
-	
+
 	/**
 	 * 删除拆解报告
 	 * @param id
