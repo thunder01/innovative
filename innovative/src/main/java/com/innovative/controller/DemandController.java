@@ -51,15 +51,15 @@ public class DemandController{
     @RequestMapping(value = "/update",method =RequestMethod.POST)
     public JsonResult update(@RequestBody Demand demand){
         String messge="审核成功!";
+        Demand demandList=null;
         boolean code=true;
-        Demand demands=demandService.getDemand(demand.getId());
-        if(demands!=null){
-            demandService.updateDemand(demand.getId());
+        if(demandService.updateDemand(demand)){
+            demandList=demandService.getDemand(demand.getId());
         }else{
             messge="审核失败";
             code=false;
         }
-        return  new JsonResult(code,messge);
+        return  new JsonResult(code,demandList);
     }
     /**
      * 添加内容
@@ -88,6 +88,7 @@ public class DemandController{
         Integer page = offset/(new PageInfo().getPageSize()) +1;
         return new JsonResult(true, demandService.getDemandList(page));
     }
+
     /**
      * 批量上传文件
      */

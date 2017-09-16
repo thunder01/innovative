@@ -24,7 +24,7 @@ public interface DemandDao {
     /**
      * 根据ID修改文件状态
      */
-    int updateDemand(@Param("id") int id);
+    int updateDemand(Demand demand);
 
 
     /**

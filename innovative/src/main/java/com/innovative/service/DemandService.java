@@ -29,8 +29,8 @@ public class DemandService {
      * 根据ID修改状态
      *
      */
-    public  boolean updateDemand(int id){
-        return (demandDao.updateDemand(id)>0 ? true:false);
+    public  boolean updateDemand(Demand demand){
+        return (demandDao.updateDemand(demand)>0 ? true:false);
     }
     /**
      * 添加内容

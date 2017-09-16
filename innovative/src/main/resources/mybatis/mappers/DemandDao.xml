@@ -17,7 +17,7 @@
         <result property="demandd" column="demandd"/>
         <result property="interestpg" column="interestpg"/>
         <result property="ninterestpg" column="ninterestpg"/>
-        <result property="gjc" column="gjc"/>
+        <result property="gjc" column="gjc" typeHandler="com.innovative.mybatisHandler.ArrayTypeHandler"/>
         <result property="hzms" column="hzms"/>
         <result property="hzrequest" column="hzrequest"/>
         <result property="productm" column="productm"/>
@@ -36,19 +36,28 @@
         SELECT * FROM "xacx_demand" WHERE "id" =  #{id};
     </select>
     <!--根据ID修改内容-->
-    <update id="updateDemand" parameterType="int">
-        UPDATE  "xacx_demand" SET "status"='1' WHERE id=#{id}
+    <update id="updateDemand" parameterType="Demand">
+        UPDATE  "xacx_demand" SET "status"='1',"option" =#{option} WHERE id=#{id}
     </update>
     <!-- 新增-->
     <insert id="addDemand" parameterType="Demand">
         <selectKey resultType="int" keyProperty="id" order="AFTER">
-            SELECT currval('xacx_demand_sequence'::regclass)
+            SELECT currval('xacx_demand_id_seq'::regclass)
         </selectKey>
         INSERT  INTO "xacx_demand"
         ("name","number","iphone","create_date","create_by","late_date","late_by","bgd","demandd","interestpg","ninterestpg",
-        "gjc","hzms","hzrequest","productm","product_date","bz","check_name","ddmj","option","file","xqf")
+        "hzms","hzrequest","productm","product_date","bz","check_name","ddmj","option","file","xqf","gjc")
         VALUES(#{name},#{number},#{iphone},now(),#{cteateBy},now(),#{lateBy},#{bgd},#{demandd},#{interestpg},#{ninterestpg},
-        #{gjc},#{hzms},#{hzrequest},#{productm},#{productDate},#{bz},#{checkName},#{ddmj},#{option}，#{path},#{xqf})
+        #{hzms},#{hzrequest},#{productm},#{productDate},#{bz},#{checkName},#{ddmj},#{option},#{path},#{xqf},
+        <choose>
+            <when test="gjc != null">
+                <foreach item="gjc" collection="gjc" separator="," open="'{" close="}'" index="">
+                    ${gjc}
+                </foreach>
+            </when>
+            <otherwise>'{}'</otherwise>
+        </choose>
+        )
     </insert>
     <!--查询总条数-->
     <select id="getTotalCount" resultType="int">
@@ -57,6 +66,9 @@
     <!--根据查询条件获取列表-->
     <select id="getDemandList" resultMap="demandMap">
         SELECT * FROM "xacx_demand"
+        <where>
+        status='1'
+        </where>
         limit #{pageSize} offset #{startIndex}
     </select>
 

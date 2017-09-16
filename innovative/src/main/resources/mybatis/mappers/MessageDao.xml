@@ -21,8 +21,14 @@
     <select id="getMessageList" resultType="map">
             SELECT
             de."name",
+            de."number",
+            de."iphone",
+            de."xqf",
+            de."bgd",
+            de."status",
             me.create_date createDate,
-            me."type"
+            me."type",
+            me."project_id"
             FROM
             xacx_demand de,
             xacx_messge me

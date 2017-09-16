@@ -14,7 +14,7 @@ public class Demand {
     private  String demandd;//需求的具体描述
     private  String interestpg;//可能解决方案
     private  String ninterestpg;//不感兴趣的方案
-    private  String gjc;//关键词
+    private  String []gjc;//关键词
     private  String hzms;//合作模式
     private  String hzrequest;//对合作方要求
     private  String productm;//项目资金预算
@@ -27,7 +27,7 @@ public class Demand {
     private  String path;//文件路径
 
 
-    public Demand(int id, String name, String number, String iphone, String createDate, String cteateBy, String lateDate, String lateBy, String bgd, String demandd, String interestpg, String ninterestpg, String gjc, String hzms, String hzrequest, String productm, String productDate, String bz, String checkName, String ddmj, String option, String status,String path,String xqf) {
+    public Demand(int id, String name, String number, String iphone, String createDate, String cteateBy, String lateDate, String lateBy, String bgd, String demandd, String interestpg, String ninterestpg, String []gjc, String hzms, String hzrequest, String productm, String productDate, String bz, String checkName, String ddmj, String option, String status,String path,String xqf) {
         this.id = id;
         this.name = name;
         this.number = number;
@@ -154,11 +154,11 @@ public class Demand {
         this.ninterestpg = ninterestpg;
     }
 
-    public String getGjc() {
+    public String []getGjc() {
         return gjc;
     }
 
-    public void setGjc(String gjc) {
+    public void setGjc(String []gjc) {
         this.gjc = gjc;
     }
 
