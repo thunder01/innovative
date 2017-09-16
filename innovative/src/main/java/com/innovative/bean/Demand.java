@@ -5,6 +5,7 @@ public class Demand {
     private  String name;//项目名称
     private  String number;//项目编号
     private  String iphone;//联系方式
+    private  String xqf;//需求方
     private  String createDate;//创建时间
     private  String cteateBy;//创建人
     private  String lateDate;//修改时间
@@ -26,7 +27,7 @@ public class Demand {
     private  String path;//文件路径
 
 
-    public Demand(int id, String name, String number, String iphone, String createDate, String cteateBy, String lateDate, String lateBy, String bgd, String demandd, String interestpg, String ninterestpg, String gjc, String hzms, String hzrequest, String productm, String productDate, String bz, String checkName, String ddmj, String option, String status,String path) {
+    public Demand(int id, String name, String number, String iphone, String createDate, String cteateBy, String lateDate, String lateBy, String bgd, String demandd, String interestpg, String ninterestpg, String gjc, String hzms, String hzrequest, String productm, String productDate, String bz, String checkName, String ddmj, String option, String status,String path,String xqf) {
         this.id = id;
         this.name = name;
         this.number = number;
@@ -50,6 +51,7 @@ public class Demand {
         this.option = option;
         this.status = status;
         this.path=path;
+        this.xqf=xqf;
     }
 
     public Demand() {
@@ -237,5 +239,13 @@ public class Demand {
 
     public void setPath(String path) {
         this.path = path;
+    }
+
+    public String getXqf() {
+        return xqf;
+    }
+
+    public void setXqf(String xqf) {
+        this.xqf = xqf;
     }
 }

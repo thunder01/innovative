@@ -28,6 +28,7 @@
         <result property="option" column="option"/>
         <result property="status" column="status"/>
         <result property="path" column="file"/>
+        <result property="xqf" column="xqf"/>
     </resultMap>
 
     <!--根据id获取内容详情-->
@@ -45,9 +46,9 @@
         </selectKey>
         INSERT  INTO "xacx_demand"
         ("name","number","iphone","create_date","create_by","late_date","late_by","bgd","demandd","interestpg","ninterestpg",
-        "gjc","hzms","hzrequest","productm","product_date","bz","check_name","ddmj","option","file")
+        "gjc","hzms","hzrequest","productm","product_date","bz","check_name","ddmj","option","file","xqf")
         VALUES(#{name},#{number},#{iphone},now(),#{cteateBy},now(),#{lateBy},#{bgd},#{demandd},#{interestpg},#{ninterestpg},
-        #{gjc},#{hzms},#{hzrequest},#{productm},#{productDate},#{bz},#{checkName},#{ddmj},#{option}，#{path})
+        #{gjc},#{hzms},#{hzrequest},#{productm},#{productDate},#{bz},#{checkName},#{ddmj},#{option}，#{path},#{xqf})
     </insert>
     <!--查询总条数-->
     <select id="getTotalCount" resultType="int">
