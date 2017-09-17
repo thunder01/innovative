@@ -52,7 +52,7 @@ public interface OrderDao {
 	public Order selectOrderById(Integer orderid);
 	
 	/**
-	 * 根据订单id查询对应的需求id
+	 * 根据订单id，查出拆解报告的id
 	 * @param orderid 订单id
 	 * @return
 	 * */
@@ -86,4 +86,6 @@ public interface OrderDao {
 	public Order selectOrderByDemand_id(Integer demand_id);
 	
 	public Integer getTotalContent(String userid);
+	
+	public Order selectOrderByApproval_id(Integer approvalid);
 }

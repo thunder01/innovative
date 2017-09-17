@@ -77,4 +77,9 @@
 	<select id="selectOrderByDemand_id" parameterType="int" resultMap="OrderMap">
 		SELECT * FROM xacx_order WHERE demandid = #{demand_id}
 	</select>
+	
+	<!-- 通过立项表单id来查询订单信息 -->
+	<select id="selectOrderByApproval_id" parameterType="int" resultMap="OrderMap">
+		SELECT * FROM xacx_order WHERE approvalid = #{approvalid}
+	</select>
 </mapper>

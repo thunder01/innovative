@@ -1,5 +1,6 @@
 package com.innovative.controller;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -57,7 +58,6 @@ public class OrderController {
 	 * */
 	@RequestMapping(value="/sourceOrder",method=RequestMethod.POST)
 	public JsonResult updateOrderLate_byId(@RequestBody Order order){
-			System.out.println(order.getLate_byId()+"---"+order.getApprovalId());
 			int flag=orderService.updateOrderLate_byId(order.getLate_byId(),order.getApprovalId());//修改订单信息
 			if (flag==1) {
 				return new JsonResult(true, "订单生成成功");
@@ -92,6 +92,7 @@ public class OrderController {
 	@RequestMapping(value="/orderdetail/{orderid}",method=RequestMethod.GET)
 	public JsonResult selectById(@PathVariable(name="orderid") Integer orderid){
 		Map<String, Object> map=orderService.selectOrderById(orderid);
+		map.put("orderid", orderid);
 		/*判断结果是否为空*/
 		if (map!=null) {
 			return new JsonResult(true, map);
@@ -101,20 +102,30 @@ public class OrderController {
 	}
 	
 	/**
-	 * 需求拆解报告列表，查出次订单的拆解报告
+	 * 需求拆解、立项报告列表，查出次订单的拆解报告
 	 * @param orderid 订单id
 	 * */
 	@RequestMapping(value="/disassembleDetail/{orderid}",method=RequestMethod.GET)
 	public JsonResult selectDisassemble(@PathVariable(name="orderid") Integer orderid){
-		/*查询需求报告信息*/
-		DisassembleReport report=disassembleService.getDisassembleReportById(orderid);
+		System.out.println(orderid);
 		
+		/*查询需求报告信息*/
+		Map<String, Object> map=disassembleService.getDisassembleReportById(orderid);
+		map.put("orderid", orderid);
 		/*判断结果是否为空*/
-		if (null!=report){
-			return new JsonResult(true, report);
+		if (null!=map){
+			return new JsonResult(true, map);
 		}else{
 			return new JsonResult(false, "结果为空");
 		}
+	}
+	
+	/*跳转立项表单*/
+	@RequestMapping(value="/toApprovalUpload/{orderid}",method = RequestMethod.GET)
+	public JsonResult toUpload(@PathVariable(name="orderid") Integer orderid){
+		Map<String,Object> map=new HashMap<>();
+		map.put("orderid", orderid);
+		return new JsonResult(true,map);
 	}
 	
 	/**
@@ -122,13 +133,11 @@ public class OrderController {
 	 * @param orderid
 	 * */
 	@RequestMapping(value="/approvalSave",method=RequestMethod.POST)
-	public JsonResult approvalSave(@RequestBody ProjectApproval projectApproval,@RequestBody Order order){
+	public JsonResult approvalSave(@RequestBody ProjectApproval projectApproval){
+		System.out.println(projectApproval);
 		/*保存立项表单*/
-		int result = projectApprovalService.addProjectApproval(projectApproval,order.getId());
-		if(result==0){
-			return new JsonResult(false, "添加失败");
-		}
-		return new JsonResult(true, "添加成功");
+		Map<String, Object> map = projectApprovalService.addProjectApproval(projectApproval,projectApproval.getOrderid());
+		return new JsonResult(true, map);
 	}
 	
 	/**
@@ -154,14 +163,12 @@ public class OrderController {
 	 * @return
 	 * */
 	@RequestMapping(value="/demandSquare",method=RequestMethod.GET)
-	public JsonResult getProjectApprovals(){
-		List<ProjectApproval> list=projectApprovalService.getProjectApprovals();
+	public JsonResult getProjectApprovals(@RequestParam(name="offset",defaultValue="0") Integer offset){
+		Integer page = offset/(new PageInfo().getPageSize()) +1;
+		
+		Map<String, Object> map=projectApprovalService.getProjectApprovals(page);
 		/*判断结果*/
-		if (list.size()>0) {
-			return new JsonResult(true, list);
-		}else{
-			return new JsonResult(false, "没有结果");
-		}
+		return new JsonResult(true, map);
 	}
 	/**
 	 * 项目团队 

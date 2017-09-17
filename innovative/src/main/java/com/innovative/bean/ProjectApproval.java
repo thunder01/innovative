@@ -32,6 +32,8 @@ public class ProjectApproval implements Serializable{
 	private Date late_date;//最后修改时间
 	private String late_by;//最后修改人
 	private Integer status;//立项表单的状态，默认0未接单，1是已结单
+	private Integer orderid;
+	private String userName;
 	public ProjectApproval() {
 		super();
 	}
@@ -180,6 +182,20 @@ public class ProjectApproval implements Serializable{
 	}
 	public void setStatus(Integer status) {
 		this.status = status;
+	}
+	
+	public Integer getOrderid() {
+		return orderid;
+	}
+	public void setOrderid(Integer orderid) {
+		this.orderid = orderid;
+	}
+	
+	public String getUserName() {
+		return userName;
+	}
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 	@Override
 	public String toString() {

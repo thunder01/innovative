@@ -1,5 +1,8 @@
 package com.innovative.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,6 +29,13 @@ public class DisassembleReportController {
 	@Autowired
     private DisassembleReportService disassembleService;
 	
+	/*跳转上传页面*/
+	@RequestMapping(value="/toUpload/{orderid}",method = RequestMethod.GET)
+	public JsonResult toUpload(@PathVariable(name="orderid") Integer orderid){
+		Map<String,Object> map=new HashMap<>();
+		map.put("orderid", orderid);
+		return new JsonResult(true,map);
+	}
 	/**
 	 * 拆解报告上传之后，将上传记录添加到数据库
 	 * @param FileData
@@ -42,11 +52,11 @@ public class DisassembleReportController {
 			report.setFile(path);//添加上传记录中的文件路径
 		}*/		
 		System.out.println(report);
-		int result = disassembleService.saveDisassembleReport(report,report.getOrderid());
-        if (result==0) {
-            return new JsonResult(false, "报告上传失败！");
+		Map<String, Object> map= disassembleService.saveDisassembleReport(report,report.getOrderid());
+        if (map!=null) {
+            return new JsonResult(true, map);
         }
-        return new JsonResult(true, "报告上传成功！");
+        return new JsonResult(false, "报告上传失败！");
         
 	}
 
@@ -57,27 +67,24 @@ public class DisassembleReportController {
 	 * */
 	@RequestMapping(value="/delete", method = RequestMethod.POST)
 	public JsonResult deleteDisassembleReportById(@RequestBody DisassembleReport report){
-		int flag=disassembleService.deleteDisassembleReportById(report.getId());
+		Map<String,Object> map=disassembleService.deleteDisassembleReportById(report.getId(),report.getOrderid());
 		/*判断是否删除成功*/
-		if (flag>0) {
-			return new JsonResult(true, "删除成功");
-		}else {
-			return new JsonResult(false, "删除失败");
-		}
+			return new JsonResult(true, map);
 		
 	}
 	
 	/**
-	 * 根据id查找拆解报告
-	 * @param id
+	 * 根据id查找拆解报告，编辑信息时先查
+	 * @param disid 拆解报告id
+	 * @param orderid
 	 * @return
 	 * */
-	@RequestMapping(value="/select/{id}", method=RequestMethod.GET)
-	public JsonResult a(@PathVariable(name="id") Integer id){
-		DisassembleReport report=disassembleService.getDisassembleReportById(id);
+	@RequestMapping(value="/select/{disid}/{orderid}", method=RequestMethod.GET)
+	public JsonResult a(@PathVariable(name="disid") Integer disid,@PathVariable(name="orderid") Integer orderid){
+		Map<String,Object> map=disassembleService.getDisassembleReportById(disid);
 		/*判断结果是否存在*/
-		if (report!=null) {
-			return new JsonResult(true, report);
+		if (map!=null) {
+			return new JsonResult(true, map);
 		}else {
 			return new JsonResult(false, "没有结果");
 		}

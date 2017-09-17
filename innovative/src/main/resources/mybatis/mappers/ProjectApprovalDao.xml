@@ -54,6 +54,7 @@
 	<select id="getProjectApprovals" resultMap="ProjectApproval">
 		SELECT id,proname,pronum,eoms,demander,contact,demand_bg,demand_core,demand_count,keyword,coopmodel,
 		require,cost,completion,remark,create_date,create_by,late_date,late_by,status FROM xacx_project_approval 
+		where EXISTS (SELECT "approvalid" FROM "xacx_order" where xacx_project_approval.id=xacx_order.approvalid)
 		ORDER BY status desc , create_date desc
 	</select>
 	

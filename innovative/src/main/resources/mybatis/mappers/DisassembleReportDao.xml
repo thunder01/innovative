@@ -28,10 +28,7 @@
     
     <!-- 根据id查询拆解报告 -->
     <select id="getDisassembleReportById" parameterType="Integer" resultMap="DisassembleReportMap">
-    	SELECT "title","file","create_date","create_by","late_date","late_by" FROM "xacx_disassemble_report"
-    	<where>
-    		"id"=#{id}
-    	</where>
+    	SELECT "id","title","file","create_date","create_by","late_date","late_by" FROM "xacx_disassemble_report" WHERE "id"=#{id}
     </select>
     
     <!--根据id删除拆解报告 -->
