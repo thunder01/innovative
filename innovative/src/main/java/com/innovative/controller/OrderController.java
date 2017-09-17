@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;import com.fasterxml.jackson.databind.ser.impl.FailingSerializer;
 import com.innovative.bean.DisassembleReport;
 import com.innovative.bean.Order;
@@ -17,6 +18,8 @@ import com.innovative.service.DisassembleReportService;
 import com.innovative.service.OrderService;
 import com.innovative.service.ProjectApprovalService;
 import com.innovative.utils.JsonResult;
+import com.innovative.utils.PageInfo;
+import com.mysql.fabric.xmlrpc.base.Data;
 
 /**
  * 订单模块 web层
@@ -37,12 +40,11 @@ public class OrderController {
 	 * @param demandid 需求id
 	 * @return
 	 * */
-	@RequestMapping(value="/receive/{userid}/{demandid}",method=RequestMethod.GET)
-	public JsonResult insertOrder(@PathVariable(name="userid")Integer userid,
-			@PathVariable(name="demandid")Integer demandid){
-		int flag=orderService.insertOrder(userid,demandid);
-		if (flag==1) {
-			return new JsonResult(true, "订单生成成功");
+	@RequestMapping(value="/receive",method=RequestMethod.POST)
+	public JsonResult insertOrder(@RequestBody Order order){
+		Map<String, Object> map=orderService.insertOrder(order.getCreate_byId(),order.getDemandId());
+		if ((Integer)map.get("result")==1) {
+			return new JsonResult(true, map);
 		}else{
 			return new JsonResult(false, "订单生成失败");
 		}	
@@ -51,12 +53,12 @@ public class OrderController {
 	/**
 	 * 需求广场,寻源工程师接单
 	 * @param approvalid 立项id
-	 * @return userid 用户id
+	 * @param userid 用户id
 	 * */
-	@RequestMapping(value="/sourceOrder/{userid}/{approvalid}",method=RequestMethod.GET)
-	public JsonResult updateOrderLate_byId(@PathVariable(name="approvalid")Integer approvalid,
-			@PathVariable(name="userid")Integer userid){			
-			int flag=orderService.updateOrderLate_byId(userid,approvalid);//修改订单信息
+	@RequestMapping(value="/sourceOrder",method=RequestMethod.POST)
+	public JsonResult updateOrderLate_byId(@RequestBody Order order){
+			System.out.println(order.getLate_byId()+"---"+order.getApprovalId());
+			int flag=orderService.updateOrderLate_byId(order.getLate_byId(),order.getApprovalId());//修改订单信息
 			if (flag==1) {
 				return new JsonResult(true, "订单生成成功");
 			}else{
@@ -69,11 +71,14 @@ public class OrderController {
 	 * @param uesrid 用户id
 	 * @return
 	 * */
-	@RequestMapping(value="/myorder/{userid}",method=RequestMethod.GET)
-	public JsonResult selectMyOrder(@PathVariable(name="userid") Integer userid){
-		List<Order> list=orderService.selectMyOrder(userid);
-		if (list.size()>0) {
-			return new JsonResult(true, list);
+	@RequestMapping(value="/myorder",method=RequestMethod.GET)
+	public JsonResult selectMyOrder(@RequestParam(name="userid") String userid,@RequestParam(name="offset",defaultValue="0") Integer offset){
+		System.out.println(userid+"----"+offset);
+		Integer page = offset/(new PageInfo().getPageSize()) +1;
+		
+		Map<String, Object> map=orderService.selectMyOrder(userid,page);
+		if (map.size()>0) {
+			return new JsonResult(true, map);
 		}else {
 			return new JsonResult(false, "结果为空");
 		}
@@ -86,10 +91,10 @@ public class OrderController {
 	 * */
 	@RequestMapping(value="/orderdetail/{orderid}",method=RequestMethod.GET)
 	public JsonResult selectById(@PathVariable(name="orderid") Integer orderid){
-		Order order=orderService.selectOrderById(orderid);
+		Map<String, Object> map=orderService.selectOrderById(orderid);
 		/*判断结果是否为空*/
-		if (order!=null) {
-			return new JsonResult(true, order);
+		if (map!=null) {
+			return new JsonResult(true, map);
 		}else {
 			return new JsonResult(false, "结果为空");
 		}
@@ -116,10 +121,10 @@ public class OrderController {
 	 * 添加立项表单
 	 * @param orderid
 	 * */
-	@RequestMapping(value="approvalSave/{orderid}",method=RequestMethod.POST)
-	public JsonResult approvalSave(@RequestBody ProjectApproval projectApproval,@PathVariable(name="orderid") Integer orderid){
+	@RequestMapping(value="/approvalSave",method=RequestMethod.POST)
+	public JsonResult approvalSave(@RequestBody ProjectApproval projectApproval,@RequestBody Order order){
 		/*保存立项表单*/
-		int result = projectApprovalService.addProjectApproval(projectApproval,orderid);
+		int result = projectApprovalService.addProjectApproval(projectApproval,order.getId());
 		if(result==0){
 			return new JsonResult(false, "添加失败");
 		}

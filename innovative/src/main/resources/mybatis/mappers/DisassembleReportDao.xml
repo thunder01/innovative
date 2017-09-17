@@ -23,6 +23,7 @@
         (title ,file,create_date,create_by)
         VALUES
         (#{title},#{file},now(),#{create_by})
+        
     </insert>
     
     <!-- 根据id查询拆解报告 -->

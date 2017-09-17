@@ -42,9 +42,14 @@ public class DisassembleReportService {
 	 * */
 	public DisassembleReport getDisassembleReportById(Integer orderid){		
 		/*先根据订单id查询拆解报告id*/
-		int disassembleId=orderDao.selectDisassemble(orderid);
-		/*然后根据拆解报告id查询拆解信息*/
-		return reportDao.getDisassembleReportById(disassembleId);
+		Integer disassembleId=orderDao.selectDisassemble(orderid);
+		if (disassembleId!=null) {
+			/*然后根据拆解报告id查询拆解信息*/
+			return reportDao.getDisassembleReportById(disassembleId);
+		}else{
+			return null;
+		}
+		
 	}
 	
 	/**

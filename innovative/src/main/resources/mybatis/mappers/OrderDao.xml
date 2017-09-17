@@ -24,12 +24,12 @@
 	</insert>
 	
 	<!-- 若用户为需求工程师，则根据用户id查找出所有的订单 -->
-	<select id="selectDemandByUserId" parameterType="int" resultMap="OrderMap">
+	<select id="selectDemandByUserId" parameterType="string" resultMap="OrderMap">
 		SELECT * FROM "xacx_order" WHERE create_by_id=#{id}
 	</select>
 	
 	<!-- 若用户为寻源工程师，则根据用户id查找出所有的订单 -->
-	<select id="selectSourceByUserId" parameterType="int" resultMap="OrderMap">
+	<select id="selectSourceByUserId" parameterType="string" resultMap="OrderMap">
 		SELECT * FROM "xacx_order" WHERE late_by_id=#{id}
 	</select>
 	
@@ -57,6 +57,11 @@
 	<!-- 根据订单id，查立项id -->
 	<select id="selectApproval" parameterType="int" resultType="int">
 		SELECT "approvalid" FROM "xacx_order" WHERE "id"=#{orderid}
+	</select>
+	
+	<!--查询我的订单有多少条记录  -->
+	<select id="getTotalContent" parameterType="string" resultType="int">
+		SELECT COUNT(*) FROM "xacx_order" WHERE "create_by_id"=#{userid}
 	</select>
 	
 	<!-- 更新订单的拆解报告信息 -->

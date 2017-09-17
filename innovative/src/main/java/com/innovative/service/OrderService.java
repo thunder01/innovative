@@ -4,18 +4,24 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.poi.common.usermodel.LineStyle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.innovative.bean.Demand;
 import com.innovative.bean.DisassembleReport;
 import com.innovative.bean.Order;
 import com.innovative.bean.ProjectApproval;
 import com.innovative.bean.Report;
+import com.innovative.bean.User;
+import com.innovative.dao.DemandDao;
 import com.innovative.dao.DisassembleReportDao;
 import com.innovative.dao.OrderDao;
 import com.innovative.dao.ProjectApprovalDao;
 import com.innovative.dao.ReportDao;
+import com.innovative.dao.UserDao;
+import com.innovative.utils.PageInfo;
 
 
 /**
@@ -32,20 +38,29 @@ public class OrderService {
 	private DisassembleReportDao disassembleReportDao;
 	@Autowired
 	private ReportDao reportDao;
+	@Autowired
+	private DemandDao demandDao;
+	@Autowired UserDao userDao;
 	
 	/**
-	 * 新增订单信息
+	 * 新增订单信息 需求池
 	 * @param order 订单对象
 	 * @return 受影响的行数
 	 * */
-	public int insertOrder(Integer userid,Integer demandid){
+	public Map<String, Object> insertOrder(String userid,Integer demandid){
 		//首先查询该需求是否可接
 		
+		Demand demand=demandDao.getDemand(demandid);
 		//若可接则生成订单，否则返回"此需求已被接单"
 		Order order = new Order();
 		order.setCreate_byId(userid);
 		order.setDemandId(demandid);
-		return orderDao.insertOrder(order);
+		
+		Map<String, Object> map=new HashMap<>();
+		map.put("demand", demand);
+		map.put("userid", userid);
+		map.put("result", orderDao.insertOrder(order));
+		return map;
 	}
 	
 	/**
@@ -54,7 +69,7 @@ public class OrderService {
 	 * @return
 	 * */
 	@Transactional
-	public int updateOrderLate_byId(Integer userid,Integer approvalId){	
+	public int updateOrderLate_byId(String late_byId,Integer approvalId){	
 		/*根据立项表单id,查询状态(0是为接单，1是已接单)*/
 		int status=projectApprovalDao.getProjectApprovalStatusById(approvalId);
 		if (1==status) {
@@ -63,7 +78,7 @@ public class OrderService {
 			int orderId=orderDao.selectOrderIdByApproval(approvalId);//根据立项id查出订单id	
 			Order order = new Order();
 			order.setId(orderId);//补全订单信息
-			order.setLate_byId(userid);
+			order.setLate_byId(late_byId);
 			/*首先更新订单表中的立项表单id信息*/
 			orderDao.updateOrderLate_byId(order);
 			/*将立项表单的状态置为1*/
@@ -85,16 +100,30 @@ public class OrderService {
 	 * @param id 用户id
 	 * @return
 	 * */
-	public List<Order> selectMyOrder(Integer id){
-		/*首先判断用户的角色,根据用户角色选择订单*/
-		//String role=userService.findRole(id);
-		//if ("需求工程师".equals(role)) {
-			return orderDao.selectDemandByUserId(id);
-		//}
+	public Map<String,Object> selectMyOrder(String id,Integer pageNum){
+		Map<String , Object> map=new HashMap<>();
 		
-		//if ("寻源工程师".equals(role)) {
-			//return orderDao.selectSourceByUserId(id);
-		//}
+		PageInfo pageInfo = new PageInfo();
+        pageInfo.setCurrentPageNum(pageNum);
+        
+		/*首先判断用户的角色,根据用户角色选择订单*/
+		User user=userDao.getUser(id);
+		
+		List<Order> list=orderDao.selectDemandByUserId(id);
+		for(Order order:list){
+			Demand demand=demandDao.getDemand(order.getDemandId());
+			order.setDemand(demand);
+		}
+			
+		map.put("user", user);
+		map.put("items", list);
+		
+        map.put("totalCount", orderDao.getTotalContent(id));      
+        map.put("Count", pageInfo.getPageSize());
+        map.put("itemCount", pageInfo.getPageSize());
+        map.put("offset", pageInfo.getStartIndex());
+        map.put("limit", pageInfo.getPageSize());
+		return map;
 	}
 	
 	/**
@@ -102,8 +131,17 @@ public class OrderService {
 	 * @param orderid 订单id
 	 * @return
 	 * */
-	public Order selectOrderById(Integer orderid){
-		return orderDao.selectOrderById(orderid);
+	public Map<String, Object> selectOrderById(Integer orderid){
+		Map<String, Object> map=new HashMap<>();
+		
+		Order order=orderDao.selectOrderById(orderid);
+		Demand demand=demandDao.getDemand(order.getDemandId());
+		order.setDemand(demand);
+		
+		User user=userDao.getUser(order.getCreate_byId());
+		map.put("item", order);
+		map.put("user", user);
+		return map;
 	}
 	
 	/**

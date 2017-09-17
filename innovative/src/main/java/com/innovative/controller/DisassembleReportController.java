@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import com.innovative.bean.DisassembleReport;
+import com.innovative.bean.Order;
 import com.innovative.service.DisassembleReportService;
 import com.innovative.utils.HttpClientUpload;
 import com.innovative.utils.JsonResult;
@@ -28,19 +29,20 @@ public class DisassembleReportController {
 	/**
 	 * 拆解报告上传之后，将上传记录添加到数据库
 	 * @param FileData
-	 * @param report
+	 * @param reportid 订单id
 	 * @return
 	 * */
-	@RequestMapping(value = "/upload/{orderid}", method = RequestMethod.POST)
-	public JsonResult saveDisassembleReport(@RequestParam(name = "FileData", required = true) MultipartFile[] FileData,
-			DisassembleReport report,@PathVariable(name="orderid") Integer orderid){
+	@RequestMapping(value = "/upload", method = RequestMethod.POST)
+	public JsonResult saveDisassembleReport(@RequestBody DisassembleReport report){
+		System.out.println(report);
 		
-		if (FileData != null && FileData.length > 0) {
-			/*使用httpclient上传到远程文件服务器*/
+		/*if (FileData != null && FileData.length > 0) {
+			使用httpclient上传到远程文件服务器
 			String path=HttpClientUpload.httpClientUploadFile(FileData,"disassemble");
 			report.setFile(path);//添加上传记录中的文件路径
-		}		
-		int result = disassembleService.saveDisassembleReport(report,orderid);
+		}*/		
+		System.out.println(report);
+		int result = disassembleService.saveDisassembleReport(report,report.getOrderid());
         if (result==0) {
             return new JsonResult(false, "报告上传失败！");
         }
@@ -50,12 +52,12 @@ public class DisassembleReportController {
 
 	/**
 	 * 删除拆解报告
-	 * @param id
+	 * @param 拆解报告id
 	 * @return
 	 * */
-	@RequestMapping(value="/delete/{id}", method = RequestMethod.GET)
-	public JsonResult deleteDisassembleReportById(@PathVariable(name="id") Integer id){
-		int flag=disassembleService.deleteDisassembleReportById(id);
+	@RequestMapping(value="/delete", method = RequestMethod.POST)
+	public JsonResult deleteDisassembleReportById(@RequestBody DisassembleReport report){
+		int flag=disassembleService.deleteDisassembleReportById(report.getId());
 		/*判断是否删除成功*/
 		if (flag>0) {
 			return new JsonResult(true, "删除成功");

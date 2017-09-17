@@ -21,7 +21,7 @@ public interface OrderDao {
 	 * @param id 用户id
 	 * @return
 	 * */
-	public List<Order> selectDemandByUserId(Integer id);
+	public List<Order> selectDemandByUserId(String id);
 	
 	/**
 	 * 根据寻源工程师的id，查出其所有订单
@@ -56,7 +56,7 @@ public interface OrderDao {
 	 * @param orderid 订单id
 	 * @return
 	 * */
-	public int selectDisassemble(Integer orderid);
+	public Integer selectDisassemble(Integer orderid);
 	
 	/**
 	 * 根据定单id，查询出立项表单 的id
@@ -84,4 +84,6 @@ public interface OrderDao {
 	 * @return
 	 */
 	public Order selectOrderByDemand_id(Integer demand_id);
+	
+	public Integer getTotalContent(String userid);
 }

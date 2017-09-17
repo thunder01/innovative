@@ -2,6 +2,7 @@ package com.innovative.bean;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.Arrays;
 
 /**
  * 拆解报告
@@ -12,17 +13,22 @@ public class DisassembleReport implements Serializable{
 	private Integer id;//
 	private String title;//标题
 	private String file;//拆解报告，文件路径
-	private Timestamp create_date;//创建时间 
+	/*private String content;//内容信息
+	private String sector;//行业领域
+	private String[] lable;//标签信息
+	private String abstracts;//摘要信息	
+*/	private String create_date;//创建时间 
 	private String create_by;//创建人
-	private Timestamp late_date;//创建时间
+	private String late_date;//创建时间
 	private String late_by;//最后修改者
+	private Integer orderid;
 	
 	public DisassembleReport() {
 		super();
 	}
 
-	public DisassembleReport(Integer id, String title, String file, Timestamp create_date, String create_by,
-			Timestamp late_date, String late_by) {
+	public DisassembleReport(Integer id, String title, String file, String create_date, String create_by,
+			String late_date, String late_by, Integer orderid) {
 		super();
 		this.id = id;
 		this.title = title;
@@ -31,8 +37,9 @@ public class DisassembleReport implements Serializable{
 		this.create_by = create_by;
 		this.late_date = late_date;
 		this.late_by = late_by;
+		this.orderid = orderid;
 	}
-
+	
 	public Integer getId() {
 		return id;
 	}
@@ -57,11 +64,11 @@ public class DisassembleReport implements Serializable{
 		this.file = file;
 	}
 
-	public Timestamp getCreate_date() {
+	public String getCreate_date() {
 		return create_date;
 	}
 
-	public void setCreate_date(Timestamp create_date) {
+	public void setCreate_date(String create_date) {
 		this.create_date = create_date;
 	}
 
@@ -73,11 +80,11 @@ public class DisassembleReport implements Serializable{
 		this.create_by = create_by;
 	}
 
-	public Timestamp getLate_date() {
+	public String getLate_date() {
 		return late_date;
 	}
 
-	public void setLate_date(Timestamp late_date) {
+	public void setLate_date(String late_date) {
 		this.late_date = late_date;
 	}
 
@@ -89,11 +96,20 @@ public class DisassembleReport implements Serializable{
 		this.late_by = late_by;
 	}
 
+	public Integer getOrderid() {
+		return orderid;
+	}
+
+	public void setOrderid(Integer orderid) {
+		this.orderid = orderid;
+	}
+
 	@Override
 	public String toString() {
 		return "DisassembleReport [id=" + id + ", title=" + title + ", file=" + file + ", create_date=" + create_date
-				+ ", create_by=" + create_by + ", late_date=" + late_date + ", late_by=" + late_by + "]";
+				+ ", create_by=" + create_by + ", late_date=" + late_date + ", late_by=" + late_by + ", orderid="
+				+ orderid + "]";
 	}
-	
+
 	
 }
