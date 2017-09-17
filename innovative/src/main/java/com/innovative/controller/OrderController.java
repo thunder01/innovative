@@ -145,17 +145,13 @@ public class OrderController {
 	 * @param orderid 订单id
 	 * @return
 	 * */
-	@RequestMapping(value="/approvalSelect/{orderid}",method=RequestMethod.GET)
-	public JsonResult selectApproval(@PathVariable(name="orderid") Integer orderid){
+	@RequestMapping(value="/approvalSelect/{app_id}",method=RequestMethod.GET)
+	public JsonResult selectApproval(@PathVariable(name="app_id") Integer app_id){
+		System.out.println(app_id);
 		/*根据订单*/
-		ProjectApproval projectApproval=projectApprovalService.getProjectApprovalById(orderid);
+		 Map<String, Object> map=projectApprovalService.getProjectApprovalById(app_id);
 
-		/*判断结果是否为空*/
-		if (projectApproval!=null) {
-			return new JsonResult(true, projectApproval);
-		}else {
-			return new JsonResult(false, "没有结果");
-		}
+		return new JsonResult(true, map);
 	}
 	
 	/**

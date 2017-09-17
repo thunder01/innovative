@@ -50,8 +50,24 @@ public class ProjectApprovalService {
 	 * @param 订单id
 	 * @return
 	 */
-	public ProjectApproval getProjectApprovalById(Integer orderid) {
-		return projectApprovalDao.getProjectApprovalById(orderid);
+	public Map<String, Object> getProjectApprovalById(Integer app_id) {
+		Map<String, Object> map=new HashMap<>();
+		
+		Order order=orderDao.selectOrderByApproval_id(app_id);
+		System.out.println(order);
+		ProjectApproval projectApproval=null;
+		
+		if (order!=null) {
+			projectApproval=projectApprovalDao.getProjectApprovalById(order.getId());
+			System.out.println(projectApproval);
+			
+			if (order.getLate_byId()!=null) {
+				projectApproval.setUserName(userDao.getUser(order.getLate_byId()).getUserName());
+			}
+		}
+		
+		map.put("items", projectApproval);
+		return map;
 	}
 	/**
 	 * 查询所有的立项表单
