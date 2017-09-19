@@ -101,9 +101,9 @@ public class SolutionService {
      * @return
      */
     public boolean updateSolution(Solution solution) {
-
+    	fileDao.updateFile(solution.getId());
         int result = solutionDao.updateSolution(solution);
 
-        return result > 0 ? true : false;
+        return result > 0 ;
     }
 }

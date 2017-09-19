@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -43,7 +44,7 @@ public class UserController {
 		       return new JsonResult(false, "参数不合法");
 	 }
 	 /**
-	  * 根据名字获取专家信息
+	  * 根据名字获取专家信息及上级的名字
 	  * @param id
 	  * @return
 	  */
@@ -58,8 +59,8 @@ public class UserController {
 	 }
 	 
 	 /**
-	   * 根据专家id 修改专家
-	   * @param expert 专家对象
+	   * 根据用户id 修改用户
+	   * @param expert 用户对象
 	   * @param req
 	   * @return
 	   */
@@ -74,6 +75,23 @@ public class UserController {
 	        
 	        return userService.updateUser(user) ?   new JsonResult(true, "修改成功！") : new JsonResult(false, "修改失败！");
 	    }
+	    
+	    /**
+		   * 新增用户角色权限角色
+		   * @param User 用户对象
+		   * @param roleId 角色id
+		   *  @param rights 权限id
+		   * @param req
+		   * @return
+		   */
+		    @RequestMapping(value = "/addUserRoleAndUserRight", method = RequestMethod.POST)
+		    @ResponseBody
+		    public JsonResult addUserRoleAndUserRight(@RequestParam(name = "userId") String userId,@RequestParam("roleId")String roleId,@RequestParam("rightId")String[] rights ,HttpServletRequest req) {
+
+		    	boolean falg = userService.addUserRoleAndUserRight(userId,roleId,rights);
+		        
+		        return falg ?   new JsonResult(true, "授权成功！") : new JsonResult(false, "授权失败！");
+		    }
 	    
 	    
 	    /**

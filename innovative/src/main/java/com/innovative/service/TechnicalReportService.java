@@ -97,7 +97,9 @@ public class TechnicalReportService {
     public boolean updateTechnicalReport(TechnicalReport technicalReport) {
 
         int result = technicalReportDao.updateTechnicalReport(technicalReport);
+        
+        fileDao.updateFile(technicalReport.getId());
 
-        return result > 0 ? true : false;
+        return result > 0 ;
     }
 }

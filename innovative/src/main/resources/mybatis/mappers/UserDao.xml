@@ -39,12 +39,29 @@
 		SELECT * FROM "xacx_user"  
 		  WHERE "UserId" =  #{userId};
 	</select>
-
-
-	 <!--根据id获取用户信息-->
-	<select id="getUserByName" resultType="User">
+	
+	 <!--根据工号获取用户信息-->
+	<select id="getUserByJobNumber" resultType="User">
 		SELECT * FROM "xacx_user"  
-		  WHERE "UserName" like   #{name};
+		  WHERE "JobNumber" =  #{jobNumber};
+	</select>
+
+
+	 <!--根据姓名模糊匹配获取用户信息-->
+	<select id="getUserByName" resultType="User">
+		WITH RECURSIVE T ("UserName", "UserPost", "Department","orgeh","up_orgeh", PATH, DEPTH)  AS (
+		    SELECT e."UserName", e."UserPost", e."Department",e."orgeh",o."up_orgeh", e."UserId"||'/' AS PATH, 1 AS DEPTH
+		    FROM xacx_user e LEFT JOIN xacx_user_organization o on e.orgeh = o.orgeh
+		    WHERE e."UserName" like  #{name}
+		
+		    UNION ALL
+		
+		    SELECT  D."UserName",D."UserPost", D."Department", d."orgeh",org."up_orgeh",T.PATH || D."UserName", T.DEPTH + 1 AS DEPTH
+		    FROM xacx_user D LEFT JOIN xacx_user_organization org on d.orgeh = org.orgeh
+		    JOIN T ON D."orgeh" = T."up_orgeh" 
+		    )
+		    SELECT "UserName", "UserPost", "Department", "orgeh","up_orgeh",PATH, DEPTH FROM T
+		ORDER BY PATH;
 	</select>
 	
 	
@@ -76,7 +93,18 @@
 		SELECT count(1) FROM "xacx_user"
 	</select>
 
-
+ <!--根据用户id与角色id获取用户角色信息是否存在-->
+	<!-- <select id="getUserRole" resultType="boolean">
+		SELECT 1 FROM "app_userrole"  
+		  WHERE "UserId" =  #{userId} and "RoleId" = #{roleId};
+	</select> -->
+	
+	<!--根据用户id与权限id获取用户角色信息是否存在-->
+	<!-- <select id="getUserRight" resultType="boolean">
+		SELECT 1 FROM "app_userrole"  
+		  WHERE "UserId" =  #{userId} and "RoleId" = #{roleId};
+	</select>
+ -->
 
 	
 
