@@ -6,8 +6,8 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import com.innovative.bean.Expert;
 import com.innovative.bean.User;
 import com.innovative.dao.UserDao;
 import com.innovative.utils.PageInfo;
@@ -35,6 +35,11 @@ public class UserService {
 	public boolean updateUser(User user) {
 		return userdao.updateUser(user);
 	}
+	/**
+	 * 用户分页查询
+	 * @param pageNum
+	 * @return
+	 */
 	public Map<String,Object> getUserLists(Integer pageNum) {
 		  PageInfo pageInfo = new PageInfo();
 	        pageInfo.setCurrentPageNum(pageNum);
@@ -50,6 +55,31 @@ public class UserService {
 	        map.put("offset", pageInfo.getStartIndex());
 	        map.put("limit", pageInfo.getPageSize());
 	        return map;
+	}
+	/**
+	 * 增加用户角色与权限
+	 * @param user
+	 * @param roleId
+	 * @param rights
+	 * @return
+	 */
+	@Transactional
+	public boolean addUserRoleAndUserRight(String userId, String roleId, String[] rights) {
+		Boolean flag = false ;
+		//增加用户角色
+		if(!userdao.getUserRole(userId,roleId))
+			flag = userdao.insertUserRole(userId,roleId);
+		//增加用户权限
+		for (String right : rights)
+		{
+			//表中没有权限就增加权限
+			if(!userdao.getUserRight(userId,right))
+				if(flag)
+					flag = userdao.insertUserRight(userId,right);
+		}
+		
+		
+		return flag;
 	}
 	
 

@@ -104,17 +104,20 @@ public class ExpertService {
      * @param expert 修改参数
      * @return
      */
+    @Transactional
     public boolean updateExpert(Expert expert) {
-        return (expertDao.updateExpert(expert) > 0);
+    	fileDao.updateFile(expert.getId());
+        boolean flag =	(expertDao.updateExpert(expert) > 0) ;
+         return flag ;
     }
 
 
 
     @Transactional
 	public boolean addForExpert(Expert expert) {
-    	expertDao.addForExpert(expert);
-    		  
-		 return fileDao.updateFile(expert.getId());
+    	int num = expertDao.addForExpert(expert);
+    	fileDao.updateFile(expert.getId());
+		 return num>0 ? true  : false;
 	}
 
 

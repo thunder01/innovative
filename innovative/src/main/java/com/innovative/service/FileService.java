@@ -58,8 +58,10 @@ public class FileService {
 	                for (int i = 0; i < files.length; i++) {
 	                	Map<String,String> urlmap = null;
 	                	urlmap = FileUpload.copyInputStreamToFileForName(files[i], modname,req);
+	                	//如果有上传的图片我们提前给他分离出来我们要看这个图片在数据库中有没有
+	                	if(modname.endsWith("Photo"))
+	                		fileDao.updateAddPhotoToDelete(refid, modname);
 	                    list.add(urlmap);
-	                    
 	                }
 	                //新增成功返回true 否则false
 	                if (list.size()>0)

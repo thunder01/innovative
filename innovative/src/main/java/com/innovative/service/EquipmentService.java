@@ -102,9 +102,9 @@ public class EquipmentService {
      * @return
      */
     public boolean updateEquipment(Equipment equipment) {
-
+    	fileDao.updateFile(equipment.getId());
         int result = equipmentDao.updateEquipment(equipment);
 
-        return result > 0 ? true : false;
+        return result > 0 ;
     }
 }

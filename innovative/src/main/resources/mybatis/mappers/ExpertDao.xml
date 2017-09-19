@@ -54,13 +54,13 @@
 				 "Sectors" @> '${sectors}'
 			</if>
 		</where>
-		order by "UpdatedAt"  DESC 
+		order by (case when "Px" is null then 0 else "Px" end)  DESC ,"UpdatedAt" DESC ,"HFactor" DESC
 		limit #{pageSize} offset #{startIndex}
 	</select>
 	<!--根据查询条件获取列表-->
 	<select id="getExpertLists" resultMap="expertMap">
 		SELECT * FROM "Experts"
-		order by "UpdatedAt"  DESC 
+		order by (case when "Px" is null then 0 else "Px" end)  DESC ,"UpdatedAt" DESC ,"HFactor" DESC
 		limit #{pageSize} offset #{startIndex}
 	</select>
 

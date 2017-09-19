@@ -96,7 +96,8 @@ public class OrganizationService {
      * @return
      */
     public boolean updateOrganization(Organization organization) {
-        return (organizationDao.updateOrganization(organization) > 0);
+    	fileDao.updateFile(organization.getId());
+        return (organizationDao.updateOrganization(organization) > 0 );
     }
 
 

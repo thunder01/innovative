@@ -25,7 +25,6 @@ public class ModRightController {
 
     /**
      * 获取所有权限
-     *
      * @param sectors 行业领域（多个用逗号隔开）
      * @param pageNum 页数（默认为1）
      * @return

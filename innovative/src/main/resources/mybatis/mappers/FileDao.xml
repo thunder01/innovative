@@ -26,25 +26,39 @@
 		 WHERE "refId" =  #{id} and  "refType" = #{refType}  and  "sign" = 'add'
 	</select>
     
-    <!--修改专家信息-->
+    <!--提交模块取人文件专家信息-->
 	<update id="updateFile" parameterType="map">
 		UPDATE "xacx_file"
 		<set>
-			"sign" = 'add'
+			"sign" = 'add' ,
+			 "UpdateAt" = now()
 		</set>
 		<where>
 			 "refId" = #{refid} and "sign" = 'confim'
 		</where>
 	</update>
 	
-	  <!--删除图片-->
+	  <!--删除模块时删除图片与文件-->
 	<update id="deleteFile" parameterType="map">
 		UPDATE "xacx_file"
 		<set>
-			"sign" = 'delete'
+			"sign" = 'delete',
+			 "UpdateAt" = now()
 		</set>
 		<where>
 			 "refId"=#{refid}
+		</where>
+	</update>
+	
+	  <!--更新图片时删除图片-->
+	<update id="updateAddPhotoToDelete" parameterType="map">
+		UPDATE "xacx_file"
+		<set>
+			"sign" = 'delete' ,
+			 "UpdateAt" = now()
+		</set>
+		<where>
+			 "refId"=#{refid} and  "refType" = #{refType}  and "sign" = 'add' 
 		</where>
 	</update>
 

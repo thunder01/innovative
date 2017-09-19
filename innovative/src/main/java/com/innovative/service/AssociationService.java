@@ -99,8 +99,8 @@ public class AssociationService {
      * @return
      */
     public boolean updateAssociation(Association association) {
-    	
-        return (associationDao.updateAssociation(association) > 0);
+    	 fileDao.updateFile(association.getId());
+        return associationDao.updateAssociation(association) > 0 ;
     }
 
 

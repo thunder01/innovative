@@ -42,11 +42,6 @@ public class FileController extends BaseController {
     	 res.setCharacterEncoding("utf-8");
     	 res.setHeader("Charset", "utf-8");
     	 res.setHeader("Cache-Control", "no-cache");
-    	 System.out.println("<><><><>"+request.getServletContext().getRealPath("/"));
-    	 boolean val = false;
-    	if(FileData.length<=0){
-    		val = false;
-    	}
     	if(modname == null)
     		modname="file";
     	PrintWriter print ;
