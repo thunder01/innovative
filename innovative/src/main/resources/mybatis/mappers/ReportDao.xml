@@ -8,7 +8,7 @@
 		<result property="title" column="title"/>
 		<result property="content" column="content"/>
 		<result property="sector" column="sector"/>
-		<result property="lable" column="lable"/>
+		<result property="lable" column="lable" typeHandler="com.innovative.mybatisHandler.ArrayTypeHandler"/>
 		<result property="abstracts" column="abstracts"/>
 		<result property="type" column="type"/>
 		<result property="file" column="file"/>
@@ -26,13 +26,22 @@
 		<selectKey resultType="int" keyProperty="id" order="AFTER">
 			SELECT currval('xacx_report_id_seq'::regclass)
 		</selectKey>
-		INSERT INTO xacx_report(title,content,sector,lable,abstracts,type,file,create_date,create_by,deleted) 
-		VALUES(#{title},#{content},#{sector},#{lable},#{abstracts},#{type},#{file},now(),#{create_by},0)
+		INSERT INTO xacx_report(title,content,sector,abstracts,type,file,create_date,create_by,deleted,lable) 
+		VALUES(#{title},#{content},#{sector},#{abstracts},#{type},#{file},now(),#{create_by},0,
+		 <choose>
+            <when test="lable != null">
+                <foreach item="lable" collection="lable" separator="," open="'{" close="}'" index="">
+                    ${lable}
+                </foreach>
+            </when>
+            <otherwise>'{}'</otherwise>
+        </choose>
+		)
 	</insert>
 	
 	<!-- 添加报告的同时向 xacx_order_report 插入一个数据-->
 	<insert id="addOrder_Report" parameterType="map">
-		INSERT INTO xacx_order_report(order_id,report_id) VALUES(#{order_id},#{report_id})
+		INSERT INTO xacx_order_report(order_id,report_id) VALUES(#{orderid},#{report_id})
 	</insert>
 	
 	<!-- 更改报告的删除状态 -->
@@ -46,15 +55,27 @@
 	
 	<!-- 更新报告 -->
 	<update id="updateReport" parameterType="Report">
-		UPDATE xacx_report SET title=#{title},content=#{content},sector=#{sector},abstracts=#{abstracts},
+		UPDATE xacx_report SET title=#{title},content=#{content},sector=
+		 <choose>
+            <when test="lable != null">
+                <foreach item="lable" collection="lable" separator="," open="'{" close="}'" index="">
+                    ${lable}
+                </foreach>
+            </when>
+            <otherwise>'{}'</otherwise>
+        </choose> 
+		,abstracts=#{abstracts},
 		file=#{file},lable=#{lable} WHERE id=#{id}
 	</update>
 	
 	<!-- 通过订单id和报告类型来找报告 -->
 	<select id="findReportById" parameterType="java.util.Map" resultMap="Report">
-		SELECT id,title,content,sector,lable,abstracts,type,file,create_date,create_by FROM xacx_report 
+		<!-- SELECT id,title,content,sector,lable,abstracts,type,file,create_date,create_by FROM xacx_report 
 		WHERE EXISTS(SELECT report_id FROM xacx_order_report WHERE order_id=#{order_id}) and type=#{type} and
-		deleted = 0
+		deleted = 0 -->
+		SELECT a.id,a.title,a.content,a.sector,a.lable,abstracts,type,a.file,a.create_date,a.create_by  
+		from xacx_report a,xacx_order b,xacx_order_report c where a.id=c.report_id and b.id=c.order_id 
+		and a.type=#{type} and b.id=#{orderid} limit #{pageNum} offset #{offset}
 	</select>
 	
 	<!--  -->
@@ -74,4 +95,13 @@
 		SELECT report_id FROM xacx_order_report WHERE id = #{id}
 	</select>
 	
+	<select id="getTotalCount" parameterType="java.util.Map" resultType="int">
+		SELECT COUNT(*)
+		from xacx_report a,xacx_order b,xacx_order_report c where a.id=c.report_id and b.id=c.order_id 
+		and a.type=#{type} and b.id=#{orderid}
+	</select>
+	
+	<select id="findReportId" parameterType="int" resultMap="Report">
+		select * from xacx_report where id=#{reportid}
+	</select>
 </mapper>

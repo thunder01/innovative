@@ -3,12 +3,9 @@ package com.innovative.service;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.apache.poi.common.usermodel.LineStyle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import com.innovative.bean.Demand;
 import com.innovative.bean.DisassembleReport;
 import com.innovative.bean.Order;
@@ -68,22 +65,31 @@ public class OrderService {
 	 * @param order 订单对象
 	 * @return
 	 * */
+	@SuppressWarnings("unchecked")
 	@Transactional
-	public int updateOrderLate_byId(String late_byId,Integer approvalId){	
+	public Map<String, Object> updateOrderLate_byId(String late_byId,Integer approvalId){	
+		Map<String, Object> map=new HashMap<>();
 		/*根据立项表单id,查询状态(0是为接单，1是已接单)*/
 		int status=projectApprovalDao.getProjectApprovalStatusById(approvalId);
 		if (1==status) {
-			return 0;
+			return (Map<String, Object>) map.put("result", 0);
 		}else {//未接单
 			int orderId=orderDao.selectOrderIdByApproval(approvalId);//根据立项id查出订单id	
 			Order order = new Order();
-			order.setId(orderId);//补全订单信息
-			order.setLate_byId(late_byId);
-			/*首先更新订单表中的立项表单id信息*/
-			orderDao.updateOrderLate_byId(order);
+			order.setId(orderId);//补全订单信息，订单id
+			order.setLate_byId(late_byId);//接单人
+			
+			/*首先更新订单表中的寻源工程师id信息（late_byId）*/
+			int result=orderDao.updateOrderLate_byId(order);
+			map.put("result", result);
 			/*将立项表单的状态置为1*/
-			return projectApprovalDao.updateProjectApprovalStatus(approvalId);
+			projectApprovalDao.updateProjectApprovalStatus(approvalId);
+			
+			map.put("orderid", orderId);
+		
+			return map;
 		}	
+		
 	}
 	
 	/**
@@ -134,13 +140,22 @@ public class OrderService {
 	public Map<String, Object> selectOrderById(Integer orderid){
 		Map<String, Object> map=new HashMap<>();
 		
-		Order order=orderDao.selectOrderById(orderid);
-		Demand demand=demandDao.getDemand(order.getDemandId());
-		order.setDemand(demand);
-		
-		User user=userDao.getUser(order.getCreate_byId());
-		map.put("item", order);
-		map.put("user", user);
+		Order order=orderDao.selectOrderById(orderid);//根据订单id查询出订单信息
+		if(order!=null){
+			if(order.getDemandId()!=null){
+				Demand demand=demandDao.getDemand(order.getDemandId());
+				if(demand!=null){
+					order.setDemand(demand);
+					map.put("result", 1);//结果正确
+				}				
+			}
+			User user=userDao.getUser(order.getCreate_byId());
+			map.put("item", order);
+			map.put("user", user);
+			map.put("orderid", orderid);
+		}else{
+			map.put("result", 0);//结果error
+		}
 		return map;
 	}
 	

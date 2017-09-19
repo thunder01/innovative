@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import com.fasterxml.jackson.databind.ser.impl.FailingSerializer;
 import com.innovative.bean.Order;
 import com.innovative.bean.ProjectApproval;
 import com.innovative.bean.Report;
@@ -33,37 +32,6 @@ public class OrderController {
 	private DisassembleReportService disassembleService;//拆解报告业务
 	@Autowired
 	private ProjectApprovalService projectApprovalService;//立项报告业务
-		
-	/**
-	 * 处理需求池中的接单操作，需求工程师接单则向订单表中新增一条记录
-	 * @param userid 需求工程师的id
-	 * @param demandid 需求id
-	 * @return
-	 * */
-	@RequestMapping(value="/receive",method=RequestMethod.POST)
-	public JsonResult insertOrder(@RequestBody Order order){
-		Map<String, Object> map=orderService.insertOrder(order.getCreate_byId(),order.getDemandId());
-		if ((Integer)map.get("result")==1) {
-			return new JsonResult(true, map);
-		}else{
-			return new JsonResult(false, "订单生成失败");
-		}	
-	}
-	
-	/**
-	 * 需求广场,寻源工程师接单
-	 * @param approvalid 立项id
-	 * @param userid 用户id
-	 * */
-	@RequestMapping(value="/sourceOrder",method=RequestMethod.POST)
-	public JsonResult updateOrderLate_byId(@RequestBody Order order){
-			int flag=orderService.updateOrderLate_byId(order.getLate_byId(),order.getApprovalId());//修改订单信息
-			if (flag==1) {
-				return new JsonResult(true, "订单生成成功");
-			}else{
-				return new JsonResult(false, "订单生成失败");
-			}
-	}
 	
 	/**
 	 * 我的订单，展示用户的订单列表
@@ -72,7 +40,6 @@ public class OrderController {
 	 * */
 	@RequestMapping(value="/myorder",method=RequestMethod.GET)
 	public JsonResult selectMyOrder(@RequestParam(name="userid") String userid,@RequestParam(name="offset",defaultValue="0") Integer offset){
-		System.out.println(userid+"----"+offset);
 		Integer page = offset/(new PageInfo().getPageSize()) +1;
 		
 		Map<String, Object> map=orderService.selectMyOrder(userid,page);
@@ -91,26 +58,24 @@ public class OrderController {
 	@RequestMapping(value="/orderdetail/{orderid}",method=RequestMethod.GET)
 	public JsonResult selectById(@PathVariable(name="orderid") Integer orderid){
 		Map<String, Object> map=orderService.selectOrderById(orderid);
-		map.put("orderid", orderid);
 		/*判断结果是否为空*/
 		if (map!=null) {
-			return new JsonResult(true, map);
-		}else {
-			return new JsonResult(false, "结果为空");
+			if ((Integer)map.get("result")==1) {
+				return new JsonResult(true, map);
+			}
 		}
+		return new JsonResult(false, "结果为空");
 	}
 	
 	/**
-	 * 需求拆解、立项报告列表，查出次订单的拆解报告
+	 * 需求拆解、立项报告列表
 	 * @param orderid 订单id
 	 * */
 	@RequestMapping(value="/disassembleDetail/{orderid}",method=RequestMethod.GET)
 	public JsonResult selectDisassemble(@PathVariable(name="orderid") Integer orderid){
-		System.out.println(orderid);
-		
+		System.out.println(orderid);	
 		/*查询需求报告信息*/
 		Map<String, Object> map=disassembleService.getDisassembleReportById(orderid);
-		map.put("orderid", orderid);
 		/*判断结果是否为空*/
 		if (null!=map){
 			return new JsonResult(true, map);
@@ -140,21 +105,7 @@ public class OrderController {
 	}
 	
 	/**
-	 * 查询立项表单
-	 * @param orderid 订单id
-	 * @return
-	 * */
-	@RequestMapping(value="/approvalSelect/{app_id}",method=RequestMethod.GET)
-	public JsonResult selectApproval(@PathVariable(name="app_id") Integer app_id){
-		System.out.println(app_id);
-		/*根据订单*/
-		 Map<String, Object> map=projectApprovalService.getProjectApprovalById(app_id);
-
-		return new JsonResult(true, map);
-	}
-	
-	/**
-	 * 需求广场列表
+	 * 需求广场列表,寻源需求
 	 * @return
 	 * */
 	@RequestMapping(value="/demandSquare",method=RequestMethod.GET)
@@ -165,6 +116,42 @@ public class OrderController {
 		/*判断结果*/
 		return new JsonResult(true, map);
 	}
+	
+	/**
+	 * 寻源需求的每一项就是一个立项表单，查询立项表单（列表中的每一项）
+	 * @param orderid 订单id
+	 * @return
+	 * */
+	@RequestMapping(value="/approvalSelect/{app_id}",method=RequestMethod.GET)
+	public JsonResult selectApproval(@PathVariable(name="app_id") Integer app_id){
+		/*根据订单*/
+		Map<String, Object> map=projectApprovalService.getProjectApprovalById(app_id);
+		System.out.println(map);
+		if(map.get("item")!=null){
+			return new JsonResult(true, map);
+		}else{
+			return new JsonResult(false, "没有结果");
+		}	
+	}
+	
+	/**
+	 * 需求广场,寻源工程师接单
+	 * @param approvalid 立项表单id
+	 * @param late_byId 寻源工程师的id
+	 * */
+	@RequestMapping(value="/sourceOrder",method=RequestMethod.POST)
+	public JsonResult updateOrderLate_byId(@RequestBody Order order){
+			System.out.println(order);
+			
+			/*修改订单表的订单信息*/
+			Map<String, Object> map=orderService.updateOrderLate_byId(order.getLate_byId(),order.getApprovalId());
+			if ((Integer)map.get("result")==1) {
+				return new JsonResult(true, map);
+			}else{
+				return new JsonResult(false, "订单生成失败");
+			}
+	}
+	
 	/**
 	 * 项目团队 
 	 * @param demand_id 需求id
@@ -203,6 +190,23 @@ public class OrderController {
 			return new JsonResult(true, list);
 		}
 		return new JsonResult(false, "传入参数有误");
+	}
+	
+
+	/**
+	 * 处理需求池中的接单操作，需求工程师接单则向订单表中新增一条记录
+	 * @param userid 需求工程师的id
+	 * @param demandid 需求id
+	 * @return
+	 * */
+	@RequestMapping(value="/receive",method=RequestMethod.POST)
+	public JsonResult insertOrder(@RequestBody Order order){
+		Map<String, Object> map=orderService.insertOrder(order.getCreate_byId(),order.getDemandId());
+		if ((Integer)map.get("result")==1) {
+			return new JsonResult(true, map);
+		}else{
+			return new JsonResult(false, "订单生成失败");
+		}	
 	}
 	
 }

@@ -75,11 +75,16 @@
 	</update>
 	<!-- 通过需求id来查询订单信息 -->
 	<select id="selectOrderByDemand_id" parameterType="int" resultMap="OrderMap">
-		SELECT * FROM xacx_order WHERE demandid = #{demand_id}
+		SELECT * FROM "xacx_order" WHERE demandid = #{demand_id}
 	</select>
 	
 	<!-- 通过立项表单id来查询订单信息 -->
 	<select id="selectOrderByApproval_id" parameterType="int" resultMap="OrderMap">
-		SELECT * FROM xacx_order WHERE approvalid = #{approvalid}
+		SELECT * FROM "xacx_order" WHERE approvalid = #{approvalid}
 	</select>
+	
+	<!-- 将订单的拆解报告id置为空 -->
+	<update id="updateDisassembleId" parameterType="int">
+		UPDATE "xacx_order" SET "disassembleid"=null WHERE "id"=#{orderid}
+	</update>
 </mapper>

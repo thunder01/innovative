@@ -38,7 +38,7 @@ public interface ReportDao {
 	 * @param id
 	 * @return
 	 */
-	public Report findReportById(Map<String, Object> map);
+	public List<Report> findReportById(Map<String, Object> map);
 	/**
 	 * 通过类型查找报告的集合
 	 * @return
@@ -50,5 +50,9 @@ public interface ReportDao {
 	 * @return
 	 */
 	public List<Report> rankReport(Integer order_id);
+	
+	public int getTotalCount(Map<String, Object> map);
+	
+	public Report findReportId(Integer reportid);
 	
 }

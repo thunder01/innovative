@@ -27,16 +27,13 @@
     </insert>
     
     <!-- 根据id查询拆解报告 -->
-    <select id="getDisassembleReportById" parameterType="Integer" resultMap="DisassembleReportMap">
+    <select id="getDisassembleReportById" parameterType="int" resultMap="DisassembleReportMap">
     	SELECT "id","title","file","create_date","create_by","late_date","late_by" FROM "xacx_disassemble_report" WHERE "id"=#{id}
     </select>
     
     <!--根据id删除拆解报告 -->
-    <delete id="deleteDisassembleReportById" parameterType="Integer">
-    	DELETE FROM "xacx_disassemble_report"
-    	<where>
-    		"id"=#{id}
-    	</where>
+    <delete id="deleteDisassembleReportById" parameterType="int">
+    	DELETE FROM "xacx_disassemble_report" WHERE "id"=#{id}
     </delete>
     
     <!--修改拆解报告 -->
