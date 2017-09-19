@@ -85,7 +85,23 @@ public interface OrderDao {
 	 */
 	public Order selectOrderByDemand_id(Integer demand_id);
 	
+	/**
+	 * 获取我的订单共有多少条记录
+	 * @return
+	 * */
 	public Integer getTotalContent(String userid);
 	
+	/**
+	 * 根据立项表单信息查出订单信息
+	 * @param approvalid 立项表单id
+	 * @return 订单信息
+	 * */
 	public Order selectOrderByApproval_id(Integer approvalid);
+	
+	/**
+	 * 将订单的拆解报告id字段置为空（删除拆解报告时使用）
+	 * @param orderid 订单id
+	 * @return
+	 * */
+	public int updateDisassembleId(Integer orderid);
 }

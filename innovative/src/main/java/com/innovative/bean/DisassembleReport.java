@@ -21,7 +21,7 @@ public class DisassembleReport implements Serializable{
 	private String create_by;//创建人
 	private String late_date;//创建时间
 	private String late_by;//最后修改者
-	private Integer orderid;
+	private Integer orderid;//订单id
 	
 	public DisassembleReport() {
 		super();

@@ -22,6 +22,7 @@ import com.innovative.dao.ProjectApprovalDao;
  * @version 2.0
  * */
 @Service
+@Transactional
 public class DisassembleReportService {
 	@Autowired
 	private DisassembleReportDao reportDao;//注入持久层接口
@@ -36,7 +37,6 @@ public class DisassembleReportService {
 	 * @param orderid 订单id
      * @return
 	 * */
-	@Transactional
 	public Map<String, Object> saveDisassembleReport(DisassembleReport report,Integer orderid){
 		/*首先向拆解报告表中添加一条记录，并返回其主键*/
 		int num = reportDao.saveDisassembleReport(report);
@@ -57,31 +57,35 @@ public class DisassembleReportService {
 				
 		/*先根据订单id查询拆解报告id*/
 		Integer disassembleId=orderDao.selectDisassemble(orderid);
-		System.out.println(disassembleId);
 		
+		/*根据拆解报告id查询拆解报告信息*/
 		DisassembleReport disassembleReport=reportDao.getDisassembleReportById(disassembleId);
+		/*根据订单id查询立项表单信息*/
 		ProjectApproval pro=projectApprovalDao.getProjectApprovalById(orderid);
+		
 		map.put("disassemble", disassembleReport);
 		map.put("approval", pro);
-		if (map!=null) {
-			/*然后根据拆解报告id查询拆解信息*/	
-			return map;
-		}else{
-			return null;
-		}
+		map.put("orderid", orderid);
 		
+		/*然后根据拆解报告id查询拆解信息*/	
+		return map;
 	}
 	
 	/**
 	 * 根据id删除拆解报告
 	 * @param id 拆解报告id
+	 * @param orderid 订单id
 	 * @return
 	 * */
-	public Map<String,Object> deleteDisassembleReportById(Integer id,Integer orderid){
+	public Map<String,Object> deleteDisassembleReportById(Integer orderid){
 		Map<String,Object> map=new HashMap<>();
-		reportDao.deleteDisassembleReportById(id);
+		
+	    int result=reportDao.deleteDisassembleReportById(orderDao.selectDisassemble(orderid));
+	    /*将订单表中的拆解报告信息清楚*/
+		orderDao.updateDisassembleId(orderid);
 		
 		map.put("orderid", orderid);
+		map.put("result", result);
 		return map;
 	}
 	
@@ -90,8 +94,11 @@ public class DisassembleReportService {
 	 * @param report 拆解报告的实体
 	 * @return
 	 * */
-	public int updateDisassembleReport(DisassembleReport report){
-		return reportDao.updateDisassembleReport(report);
+	public Map<String,Object> updateDisassembleReport(DisassembleReport report){
+		Map<String,Object> map=new HashMap<>();
+		map.put("result", reportDao.updateDisassembleReport(report));
+		map.put("orderid", report.getOrderid());
+		return map;
 	}
 	
 }

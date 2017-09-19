@@ -14,6 +14,7 @@ import com.innovative.bean.Report;
 import com.innovative.dao.DemandDao;
 import com.innovative.dao.OrderDao;
 import com.innovative.dao.ReportDao;
+import com.innovative.utils.PageInfo;
 
 @Service("reportService")
 public class ReportService{
@@ -28,12 +29,20 @@ public class ReportService{
 	 * @param report
 	 */
 	@Transactional
-	public int addReportAndOrder_report(Report report) {
-		reportDao.addReport(report);
-		Map<String, Object> map = new HashMap<>();
-		map.put("order_id", report.getOrder_id());
-		map.put("report_id", report.getId());
-		return reportDao.addOrder_Report(map);
+	public Map<String, Object> addReportAndOrder_report(Report report) {
+		Map<String, Object> map=new HashMap<>();
+		if(report!=null){
+			int result=reportDao.addReport(report);//添加报告
+			map.put("orderid", report.getOrder_id());
+			map.put("type", report.getType());
+			map.put("report_id", report.getId());
+			
+			reportDao.addOrder_Report(map);//向中间表添加
+			map.put("result", result);
+			map.put("item", result);
+		}
+		
+		return map;
 		
 	}
 	
@@ -54,21 +63,48 @@ public class ReportService{
 	public int updateReport(Report report) {
 		return reportDao.updateReport(report);
 	}
+	
 	/**
 	 * 通过订单order_id和报告的类型来查询报告
 	 * @param order_id
 	 * @param type
 	 * @return
 	 */
-	public Report findReportById(Integer order_id,String type) {
-		System.out.println(">>>>>>>>>>"+order_id+">>>>>>>"+type);
+	public Map<String, Object> findReportById(Integer order_id,String type,Integer pageNum) {
+		PageInfo pageInfo = new PageInfo();
+        pageInfo.setCurrentPageNum(pageNum);
+        
 		Map<String, Object> map = new HashMap<String,Object>();
-		map.put("order_id", order_id);
+		map.put("orderid", order_id);
 		map.put("type", type);
-		Report report = reportDao.findReportById(map);
-		Demand demand = demandDao.getDemand(orderDao.selectOrderById(order_id).getDemandId());
-		report.setDemand_name(demand.getName());
-		return report;
+		map.put("pageNum",pageInfo.getPageSize());
+		map.put("offset",pageInfo.getStartIndex());
+		int totalCount = reportDao.getTotalCount(map);
+		Demand demand=null;
+		List<Report> list = reportDao.findReportById(map);
+		if (list!=null && list.size()>0) {
+			map.put("result", 1);
+			for(Report report:list){
+				if (orderDao.selectOrderById(order_id)!=null) {		
+					if (orderDao.selectOrderById(order_id).getDemandId()!=null) {
+						demand = demandDao.getDemand(orderDao.selectOrderById(order_id).getDemandId());
+					}	
+				}	
+				if (demand!=null) {
+					report.setDemand_name(demand.getName());
+				}
+			}	
+		}else {
+			map.put("result", 0);
+		}	
+		
+		map.put("totalCount", totalCount);
+        map.put("Count", pageInfo.getPageSize());
+        map.put("itemCount", pageInfo.getPageSize());
+        map.put("offset", pageInfo.getStartIndex());
+        map.put("limit", pageInfo.getPageSize());
+		map.put("items",list);
+		return map;
 	}
 	/**
 	 * 通过type类型查询报告
@@ -94,6 +130,16 @@ public class ReportService{
 		}
 //		System.out.println("======="+list);
 		return list;
+	}
+	
+	public Map<String, Object> findReportId(Integer reportid,Integer orderid,Integer type){
+		Map<String, Object> map=new HashMap<>();
+		Report report=reportDao.findReportId(reportid);
+		map.put("item", report);
+		map.put("orderid", orderid);
+		map.put("type", type);
+		
+		return map;
 	}
 	
 	
