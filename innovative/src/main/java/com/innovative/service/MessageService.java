@@ -20,7 +20,7 @@ public class MessageService {
 
 
     /**
-     * 添加内容
+     * 添加容
      */
     public  boolean addMessage(Message message){
         return (messageDao.addMessage(message)>0 ?true:false);
