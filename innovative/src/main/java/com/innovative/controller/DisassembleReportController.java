@@ -8,14 +8,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 import com.innovative.bean.DisassembleReport;
-import com.innovative.bean.Order;
 import com.innovative.service.DisassembleReportService;
-import com.innovative.utils.HttpClientUpload;
 import com.innovative.utils.JsonResult;
 
 /**
@@ -36,6 +32,7 @@ public class DisassembleReportController {
 		map.put("orderid", orderid);
 		return new JsonResult(true,map);
 	}
+	
 	/**
 	 * 拆解报告上传之后，将上传记录添加到数据库
 	 * @param FileData
@@ -56,20 +53,24 @@ public class DisassembleReportController {
         if (map!=null) {
             return new JsonResult(true, map);
         }
-        return new JsonResult(false, "报告上传失败！");
-        
+        return new JsonResult(false, "报告上传失败！");        
 	}
 
 	/**
 	 * 删除拆解报告
-	 * @param 拆解报告id
+	 * @param 订单id
 	 * @return
 	 * */
 	@RequestMapping(value="/delete", method = RequestMethod.POST)
 	public JsonResult deleteDisassembleReportById(@RequestBody DisassembleReport report){
-		Map<String,Object> map=disassembleService.deleteDisassembleReportById(report.getId(),report.getOrderid());
+		Map<String,Object> map=disassembleService.deleteDisassembleReportById(report.getOrderid());
 		/*判断是否删除成功*/
+		if ((Integer)map.get("result")==1) {
 			return new JsonResult(true, map);
+		}else{
+			return new JsonResult(false, "删除失败");
+		}
+			
 		
 	}
 	
@@ -87,22 +88,21 @@ public class DisassembleReportController {
 			return new JsonResult(true, map);
 		}else {
 			return new JsonResult(false, "没有结果");
-		}
-		
+		}	
 	}
 	
 	/**
 	 * 修改拆解报告
-	 * @param report
+	 * @param report，要有ding订单id
 	 * @return
 	 * */
 	@RequestMapping(value="/edit" ,method=RequestMethod.POST)
 	@ResponseBody
 	public JsonResult updateDisassembleReport(@RequestBody DisassembleReport report) {
-		int flag=disassembleService.updateDisassembleReport(report);
+		Map<String,Object> map=disassembleService.updateDisassembleReport(report);
 		/*判断是否修改成功*/
-		if (flag>0) {
-			return new JsonResult(true, "修改成功");
+		if ((Integer)map.get("result")>0) {
+			return new JsonResult(true, map);
 		}else {
 			return new JsonResult(false, "修改失败");
 		}	

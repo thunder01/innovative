@@ -13,7 +13,7 @@
 		<result property="demand_bg" column="demand_bg"/>
 		<result property="demand_core" column="demand_core"/>
 		<result property="demand_count" column="demand_count"/>
-		<result property="keyword" column="keyword"/>
+		<result property="keyword" column="keyword" typeHandler="com.innovative.mybatisHandler.ArrayTypeHandler"/>
 		<result property="coopmodel" column="coopmodel"/>
 		<result property="require" column="require"/>
 		<result property="cost" column="cost"/>
@@ -31,9 +31,18 @@
 			SELECT currval('xacx_project_approval_id_seq'::regclass)
 		</selectKey>
 		INSERT INTO xacx_project_approval(proname,pronum,eoms,demander,contact,demand_bg,demand_core,
-		demand_count,keyword,coopmodel,require,cost,completion,remark,create_date,create_by,status) 
+		demand_count,coopmodel,require,cost,completion,remark,create_date,create_by,status,keyword) 
 		VALUES(#{proname},#{pronum},#{eoms},#{demander},#{contact},#{demand_bg},#{demand_core},
-		#{demand_count},#{keyword},#{coopmodel},#{require},#{cost},#{completion},#{remark},current_date,#{create_by},0)
+		#{demand_count},#{coopmodel},#{require},#{cost},#{completion},#{remark},current_date,#{create_by},0,
+		<choose>
+            <when test="keyword != null">
+                <foreach item="keyword" collection="keyword" separator="," open="'{" close="}'" index="">
+                    ${keyword}
+                </foreach>
+            </when>
+            <otherwise>'{}'</otherwise>
+        </choose>
+        )
 	</insert>
 		
 	<!-- 通过订单id查询立项表单 -->

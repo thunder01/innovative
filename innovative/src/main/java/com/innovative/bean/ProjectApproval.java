@@ -21,7 +21,7 @@ public class ProjectApproval implements Serializable{
 	private String demand_bg;//需求背景
 	private String demand_core;//需求核心
 	private Integer demand_count;//需求量
-	private String keyword;//关键词
+	private String[] keyword;//关键词
 	private String coopmodel;//合作模式
 	private String require;//对对方合作要求
 	private String cost;//成本要求	
@@ -38,7 +38,7 @@ public class ProjectApproval implements Serializable{
 		super();
 	}
 	public ProjectApproval(Integer id, String proname, String pronum, String eoms, String demander, String contact,
-			String demand_bg, String demand_core, Integer demand_count, String keyword, String coopmodel,
+			String demand_bg, String demand_core, Integer demand_count, String[] keyword, String coopmodel,
 			String require, String cost, Date completion, String remark, Date create_date, String create_by,
 			Date late_date, String late_by, Integer status) {
 		super();
@@ -117,10 +117,10 @@ public class ProjectApproval implements Serializable{
 	public void setDemand_count(Integer demand_count) {
 		this.demand_count = demand_count;
 	}
-	public String getKeyword() {
+	public String[] getKeyword() {
 		return keyword;
 	}
-	public void setKeyword(String keyword) {
+	public void setKeyword(String[] keyword) {
 		this.keyword = keyword;
 	}
 	public String getCoopmodel() {

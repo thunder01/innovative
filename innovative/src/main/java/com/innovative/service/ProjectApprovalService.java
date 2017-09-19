@@ -53,20 +53,22 @@ public class ProjectApprovalService {
 	public Map<String, Object> getProjectApprovalById(Integer app_id) {
 		Map<String, Object> map=new HashMap<>();
 		
+		/*根据立项表单id查询对应的订单信息*/
 		Order order=orderDao.selectOrderByApproval_id(app_id);
 		System.out.println(order);
 		ProjectApproval projectApproval=null;
 		
 		if (order!=null) {
+			/*查询对应的立项表单信息*/
 			projectApproval=projectApprovalDao.getProjectApprovalById(order.getId());
-			System.out.println(projectApproval);
+			map.put("orderid", order.getId());
 			
 			if (order.getLate_byId()!=null) {
+				/*查询已结单人，即寻源工程师*/
 				projectApproval.setUserName(userDao.getUser(order.getLate_byId()).getUserName());
 			}
-		}
-		
-		map.put("items", projectApproval);
+		}	
+		map.put("item", projectApproval);	
 		return map;
 	}
 	/**
