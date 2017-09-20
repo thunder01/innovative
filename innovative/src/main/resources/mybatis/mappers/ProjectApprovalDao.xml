@@ -112,4 +112,9 @@
 	<select id="findSource_statusById" parameterType="int" resultType="int">
 		SELECT source_status FROM xacx_project_approval_v2 WHERE id = #{id}
 	</select>
+	
+	<!-- 通过订单的id查询寻源工程师的id数组 -->
+	<select id="findSource_idByOrder_id" parameterType="int" resultType="string">
+		SELECT source_id FROM xacx_project_approval_v2 WHERE order_id = #{order_id}
+	</select>
 </mapper>

@@ -86,4 +86,11 @@ public interface ProjectApprovalDao {
 	 * @return
 	 */
 	public int findSource_statusById(Integer id);
+	
+	/**
+	 * 通过订单的id查询寻源工程师的id数组 
+	 * @param order_id
+	 * @return
+	 */
+	public String[] findSource_idByOrder_id(Integer order_id);
 }

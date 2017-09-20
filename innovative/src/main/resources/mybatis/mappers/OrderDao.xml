@@ -68,5 +68,25 @@
     <update id="updatePass_status" parameterType="int">
    		update xacx_order_v2 set pass_status=1 where id=#{order_id}
     </update>
+    
+    <!-- 通过订单的id查询需求工程师的id -->
+	<select id="findCreate_by_idById" parameterType="int" resultType="string">
+		SELECT create_by_id FROM xacx_order_v2 WHERE id = #{order_id}
+	</select>
+	
+	<!-- 项目评价 -->
+	<update id="proEvaluate" parameterType="Order">
+		UPDATE xacx_order_v2 set 
+		<if test="workpoint !=null and workpoint !=''"> 
+			workpoint=#{workpoint} 
+		</if>
+		<if test="eoms_service_appraise !=null and eoms_service_appraise !=''">
+			eoms_service_score=#{eoms_service_score},eoms_service_appraise=#{eoms_service_appraise}
+		</if>
+		<if test="service_service_appraise !=null and service_service_appraise !=''">
+			source_service_score=#{source_service_score},service_service_appraise=#{service_service_appraise}
+		</if>
+		WHERE id = #{id}
+	</update>
 	
 </mapper>

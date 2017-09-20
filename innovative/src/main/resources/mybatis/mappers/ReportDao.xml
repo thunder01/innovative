@@ -77,4 +77,10 @@
 	<select id="findReportCountByApp_id" parameterType="java.util.Map" resultType="int">
 		SELECT COUNT(*) FROM xacx_report_v2 WHERE approval_id=#{approval_id} and type=#{type}
 	</select>	
+	
+	<!-- 通过订单id来找所有报告并按创建时间排序 -->
+	<select id="rankReport" parameterType="int" resultMap="ReportMap">
+		SELECT * FROM xacx_report_v2 WHERE EXISTS(SELECT id FROM xacx_project_approval_v2 
+		WHERE order_id = #{order_id} AND xacx_report_v2.approval_id= id) ORDER BY xacx_report_v2.create_date DESC
+	</select>
 </mapper>

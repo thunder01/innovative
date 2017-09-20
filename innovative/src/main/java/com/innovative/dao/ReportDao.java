@@ -51,5 +51,10 @@ public interface ReportDao {
 	 */
 	public int findReportCountByApp_id(Map<String, Object> map);
 
-	
+	/**
+	 * 通过订单id来找所有报告并按创建时间排序 
+	 * @param order_id
+	 * @return
+	 */
+	public List<Report> rankReport(Integer order_id);
 }

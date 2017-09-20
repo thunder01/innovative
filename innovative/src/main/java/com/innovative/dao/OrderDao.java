@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 import com.innovative.bean.Order;
+import com.innovative.bean.Report;
 
 /**
  * 订单信息处理的持久层接口
@@ -73,4 +74,18 @@ public interface OrderDao {
 	 * @return
 	 */
 	public int updatePass_status(Integer order_id);
+	
+	/**
+	 * 通过订单的id查询需求工程师的id
+	 * @param order_id
+	 * @return
+	 */
+	public String findCreate_by_idById(Integer order_id);
+	
+	/**
+	 * 项目评分
+	 * @param order
+	 * @return
+	 */
+	public int proEvaluate(Order order);
 }

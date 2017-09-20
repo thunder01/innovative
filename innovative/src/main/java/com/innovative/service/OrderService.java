@@ -1,5 +1,6 @@
 package com.innovative.service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,6 +10,7 @@ import com.innovative.bean.Demand;
 import com.innovative.bean.DisassembleReport;
 import com.innovative.bean.Order;
 import com.innovative.bean.ProjectApproval;
+import com.innovative.bean.Report;
 import com.innovative.bean.User;
 import com.innovative.dao.DemandDao;
 import com.innovative.dao.DisassembleReportDao;
@@ -35,6 +37,8 @@ public class OrderService {
 	private DemandDao demandDao;
 	@Autowired 
 	private UserDao userDao;
+	@Autowired
+	private ReportDao reportDao;
 	
 	/**
 	 * 新增订单信息 需求池
@@ -165,5 +169,72 @@ public class OrderService {
 		return map;
 	}
 	
+	/**
+	 * 项目团队
+	 * @param order_id
+	 * @return
+	 */
+	public Map<String, Object> getTeamByOrderId(Integer order_id){
+		Map<String, Object> map=new HashMap<>();
+			
+		User demandMaster;
+		List<User> list;
+		try {
+			/*1 通过订单的id查询需求工程师的id */
+			String demandMasterId=orderDao.findCreate_by_idById(order_id);
+			
+			/*2  通过订单的id查询寻源工程师的id数组*/
+			String[] sourceMasterId=projectApprovalDao.findSource_idByOrder_id(order_id);
+			
+			/*3 获取用户信息*/
+			demandMaster = userDao.getUser(demandMasterId);
+			list = new ArrayList<>();
+			for(int i=0;i<sourceMasterId.length;i++){
+				User source=userDao.getUser(sourceMasterId[i]);
+				list.add(source);
+			}
+			
+			map.put("demandMaster", demandMaster);
+			map.put("source", list);
+			map.put("orderid", order_id);
+		} catch (Exception e) {
+			map.put("message", "结果错误");
+			e.printStackTrace();
+		}
+		return map;
+	}
 	
+	/**
+	 * 过程纪要
+	 * @param order_id
+	 * @return
+	 */
+	public Map<String, Object> rankReport(Integer order_id){
+		Map<String, Object> map=new HashMap<>();
+		
+		/*通过订单id来找所有报告并按创建时间排序*/
+		List<Report> list=reportDao.rankReport(order_id);
+		
+		map.put("items", list);
+		return map;
+	}
+	
+	/**
+	 * 项目评分
+	 * @param order
+	 * @return
+	 */
+	public Map<String, Object> projectGrade(Order order){
+		Map<String, Object> map=new HashMap<>();
+		
+		int flag=orderDao.proEvaluate(order);
+		
+		if (flag==1) {
+			map.put("message", "成功");
+		}else{
+			map.put("message", "失败");
+		}
+			
+		return map;
+	}
 }

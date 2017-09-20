@@ -162,45 +162,30 @@ public class OrderController {
 		return new JsonResult(true, map);
 	}	
 	
+	@RequestMapping(value="/summary/{order_id}",method=RequestMethod.GET)
+	public JsonResult rankReport(@PathVariable(name="order_id") Integer order_id){
+		Map<String, Object> map=orderService.rankReport(order_id);
+		
+		return new JsonResult(true, map);
+	}
 	
 	/**
 	 * 项目团队 
 	 * @param demand_id 需求id
 	 * @return
 	 */
-	/*@RequestMapping(value="/getTeam/{demand_id}",method=RequestMethod.GET)
-	public JsonResult getTeam(@PathVariable(name="demand_id",required=true)Integer demand_id){
-			Map<String, Object> map = orderService.getTeamByDemand_id(demand_id);
-			if(map.size()==0){
-				return new JsonResult(false, "没有查到");
-			}
-			return new JsonResult(true, map);
-	}*/
-	/**
-	 * 项目同队里的需求工程师或者寻源工程师上传过的附件
-	 * @param demand_id 需求id
-	 * @param user_role 需求工程师是eoms 寻源工程师是se
-	 * @return
-	 */
-	/*@RequestMapping(value="/getTeam/{demand_id}/{user_role}",method=RequestMethod.GET)
-	public JsonResult getTeam(@PathVariable(name="demand_id")Integer demand_id,@PathVariable(name="user_role")String user_role){
-		//需求工程师
-		if("eoms".equals(user_role)){
-			Map<String, Object> map = orderService.getDemandFile(demand_id);
-			if(map.size()==0){
-				return new JsonResult(false, "还没有上传拆解报告");
-			}
-			return new JsonResult(true, map);
-		}
-		//寻源工程师
-		if("se".equals(user_role)){
-			List<Report> list = orderService.getReportFiles(demand_id);
-			if(null==list||list.size()==0){
-				return new JsonResult(false, "没有上传");
-			}
-			return new JsonResult(true, list);
-		}
-		return new JsonResult(false, "传入参数有误");
+	@RequestMapping(value="/projectTeam/{order_id}",method=RequestMethod.GET)
+	public JsonResult getTeam(@PathVariable(name="order_id",required=true)Integer order_id){
+		Map<String, Object> map = orderService.getTeamByOrderId(order_id);
+			
+		return new JsonResult(true, map);
 	}
-	*/
+	
+	@RequestMapping(value="/projectGrade",method=RequestMethod.POST)
+	public JsonResult projectGrade(@RequestBody Order order){
+		Map<String, Object> map=orderService.projectGrade(order);
+		
+		return new JsonResult(true, map);
+	}
+	
 }
