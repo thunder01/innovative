@@ -7,41 +7,53 @@
 	<resultMap type="DisassembleReport" id="DisassembleReportMap">
 		<id property="id" column="id"/>
 		<result property="title" column="title"/>
+		<result property="order_id" column="order_id"/>
 		<result property="file" column="file"/>
 		<result property="create_date" column="create_date"/>
 		<result property="create_by" column="create_by"/>
 		<result property="late_date" column="late_date"/>
 		<result property="late_by" column="late_by"/>
+		<result property="delete_by" column="delete_by"/>
+		<result property="delete_date" column="delete_date"/>
+		<result property="delete_status" column="delete_status"/>
 	</resultMap>
 
-    <!--将拆解报告保存到服务器，并将记录保存到数据库-->
-    <insert id="saveDisassembleReport" parameterType="DisassembleReport">
-    	<selectKey resultType="int" keyProperty="id" order="AFTER">
-			SELECT currval('xacx_disassemble_report_id_seq'::regclass)
-		</selectKey>
-        INSERT INTO "xacx_disassemble_report"
-        (title ,file,create_date,create_by)
-        VALUES
-        (#{title},#{file},now(),#{create_by})
-        
-    </insert>
-    
-    <!-- 根据id查询拆解报告 -->
-    <select id="getDisassembleReportById" parameterType="int" resultMap="DisassembleReportMap">
-    	SELECT "id","title","file","create_date","create_by","late_date","late_by" FROM "xacx_disassemble_report" WHERE "id"=#{id}
+	<!-- 根据订单id查询拆解报告的信息 -->
+    <select id="getDisassembleByOrderid" parameterType="int" resultMap="DisassembleReportMap">
+    	select * from xacx_disassemble_report_v2 where order_id=#{orderid} and delete_status=0 
     </select>
     
-    <!--根据id删除拆解报告 -->
-    <delete id="deleteDisassembleReportById" parameterType="int">
-    	DELETE FROM "xacx_disassemble_report" WHERE "id"=#{id}
+    <!-- 添加一个拆解报告信息 -->
+    <insert id="saveDisassembleReport" parameterType="DisassembleReport">
+    	insert into xacx_disassemble_report_v2 (order_id,title,file,create_by,create_date,delete_status) 
+    	values(#{order_id},#{title},#{file},#{create_by},now(),0)
+    </insert>
+    
+    <!-- 删除拆解报告 -->
+    <update id="deleteDisassembleReportById" parameterType="DisassembleReport">
+    	update xacx_disassemble_report_v2 set delete_status=1,delete_by=#{delete_by},delete_date=now() 
+    	where id=#{id}
+    </update>
+    
+    <!--删除拆解报告 ,真实删除-->
+    <delete id="deleteDisassembleReportByIdReal" parameterType="int">
+    	delete from xacx_disassemble_report_v2 where id=#{id}
     </delete>
     
-    <!--修改拆解报告 -->
-    <update id="updateDisassembleReport" parameterType="DisassembleReport">
-    	UPDATE "xacx_disassemble_report" SET "title"=#{title}
-    	<where>
-    		"id"=#{id}
-    	</where>
+    <!-- 根据拆解报告id查询详情 -->
+    <select id="getDisassembleReportById" parameterType="int" resultMap="DisassembleReportMap">
+    	select * from xacx_disassemble_report_v2 where id=#{id} and delete_status=0 
+    </select>
+    
+    <!-- 修改拆解报告 -->
+    <update id="updateDisassembleReportById" parameterType="DisassembleReport">
+    	update xacx_disassemble_report_v2 set title=#{title},file=#{file},late_by=#{late_by},late_date=now() 
+    	where id=#{id} 
     </update>
-
+    
+    <!-- 根据订单id查询拆解报告id -->
+    <select id="getIdByOrderId" parameterType="int" resultType="int">
+    	select id from xacx_disassemble_report_v2 where order_id=#{order_id}
+    </select>
+ 
 </mapper>

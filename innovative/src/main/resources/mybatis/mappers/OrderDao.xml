@@ -4,87 +4,69 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.innovative.dao.OrderDao">
 	<!-- 订单实体类属性与表字段的映射 -->
-	<resultMap type="Order" id="OrderMap">
+	<resultMap id="OrderMap" type="Order" >
 		<id property="id" column="id"/>
 		<result property="demandId" column="demandid"/>
-		<result property="reportId" column="reportid"/>
-		<result property="approvalId" column="approvalid"/>
-		<result property="disassembleId" column="disassembleid"/>
-		<result property="status" column="status"/>
-		<result property="create_date" column="create_date"/>
 		<result property="create_byId" column="create_by_id"/>
-		<result property="late_date" column="late_date"/>
-		<result property="late_byId" column="late_by_id"/>
+		<result property="create_date" column="create_date"/>
+		<result property="workpoint" column="workpoint"/>
+		<result property="eoms_service_score" column="eoms_service_score"/>
+		<result property="eoms_service_appraise" column="eoms_service_appraise"/>
+		<result property="source_service_score" column="source_service_score"/>
+		<result property="source_service_appraise" column="source_service_appraise"/>
+		<result property="confirm_status" column="confirm_status"/>
+		<result property="pass_date" column="pass_date"/>
+		<result property="pass_by" column="pass_by"/>
+		<result property="pass_status" column="pass_status"/>
+		<association property="demand" javaType="Demand" resultMap="com.innovative.dao.DemandDao.demandMap">	
+		</association>
+		<!-- <collection property="approvalList" ofType="ProjectApproval">
+		</collection> -->		
 	</resultMap>
 
 	<!-- 添加订单信息 -->
 	<insert id="insertOrder" parameterType="Order">
-		INSERT INTO "xacx_order"("demandid","status","create_date","create_by_id") 
-		VALUES(#{demandId},0,now(),#{create_byId})
+		insert into xacx_order_v2(demandid,create_by_id,create_date,confirm_status,pass_status) 
+		values(#{demandId},#{create_byId},now(),0,0)
 	</insert>
 	
-	<!-- 若用户为需求工程师，则根据用户id查找出所有的订单 -->
-	<select id="selectDemandByUserId" parameterType="string" resultMap="OrderMap">
-		SELECT * FROM "xacx_order" WHERE create_by_id=#{id}
+	<!--查询我的订单-->
+	<select id="selectOrderListByUserId" parameterType="map" resultMap="OrderMap">
+		select * from xacx_order_v2 where create_by_id=#{userid} order by create_date desc limit #{pageSize} offset #{startIndex}
 	</select>
 	
-	<!-- 若用户为寻源工程师，则根据用户id查找出所有的订单 -->
-	<select id="selectSourceByUserId" parameterType="string" resultMap="OrderMap">
-		SELECT * FROM "xacx_order" WHERE late_by_id=#{id}
+	<!-- 根据订单id删除订单信息 -->
+	<delete id="deleteByOrderId" parameterType="string">
+		delete from xacx_order_v2 where id=#{orderid}
+	</delete>
+	
+	<!-- 根据订单id查询详情 -->
+	<select id="selectOrderByOrderId" parameterType="int" resultMap="OrderMap">
+		select * from xacx_order_v2 where id=#{orderid}
 	</select>
 	
-	<!-- 根据立项表单的id,查找出对应的订单id -->
-	<select id="selectOrderIdByApproval" parameterType="int" resultType="int">
-		SELECT "id" FROM "xacx_order" WHERE approvalid=#{id}
+	<!-- 我的订单总条数 -->
+	<select id="getTotalCOuntMyorder" parameterType="string" resultType="int">
+		select count(*) from xacx_order_v2 where create_by_id=#{userid}
 	</select>
 	
-	<!-- 根据订单id，查找出订单信息 -->
-	<select id="selectOrderById" parameterType="int" resultMap="OrderMap">
-		SELECT * FROM "xacx_order" WHERE "id"=#{orderid}
+	<select id="getDemandIdByOrderId" parameterType="int" resultType="int">
+		select demandid from xacx_order_v2 where id=#{order_id}
 	</select>
 	
-	<!-- 寻源工程师下单操作，更新已有的订单 -->
-	<update id="updateOrderLate_byId" parameterType="Order">
-		UPDATE "xacx_order" SET "late_date"=NOW(),late_by_id=#{late_byId} 
-		WHERE "id"=#{id}
-	</update>
+	<!-- 根据需求id查出订单id -->
+	<select id="getOrderIdByDemandId" parameterType="int" resultType="int">
+    	select id from xacx_order_v2 where demandid=#{demandid}
+    </select>
+    
+    <!-- 拆解报告已确认 -->
+    <update id="updateConfirm_status" parameterType="int">
+    	update xacx_order_v2 set confirm_status=1 where id=#{order_id}
+    </update>
+    
+    <!-- 拆解报告通过 -->
+    <update id="updatePass_status" parameterMap="int">
+   		update xacx_order_v2 set pass_status=1 where id=#{order_id}
+    </update>
 	
-	<!-- 根据订单id，查出拆解报告的id -->
-	<select id="selectDisassemble" parameterType="int" resultType="int">
-		SELECT "disassembleid" FROM "xacx_order" WHERE "id"=#{orderid}
-	</select>
-	
-	<!-- 根据订单id，查立项id -->
-	<select id="selectApproval" parameterType="int" resultType="int">
-		SELECT "approvalid" FROM "xacx_order" WHERE "id"=#{orderid}
-	</select>
-	
-	<!--查询我的订单有多少条记录  -->
-	<select id="getTotalContent" parameterType="string" resultType="int">
-		SELECT COUNT(*) FROM "xacx_order" WHERE "create_by_id"=#{userid}
-	</select>
-	
-	<!-- 更新订单的拆解报告信息 -->
-	<update id="updateDisassembleReport" parameterType="Order">
-		UPDATE "xacx_order" SET "disassembleid"=#{disassembleId} WHERE "id"=#{id}
-	</update>
-	
-	<!-- 更新立项表单信息 -->
-	<update id="updateProjectApproval" parameterType="Order">
-		UPDATE "xacx_order" SET "approvalid"=#{approvalId} WHERE "id"=#{id}
-	</update>
-	<!-- 通过需求id来查询订单信息 -->
-	<select id="selectOrderByDemand_id" parameterType="int" resultMap="OrderMap">
-		SELECT * FROM "xacx_order" WHERE demandid = #{demand_id}
-	</select>
-	
-	<!-- 通过立项表单id来查询订单信息 -->
-	<select id="selectOrderByApproval_id" parameterType="int" resultMap="OrderMap">
-		SELECT * FROM "xacx_order" WHERE approvalid = #{approvalid}
-	</select>
-	
-	<!-- 将订单的拆解报告id置为空 -->
-	<update id="updateDisassembleId" parameterType="int">
-		UPDATE "xacx_order" SET "disassembleid"=null WHERE "id"=#{orderid}
-	</update>
 </mapper>
