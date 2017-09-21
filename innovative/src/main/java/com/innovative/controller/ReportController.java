@@ -59,6 +59,7 @@ public class ReportController {
 		}
 		return new JsonResult(false, "添加失败");
 	}
+	
 	/**
 	 * 通过id删除报告
 	 * @param id
@@ -96,6 +97,7 @@ public class ReportController {
 	public JsonResult reportSelect(@PathVariable(name="offset") Integer offset, 
 			@PathVariable(name = "orderid") Integer orderid,@PathVariable(name = "type") String type){
 
+		System.out.println(orderid+"ccc"+type+"nncn");
 		Integer page = offset/(new PageInfo().getPageSize()) +1;		
 		Map<String,Object> map = reportService.findReportById(orderid, type,page);
 		
@@ -112,7 +114,7 @@ public class ReportController {
 	@RequestMapping(value="reportDetail/{reportid}/{orderid}/{type}",method=RequestMethod.GET)
 	public JsonResult reportDetail(@PathVariable(name="reportid") Integer reportid,
 		@PathVariable(name="orderid") Integer orderid,@PathVariable(name="type") Integer type){
-		System.out.println(reportid+"----"+orderid+"-----"+type);
+
 		Map<String,Object> map=reportService.findReportById(reportid,orderid,type);
 		System.out.println(map);
 		if (map.get("item")!=null) {

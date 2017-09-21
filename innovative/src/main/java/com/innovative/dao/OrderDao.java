@@ -73,7 +73,7 @@ public interface OrderDao {
 	 * @param order_id
 	 * @return
 	 */
-	public int updatePass_status(Integer order_id);
+	public int updatePass_status(Order order);
 	
 	/**
 	 * 通过订单的id查询需求工程师的id
@@ -88,4 +88,11 @@ public interface OrderDao {
 	 * @return
 	 */
 	public int proEvaluate(Order order);
+	
+	/**
+	 * 
+	 * @param id
+	 * @return
+	 */
+	public Order getOrderById(Integer id);
 }

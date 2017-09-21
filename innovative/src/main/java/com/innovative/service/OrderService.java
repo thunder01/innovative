@@ -91,6 +91,10 @@ public class OrderService {
 				List<Order> list=orderDao.selectOrderListByUserId(userid,pageInfo.getStartIndex(), pageInfo.getPageSize());
 				map.put("totalCount", orderDao.getTotalCOuntMyorder(userid));
 				if (list.size()>0) {
+					for(Order order:list){
+						Demand demand=demandDao.getDemand(order.getDemandId());
+						order.setDemand(demand);
+					}
 					map.put("items", list);
 				}else{
 					map.put("message", "您还没有订单信息");
@@ -107,10 +111,6 @@ public class OrderService {
 			}else {
 				map.put("message", "不是相关角色");
 			}
-			/*for(Order order:list){
-				Demand demand=demandDao.getDemand(order.getDemandId());
-				order.setDemand(demand);
-			}*/
 		}else{
 			map.put("message", "用户不存在");
 		}
@@ -133,6 +133,8 @@ public class OrderService {
 		Order order=orderDao.selectOrderByOrderId(orderid);//根据订单id查询出订单信息
 		if(order!=null){
 			User user=userDao.getUser(order.getCreate_byId());
+			Demand demand=demandDao.getDemand(order.getDemandId());
+			order.setDemand(demand);
 			map.put("item", order);
 			map.put("user", user);
 			map.put("orderid", orderid);
@@ -160,7 +162,7 @@ public class OrderService {
 		/*根据订单id查询所有的立项表单*/
 		List<ProjectApproval> list=projectApprovalDao.getApprovalListByOrderid(orderid);
 		if (list.size()>0) {
-			map.put("approvalList", list);
+			map.put("items", list);
 		}else{
 			map.put("message2", "没有立项表单");
 		}

@@ -20,6 +20,10 @@ public class DisassembleReport implements Serializable{
 	private String delete_date;//删除时间
 	private Integer delete_status;//删除状态，0未删除，1是已删除
 	private Integer order_id;//订单id
+	private String message;
+	private String status;
+	private String status2;
+	private String pass_by;
 	
 	public DisassembleReport() {
 		super();
@@ -111,6 +115,38 @@ public class DisassembleReport implements Serializable{
 
 	public void setOrder_id(Integer order_id) {
 		this.order_id = order_id;
+	}
+	
+	public String getMessage() {
+		return message;
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
+	}
+	
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+	
+	public String getStatus2() {
+		return status2;
+	}
+
+	public void setStatus2(String status2) {
+		this.status2 = status2;
+	}
+
+	public String getPass_by() {
+		return pass_by;
+	}
+
+	public void setPass_by(String pass_by) {
+		this.pass_by = pass_by;
 	}
 
 	@Override
