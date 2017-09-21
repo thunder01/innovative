@@ -3,8 +3,10 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.innovative.dao.ReportDao">
-	<resultMap type="Report" id="Report">
+	<resultMap type="Report" id="ReportMap">
 		<id property="id" column="id"/>
+		<result property="approval_id" column="approval_id"/>
+		<result property="demand_name" column="demand_name"/>
 		<result property="title" column="title"/>
 		<result property="content" column="content"/>
 		<result property="sector" column="sector"/>
@@ -24,10 +26,10 @@
 	<!-- 报告的添加 同时把id返回到bean -->
 	<insert id="addReport" parameterType="Report">
 		<selectKey resultType="int" keyProperty="id" order="AFTER">
-			SELECT currval('xacx_report_id_seq'::regclass)
+			SELECT currval('xacx_report_v2_id_seq'::regclass)
 		</selectKey>
-		INSERT INTO xacx_report(title,content,sector,abstracts,type,file,create_date,create_by,deleted,lable) 
-		VALUES(#{title},#{content},#{sector},#{abstracts},#{type},#{file},now(),#{create_by},0,
+		INSERT INTO xacx_report_v2(approval_id,demand_name,title,content,sector,abstracts,type,file,create_date,create_by,deleted,lable) 
+		VALUES(#{approval_id},#{demand_name},#{title},#{content},#{sector},#{abstracts},#{type},#{file},now(),#{create_by},0,
 		 <choose>
             <when test="lable != null">
                 <foreach item="lable" collection="lable" separator="," open="'{" close="}'" index="">
@@ -38,24 +40,15 @@
         </choose>
 		)
 	</insert>
-	
-	<!-- 添加报告的同时向 xacx_order_report 插入一个数据-->
-	<insert id="addOrder_Report" parameterType="map">
-		INSERT INTO xacx_order_report(order_id,report_id) VALUES(#{orderid},#{report_id})
-	</insert>
-	
+		
 	<!-- 更改报告的删除状态 -->
-	<update id="updateReportDeleted" parameterType="int">
-		UPDATE xacx_report SET deleted = 1 WHERE id = #{id} 
+	<update id="updateReportDeleted" parameterType="java.util.Map">
+		UPDATE xacx_report_v2 SET deleted = 1 ,delete_date=now(),delete_by=#{userid} WHERE id = #{id} 
 	</update>
-	<!-- 删除xacx_order_report带有report_id当前数据的信息 -->
-	<delete id="deleteOrder_reportByReport_id" parameterType="int">
-		DELETE FROM xacx_order_report WHERE report_id = #{report_id}
-	</delete>
 	
 	<!-- 更新报告 -->
 	<update id="updateReport" parameterType="Report">
-		UPDATE xacx_report SET title=#{title},content=#{content},sector=
+		UPDATE xacx_report_v2 SET title=#{title},content=#{content},sector=
 		 <choose>
             <when test="lable != null">
                 <foreach item="lable" collection="lable" separator="," open="'{" close="}'" index="">
@@ -65,43 +58,29 @@
             <otherwise>'{}'</otherwise>
         </choose> 
 		,abstracts=#{abstracts},
-		file=#{file},lable=#{lable} WHERE id=#{id}
+		file=#{file},lable=#{lable},late_date=now(),late_by=#{late_by} WHERE id=#{id}
 	</update>
 	
-	<!-- 通过订单id和报告类型来找报告 -->
-	<select id="findReportById" parameterType="java.util.Map" resultMap="Report">
-		<!-- SELECT id,title,content,sector,lable,abstracts,type,file,create_date,create_by FROM xacx_report 
-		WHERE EXISTS(SELECT report_id FROM xacx_order_report WHERE order_id=#{order_id}) and type=#{type} and
-		deleted = 0 -->
-		SELECT a.id,a.title,a.content,a.sector,a.lable,abstracts,type,a.file,a.create_date,a.create_by  
-		from xacx_report a,xacx_order b,xacx_order_report c where a.id=c.report_id and b.id=c.order_id 
-		and a.type=#{type} and b.id=#{orderid} limit #{pageNum} offset #{offset}
+	<!-- 通过报告id查询报告 -->
+	<select id="findReportById" parameterType="int" resultMap="ReportMap">
+		SELECT * FROM xacx_report_v2 WHERE id = #{id}
 	</select>
 	
-	<!--  -->
-	<select id="findReportList" parameterType="string" resultMap="Report">
-		SELECT id,title,content,sector,lable,abstracts,type,file,create_date,create_by FROM xacx_report WHERE type =#{type}
+	<!-- 通过立项表单的id和报告的类型来查找报告的集合 分页-->
+	<select id="findReportListByApp_id" parameterType="java.util.Map" resultMap="ReportMap">
+		SELECT id,approval_id,demand_name,title,content,sector,lable,abstracts,type,file,create_by,create_date,late_by,
+		late_date,delete_by,delete_date,delete_status FROM xacx_report_v2 WHERE approval_id=#{approval_id} and type=#{type}
+		limit #{pageSize} offset #{startIndex} 
 	</select>
 	
-	<!-- 通过订单id来找报告并按创建时间排序 -->
-	<select id="rankReport" parameterType="int" resultMap="Report">
-		SELECT id,title,content,sector,lable,abstracts,type,file,create_date,create_by FROM xacx_report 
-		WHERE EXISTS (SELECT report_id FROM xacx_order_report WHERE order_id = #{order_id}) and deleted =0
-		ORDER BY create_date
-	</select>
+	<!-- 通过立项表单的id和报告的类型来查找报告总数-->
+	<select id="findReportCountByApp_id" parameterType="java.util.Map" resultType="int">
+		SELECT COUNT(*) FROM xacx_report_v2 WHERE approval_id=#{approval_id} and type=#{type}
+	</select>	
 	
-	<!-- 通过订单id来找报告id的集合 -->
-	<select id="findReportIds" parameterType="int" resultMap="Report">
-		SELECT report_id FROM xacx_order_report WHERE id = #{id}
-	</select>
-	
-	<select id="getTotalCount" parameterType="java.util.Map" resultType="int">
-		SELECT COUNT(*)
-		from xacx_report a,xacx_order b,xacx_order_report c where a.id=c.report_id and b.id=c.order_id 
-		and a.type=#{type} and b.id=#{orderid}
-	</select>
-	
-	<select id="findReportId" parameterType="int" resultMap="Report">
-		select * from xacx_report where id=#{reportid}
+	<!-- 通过订单id来找所有报告并按创建时间排序 -->
+	<select id="rankReport" parameterType="int" resultMap="ReportMap">
+		SELECT * FROM xacx_report_v2 WHERE EXISTS(SELECT id FROM xacx_project_approval_v2 
+		WHERE order_id = #{order_id} AND xacx_report_v2.approval_id= id) ORDER BY xacx_report_v2.create_date DESC
 	</select>
 </mapper>

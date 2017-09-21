@@ -33,13 +33,13 @@ public class ReportController {
 	@RequestMapping(value="toSaveReport/{orderid}/{type}",method=RequestMethod.GET)
 	public JsonResult toSaveReport(@PathVariable(name="orderid") Integer orderid,@PathVariable(name="type") Integer type){
 		Map<String, Object> map=new HashMap<>();
-		map.put("orderid", type);
+		map.put("orderid", orderid);
 		map.put("type", type);
 		return new JsonResult(true, map);
 	}
 	
 	/**
-	 * 添加一个报告，并向中间表添加一个数据
+	 * 添加一个报告
 	 * @param report
 	 * @param request
 	 * @return
@@ -64,9 +64,9 @@ public class ReportController {
 	 * @param id
 	 * @return
 	 */
-	@RequestMapping(value="/reportDelete/{id}",method=RequestMethod.GET)
-	public JsonResult reportDelete(@PathVariable(name="id")Integer id){
-		if(reportService.updateReportDeleted(id)>0){
+	@RequestMapping(value="/reportDelete/{id}/{userid}",method=RequestMethod.GET)
+	public JsonResult reportDelete(@PathVariable(name="id")Integer id,@PathVariable String userid){
+		if(reportService.updateReportDeleted(id,userid)>0){
 			return new JsonResult(true, "删除成功");
 		}
 		return new JsonResult(false, "删除失败");
@@ -113,7 +113,7 @@ public class ReportController {
 	public JsonResult reportDetail(@PathVariable(name="reportid") Integer reportid,
 		@PathVariable(name="orderid") Integer orderid,@PathVariable(name="type") Integer type){
 		System.out.println(reportid+"----"+orderid+"-----"+type);
-		Map<String,Object> map=reportService.findReportId(reportid,orderid,type);
+		Map<String,Object> map=reportService.findReportById(reportid,orderid,type);
 		System.out.println(map);
 		if (map.get("item")!=null) {
 			return new JsonResult(true, map);

@@ -3,8 +3,13 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.innovative.dao.ProjectApprovalDao">
-	<resultMap type="ProjectApproval" id="ProjectApproval">
+	<resultMap type="ProjectApproval" id="ProjectApprovalMap">
 		<id property="id" column="id"/>
+		<result property="order_id" column="order_id"/>
+		<result property="source_id" column="source_id"/>
+		<result property="source_status" column="source_status"/>
+		<result property="source_time" column="source_time"/>
+		<result property="post_status" column="post_status"/>
 		<result property="proname" column="proname"/>
 		<result property="pronum" column="pronum"/>
 		<result property="eoms" column="eoms"/>
@@ -19,21 +24,20 @@
 		<result property="cost" column="cost"/>
 		<result property="completion" column="completion"/>
 		<result property="remark" column="remark"/>
-		<result property="create_date" column="create_date"/>
 		<result property="create_by" column="create_by"/>
-		<result property="late_date" column="late_date"/>
+		<result property="create_date" column="create_date"/>
 		<result property="late_by" column="late_by"/>
-		<result property="status" column="status"/>
+		<result property="late_date" column="late_date"/>
+		<collection property="reportList" javaType="Report" resultMap="com.innovative.dao.ReportDao.ReportMap">
+		</collection>
 	</resultMap>
+	
 	<!-- 添加立项表单 -->
 	<insert id="addProjectApproval" parameterType="ProjectApproval">
-		<selectKey keyProperty="id"  order="AFTER" resultType="int">
-			SELECT currval('xacx_project_approval_id_seq'::regclass)
-		</selectKey>
-		INSERT INTO xacx_project_approval(proname,pronum,eoms,demander,contact,demand_bg,demand_core,
-		demand_count,coopmodel,require,cost,completion,remark,create_date,create_by,status,keyword) 
-		VALUES(#{proname},#{pronum},#{eoms},#{demander},#{contact},#{demand_bg},#{demand_core},
-		#{demand_count},#{coopmodel},#{require},#{cost},#{completion},#{remark},current_date,#{create_by},0,
+		INSERT INTO xacx_project_approval_v2 (proname,pronum,eoms,demander,contact,demand_bg,demand_core,order_id,source_status,
+		post_status,demand_count,coopmodel,require,cost,completion,remark,create_date,create_by,status,keyword) 
+		VALUES(#{proname},#{pronum},#{eoms},#{demander},#{contact},#{demand_bg},#{demand_core},#{order_id},0,
+		0,#{demand_count},#{coopmodel},#{require},#{cost},#{completion},#{remark},current_date,#{create_by},0,
 		<choose>
             <when test="keyword != null">
                 <foreach item="keyword" collection="keyword" separator="," open="'{" close="}'" index="">
@@ -45,30 +49,72 @@
         )
 	</insert>
 		
-	<!-- 通过订单id查询立项表单 -->
-	<select id="getProjectApprovalById" parameterType="int" resultMap="ProjectApproval">
-		SELECT id,proname,pronum,eoms,demander,contact,demand_bg,demand_core,demand_count,keyword,coopmodel,
-		require,cost,completion,remark,create_date,create_by,late_date,late_by,status FROM xacx_project_approval 
-		WHERE id = (SELECT approvalid FROM xacx_order WHERE id = #{order_id})
-	</select>
-	<!-- 通过id查询立项表单的状态  0是未接单，1是已接单 -->
-	<select id="getProjectApprovalStatusById" parameterType="int" resultType="int">
-		SELECT status FROM xacx_project_approval WHERE id = #{id}
+	<!--寻源接单，根据寻源工程师id查出其所有的立项信息-->
+	<select id="selectApprovalListByUserId" resultMap="ProjectApprovalMap">
+		select id,order_id,source_id,source_status,source_time,post_status,proname,pronum,eoms,demander,contact,
+		demand_bg,demand_core,demand_count,keyword,coopmodel,cost,completion,remark,create_by,create_date,late_by,
+		late_date 
+		from xacx_project_approval_v2 where source_id=#{userid} order by source_time desc
+		limit #{pageSize} offset #{startIndex}
 	</select>
 	
-	
-	
-	
-	<!-- 查询所有的立项表单 -->
-	<select id="getProjectApprovals" resultMap="ProjectApproval">
-		SELECT id,proname,pronum,eoms,demander,contact,demand_bg,demand_core,demand_count,keyword,coopmodel,
-		require,cost,completion,remark,create_date,create_by,late_date,late_by,status FROM xacx_project_approval 
-		where EXISTS (SELECT "approvalid" FROM "xacx_order" where xacx_project_approval.id=xacx_order.approvalid)
-		ORDER BY status desc , create_date desc
+	<!-- 根据订单id查询所有的立项表单信息 -->
+	<select id="getApprovalListByOrderid" resultMap="ProjectApprovalMap">
+		select id,order_id,source_id,source_status,source_time,post_status,proname,pronum,eoms,demander,contact,
+		demand_bg,demand_core,demand_count,keyword,coopmodel,cost,completion,remark,create_by,create_date,late_by,
+		late_date 
+		from xacx_project_approval_v2 
+		where order_id=#{order_id}
 	</select>
 	
-	<!-- 通过立项表单的id更改的立项表单的状态 -->
-	<update id="updateProjectApprovalStatus" parameterType="int">
-		UPDATE xacx_project_approval SET status = 1 WHERE id = #{id}
+	<!-- 发布立项信息 -->
+	<update id="postApproval" parameterType="int">
+		UPDATE xacx_project_approval_v2 SET post_status = 1,late_date=now() WHERE id = #{id}
 	</update>
+	
+	<!-- 需求广场查询发布成功且按接单状态和发布时间排序 -->
+	<select id="selectSquare" resultMap="ProjectApprovalMap">
+		SELECT id,order_id,source_id,source_status,source_time,post_status,proname,pronum,eoms,demander,contact,
+		demand_bg,demand_core,demand_count,keyword,coopmodel,cost,completion,remark,create_by,create_date,late_by,
+		late_date FROM xacx_project_approval_v2 
+		WHERE post_status = 1 ORDER BY source_status , late_date DESC 
+		limit #{pageSize} offset #{startIndex}
+	</select>
+	
+	<!-- 需求广场数量 -->
+	<select id="getTotalCount" resultType="int">
+		SELECT COUNT(id) from xacx_project_approval_v2 WHERE post_status = 1
+	</select>
+	
+	<!-- 登入人是寻源工程师的接单数量 -->
+	<select id="getSourceCount" parameterType="string" resultType="int">
+		SELECT COUNT(id) FROM xacx_project_approval_v2 WHERE source_id = #{source_id}
+	</select>
+	
+	<!-- 通过id查询 立项表单-->
+	<select id="findApprovalById" parameterType="int" resultMap="ProjectApprovalMap">
+		SELECT id,order_id,source_id,source_status,source_time,post_status,proname,pronum,eoms,demander,contact,
+		demand_bg,demand_core,demand_count,keyword,coopmodel,cost,completion,remark,create_by,create_date,late_by,
+		late_date FROM xacx_project_approval_v2 WHERE id=#{id}
+	</select>
+	
+	<!-- 通过立项表单的id来查询确认用户id -->
+	<select id="findUserIdByApp_id" parameterType="int" resultType="string">
+		SELECT pass_by FROM xacx_order_v2 WHERE id = (SELECT order_id FROM xacx_project_approval_v2 WHERE id = #{id})
+	</select>
+	
+	<!-- 通过立项表单的id更改立项表单,被接单 -->
+	<update id="updateProjectApprovalReceive" parameterType="int">
+		UPDATE xacx_project_approval_v2 SET source_id=#{source_id},source_status=1,source_time=now() WHERE id = #{id}
+	</update>
+	
+	<!-- 通过立项表单id来查询接单状态0未接单，1已结单 -->
+	<select id="findSource_statusById" parameterType="int" resultType="int">
+		SELECT source_status FROM xacx_project_approval_v2 WHERE id = #{id}
+	</select>
+	
+	<!-- 通过订单的id查询寻源工程师的id数组 -->
+	<select id="findSource_idByOrder_id" parameterType="int" resultType="string">
+		SELECT source_id FROM xacx_project_approval_v2 WHERE order_id = #{order_id}
+	</select>
 </mapper>

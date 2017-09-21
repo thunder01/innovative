@@ -8,31 +8,53 @@ import com.innovative.bean.DisassembleReport;
  * @version 2.0
  * */
 public interface DisassembleReportDao {
-	/**
-	 * 拆解报告上传后，在数据库中保存添加记录
-	 * @param report
-     * @return
-	 * */
-	public int saveDisassembleReport(DisassembleReport report);
 	
 	/**
-	 * 根据id查询出对应的拆解报告
-	 * @param id 拆解报告id
+	 * getDisassembleByOrderid 根据订单id获取对应的拆解报告信息
+	 * @param orderid
 	 * @return
 	 * */
-	public DisassembleReport getDisassembleReportById(Integer id);
+	public DisassembleReport getDisassembleByOrderid(Integer orderid);
 	
 	/**
-	 * 根据id删除拆解报告
-	 * @param id 拆解报告id
+	 * 添加拆解报告
+	 * @param dReport
 	 * @return
-	 * */
+	 */
+	public int saveDisassembleReport(DisassembleReport dReport);
+	
+	/**
+	 * 删除拆解报告，记录删除人时间
+	 * @param dReport
+	 * @return
+	 */
 	public int deleteDisassembleReportById(Integer id);
 	
 	/**
-	 * 修改拆解报告
-	 * @param report 拆解报告的实体
+	 * 根据id查询拆解报告详情
+	 * @param id
 	 * @return
-	 * */
-	public int updateDisassembleReport(DisassembleReport report);
+	 */
+	public DisassembleReport getDisassembleReportById(Integer id);
+	
+	/**
+	 * 修改拆解报告
+	 * @param dReport
+	 * @return
+	 */
+	public int updateDisassembleReportById(DisassembleReport dReport);
+	
+	/**
+	 * 根据订单id查询拆解报告id
+	 * @param orderid
+	 * @return
+	 */
+	public int getIdByOrderId(Integer orderid);
+	
+	/**
+	 * 根据id删除拆解报告
+	 * @param id
+	 * @return
+	 */
+	public int deleteDisassembleReportByIdReal(Integer id);
 }
