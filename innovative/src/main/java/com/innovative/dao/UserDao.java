@@ -52,14 +52,15 @@ public interface  UserDao {
 		 * @param roleId
 		 * @return
 		 */
-		boolean getUserRole(@Param("userId")String userId, @Param("roleId")String roleId);
+		int getUserRole(@Param("userId")String userId, @Param("roleId")String roleId);
 		/**
 		 * 增加用户角色记录
 		 * @param userId 用户id
 		 * @param roleId 角色id
+		 * @param string 
 		 * @return
 		 */
-		Boolean insertUserRole(@Param("userId")String userId, @Param("roleId")String roleId);
+		Boolean insertUserRole(@Param("userId")String userId, @Param("roleId")String roleId, @Param("createBy") String createBy);
 		/**
 		 * 检查是否有权限
 		 * @param right  权限id
@@ -74,5 +75,18 @@ public interface  UserDao {
 		 * @return
 		 */
 		Boolean insertUserRight(@Param("userId")String userId, @Param("right")String right);
+		/**
+		 * 增加多个用户角色
+		 * @param user
+		 * @return
+		 */
+		boolean insertUserRoles(User user);
+		/**
+		 * 删除用户角色
+		 * @param userId  用户id
+		 */
+		void deleteUserRoles(@Param("userId")String userId);
 }
+
+
 

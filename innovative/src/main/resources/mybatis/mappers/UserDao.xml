@@ -93,18 +93,37 @@
 		SELECT count(1) FROM "xacx_user"
 	</select>
 
- <!--根据用户id与角色id获取用户角色信息是否存在-->
-	<!-- <select id="getUserRole" resultType="boolean">
-		SELECT 1 FROM "app_userrole"  
-		  WHERE "UserId" =  #{userId} and "RoleId" = #{roleId};
-	</select> -->
-	
-	<!--根据用户id与权限id获取用户角色信息是否存在-->
-	<!-- <select id="getUserRight" resultType="boolean">
-		SELECT 1 FROM "app_userrole"  
+ <!-- 根据用户id与角色id获取用户角色信息是否存在 -->
+	<select id="getUserRole" resultType="int">
+		SELECT count(*) FROM "app_userrole"  
 		  WHERE "UserId" =  #{userId} and "RoleId" = #{roleId};
 	</select>
- -->
+	
+ 	<!--添加用户角色-->
+	<insert id="insertUserRole" parameterType="map">
+		INSERT INTO "app_userrole" ("UserId", "RoleId", "CreateAt", "CreateBy") VALUES 
+		(#{userId}, #{roleId}, now(),#{createBy})
+	</insert>
+	
+		
+ 	<!--给一个用户赋值多个角色-->
+	<insert id="insertUserRoles" parameterType="User">
+		INSERT INTO "app_userrole" ("UserId", "RoleId", "CreateAt", "CreateBy") VALUES 
+		
+		<foreach collection="roleIds" item="item" open="(" separator="),(" close=")">
+			#{userId}, #{item}, now(),#{createBy}
+		</foreach>
+	</insert>
+	
+	<!-- deleteUserRoles -->
+	
+	 <!--删除用户对应的角色-->
+	<delete id="deleteUserRoles" parameterType="map">
+		delete from "app_userrole"
+		<where>
+			 "UserId"=#{userId}
+		</where>
+	</delete>
 
 	
 

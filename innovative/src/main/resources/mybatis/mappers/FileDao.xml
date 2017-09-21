@@ -39,16 +39,12 @@
 	</update>
 	
 	  <!--删除模块时删除图片与文件-->
-	<update id="deleteFile" parameterType="map">
-		UPDATE "xacx_file"
-		<set>
-			"sign" = 'delete',
-			 "UpdateAt" = now()
-		</set>
+	<delete id="deleteFile" parameterType="map">
+		delete from "xacx_file"
 		<where>
 			 "refId"=#{refid}
 		</where>
-	</update>
+	</delete>
 	
 	  <!--更新图片时删除图片-->
 	<update id="updateAddPhotoToDelete" parameterType="map">
@@ -58,7 +54,7 @@
 			 "UpdateAt" = now()
 		</set>
 		<where>
-			 "refId"=#{refid} and  "refType" = #{refType}  and "sign" = 'add' 
+			 "refId"=#{refid}  and  "refType" = #{refType}  and "sign" = 'add' 
 		</where>
 	</update>
 

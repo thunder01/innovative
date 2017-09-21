@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.innovative.dao.RightDao">
+ 	<!-- 增加模块权限 -->
+	<insert id="addRight" parameterType="Right">
+		INSERT INTO "app_right" ("Id", "Pid", "RightName", "Description", "RightType", "CreateBy", "CreateAt","Mode") 
+			VALUES 
+		(#{id},#{pid},#{rightName},#{description},#{rightType},#{createBy},now(),#{mode})
+	</insert>
+
+	 <!--删除模块权限-->
+	<delete id="deleteRight" parameterType="map">
+		delete from "app_right"
+		<where>
+			 "Id"=#{id}
+		</where>
+	</delete>
+
+</mapper>

@@ -57,31 +57,34 @@ public class UserService {
 	        return map;
 	}
 	/**
-	 * 增加用户角色与权限
-	 * @param user
-	 * @param roleId
-	 * @param rights
+	 * 给用户付一个权限
+	 * @param user 用户对象
 	 * @return
 	 */
-	@Transactional
-	public boolean addUserRoleAndUserRight(String userId, String roleId, String[] rights) {
-		Boolean flag = false ;
-		//增加用户角色
-		if(!userdao.getUserRole(userId,roleId))
-			flag = userdao.insertUserRole(userId,roleId);
-		//增加用户权限
-		for (String right : rights)
-		{
-			//表中没有权限就增加权限
-			if(!userdao.getUserRight(userId,right))
-				if(flag)
-					flag = userdao.insertUserRight(userId,right);
-		}
-		
-		
-		return flag;
+	public boolean addUserRole(User user) {
+		// TODO Auto-generated method stub
+		return userdao.insertUserRole(user.getUserId(),user.getRoleId(),user.getCreateBy());
 	}
-	
+	/**
+	 * 获取一个用户的的莫个角色
+	 * @param userId
+	 * @param roleId
+	 * @return
+	 */
+	public boolean getUserRole(String userId,String roleId) {
+		return userdao.getUserRole(userId, roleId)>1? true : false;
+	}
+	/**
+	 * 给用户添加多个角色
+	 * @param user
+	 * @return
+	 */
+	public boolean addUserRoles(User user) {
+		//删除用户所有的角色
+		userdao.deleteUserRoles(user.getUserId());
+		
+		return userdao.insertUserRoles(user);
+	}
 
 
 }

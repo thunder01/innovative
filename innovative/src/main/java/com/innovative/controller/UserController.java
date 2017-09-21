@@ -4,7 +4,6 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,8 +12,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.innovative.bean.Expert;
 import com.innovative.bean.User;
 import com.innovative.service.UserService;
 import com.innovative.utils.CookiesUtil;
@@ -76,23 +73,6 @@ public class UserController {
 	        return userService.updateUser(user) ?   new JsonResult(true, "修改成功！") : new JsonResult(false, "修改失败！");
 	    }
 	    
-	    /**
-		   * 新增用户角色权限角色
-		   * @param User 用户对象
-		   * @param roleId 角色id
-		   *  @param rights 权限id
-		   * @param req
-		   * @return
-		   */
-		    @RequestMapping(value = "/addUserRoleAndUserRight", method = RequestMethod.POST)
-		    @ResponseBody
-		    public JsonResult addUserRoleAndUserRight(@RequestParam(name = "userId") String userId,@RequestParam("roleId")String roleId,@RequestParam("rightId")String[] rights ,HttpServletRequest req) {
-
-		    	boolean falg = userService.addUserRoleAndUserRight(userId,roleId,rights);
-		        
-		        return falg ?   new JsonResult(true, "授权成功！") : new JsonResult(false, "授权失败！");
-		    }
-	    
 	    
 	    /**
 	     * 用户列表页
@@ -104,6 +84,43 @@ public class UserController {
 	    	Integer page = offset/(new PageInfo().getPageSize()) +1;
 	        return new JsonResult(true, userService.getUserLists(page));
 	    }
+	    /**
+	     * 给用户分角色
+	     * @param role
+	     * @param req
+	     * @return
+	     */
+	    @RequestMapping(value = "/addUserRole", method = RequestMethod.POST)
+	    @ResponseBody
+	    public JsonResult addUserRole(@RequestBody User user,HttpServletRequest req) {
+	    	
+	    	user.setUpdateBy(CookiesUtil.getCookieValue(req,"user_name"));
+	    	user.setCreateBy(CookiesUtil.getCookieValue(req,"user_name"));
+	    	//看这个用户是否有这个角色有的话返回false 
+	    	if(userService.getUserRole(user.getUserId(), user.getRoleId())){
+	    		return new JsonResult(false, "该用户角色已存在！不能重复添加！");
+	    	}
+	    	if(!userService.addUserRole(user)){
+	    		return new JsonResult(false, "新增失败，请重试！");
+	    	}
+	        return new JsonResult(true, "新增成功!");
+	    }
 
+	    /**
+	     * 给用户分多个角色
+	     * @param role
+	     * @param req
+	     * @return
+	     */
+	    @RequestMapping(value = "/addUserRoles", method = RequestMethod.POST)
+	    @ResponseBody
+	    public JsonResult addUserRoles(@RequestBody User user,HttpServletRequest req) {
+	    	
+	    	user.setUpdateBy(CookiesUtil.getCookieValue(req,"user_name"));
+	    	if(!userService.addUserRoles(user)){
+	    		return new JsonResult(false, "新增失败，请重试！");
+	    	}
+	        return new JsonResult(true, "新增成功!");
+	    }
 
 }

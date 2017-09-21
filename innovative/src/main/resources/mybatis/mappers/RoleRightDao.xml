@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.innovative.dao.RoleRightDao">
+	
+	  <!--删除角色对应的权限-->
+	<delete id="deleteRoleRight" parameterType="map">
+		delete from "app_role_right"
+		<where>
+			 "RoleId"=#{roleId}
+		</where>
+	</delete>
+	
+	<insert id="addRoleRight" parameterType="Role" >
+		INSERT INTO "app_role_right" ("RoleId", "RightId") VALUES
+		
+		<foreach collection="rightIds" item="item" open="(" separator="),(" close=")">
+			#{roleId},#{item}
+		</foreach>
+		
+	</insert>
+
+
+</mapper>

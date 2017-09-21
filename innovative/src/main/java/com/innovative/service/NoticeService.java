@@ -4,6 +4,8 @@ package com.innovative.service;
 import com.innovative.bean.Notice;
 import com.innovative.dao.NoticeDao;
 import com.innovative.utils.FileUpload;
+import com.innovative.utils.HttpClientUpload;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -50,7 +52,7 @@ public class NoticeService {
         params.put("tags", "{" + "" + "}");
         params.put("title", title);
         params.put("updatedBy", "");
-        params.put("file", FileUpload.getUrls(file, "Notices"));
+        params.put("file", HttpClientUpload.httpClientUploadFile(file, "noticePhoto"));
 
         return (noticeDao.addNotice(params) > 0);
     }

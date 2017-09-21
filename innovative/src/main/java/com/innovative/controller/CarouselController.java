@@ -3,7 +3,7 @@ package com.innovative.controller;
 
 import com.innovative.bean.Carousel;
 import com.innovative.service.CarouselService;
-import com.innovative.utils.FileUpload;
+import com.innovative.utils.HttpClientUpload;
 import com.innovative.utils.JsonResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+
 
 @RestController
 @RequestMapping("/carousel")
@@ -34,11 +34,12 @@ public class CarouselController {
     public JsonResult insertImg(@RequestParam(name = "FileData", required = true) MultipartFile[] FileData) {
 
         //用于存储上传后的图片地址
-        List<String> list = new ArrayList();
+        /*List<String> list = new ArrayList();*/
+        String url = "" ;
 
         //上传图片操作
         if (FileData != null && FileData.length > 0) {
-            try {
+            /*try {
                 String url = null;
                 for (int i = 0; i < FileData.length; i++) {
 
@@ -46,15 +47,18 @@ public class CarouselController {
                     list.add(url);
 
                 }
+              
             } catch (IOException e) {
                 e.printStackTrace();
-            }
+                
+            }*/
+            url =  HttpClientUpload.httpClientUploadFile(FileData, "");
         }
 
-        if (list == null || list.size() < 1) {
+        if (url == null || url.length() <= 0) {
             return new JsonResult(false, "上传图片失败！");
         }
-
+       List<String> list = Arrays.asList(url.split(","));
         //向数据库插入图片信息
         boolean result = carouselService.insertImg(list);
         if (!result) {

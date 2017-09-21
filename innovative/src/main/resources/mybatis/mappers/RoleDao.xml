@@ -10,7 +10,22 @@
     <select id="getRoleList" resultType="Role">
         SELECT "RoleName","RoleId","P_RoleId","Description"
         FROM "app_role"
+        limit #{pageSize} offset #{startIndex}
     </select>
+    <!-- 获取总数 -->
+     <select id="getTotalCount" resultType="int">
+        SELECT count(*)
+        FROM "app_role"
+    </select>
+    
+    	<!--添加角色-->
+	<insert id="addRole" parameterType="Role">
+		INSERT INTO "app_role" ("RoleName", "RoleId", "P_RoleId", "CreateAt", "Description") 
+		VALUES 
+		(#{roleName},#{roleId},#{p_RoleId},now(),#{description})
+	</insert>
+	
+	
 
 
 </mapper>

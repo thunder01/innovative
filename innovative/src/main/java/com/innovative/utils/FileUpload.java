@@ -131,11 +131,11 @@ public class FileUpload {
         }
         return fileUrls.toString();
     }
-
+    //上传单个文件
 	public static Map<String, String> copyInputStreamToFileForName(MultipartFile file, String tableName,
 			HttpServletRequest req) throws IOException {
 		  //创建文件路径和文件夹
-        String dir = "/data/wwwroot/default/attachments/images/java"+Config.FILE_URL + tableName + "/" + DateUtil.getDay() + "/";
+       /* String dir = Config.FILE_URL + tableName + "/" + DateUtil.getDay() + "/";
         File f = mkdirsmy(dir, file.getOriginalFilename());
         
         
@@ -144,9 +144,14 @@ public class FileUpload {
         FileOutputStream write = new FileOutputStream(f);
         byte[] decoderBytes = file.getBytes();
         write.write(decoderBytes);
-        write.close();
+        write.close();*/
+		MultipartFile files[] =  {file};
+		//调用http客户端上传到图片服务器 直接返回一个图片的相对路径
+		String url = HttpClientUpload.httpClientUploadFile(files, tableName);
+		//服务器直接返回来的是绝对路径 我们把他截取个相对服务器返回路径
         Map<String,String> map = new HashMap<String,String> ();
-        map.put("url", f.getAbsolutePath());
+        //往map中存放路径跟文件名
+        map.put("url", url);
         map.put("name", file.getOriginalFilename());
 
         return map;

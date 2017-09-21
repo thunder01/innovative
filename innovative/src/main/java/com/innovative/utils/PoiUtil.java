@@ -120,7 +120,7 @@ public class PoiUtil {
                     //生成此条记录的头像地址
                     // 获取图片流
                     PictureData pic = sheetIndexPicMap.get(PicMapKey);
-                    String name = String.valueOf(System.currentTimeMillis());
+                   /* String name = String.valueOf(System.currentTimeMillis());
                     // 获取图片格式
                     String ext = pic.suggestFileExtension();
                     String picUrl = Config.FILE_URL + "Expert" + "/" + DateUtil.getDay() + "/" + name + "." + ext;
@@ -133,10 +133,10 @@ public class PoiUtil {
                     //上传到指定位置
                     FileOutputStream write = new FileOutputStream(f);
                     write.write(data);
-                    write.close();
+                    write.close();*/
+                    //直接调用http客户端上传图片到图片服务器
+                    String picUrl = HttpClientUpload.httpClientUploadPic(pic, "ExpertPhoto");
 
-                    //将此url修改到集合此key的头像url中
-                   // Expert expert = (Expert)beanList.get(i).get(key[0].toString());
                     expert.setAvatar(picUrl);
                 }
                 map.put(key[0].toString(), expert);
@@ -180,7 +180,7 @@ public class PoiUtil {
                     //生成此条记录的头像地址
                     // 获取图片流
                     PictureData pic = sheetIndexPicMap.get(PicMapKey);
-                    String name = String.valueOf(System.currentTimeMillis());
+                   /* String name = String.valueOf(System.currentTimeMillis());
                     // 获取图片格式
                     String ext = pic.suggestFileExtension();
                     String picUrl = Config.FILE_URL + "Association" + "/" + DateUtil.getDay() + "/" + name + "." + ext;
@@ -193,7 +193,8 @@ public class PoiUtil {
                     //上传到指定位置
                     FileOutputStream write = new FileOutputStream(f);
                     write.write(data);
-                    write.close();
+                    write.close();*/
+                    String picUrl = HttpClientUpload.httpClientUploadPic(pic, "AssociationPhoto");
 
                     //将此url修改到集合此key的头像url中
                    // Expert expert = (Expert)beanList.get(i).get(key[0].toString());
@@ -240,7 +241,7 @@ public class PoiUtil {
                      //生成此条记录的头像地址
                      // 获取图片流
                      PictureData pic = sheetIndexPicMap.get(PicMapKey);
-                     String name = String.valueOf(System.currentTimeMillis());
+                    /* String name = String.valueOf(System.currentTimeMillis());
                      // 获取图片格式
                      String ext = pic.suggestFileExtension();
                      String picUrl = Config.FILE_URL + "Expert" + "/" + DateUtil.getDay() + "/" + name + "." + ext;
@@ -253,7 +254,8 @@ public class PoiUtil {
                      //上传到指定位置
                      FileOutputStream write = new FileOutputStream(f);
                      write.write(data);
-                     write.close();
+                     write.close();*/
+                     String picUrl = HttpClientUpload.httpClientUploadPic(pic, "ExpertPhoto");
 
                      //将此url修改到集合此key的头像url中
                     // Expert expert = (Expert)beanList.get(i).get(key[0].toString());
@@ -312,7 +314,7 @@ public class PoiUtil {
                    //生成此条记录的头像地址
                    // 获取图片流
                    PictureData pic = sheetIndexPicMap.get(PicMapKey);
-                   String name = String.valueOf(System.currentTimeMillis());
+                   /*String name = String.valueOf(System.currentTimeMillis());
                    // 获取图片格式
                    String ext = pic.suggestFileExtension();
                    String picUrl = Config.FILE_URL + "Equipment" + "/" + DateUtil.getDay() + "/" + name + "." + ext;
@@ -325,7 +327,8 @@ public class PoiUtil {
                    //上传到指定位置
                    FileOutputStream write = new FileOutputStream(f);
                    write.write(data);
-                   write.close();
+                   write.close();*/
+                   String picUrl = HttpClientUpload.httpClientUploadPic(pic, "EquipmentPhoto");
 
                    //将此url修改到集合此key的头像url中
                   // Expert expert = (Expert)beanList.get(i).get(key[0].toString());
@@ -369,7 +372,7 @@ public class PoiUtil {
 	                   //生成此条记录的头像地址
 	                   // 获取图片流
 	                   PictureData pic = sheetIndexPicMap.get(PicMapKey);
-	                   String name = String.valueOf(System.currentTimeMillis());
+	                  /* String name = String.valueOf(System.currentTimeMillis());
 	                   // 获取图片格式
 	                   String ext = pic.suggestFileExtension();
 	                   String picUrl = Config.FILE_URL + "Organization" + "/" + DateUtil.getDay() + "/" + name + "." + ext;
@@ -382,8 +385,8 @@ public class PoiUtil {
 	                   //上传到指定位置
 	                   FileOutputStream write = new FileOutputStream(f);
 	                   write.write(data);
-	                   write.close();
-
+	                   write.close();*/
+	                   String picUrl = HttpClientUpload.httpClientUploadPic(pic, "OrganizationPhoto");
 	                   //将此url修改到集合此key的头像url中
 	                  // Expert expert = (Expert)beanList.get(i).get(key[0].toString());
 	                   organization.setLogo(picUrl);
@@ -425,7 +428,7 @@ public class PoiUtil {
 	                   //生成此条记录的头像地址
 	                   // 获取图片流
 	                   PictureData pic = sheetIndexPicMap.get(PicMapKey);
-	                   String name = String.valueOf(System.currentTimeMillis());
+	                  /* String name = String.valueOf(System.currentTimeMillis());
 	                   // 获取图片格式
 	                   String ext = pic.suggestFileExtension();
 	                   String picUrl = Config.FILE_URL + "TechnicalReports" + "/" + DateUtil.getDay() + "/" + name + "." + ext;
@@ -438,7 +441,8 @@ public class PoiUtil {
 	                   //上传到指定位置
 	                   FileOutputStream write = new FileOutputStream(f);
 	                   write.write(data);
-	                   write.close();
+	                   write.close();*/
+	                   String picUrl = HttpClientUpload.httpClientUploadPic(pic, "TechnicalReportPhoto");
 
 	                   //将此url修改到集合此key的头像url中
 	                  // Expert expert = (Expert)beanList.get(i).get(key[0].toString());
@@ -481,7 +485,7 @@ public class PoiUtil {
 	                   //生成此条记录的头像地址
 	                   // 获取图片流
 	                   PictureData pic = sheetIndexPicMap.get(PicMapKey);
-	                   String name = String.valueOf(System.currentTimeMillis());
+	                  /* String name = String.valueOf(System.currentTimeMillis());
 	                   // 获取图片格式
 	                   String ext = pic.suggestFileExtension();
 	                   String picUrl = Config.FILE_URL + "solution" + "/" + DateUtil.getDay() + "/" + name + "." + ext;
@@ -495,7 +499,8 @@ public class PoiUtil {
 	                   FileOutputStream write = new FileOutputStream(f);
 	                   write.write(data);
 	                   write.close();
-
+*/
+	                   String picUrl = HttpClientUpload.httpClientUploadPic(pic, "solutionPhoto");
 	                   //将此url修改到集合此key的头像url中
 	                  // Expert expert = (Expert)beanList.get(i).get(key[0].toString());
 	                   solution.setPictures(picUrl);

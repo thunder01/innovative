@@ -12,6 +12,7 @@ import java.io.Serializable;
  *  * jobNumber 工号
  */
 import java.sql.Timestamp;
+import java.util.List;
 
 import javax.jws.WebService;
 @WebService
@@ -32,14 +33,17 @@ public class User implements Serializable {
 	private String updateBy;//更改人
 	private Timestamp updateAt;//更新时间
 	private String userState;//状态
+	private String roleId;//状态
+	private String CreateBy;//状态
+	private List<String> roleIds;//状态
 	public User() {
 			
 		}
 
 
-
 	public User(String userId, String userName, Integer userIntegration, String userPost, Timestamp createAt,
-			String userSex, int userAge, String jobNumber, String updateBy, Timestamp updateAt, String userState) {
+			String userSex, int userAge, String jobNumber, String updateBy, Timestamp updateAt, String userState,
+			String roleId, String createBy, List<String> roleIds) {
 		this.userId = userId;
 		this.userName = userName;
 		this.userIntegration = userIntegration;
@@ -51,7 +55,56 @@ public class User implements Serializable {
 		this.updateBy = updateBy;
 		this.updateAt = updateAt;
 		this.userState = userState;
+		this.roleId = roleId;
+		CreateBy = createBy;
+		this.roleIds = roleIds;
 	}
+
+
+
+
+
+
+
+	public String getCreateBy() {
+		return CreateBy;
+	}
+
+
+
+
+
+
+
+	public void setCreateBy(String createBy) {
+		CreateBy = createBy;
+	}
+
+
+
+
+
+
+
+	public String getRoleId() {
+		return roleId;
+	}
+
+	public void setRoleId(String roleId) {
+		this.roleId = roleId;
+	}
+
+
+	public List<String> getRoleIds() {
+		return roleIds;
+	}
+
+	public void setRoleIds(List<String> roleIds) {
+		this.roleIds = roleIds;
+	}
+
+
+
 
 
 

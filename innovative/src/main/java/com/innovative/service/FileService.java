@@ -9,6 +9,7 @@ import com.innovative.utils.FileUpload;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -51,7 +52,7 @@ public class FileService {
 		   return false;
 	}
 
-	
+	@Transactional
 	public boolean uploadFile(MultipartFile[] files, String modname, String refid, String introductions,HttpServletRequest req) throws IOException {
 		   if (files != null && files.length > 0) {
 	               List<Map<String,String>> list = new ArrayList<Map<String,String>>();
