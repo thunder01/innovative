@@ -76,9 +76,9 @@ public class OrderController {
 	 * 跳转立项表单(需要用户的id信息)
 	 * */
 	@RequestMapping(value="/toApprovalUpload/{orderid}",method = RequestMethod.GET)
-	public JsonResult toUpload(@PathVariable(name="orderid") Integer orderid){
-		Map<String,Object> map=new HashMap<>();
-		map.put("orderid", orderid);
+	public JsonResult toUpload(@PathVariable(name="orderid") Integer orderid){	
+		Map<String,Object> map=projectApprovalService.toApprovalUpload(orderid);
+		
 		return new JsonResult(true,map);
 	}
 	
@@ -88,6 +88,7 @@ public class OrderController {
 	 * */
 	@RequestMapping(value="/approvalSave",method=RequestMethod.POST)
 	public JsonResult approvalSave(@RequestBody ProjectApproval projectApproval){
+		System.out.println(projectApproval);
 		/*保存立项表单*/
 		Map<String, Object> map = projectApprovalService.addProjectApproval(projectApproval);
 		
@@ -98,10 +99,10 @@ public class OrderController {
 	 * 发布需求
 	 * @return
 	 * */
-	@RequestMapping(value="postApproval",method=RequestMethod.POST)
+	@RequestMapping(value="/postApproval",method=RequestMethod.POST)
 	public JsonResult postApproval(@RequestBody ProjectApproval pApproval){
 		Map<String,Object> map=projectApprovalService.postApproval(pApproval);
-		
+		System.out.println(pApproval);
 		return new JsonResult(true, map);
 	}
 	

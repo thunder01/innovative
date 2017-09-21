@@ -5,10 +5,12 @@ import java.util.Map;
 
 import javax.print.attribute.HashAttributeSet;
 
+import org.apache.xml.resolver.helpers.PublicId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.innovative.bean.Demand;
 import com.innovative.bean.DisassembleReport;
 import com.innovative.bean.Message;
 import com.innovative.bean.Order;
@@ -48,23 +50,28 @@ public class DisassembleReportService {
 	 * */
 	public Map<String, Object> saveDisassembleReport(DisassembleReport report,Integer orderid){
 		Map<String, Object> map=new HashMap<>();
-		/*保存拆解报告*/
-		int result = reportDao.saveDisassembleReport(report);
-		
-		/*根据订单id查询需求id*/
-		int projectId=orderDao.getDemandIdByOrderId(orderid);
-		
-		/*生成消息信息*/
-		Message message=new Message();
-		message.setProjectId(projectId);
-		message.setType("1");
-		
-		/*发送消息*/
-		messageDao.addMessage(message);
-		
-		map.put("result",result);
-		map.put("orderid", orderid);
-		
+	
+		if ("1".equals(report.getMessage())) {
+			map.put("orderid", orderid);
+			System.out.println("拆解报告已经上传");
+		}else{
+			/*保存拆解报告*/
+			int result = reportDao.saveDisassembleReport(report);
+			
+			/*根据订单id查询需求id*/
+			int projectId=orderDao.getDemandIdByOrderId(orderid);
+			
+			/*生成消息信息*/
+			Message message=new Message();
+			message.setProjectId(projectId);
+			message.setType("1");
+			
+			/*发送消息*/
+			messageDao.addMessage(message);
+			
+			map.put("result",result);
+			map.put("orderid", orderid);
+		}
 		return map;	 
 	}
 	
@@ -123,6 +130,8 @@ public class DisassembleReportService {
 	public Map<String, Object> confirmDisassemble(Integer demand_id){
 		Map<String, Object> map=new HashMap<>();
 		
+		Demand demand=demandDao.getDemand(demand_id);
+		
 		/*根据需求id查出订单id*/
 		int orderid=orderDao.getOrderIdByDemandId(demand_id);
 		
@@ -132,13 +141,12 @@ public class DisassembleReportService {
 		/*根据拆解报告id查询拆解报告信息*/
 		DisassembleReport dReport=reportDao.getDisassembleReportById(disid);
 		
-		
 		/*根据创建人的id，查出创建人的信息*/
 		User user=userDao.getUser(dReport.getCreate_by());
 		
 		map.put("item", dReport);
 		map.put("user", user);
-		
+		map.put("contact", demand.getIphone());
 		return map;
 	}
 	
@@ -148,30 +156,59 @@ public class DisassembleReportService {
 	 * @param status
 	 * @return
 	 */
-	public Map<String, Object> confirmDisassembleStatus(Integer disid,Integer order_id,Integer status){
+	public Map<String, Object> confirmDisassembleStatus(DisassembleReport dReport){
 		Map<String, Object> map=new HashMap<>();
 		
 		/*未通过*/
-		if (status==0) {
-			/*将订单信息删除*/
-			orderDao.deleteByOrderId(order_id);
-			/*删除拆解报告*/
-			reportDao.deleteDisassembleReportByIdReal(disid);
-			
+		if ("0".equals(dReport.getStatus2())) {
+			/*先判断拆解报告是否已经通过*/
+			Order order = orderDao.getOrderById(dReport.getOrder_id());
+			if (order.getPass_status()==0) {
+				/*将订单信息删除*/
+				orderDao.deleteByOrderId(dReport.getOrder_id());
+				/*删除拆解报告*/
+				reportDao.deleteDisassembleReportByIdReal(dReport.getId());
+			}
 			/*将需求的状态重新置为0（可接单状态）*/
 			/*demandDao.update();*/
 			map.put("message", "拆解报告未通过");
 		}
 		
 		/*通过*/
-		if (status==1) {
+		if ("1".equals(dReport.getStatus())) {
 			/*将订单的confirm_status置为1*/
-			orderDao.updateConfirm_status(order_id);
+			orderDao.updateConfirm_status(dReport.getOrder_id());
 			/*将订单的pass_status置为1*/
-			orderDao.updatePass_status(order_id);
-			map.put("message", "曾经那个通过");
+			Order order=new Order();
+			order.setId(dReport.getOrder_id());
+			order.setPass_by(dReport.getPass_by());
+			orderDao.updatePass_status(order);
+			map.put("message", "拆解报告通过");
 		}
 		
+		int demand_id=orderDao.getDemandIdByOrderId(dReport.getOrder_id());
+		Demand demand=demandDao.getDemand(demand_id);
+		User user=userDao.getUser(dReport.getCreate_by());
+		map.put("item", reportDao.getDisassembleByOrderid(dReport.getOrder_id()));
+		map.put("user", user);
+		System.out.println(user);
+		map.put("contact", demand.getIphone());
+		return map;
+	}
+	
+	/**
+	 * 跳转上传确认
+	 * @param orderid
+	 * @return
+	 */
+	public Map<String, Object> toUpload(Integer orderid){
+		Map<String, Object> map=new HashMap<>();
+		if (reportDao.getDisassembleByOrderid(orderid)!=null) {
+			map.put("message", "1");//已经上传
+		}else{
+			map.put("message", "0");
+		}
+		map.put("orderid", orderid);
 		return map;
 	}
 }

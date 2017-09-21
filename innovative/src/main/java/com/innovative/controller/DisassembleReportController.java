@@ -28,8 +28,7 @@ public class DisassembleReportController {
 	/*跳转上传页面*/
 	@RequestMapping(value="/toUpload/{orderid}",method = RequestMethod.GET)
 	public JsonResult toUpload(@PathVariable(name="orderid") Integer orderid){
-		Map<String,Object> map=new HashMap<>();
-		map.put("orderid", orderid);
+		Map<String,Object> map=disassembleService.toUpload(orderid);
 		return new JsonResult(true,map);
 	}
 	
@@ -116,15 +115,14 @@ public class DisassembleReportController {
 	
 	/**
 	 * 确认拆解报告
-	 * @param disid
+	 * @param id 拆解报告id
 	 * @param order_id
-	 * @param status
+	 * @param status 0未通过，1通过
 	 * @return
 	 */
-	@RequestMapping(value="/confirm/{disid}/{order_id}/{status}",method=RequestMethod.GET)
-	public JsonResult confirmDisassembleStatus(@PathVariable(name="disid") Integer disid,@PathVariable(name="order_id") Integer order_id,
-			@PathVariable(name="status") Integer status){
-		Map<String,Object> map=disassembleService.confirmDisassembleStatus(disid,order_id,status);
+	@RequestMapping(value="/confirm",method=RequestMethod.POST)
+	public JsonResult confirmDisassembleStatus(@RequestBody DisassembleReport disassembleReport){
+		Map<String,Object> map=disassembleService.confirmDisassembleStatus(disassembleReport);
 		
 		return new JsonResult(true, map);
 	}

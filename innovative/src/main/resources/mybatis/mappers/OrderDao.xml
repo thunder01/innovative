@@ -18,10 +18,9 @@
 		<result property="pass_date" column="pass_date"/>
 		<result property="pass_by" column="pass_by"/>
 		<result property="pass_status" column="pass_status"/>
-		<association property="demand" javaType="Demand" resultMap="com.innovative.dao.DemandDao.demandMap">	
-		</association>
-		<!-- <collection property="approvalList" ofType="ProjectApproval">
-		</collection> -->		
+		<!-- <collection property="approvalList" column="id" ofType="ProjectApproval"
+			select="com.innovative.dao.ProjectApprovalDao.getApprovalListByOrderid">
+		</collection> -->
 	</resultMap>
 
 	<!-- 添加订单信息 -->
@@ -65,8 +64,8 @@
     </update>
     
     <!-- 拆解报告通过 -->
-    <update id="updatePass_status" parameterType="int">
-   		update xacx_order_v2 set pass_status=1 where id=#{order_id}
+    <update id="updatePass_status" parameterType="Order">
+   		update xacx_order_v2 set pass_status=1,pass_by=#{pass_by},pass_date=now() where id=#{id}
     </update>
     
     <!-- 通过订单的id查询需求工程师的id -->
@@ -88,5 +87,9 @@
 		</if>
 		WHERE id = #{id}
 	</update>
+	
+	<select id="getOrderById" parameterType="int" resultMap="OrderMap">
+		select * from xacx_order_v2 where id=#{id}
+	</select>
 	
 </mapper>

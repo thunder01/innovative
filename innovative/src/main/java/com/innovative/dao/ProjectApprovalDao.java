@@ -24,7 +24,7 @@ public interface ProjectApprovalDao {
 	 * @param
 	 * @return
 	 * */
-	public List<ProjectApproval> getApprovalListByOrderid(Integer order_id);
+	public List<ProjectApproval> getApprovalListByOrderid(Integer id);
 	
 	/**
 	 * 添加立项表单信息
