@@ -1,5 +1,7 @@
 package com.innovative.service;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -91,6 +93,10 @@ public class OrderService {
 				List<Order> list=orderDao.selectOrderListByUserId(userid,pageInfo.getStartIndex(), pageInfo.getPageSize());
 				map.put("totalCount", orderDao.getTotalCOuntMyorder(userid));
 				if (list.size()>0) {
+					for(Order order:list){
+						Demand demand=demandDao.getDemand(order.getDemandId());
+						order.setDemand(demand);
+					}
 					map.put("items", list);
 				}else{
 					map.put("message", "您还没有订单信息");
@@ -107,10 +113,6 @@ public class OrderService {
 			}else {
 				map.put("message", "不是相关角色");
 			}
-			/*for(Order order:list){
-				Demand demand=demandDao.getDemand(order.getDemandId());
-				order.setDemand(demand);
-			}*/
 		}else{
 			map.put("message", "用户不存在");
 		}
@@ -133,6 +135,8 @@ public class OrderService {
 		Order order=orderDao.selectOrderByOrderId(orderid);//根据订单id查询出订单信息
 		if(order!=null){
 			User user=userDao.getUser(order.getCreate_byId());
+			Demand demand=demandDao.getDemand(order.getDemandId());
+			order.setDemand(demand);
 			map.put("item", order);
 			map.put("user", user);
 			map.put("orderid", orderid);
@@ -160,7 +164,7 @@ public class OrderService {
 		/*根据订单id查询所有的立项表单*/
 		List<ProjectApproval> list=projectApprovalDao.getApprovalListByOrderid(orderid);
 		if (list.size()>0) {
-			map.put("approvalList", list);
+			map.put("items", list);
 		}else{
 			map.put("message2", "没有立项表单");
 		}
@@ -178,7 +182,7 @@ public class OrderService {
 		Map<String, Object> map=new HashMap<>();
 			
 		User demandMaster;
-		List<User> list;
+		List list;
 		try {
 			/*1 通过订单的id查询需求工程师的id */
 			String demandMasterId=orderDao.findCreate_by_idById(order_id);
@@ -188,10 +192,13 @@ public class OrderService {
 			
 			/*3 获取用户信息*/
 			demandMaster = userDao.getUser(demandMasterId);
+			
 			list = new ArrayList<>();
 			for(int i=0;i<sourceMasterId.length;i++){
 				User source=userDao.getUser(sourceMasterId[i]);
-				list.add(source);
+				if (sourceMasterId[i]!=null) {
+					list.add(source);
+				}	
 			}
 			
 			map.put("demandMaster", demandMaster);
@@ -215,7 +222,23 @@ public class OrderService {
 		/*通过订单id来找所有报告并按创建时间排序*/
 		List<Report> list=reportDao.rankReport(order_id);
 		
+		for(Report report:list){
+			if ("1".equals(report.getType())) {
+				report.setTypeName("方案线索");
+			}else if ("2".equals(report.getType())) {
+				report.setTypeName("寻源报告");
+			}else if ("3".equals(report.getType())) {
+				report.setTypeName("会议记录");
+			}else if ("4".equals(report.getType())) {
+				report.setTypeName("出差报告");
+			}else if ("5".equals(report.getType())) {
+				report.setTypeName("问题记录");
+			}else if ("6".equals(report.getType())) {
+				report.setTypeName("项目总结");
+			}
+		}
 		map.put("items", list);
+		map.put("orderid", order_id);
 		return map;
 	}
 	
@@ -234,7 +257,8 @@ public class OrderService {
 		}else{
 			map.put("message", "失败");
 		}
-			
+		
+		map.put("orderid", order.getId());
 		return map;
 	}
 }

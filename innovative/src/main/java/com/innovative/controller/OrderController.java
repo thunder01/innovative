@@ -38,6 +38,7 @@ public class OrderController {
 	@RequestMapping(value="/myorder",method=RequestMethod.GET)
 	public JsonResult selectMyOrder(@RequestParam(name="userid") String userid,@RequestParam(name="offset",defaultValue="0") Integer offset){
 		Integer page = offset/(new PageInfo().getPageSize()) +1;
+		
 		Map<String, Object> map=orderService.selectMyOrder(userid,page);
 		
 		return new JsonResult(true, map);
@@ -76,9 +77,9 @@ public class OrderController {
 	 * 跳转立项表单(需要用户的id信息)
 	 * */
 	@RequestMapping(value="/toApprovalUpload/{orderid}",method = RequestMethod.GET)
-	public JsonResult toUpload(@PathVariable(name="orderid") Integer orderid){
-		Map<String,Object> map=new HashMap<>();
-		map.put("orderid", orderid);
+	public JsonResult toUpload(@PathVariable(name="orderid") Integer orderid){	
+		Map<String,Object> map=projectApprovalService.toApprovalUpload(orderid);
+		
 		return new JsonResult(true,map);
 	}
 	
@@ -88,6 +89,7 @@ public class OrderController {
 	 * */
 	@RequestMapping(value="/approvalSave",method=RequestMethod.POST)
 	public JsonResult approvalSave(@RequestBody ProjectApproval projectApproval){
+		System.out.println(projectApproval);
 		/*保存立项表单*/
 		Map<String, Object> map = projectApprovalService.addProjectApproval(projectApproval);
 		
@@ -98,10 +100,10 @@ public class OrderController {
 	 * 发布需求
 	 * @return
 	 * */
-	@RequestMapping(value="postApproval",method=RequestMethod.POST)
+	@RequestMapping(value="/postApproval",method=RequestMethod.POST)
 	public JsonResult postApproval(@RequestBody ProjectApproval pApproval){
 		Map<String,Object> map=projectApprovalService.postApproval(pApproval);
-		
+
 		return new JsonResult(true, map);
 	}
 	
@@ -119,7 +121,7 @@ public class OrderController {
 	}
 	
 	/**
-	 * 寻源需求的每一项就是一个立项表单，查询立项表单（列表中的每一项）
+	 * 立项表单详情
 	 * @param orderid 订单id
 	 * @return
 	 * */
@@ -127,7 +129,6 @@ public class OrderController {
 	public JsonResult selectApproval(@PathVariable(name="app_id") Integer app_id){
 		/*根据订单*/
 		Map<String, Object> map=projectApprovalService.getProjectApprovalById(app_id);
-		System.out.println(map);
 		if(map.get("item")!=null){
 			return new JsonResult(true, map);
 		}else{
@@ -143,11 +144,8 @@ public class OrderController {
 	@RequestMapping(value="/sourceOrder",method=RequestMethod.POST)
 	public JsonResult updateOrderLate_byId(@RequestBody ProjectApproval pApproval){		
 		/*修改订单表的订单信息*/
-		int flag=projectApprovalService.updateProjectApprovalReceive(pApproval.getId());
-		if (flag==1) {
-			return new JsonResult(true, pApproval);
-		}
-		return new JsonResult(false,"接单失败");
+		Map<String, Object> map=projectApprovalService.updateProjectApprovalReceive(pApproval.getId());
+		return new JsonResult(true,map);
 	}
 	
 	/**
@@ -162,6 +160,11 @@ public class OrderController {
 		return new JsonResult(true, map);
 	}	
 	
+	/**
+	 * 过程纪要
+	 * @param order_id
+	 * @return
+	 */
 	@RequestMapping(value="/summary/{order_id}",method=RequestMethod.GET)
 	public JsonResult rankReport(@PathVariable(name="order_id") Integer order_id){
 		Map<String, Object> map=orderService.rankReport(order_id);
@@ -176,13 +179,19 @@ public class OrderController {
 	 */
 	@RequestMapping(value="/projectTeam/{order_id}",method=RequestMethod.GET)
 	public JsonResult getTeam(@PathVariable(name="order_id",required=true)Integer order_id){
-		Map<String, Object> map = orderService.getTeamByOrderId(order_id);
-			
+		Map<String, Object> map = orderService.getTeamByOrderId(order_id);		
 		return new JsonResult(true, map);
 	}
 	
+	
+	/**
+	 * 项目评价
+	 * @param order
+	 * @return
+	 */
 	@RequestMapping(value="/projectGrade",method=RequestMethod.POST)
 	public JsonResult projectGrade(@RequestBody Order order){
+		System.out.println(order);
 		Map<String, Object> map=orderService.projectGrade(order);
 		
 		return new JsonResult(true, map);

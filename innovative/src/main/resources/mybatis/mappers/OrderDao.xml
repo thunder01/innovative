@@ -18,10 +18,9 @@
 		<result property="pass_date" column="pass_date"/>
 		<result property="pass_by" column="pass_by"/>
 		<result property="pass_status" column="pass_status"/>
-		<association property="demand" javaType="Demand" resultMap="com.innovative.dao.DemandDao.demandMap">	
-		</association>
-		<!-- <collection property="approvalList" ofType="ProjectApproval">
-		</collection> -->		
+		<!-- <collection property="approvalList" column="id" ofType="ProjectApproval"
+			select="com.innovative.dao.ProjectApprovalDao.getApprovalListByOrderid">
+		</collection> -->
 	</resultMap>
 
 	<!-- 添加订单信息 -->
@@ -50,6 +49,7 @@
 		select count(*) from xacx_order_v2 where create_by_id=#{userid}
 	</select>
 	
+	<!-- 根据订单id查询需求id -->
 	<select id="getDemandIdByOrderId" parameterType="int" resultType="int">
 		select demandid from xacx_order_v2 where id=#{order_id}
 	</select>
@@ -65,8 +65,8 @@
     </update>
     
     <!-- 拆解报告通过 -->
-    <update id="updatePass_status" parameterType="int">
-   		update xacx_order_v2 set pass_status=1 where id=#{order_id}
+    <update id="updatePass_status" parameterType="Order">
+   		update xacx_order_v2 set pass_status=1,pass_by=#{pass_by},pass_date=now() where id=#{id}
     </update>
     
     <!-- 通过订单的id查询需求工程师的id -->
@@ -76,17 +76,21 @@
 	
 	<!-- 项目评价 -->
 	<update id="proEvaluate" parameterType="Order">
-		UPDATE xacx_order_v2 set 
+		UPDATE xacx_order_v2 set id = #{id}
 		<if test="workpoint !=null and workpoint !=''"> 
-			workpoint=#{workpoint} 
+			,workpoint=#{workpoint}
 		</if>
 		<if test="eoms_service_appraise !=null and eoms_service_appraise !=''">
-			eoms_service_score=#{eoms_service_score},eoms_service_appraise=#{eoms_service_appraise}
+			,eoms_service_score=#{eoms_service_score},eoms_service_appraise=#{eoms_service_appraise}
 		</if>
-		<if test="service_service_appraise !=null and service_service_appraise !=''">
-			source_service_score=#{source_service_score},service_service_appraise=#{service_service_appraise}
+		<if test="source_service_appraise !=null and source_service_appraise !=''">
+			,source_service_score=#{source_service_score},source_service_appraise=#{source_service_appraise}
 		</if>
 		WHERE id = #{id}
 	</update>
+	
+	<select id="getOrderById" parameterType="int" resultMap="OrderMap">
+		select * from xacx_order_v2 where id=#{id}
+	</select>
 	
 </mapper>

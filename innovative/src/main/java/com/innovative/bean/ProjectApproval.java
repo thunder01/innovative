@@ -33,6 +33,8 @@ public class ProjectApproval implements Serializable{
 	private String late_date;//最后修改时间
 	private List<Report> reportList;//报告列表
 	private String userName;//接单人的名字
+	private String message;
+	private String confirmName;//确认人
 	
 	public ProjectApproval() {
 		super();
@@ -277,6 +279,22 @@ public class ProjectApproval implements Serializable{
 
 	public void setUserName(String userName) {
 		this.userName = userName;
+	}
+	
+	public String getMessage() {
+		return message;
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
+	}
+
+	public String getConfirmName() {
+		return confirmName;
+	}
+
+	public void setConfirmName(String confirmName) {
+		this.confirmName = confirmName;
 	}
 
 	@Override

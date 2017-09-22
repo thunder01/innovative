@@ -1,5 +1,6 @@
 package com.innovative.service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,6 +21,7 @@ import com.innovative.dao.ReportDao;
 import com.innovative.utils.PageInfo;
 
 @Service("reportService")
+@Transactional
 public class ReportService{
 	@Resource
 	private ReportDao reportDao;
@@ -29,28 +31,30 @@ public class ReportService{
 	private DemandDao demandDao;
 	@Resource
 	private ProjectApprovalDao projectApprovalDao;
+	
 	/**
 	 * 添加一个报告
 	 * @param report
 	 */
-	@Transactional
-
-	public Map<String, Object> addReportAndOrder_report(Report report) {
+	public Map<String, Object> addReport(Report report) {
 		Map<String, Object> map=new HashMap<>();
+		
 		if(report!=null){
-			int result=reportDao.addReport(report);//添加报告
-			map.put("orderid", report.getOrder_id());
-			map.put("type", report.getType());
-			map.put("report_id", report.getId());
-			map.put("result", result);
-			map.put("item", result);
-			Order order = orderDao.selectOrderByOrderId(report.getOrder_id());
+			/*查询报告对应的需求名称*/
+			Order order = orderDao.selectOrderByOrderId(report.getOrder_id());	
 			if(order!=null){
 				Demand demand = demandDao.getDemand(order.getDemandId());
 				if(demand!=null){
 					report.setDemand_name(demand.getName());
 				}
 			}
+			
+			int result=reportDao.addReport(report);//添加报告
+			map.put("orderid", report.getOrder_id());
+			map.put("type", report.getType());
+			map.put("report_id", report.getId());
+			map.put("result", result);
+			map.put("item", result);
 		}
 		return map;	
 	}
@@ -77,56 +81,71 @@ public class ReportService{
 	}
 	
 	/**
-	 * 通过立项表单的id和报告的类型来查找报告的集合
+	 * 通过订单的id和报告的类型来查找报告的集合
 	 * @param order_id 订单id
-	 * @param approva_id 立项表单id
 	 * @param type 报告类型
 	 * @param pageNum
 	 * @return
 	 */
-	public Map<String, Object> findReportById(Integer approva_id,String type,Integer pageNum) {
+	public Map<String, Object> findReportByOrderId(Integer order_id,String type,Integer pageNum) {
+		Map<String, Object> map = new HashMap<String,Object>();
+		
 		PageInfo pageInfo = new PageInfo();
         pageInfo.setCurrentPageNum(pageNum);
-		Map<String, Object> map = new HashMap<String,Object>();
-		map.put("approva_id", approva_id);
+        
+		
+		map.put("order_id", order_id);
 		map.put("type", type);
-		map.put("pageNum",pageInfo.getPageSize());
-		map.put("offset",pageInfo.getStartIndex());
+		map.put("Count", pageInfo.getPageSize());
+	    map.put("itemCount", pageInfo.getPageSize());
+	    map.put("limit", pageInfo.getPageSize());
+	    map.put("pageNum",pageInfo.getPageSize());
+	    map.put("offset",pageInfo.getStartIndex());		
 		map.put("pageSize",pageInfo.getPageSize());
 		map.put("startIndex",pageInfo.getStartIndex());
-		Demand demand=null;
-		List<Report> list = reportDao.findReportListByApp_id(map);
-		ProjectApproval projectApproval = projectApprovalDao.findApprovalById(approva_id);
-		if (list!=null && list.size()>0) {
-			map.put("result", 1);
-			for(Report report:list){
-				if (projectApproval!=null&&orderDao.selectOrderByOrderId(projectApproval.getOrder_id())!=null) {
-					map.put("orderid", projectApproval.getOrder_id());
-					if (orderDao.selectOrderByOrderId(projectApproval.getOrder_id()).getDemandId()!=null) {
-						demand = demandDao.getDemand(orderDao.selectOrderByOrderId(projectApproval.getOrder_id()).getDemandId());
-					}	
+		map.put("totalCount", reportDao.findReportCountByOrder_id(map));
+		map.put("orderid", order_id);
+		
+		/*根据订单id、报告类型查询所有的报告*/
+		List<Report> list = reportDao.findReportListByOrder_id(map);	
+		
+		/*未所有想报告添加需求名*/
+		for(Report report:list){
+			if (orderDao.selectOrderByOrderId(order_id)!=null) {
+				
+				if (orderDao.selectOrderByOrderId(order_id).getDemandId()!=null) {
+					/*根据立项信息查询订单id，根据订单id查询订单信息，根据需求id查询需求信息*/
+					Demand demand = demandDao.getDemand(orderDao.selectOrderByOrderId(order_id).getDemandId());
+					if (demand!=null) {
+						report.setDemand_name(demand.getName());
+					}
 				}	
-				if (demand!=null) {
-					report.setDemand_name(demand.getName());
-				}
-			}	
+			}		
+		}	
+		
+		if (list.size()>0) {
+			map.put("result", 1);
+				
 		}else {
 			map.put("result", 0);
-		}	
-		map.put("totalCount", reportDao.findReportCountByApp_id(map));
-        map.put("Count", pageInfo.getPageSize());
-        map.put("itemCount", pageInfo.getPageSize());
-        map.put("offset", pageInfo.getStartIndex());
-        map.put("limit", pageInfo.getPageSize());
+		}			  
 		map.put("items",list);
 		return map;
 	}
 	
-	public Map<String, Object> findReportById(Integer reportid,Integer orderid,Integer type){
+	/**
+	 * 根据报告id查询报告详情
+	 * @param reportid
+	 * @param approval_id
+	 * @param type
+	 * @return
+	 */
+	public Map<String, Object> findReportById(Integer reportid,Integer type){
 		Map<String, Object> map=new HashMap<>();
 		Report report=reportDao.findReportById(reportid);
+
+		map.put("orderid", report.getOrder_id());
 		map.put("item", report);
-		map.put("orderid", orderid);
 		map.put("type", type);
 		return map;
 	}

@@ -28,16 +28,16 @@
 		<result property="create_date" column="create_date"/>
 		<result property="late_by" column="late_by"/>
 		<result property="late_date" column="late_date"/>
-		<collection property="reportList" javaType="Report" resultMap="com.innovative.dao.ReportDao.ReportMap">
-		</collection>
+		<!-- <collection property="reportList" javaType="Report" resultMap="com.innovative.dao.ReportDao.ReportMap">
+		</collection> -->
 	</resultMap>
 	
 	<!-- 添加立项表单 -->
 	<insert id="addProjectApproval" parameterType="ProjectApproval">
-		INSERT INTO xacx_project_approval_v2 (proname,pronum,eoms,demander,contact,demand_bg,demand_core,order_id,source_status,
-		post_status,demand_count,coopmodel,require,cost,completion,remark,create_date,create_by,status,keyword) 
-		VALUES(#{proname},#{pronum},#{eoms},#{demander},#{contact},#{demand_bg},#{demand_core},#{order_id},0,
-		0,#{demand_count},#{coopmodel},#{require},#{cost},#{completion},#{remark},current_date,#{create_by},0,
+		INSERT INTO xacx_project_approval_v2 (order_id,source_status,post_status,proname,pronum,eoms,demander,contact,demand_bg,demand_core,demand_count,
+		coopmodel,require,cost,completion,remark,create_by,create_date,keyword) 
+		VALUES(#{order_id},0,0,#{proname},#{pronum},#{eoms},#{demander},#{contact},#{demand_bg},
+		#{demand_core},#{demand_count},#{coopmodel},#{require},#{cost},#{completion},#{remark},#{create_by},now(),
 		<choose>
             <when test="keyword != null">
                 <foreach item="keyword" collection="keyword" separator="," open="'{" close="}'" index="">
@@ -52,7 +52,7 @@
 	<!--寻源接单，根据寻源工程师id查出其所有的立项信息-->
 	<select id="selectApprovalListByUserId" resultMap="ProjectApprovalMap">
 		select id,order_id,source_id,source_status,source_time,post_status,proname,pronum,eoms,demander,contact,
-		demand_bg,demand_core,demand_count,keyword,coopmodel,cost,completion,remark,create_by,create_date,late_by,
+		demand_bg,demand_core,demand_count,keyword,coopmodel,require,cost,completion,remark,create_by,create_date,late_by,
 		late_date 
 		from xacx_project_approval_v2 where source_id=#{userid} order by source_time desc
 		limit #{pageSize} offset #{startIndex}
@@ -61,10 +61,10 @@
 	<!-- 根据订单id查询所有的立项表单信息 -->
 	<select id="getApprovalListByOrderid" resultMap="ProjectApprovalMap">
 		select id,order_id,source_id,source_status,source_time,post_status,proname,pronum,eoms,demander,contact,
-		demand_bg,demand_core,demand_count,keyword,coopmodel,cost,completion,remark,create_by,create_date,late_by,
+		demand_bg,demand_core,demand_count,keyword,coopmodel,require,cost,completion,remark,create_by,create_date,late_by,
 		late_date 
 		from xacx_project_approval_v2 
-		where order_id=#{order_id}
+		where order_id=#{id}
 	</select>
 	
 	<!-- 发布立项信息 -->
@@ -75,7 +75,7 @@
 	<!-- 需求广场查询发布成功且按接单状态和发布时间排序 -->
 	<select id="selectSquare" resultMap="ProjectApprovalMap">
 		SELECT id,order_id,source_id,source_status,source_time,post_status,proname,pronum,eoms,demander,contact,
-		demand_bg,demand_core,demand_count,keyword,coopmodel,cost,completion,remark,create_by,create_date,late_by,
+		demand_bg,demand_core,demand_count,keyword,coopmodel,require,cost,completion,remark,create_by,create_date,late_by,
 		late_date FROM xacx_project_approval_v2 
 		WHERE post_status = 1 ORDER BY source_status , late_date DESC 
 		limit #{pageSize} offset #{startIndex}
@@ -94,7 +94,7 @@
 	<!-- 通过id查询 立项表单-->
 	<select id="findApprovalById" parameterType="int" resultMap="ProjectApprovalMap">
 		SELECT id,order_id,source_id,source_status,source_time,post_status,proname,pronum,eoms,demander,contact,
-		demand_bg,demand_core,demand_count,keyword,coopmodel,cost,completion,remark,create_by,create_date,late_by,
+		demand_bg,demand_core,demand_count,keyword,coopmodel,require,cost,completion,remark,create_by,create_date,late_by,
 		late_date FROM xacx_project_approval_v2 WHERE id=#{id}
 	</select>
 	
