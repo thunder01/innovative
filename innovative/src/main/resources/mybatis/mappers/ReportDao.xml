@@ -70,7 +70,7 @@
 	<select id="findReportListByOrder_id" parameterType="java.util.Map" resultMap="ReportMap">
 		SELECT id,order_id,demand_name,title,content,sector,lable,abstracts,type,fileid,create_by,create_date,late_by,
 		late_date,delete_by,delete_date,delete_status FROM xacx_report_v2 WHERE order_id=#{order_id} and type=#{type}
-		limit #{pageSize} offset #{startIndex} 
+		ORDER BY create_date DESC limit #{pageSize} offset #{startIndex} 
 	</select>
 	
 	<!-- 通过立项表单的id和报告的类型来查找报告总数-->
