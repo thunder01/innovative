@@ -87,7 +87,7 @@ public class ReportService{
 	 * @param pageNum
 	 * @return
 	 */
-	public Map<String, Object> findReportById(Integer order_id,String type,Integer pageNum) {
+	public Map<String, Object> findReportByOrderId(Integer order_id,String type,Integer pageNum) {
 		Map<String, Object> map = new HashMap<String,Object>();
 		
 		PageInfo pageInfo = new PageInfo();
@@ -143,6 +143,8 @@ public class ReportService{
 	public Map<String, Object> findReportById(Integer reportid,Integer type){
 		Map<String, Object> map=new HashMap<>();
 		Report report=reportDao.findReportById(reportid);
+
+		map.put("orderid", report.getOrder_id());
 		map.put("item", report);
 		map.put("type", type);
 		return map;

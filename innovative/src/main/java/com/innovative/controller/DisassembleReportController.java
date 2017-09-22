@@ -8,10 +8,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+
 import com.innovative.bean.DisassembleReport;
 import com.innovative.service.DisassembleReportService;
+import com.innovative.utils.HttpClientUpload;
 import com.innovative.utils.JsonResult;
 
 /**
@@ -24,6 +28,14 @@ import com.innovative.utils.JsonResult;
 public class DisassembleReportController {
 	@Autowired
     private DisassembleReportService disassembleService;
+	
+	/**
+	 * 拆解报告的文件上传
+	 * */
+	public JsonResult uploadDisassembleFile(@RequestParam("") MultipartFile[] files){
+		String path=HttpClientUpload.httpClientUploadFile(files, "disassemble");
+		return new JsonResult(true, path);
+	}
 	
 	/*跳转上传页面*/
 	@RequestMapping(value="/toUpload/{orderid}",method = RequestMethod.GET)

@@ -3,6 +3,7 @@ package com.innovative.bean;
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 /**
  * 报告，方案线索、寻源报告、会议记录、出差报告、问题记录、项目总结
  * @author huang
@@ -118,7 +119,7 @@ public class Report implements Serializable{
 	}
 
 	public String getCreate_date() {
-		return create_date;
+		return create_date.substring(0, 16);
 	}
 
 	public void setCreate_date(String create_date) {
@@ -134,6 +135,9 @@ public class Report implements Serializable{
 	}
 
 	public String getLate_date() {
+		if (late_date!=null) {
+			return late_date.substring(0, 16);
+		}
 		return late_date;
 	}
 
@@ -185,4 +189,14 @@ public class Report implements Serializable{
 		return serialVersionUID;
 	}
 
+	@Override
+	public String toString() {
+		return "Report [id=" + id + ", order_id=" + order_id + ", demand_name=" + demand_name + ", title=" + title
+				+ ", content=" + content + ", sector=" + sector + ", lable=" + Arrays.toString(lable) + ", abstracts="
+				+ abstracts + ", type=" + type + ", file=" + file + ", create_date=" + create_date + ", create_by="
+				+ create_by + ", late_date=" + late_date + ", late_by=" + late_by + ", delete_status=" + delete_status
+				+ ", delete_date=" + delete_date + ", delete_by=" + delete_by + ", typeName=" + typeName + "]";
+	}
+	
+	
 }

@@ -32,7 +32,7 @@ public class ReportController {
 			@PathVariable(name = "order_id") Integer order_id,@PathVariable(name = "type") String type){
 
 		Integer page = offset/(new PageInfo().getPageSize()) +1;		
-		Map<String,Object> map = reportService.findReportById(order_id, type,page);
+		Map<String,Object> map = reportService.findReportByOrderId(order_id, type,page);
 		
 		if((Integer)map.get("result")==1){
 			return new JsonResult(true, map);
@@ -98,8 +98,9 @@ public class ReportController {
 	 * 
 	 * */
 	@RequestMapping(value="reportDetail/{report_id}/{type}",method=RequestMethod.GET)
-	public JsonResult reportDetail(@PathVariable(name="report_id") Integer report_id,@PathVariable(name="approval_id") Integer approval_id,@PathVariable(name="type") Integer type){
+	public JsonResult reportDetail(@PathVariable(name="report_id") Integer report_id,@PathVariable(name="type") Integer type){
 		Map<String,Object> map=reportService.findReportById(report_id,type);
+	
 		if (map.get("item")!=null) {
 			return new JsonResult(true, map);
 		}else{
