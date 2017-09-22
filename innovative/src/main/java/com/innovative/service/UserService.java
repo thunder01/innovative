@@ -68,11 +68,10 @@ public class UserService {
 	/**
 	 * 获取一个用户的的莫个角色
 	 * @param userId
-	 * @param roleId
 	 * @return
 	 */
 	public boolean getUserRole(String userId,String roleId) {
-		return userdao.getUserRole(userId, roleId)>1? true : false;
+		return userdao.getUserRole(userId, roleId)>=1? true : false;
 	}
 	/**
 	 * 给用户添加多个角色

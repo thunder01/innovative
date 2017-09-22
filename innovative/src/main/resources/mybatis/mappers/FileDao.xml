@@ -63,15 +63,8 @@
     <select id="getFileById" resultType="FileBean">
     
         SELECT "refType","refId","url","filename" FROM  "xacx_file"
-        <where>
-            <if test="refid!=null and refid!=''">
-				"refId" = #{refid}
-			</if>
-            <if test="reftype!=null and reftype!=''">
-				AND "refType" = #{reftype}
-			</if>
-             AND  "sign" = 'add' 
-        </where>
+            where  "refId" = #{refid}  AND  "refType" = #{reftype}  AND  "sign" = 'add' 
+        
     </select>
 
 </mapper>

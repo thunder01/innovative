@@ -40,6 +40,12 @@
 		  WHERE "UserId" =  #{userId};
 	</select>
 	
+	 <!--根据id与角色id查用户是否拥有该角色-->
+	<select id="getUserRole" resultType="int">
+		SELECT count(*) FROM  "app_userrole"
+		  WHERE "UserId" =  #{userId} and "RoleId" = #{roleId}
+	</select>
+	
 	 <!--根据工号获取用户信息-->
 	<select id="getUserByJobNumber" resultType="User">
 		SELECT * FROM "xacx_user"  
@@ -94,10 +100,10 @@
 	</select>
 
  <!-- 根据用户id与角色id获取用户角色信息是否存在 -->
-	<select id="getUserRole" resultType="int">
+<!-- 	<select id="getUserRole" resultType="int">
 		SELECT count(*) FROM "app_userrole"  
 		  WHERE "UserId" =  #{userId} and "RoleId" = #{roleId};
-	</select>
+	</select> -->
 	
  	<!--添加用户角色-->
 	<insert id="insertUserRole" parameterType="map">

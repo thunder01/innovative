@@ -30,13 +30,29 @@ public class UserController {
 	  * @return
 	  */
 	 @RequestMapping(value = "/getUser/{id}", method = RequestMethod.GET)
-	    public JsonResult getExpert(@PathVariable(name = "id") String id) {
+	    public JsonResult getUser(@PathVariable(name = "id") String id) {
 	    
 		 if(id == null || "".equals(id))
 			 return new JsonResult(false, "参数不合法");
 			User user = userService.getUser(id);
 		        if (user != null) {
 		            return new JsonResult(true, user);
+		        }
+		       return new JsonResult(false, "参数不合法");
+	 }
+	 /**
+	  * 查看用户是否有该角色
+	  * @param id
+	  * @return
+	  */
+	 @RequestMapping(value = "/getUserRole/{userId}/{roleId}", method = RequestMethod.GET)
+	    public JsonResult getUserRole(@PathVariable(name = "userId") String userId,@PathVariable(name = "roleId") String roleId) {
+	    
+		 if(userId == null || "".equals(userId))
+			 return new JsonResult(false, "参数不合法");
+			boolean flag = userService.getUserRole(userId,roleId);
+		        if (flag == true) {
+		            return new JsonResult(true, "该用户拥有该角色！");
 		        }
 		       return new JsonResult(false, "参数不合法");
 	 }
