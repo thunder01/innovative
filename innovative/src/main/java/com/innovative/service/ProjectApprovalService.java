@@ -150,23 +150,21 @@ public class ProjectApprovalService {
 		/*查询对应的立项表单信息*/
 		ProjectApproval projectApproval=projectApprovalDao.findApprovalById(app_id);
 		
-		System.out.println(projectApproval);
-		
 		String userId=projectApprovalDao.findUserIdByApp_id(app_id);
 		User user=userDao.getUser(userId);
 		
 		if (user!=null&&projectApproval!=null) {
 			projectApproval.setUserName(user.getUserName());
-			map.put("orderid", projectApproval.getOrder_id());
 		}
 		
 		Order order=orderDao.getOrderById(projectApproval.getOrder_id());
 		
 		/*order.getPass_by获取到的只是用户的id，还要查出用户姓名，系统暂时没有用户信息，故没有操作*/
 		projectApproval.setConfirmName(order.getPass_by());
-		
+		map.put("orderid", projectApproval.getOrder_id());
 		map.put("approvalid",app_id);
 		map.put("item", projectApproval);	
+
 		return map;
 	}
 	
@@ -175,12 +173,15 @@ public class ProjectApprovalService {
 	 * @param id
 	 * @return
 	 */
-	public int updateProjectApprovalReceive(Integer id){
-		int status=projectApprovalDao.findSource_statusById(id);
-		if (status==0) {
-			return projectApprovalDao.updateProjectApprovalReceive(id);
+	public Map<String, Object> updateProjectApprovalReceive(Integer id){
+		Map<String, Object> map=getProjectApprovalById(id);
+		if (projectApprovalDao.findApprovalById(id)!=null) {
+			int status=projectApprovalDao.findSource_statusById(id);
+			if (status==0) {
+				projectApprovalDao.updateProjectApprovalReceive(id);
+			}
 		}
-		return 0;
+		return map;
 	}
 	
 }

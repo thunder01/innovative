@@ -1,6 +1,8 @@
 package com.innovative.bean;
 
 import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 /**
  * 报告，方案线索、寻源报告、会议记录、出差报告、问题记录、项目总结
  * @author huang
@@ -9,7 +11,7 @@ import java.io.Serializable;
 
 public class Report implements Serializable{
 	/**
-	 * 
+	 * 报告信息
 	 */
 	private static final long serialVersionUID = 1L;
 	private Integer id;//生成的主键id
@@ -26,36 +28,21 @@ public class Report implements Serializable{
 	private String create_by;//创建人
 	private String late_date;//创建时间
 	private String late_by;//最后修改者
-	private Integer deleted;//删除的状态
+	private Integer delete_status;//删除的状态
 	private String delete_date;//删除的状态的时间
 	private String delete_by;//谁删除的
+	private String typeName;//类型名称
 	
 	private Integer order_id;
 	public Report() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
-	public Report(Integer id, Integer approval_id, String demand_name, String title, String content, String sector,
-			String[] lable, String abstracts, String type, String file, String create_date, String create_by,
-			String late_date, String late_by, Integer deleted, String delete_date, String delete_by) {
-		super();
-		this.id = id;
-		this.approval_id = approval_id;
-		this.demand_name = demand_name;
-		this.title = title;
-		this.content = content;
-		this.sector = sector;
-		this.lable = lable;
-		this.abstracts = abstracts;
-		this.type = type;
-		this.file = file;
-		this.create_date = create_date;
-		this.create_by = create_by;
-		this.late_date = late_date;
-		this.late_by = late_by;
-		this.deleted = deleted;
-		this.delete_date = delete_date;
-		this.delete_by = delete_by;
+	
+	public String getTypeName() {
+		return typeName;
+	}
+	public void setTypeName(String typeName) {
+		this.typeName = typeName;
 	}
 	public Integer getId() {
 		return id;
@@ -117,9 +104,12 @@ public class Report implements Serializable{
 	public void setFile(String file) {
 		this.file = file;
 	}
+	
 	public String getCreate_date() {
-		return create_date;
+		String str=create_date.substring(0, 10).replace("-", ".");
+		return str;
 	}
+	
 	public void setCreate_date(String create_date) {
 		this.create_date = create_date;
 	}
@@ -141,11 +131,11 @@ public class Report implements Serializable{
 	public void setLate_by(String late_by) {
 		this.late_by = late_by;
 	}
-	public Integer getDeleted() {
-		return deleted;
+	public Integer getDelete_status() {
+		return delete_status;
 	}
-	public void setDeleted(Integer deleted) {
-		this.deleted = deleted;
+	public void setDelete_status(Integer delete_status) {
+		this.delete_status = delete_status;
 	}
 	public String getDelete_date() {
 		return delete_date;
