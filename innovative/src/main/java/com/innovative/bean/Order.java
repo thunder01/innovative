@@ -76,7 +76,10 @@ public class Order implements Serializable{
 	}
 
 	public String getCreate_date() {
-		return create_date.substring(0, 16);
+		if (create_date!=null) {
+			return create_date.substring(0, 16);
+		}
+		return create_date;
 	}
 
 	public void setCreate_date(String create_date) {

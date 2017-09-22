@@ -49,6 +49,7 @@
 		select count(*) from xacx_order_v2 where create_by_id=#{userid}
 	</select>
 	
+	<!-- 根据订单id查询需求id -->
 	<select id="getDemandIdByOrderId" parameterType="int" resultType="int">
 		select demandid from xacx_order_v2 where id=#{order_id}
 	</select>
