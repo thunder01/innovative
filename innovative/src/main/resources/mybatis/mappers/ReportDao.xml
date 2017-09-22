@@ -13,7 +13,7 @@
 		<result property="lable" column="lable" typeHandler="com.innovative.mybatisHandler.ArrayTypeHandler"/>
 		<result property="abstracts" column="abstracts"/>
 		<result property="type" column="type"/>
-		<result property="file" column="file"/>
+		<result property="fileid" column="fileid"/>
 		<result property="create_date" column="create_date"/>
 		<result property="create_by" column="create_by"/>
 		<result property="late_date" column="late_date"/>
@@ -28,8 +28,8 @@
 		<selectKey resultType="int" keyProperty="id" order="AFTER">
 			SELECT currval('xacx_report_v2_id_seq'::regclass)
 		</selectKey>
-		INSERT INTO xacx_report_v2(order_id,demand_name,title,content,sector,abstracts,type,file,create_date,create_by,delete_status,lable) 
-		VALUES(#{order_id},#{demand_name},#{title},#{content},#{sector},#{abstracts},#{type},#{file},now(),#{create_by},0,
+		INSERT INTO xacx_report_v2(order_id,demand_name,title,content,sector,abstracts,type,fileid,create_date,create_by,delete_status,lable) 
+		VALUES(#{order_id},#{demand_name},#{title},#{content},#{sector},#{abstracts},#{type},#{fileid},now(),#{create_by},0,
 		 <choose>
             <when test="lable != null">
                 <foreach item="lable" collection="lable" separator="," open="'{" close="}'" index="">
@@ -58,7 +58,7 @@
             <otherwise>'{}'</otherwise>
         </choose> 
 		,abstracts=#{abstracts},
-		file=#{file},lable=#{lable},late_date=now(),late_by=#{late_by} WHERE id=#{id}
+		fileid=#{fileid},lable=#{lable},late_date=now(),late_by=#{late_by} WHERE id=#{id}
 	</update>
 	
 	<!-- 通过报告id查询报告 -->
@@ -68,7 +68,7 @@
 	
 	<!-- 通过订单id和报告的类型来查找报告的集合 分页-->
 	<select id="findReportListByOrder_id" parameterType="java.util.Map" resultMap="ReportMap">
-		SELECT id,order_id,demand_name,title,content,sector,lable,abstracts,type,file,create_by,create_date,late_by,
+		SELECT id,order_id,demand_name,title,content,sector,lable,abstracts,type,fileid,create_by,create_date,late_by,
 		late_date,delete_by,delete_date,delete_status FROM xacx_report_v2 WHERE order_id=#{order_id} and type=#{type}
 		limit #{pageSize} offset #{startIndex} 
 	</select>

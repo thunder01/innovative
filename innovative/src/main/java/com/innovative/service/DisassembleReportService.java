@@ -1,10 +1,10 @@
 package com.innovative.service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.print.attribute.HashAttributeSet;
-
 import org.apache.xml.resolver.helpers.PublicId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,12 +12,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.innovative.bean.Demand;
 import com.innovative.bean.DisassembleReport;
+import com.innovative.bean.FileBean;
 import com.innovative.bean.Message;
 import com.innovative.bean.Order;
 import com.innovative.bean.ProjectApproval;
 import com.innovative.bean.User;
 import com.innovative.dao.DemandDao;
 import com.innovative.dao.DisassembleReportDao;
+import com.innovative.dao.FileDao;
 import com.innovative.dao.MessageDao;
 import com.innovative.dao.OrderDao;
 import com.innovative.dao.ProjectApprovalDao;
@@ -41,6 +43,8 @@ public class DisassembleReportService {
 	private UserDao userDao;
 	@Autowired
 	private DemandDao demandDao;
+	@Autowired 
+	private FileDao fileDao;
 	
 	/**
 	 * 拆解报告上传之后，将上传记录添加到数据库，并向消息表添加一条记录
@@ -50,11 +54,13 @@ public class DisassembleReportService {
 	 * */
 	public Map<String, Object> saveDisassembleReport(DisassembleReport report,Integer orderid){
 		Map<String, Object> map=new HashMap<>();
-	
+		fileDao.updateFile(report.getFileid());
+		
 		if ("1".equals(report.getMessage())) {
 			map.put("orderid", orderid);
-			System.out.println("拆解报告已经上传");
 		}else{
+			/*先将次订单的所有拆解报告删除*/
+			reportDao.deleteDisassembleReportByIdReal(reportDao.getIdByOrderId(orderid));
 			/*保存拆解报告*/
 			int result = reportDao.saveDisassembleReport(report);
 			
@@ -101,6 +107,12 @@ public class DisassembleReportService {
 		Map<String, Object> map=new HashMap<>();
 		
 		DisassembleReport dReport=reportDao.getDisassembleReportById(disid);
+		
+		/*獲取文件id*/
+		String fileid=dReport.getFileid();
+		List<FileBean> listFiles=fileDao.getFileById(fileid, "disassemble");
+		dReport.setList(listFiles);
+		
 		map.put("item", dReport);
 		map.put("orderid", orderid);
 		
@@ -143,6 +155,11 @@ public class DisassembleReportService {
 		
 		/*根据创建人的id，查出创建人的信息*/
 		User user=userDao.getUser(dReport.getCreate_by());
+		
+		/*獲取文件id*/
+		String fileid=dReport.getFileid();
+		List<FileBean> listFiles=fileDao.getFileById(fileid, "disassemble");
+		dReport.setList(listFiles);
 		
 		map.put("item", dReport);
 		map.put("user", user);

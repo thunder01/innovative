@@ -169,16 +169,18 @@ public class ProjectApprovalService {
 	}
 	
 	/**
-	 * 寻源工程师下单
-	 * @param id
+	 * 寻源工程师接单
+	 * @param id 立项表单的id
 	 * @return
 	 */
-	public Map<String, Object> updateProjectApprovalReceive(Integer id){
-		Map<String, Object> map=getProjectApprovalById(id);
-		if (projectApprovalDao.findApprovalById(id)!=null) {
-			int status=projectApprovalDao.findSource_statusById(id);
+	public Map<String, Object> updateProjectApprovalReceive(Integer app_id){
+		Map<String, Object> map=getProjectApprovalById(app_id);
+		if (projectApprovalDao.findApprovalById(app_id)!=null) {
+			int status=projectApprovalDao.findSource_statusById(app_id);
 			if (status==0) {
-				projectApprovalDao.updateProjectApprovalReceive(id);
+				projectApprovalDao.updateProjectApprovalReceive(app_id);
+			}else{
+				map.put("message", "订单已经被人接了");
 			}
 		}
 		return map;

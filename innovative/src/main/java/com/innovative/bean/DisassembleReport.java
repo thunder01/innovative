@@ -1,6 +1,8 @@
 package com.innovative.bean;
 
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * 拆解报告
@@ -11,7 +13,7 @@ public class DisassembleReport implements Serializable{
 	private static final long serialVersionUID = 8955741163013441331L;
 	private Integer id;//
 	private String title;//标题
-	private String file;//拆解报告，文件路径	
+	private String fileid;//拆解报告文件id
     private String create_date;//创建时间 
 	private String create_by;//创建人
 	private String late_date;//创建时间
@@ -24,6 +26,7 @@ public class DisassembleReport implements Serializable{
 	private String status;
 	private String status2;
 	private String pass_by;
+	private List<FileBean> list;
 	
 	public DisassembleReport() {
 		super();
@@ -44,13 +47,13 @@ public class DisassembleReport implements Serializable{
 	public void setTitle(String title) {
 		this.title = title;
 	}
-
-	public String getFile() {
-		return file;
+	
+	public String getFileid() {
+		return fileid;
 	}
 
-	public void setFile(String file) {
-		this.file = file;
+	public void setFileid(String fileid) {
+		this.fileid = fileid;
 	}
 
 	public String getCreate_date() {
@@ -149,11 +152,23 @@ public class DisassembleReport implements Serializable{
 		this.pass_by = pass_by;
 	}
 
+	public List<FileBean> getList() {
+		return list;
+	}
+
+	public void setList(List<FileBean> list) {
+		this.list = list;
+	}
+
 	@Override
 	public String toString() {
-		return "DisassembleReport [id=" + id + ", title=" + title + ", file=" + file + ", create_date=" + create_date
-				+ ", create_by=" + create_by + ", late_date=" + late_date + ", late_by=" + late_by + ", delete_by="
-				+ delete_by + ", delete_date=" + delete_date + ", delete_status=" + delete_status + ", order_id="
-				+ order_id + "]";
+		return "DisassembleReport [id=" + id + ", title=" + title + ", fileid=" + fileid + ", create_date="
+				+ create_date + ", create_by=" + create_by + ", late_date=" + late_date + ", late_by=" + late_by
+				+ ", delete_by=" + delete_by + ", delete_date=" + delete_date + ", delete_status=" + delete_status
+				+ ", order_id=" + order_id + ", message=" + message + ", status=" + status + ", status2=" + status2
+				+ ", pass_by=" + pass_by + ", list=" + list + "]";
 	}
+
+	
+	
 }

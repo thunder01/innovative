@@ -1,5 +1,7 @@
 package com.innovative.service;
 
+import java.io.File;
+import java.nio.file.Files;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -10,12 +12,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.innovative.bean.Demand;
 import com.innovative.bean.DisassembleReport;
+import com.innovative.bean.FileBean;
 import com.innovative.bean.Order;
 import com.innovative.bean.ProjectApproval;
 import com.innovative.bean.Report;
 import com.innovative.bean.User;
 import com.innovative.dao.DemandDao;
 import com.innovative.dao.DisassembleReportDao;
+import com.innovative.dao.FileDao;
 import com.innovative.dao.OrderDao;
 import com.innovative.dao.ProjectApprovalDao;
 import com.innovative.dao.ReportDao;
@@ -41,6 +45,8 @@ public class OrderService {
 	private UserDao userDao;
 	@Autowired
 	private ReportDao reportDao;
+	@Autowired
+	private FileDao fileDao;
 	
 	/**
 	 * 新增订单信息 需求池
@@ -156,6 +162,14 @@ public class OrderService {
 		/*根据订单id查出拆解报告信息*/
 		DisassembleReport disassembleReport=disassembleReportDao.getDisassembleByOrderid(orderid);	
 		if (disassembleReport!=null) {
+			/*獲取文件id*/
+			String fileid=disassembleReport.getFileid();
+			List<FileBean> listFiles=fileDao.getFileById(fileid, "disassemble");
+			
+			System.out.println(fileid+"--"+listFiles);
+			
+			disassembleReport.setList(listFiles);
+			
 			map.put("disassemble", disassembleReport);
 		}else{
 			map.put("message1", "没有拆解报告");

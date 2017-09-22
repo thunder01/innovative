@@ -8,7 +8,7 @@
 		<id property="id" column="id"/>
 		<result property="title" column="title"/>
 		<result property="order_id" column="order_id"/>
-		<result property="file" column="file"/>
+		<result property="fileid" column="fileid"/>
 		<result property="create_date" column="create_date"/>
 		<result property="create_by" column="create_by"/>
 		<result property="late_date" column="late_date"/>
@@ -25,8 +25,8 @@
     
     <!-- 添加一个拆解报告信息 -->
     <insert id="saveDisassembleReport" parameterType="DisassembleReport">
-    	insert into xacx_disassemble_report_v2 (order_id,title,file,create_by,create_date,delete_status) 
-    	values(#{order_id},#{title},#{file},#{create_by},now(),0)
+    	insert into xacx_disassemble_report_v2 (order_id,title,fileid,create_by,create_date,delete_status) 
+    	values(#{order_id},#{title},#{fileid},#{create_by},now(),0)
     </insert>
     
     <!-- 删除拆解报告 -->
@@ -47,7 +47,7 @@
     
     <!-- 修改拆解报告 -->
     <update id="updateDisassembleReportById" parameterType="DisassembleReport">
-    	update xacx_disassemble_report_v2 set title=#{title},file=#{file},late_by=#{late_by},late_date=now() 
+    	update xacx_disassemble_report_v2 set title=#{title},fileid=#{fileid},late_by=#{late_by},late_date=now() 
     	where id=#{id} 
     </update>
     
