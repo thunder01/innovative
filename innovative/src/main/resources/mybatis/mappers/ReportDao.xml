@@ -18,7 +18,7 @@
 		<result property="create_by" column="create_by"/>
 		<result property="late_date" column="late_date"/>
 		<result property="late_by" column="late_by"/>
-		<result property="deleted" column="deleted"/>
+		<result property="delete_status" column="delete_status"/>
 		<result property="delete_date" column="delete_date"/>
 		<result property="delete_by" column="delete_by"/>
 	</resultMap>
@@ -28,7 +28,7 @@
 		<selectKey resultType="int" keyProperty="id" order="AFTER">
 			SELECT currval('xacx_report_v2_id_seq'::regclass)
 		</selectKey>
-		INSERT INTO xacx_report_v2(approval_id,demand_name,title,content,sector,abstracts,type,file,create_date,create_by,deleted,lable) 
+		INSERT INTO xacx_report_v2(approval_id,demand_name,title,content,sector,abstracts,type,file,create_date,create_by,delete_status,lable) 
 		VALUES(#{approval_id},#{demand_name},#{title},#{content},#{sector},#{abstracts},#{type},#{file},now(),#{create_by},0,
 		 <choose>
             <when test="lable != null">

@@ -54,7 +54,7 @@ public class DisassembleReport implements Serializable{
 	}
 
 	public String getCreate_date() {
-		return create_date;
+		return create_date.substring(0, 10).replace("-", "/");
 	}
 
 	public void setCreate_date(String create_date) {

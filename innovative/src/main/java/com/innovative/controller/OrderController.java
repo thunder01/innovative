@@ -102,7 +102,7 @@ public class OrderController {
 	@RequestMapping(value="/postApproval",method=RequestMethod.POST)
 	public JsonResult postApproval(@RequestBody ProjectApproval pApproval){
 		Map<String,Object> map=projectApprovalService.postApproval(pApproval);
-		System.out.println(pApproval);
+
 		return new JsonResult(true, map);
 	}
 	
@@ -120,7 +120,7 @@ public class OrderController {
 	}
 	
 	/**
-	 * 寻源需求的每一项就是一个立项表单，查询立项表单（列表中的每一项）
+	 * 立项表单详情
 	 * @param orderid 订单id
 	 * @return
 	 * */
@@ -128,7 +128,6 @@ public class OrderController {
 	public JsonResult selectApproval(@PathVariable(name="app_id") Integer app_id){
 		/*根据订单*/
 		Map<String, Object> map=projectApprovalService.getProjectApprovalById(app_id);
-		System.out.println(map);
 		if(map.get("item")!=null){
 			return new JsonResult(true, map);
 		}else{
@@ -144,11 +143,8 @@ public class OrderController {
 	@RequestMapping(value="/sourceOrder",method=RequestMethod.POST)
 	public JsonResult updateOrderLate_byId(@RequestBody ProjectApproval pApproval){		
 		/*修改订单表的订单信息*/
-		int flag=projectApprovalService.updateProjectApprovalReceive(pApproval.getId());
-		if (flag==1) {
-			return new JsonResult(true, pApproval);
-		}
-		return new JsonResult(false,"接单失败");
+		Map<String, Object> map=projectApprovalService.updateProjectApprovalReceive(pApproval.getId());
+		return new JsonResult(true,map);
 	}
 	
 	/**
@@ -163,6 +159,11 @@ public class OrderController {
 		return new JsonResult(true, map);
 	}	
 	
+	/**
+	 * 过程纪要
+	 * @param order_id
+	 * @return
+	 */
 	@RequestMapping(value="/summary/{order_id}",method=RequestMethod.GET)
 	public JsonResult rankReport(@PathVariable(name="order_id") Integer order_id){
 		Map<String, Object> map=orderService.rankReport(order_id);
@@ -177,13 +178,19 @@ public class OrderController {
 	 */
 	@RequestMapping(value="/projectTeam/{order_id}",method=RequestMethod.GET)
 	public JsonResult getTeam(@PathVariable(name="order_id",required=true)Integer order_id){
-		Map<String, Object> map = orderService.getTeamByOrderId(order_id);
-			
+		Map<String, Object> map = orderService.getTeamByOrderId(order_id);		
 		return new JsonResult(true, map);
 	}
 	
+	
+	/**
+	 * 项目评价
+	 * @param order
+	 * @return
+	 */
 	@RequestMapping(value="/projectGrade",method=RequestMethod.POST)
 	public JsonResult projectGrade(@RequestBody Order order){
+		System.out.println(order);
 		Map<String, Object> map=orderService.projectGrade(order);
 		
 		return new JsonResult(true, map);

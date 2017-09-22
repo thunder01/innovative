@@ -75,15 +75,15 @@
 	
 	<!-- 项目评价 -->
 	<update id="proEvaluate" parameterType="Order">
-		UPDATE xacx_order_v2 set 
+		UPDATE xacx_order_v2 set id = #{id}
 		<if test="workpoint !=null and workpoint !=''"> 
-			workpoint=#{workpoint} 
+			,workpoint=#{workpoint}
 		</if>
 		<if test="eoms_service_appraise !=null and eoms_service_appraise !=''">
-			eoms_service_score=#{eoms_service_score},eoms_service_appraise=#{eoms_service_appraise}
+			,eoms_service_score=#{eoms_service_score},eoms_service_appraise=#{eoms_service_appraise}
 		</if>
-		<if test="service_service_appraise !=null and service_service_appraise !=''">
-			source_service_score=#{source_service_score},service_service_appraise=#{service_service_appraise}
+		<if test="source_service_appraise !=null and source_service_appraise !=''">
+			,source_service_score=#{source_service_score},source_service_appraise=#{source_service_appraise}
 		</if>
 		WHERE id = #{id}
 	</update>
