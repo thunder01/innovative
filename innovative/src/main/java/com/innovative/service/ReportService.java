@@ -21,6 +21,7 @@ import com.innovative.dao.ReportDao;
 import com.innovative.utils.PageInfo;
 
 @Service("reportService")
+@Transactional
 public class ReportService{
 	@Resource
 	private ReportDao reportDao;
@@ -30,13 +31,12 @@ public class ReportService{
 	private DemandDao demandDao;
 	@Resource
 	private ProjectApprovalDao projectApprovalDao;
+	
 	/**
 	 * 添加一个报告
 	 * @param report
 	 */
-	@Transactional
-
-	public Map<String, Object> addReportAndOrder_report(Report report) {
+	public Map<String, Object> addReport(Report report) {
 		Map<String, Object> map=new HashMap<>();
 		
 		if(report!=null){
@@ -48,6 +48,7 @@ public class ReportService{
 					report.setDemand_name(demand.getName());
 				}
 			}
+			
 			int result=reportDao.addReport(report);//添加报告
 			map.put("orderid", report.getOrder_id());
 			map.put("type", report.getType());
@@ -80,7 +81,7 @@ public class ReportService{
 	}
 	
 	/**
-	 * 通过立项表单的id和报告的类型来查找报告的集合
+	 * 通过订单的id和报告的类型来查找报告的集合
 	 * @param order_id 订单id
 	 * @param type 报告类型
 	 * @param pageNum
@@ -88,56 +89,47 @@ public class ReportService{
 	 */
 	public Map<String, Object> findReportById(Integer order_id,String type,Integer pageNum) {
 		Map<String, Object> map = new HashMap<String,Object>();
-		List<Report> reportList=new ArrayList<>();
 		
 		PageInfo pageInfo = new PageInfo();
         pageInfo.setCurrentPageNum(pageNum);
         
 		
 		map.put("order_id", order_id);
+		map.put("type", type);
 		map.put("Count", pageInfo.getPageSize());
 	    map.put("itemCount", pageInfo.getPageSize());
 	    map.put("limit", pageInfo.getPageSize());
 	    map.put("pageNum",pageInfo.getPageSize());
-	    map.put("offset",pageInfo.getStartIndex());
-	    
-		Demand demand=null;
-		/*根据订单id查询所有的立项表单id*/
-		List<ProjectApproval> approvalList=projectApprovalDao.getApprovalListByOrderid(order_id);
+	    map.put("offset",pageInfo.getStartIndex());		
+		map.put("pageSize",pageInfo.getPageSize());
+		map.put("startIndex",pageInfo.getStartIndex());
+		map.put("totalCount", reportDao.findReportCountByOrder_id(map));
+		map.put("orderid", order_id);
 		
-		for(ProjectApproval projectApproval:approvalList){
-			map.put("approval_id", projectApproval.getId());
-			map.put("type", type);
-			map.put("pageSize",pageInfo.getPageSize());
-			map.put("startIndex",pageInfo.getStartIndex());
-			
-			/*根据立项表单id、报告类型查询所有的报告*/
-			List<Report> list = reportDao.findReportListByApp_id(map);
+		/*根据订单id、报告类型查询所有的报告*/
+		List<Report> list = reportDao.findReportListByOrder_id(map);	
+		
+		/*未所有想报告添加需求名*/
+		for(Report report:list){
+			if (orderDao.selectOrderByOrderId(order_id)!=null) {
 				
-			if (list.size()>0) {
-				map.put("result", 1);
-				for(Report report:list){
-					if (projectApproval!=null&&orderDao.selectOrderByOrderId(projectApproval.getOrder_id())!=null) {
-						map.put("orderid", projectApproval.getOrder_id());
-						if (orderDao.selectOrderByOrderId(projectApproval.getOrder_id()).getDemandId()!=null) {
-							/*根据立项信息查询订单id，根据订单id查询订单信息，根据需求id查询需求信息*/
-							demand = demandDao.getDemand(orderDao.selectOrderByOrderId(projectApproval.getOrder_id()).getDemandId());
-						}	
-					}	
+				if (orderDao.selectOrderByOrderId(order_id).getDemandId()!=null) {
+					/*根据立项信息查询订单id，根据订单id查询订单信息，根据需求id查询需求信息*/
+					Demand demand = demandDao.getDemand(orderDao.selectOrderByOrderId(order_id).getDemandId());
 					if (demand!=null) {
 						report.setDemand_name(demand.getName());
 					}
 				}	
-			}else {
-				map.put("result", 0);
-			}	
-			
-			reportList.addAll(list);
-		}
+			}		
+		}	
 		
-		
-		map.put("totalCount", reportDao.findReportCountByApp_id(map));  
-		map.put("items",reportList);
+		if (list.size()>0) {
+			map.put("result", 1);
+				
+		}else {
+			map.put("result", 0);
+		}			  
+		map.put("items",list);
 		return map;
 	}
 	
@@ -148,11 +140,10 @@ public class ReportService{
 	 * @param type
 	 * @return
 	 */
-	public Map<String, Object> findReportById(Integer reportid,Integer approval_id,Integer type){
+	public Map<String, Object> findReportById(Integer reportid,Integer type){
 		Map<String, Object> map=new HashMap<>();
 		Report report=reportDao.findReportById(reportid);
 		map.put("item", report);
-		map.put("approval_id", approval_id);
 		map.put("type", type);
 		return map;
 	}

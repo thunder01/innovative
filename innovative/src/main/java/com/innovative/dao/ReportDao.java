@@ -38,18 +38,18 @@ public interface ReportDao {
 	public Report findReportById(Integer id);
 	
 	/**
-	 * 通过立项表单的id和报告的类型来查找报告的集合
-	 * @param map(approval_id,type,pageSize,startIndex)
+	 * 通过订单的id和报告的类型来查找报告的集合
+	 * @param map(order_id,type,pageSize,startIndex)
 	 * @return
 	 */
-	public List<Report> findReportListByApp_id(Map<String, Object> map);
+	public List<Report> findReportListByOrder_id(Map<String, Object> map);
 	
 	/**
-	 * 通过立项表单的id和报告的类型来查找报告的数量
-	 * @param map(approval_id,type)
+	 * 通过订单的id和报告的类型来查找报告的数量
+	 * @param map(order_id,type)
 	 * @return
 	 */
-	public int findReportCountByApp_id(Map<String, Object> map);
+	public int findReportCountByOrder_id(Map<String, Object> map);
 
 	/**
 	 * 通过订单id来找所有报告并按创建时间排序 

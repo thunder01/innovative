@@ -41,12 +41,10 @@ public class ReportController {
 	}
 	
 	/*跳转到添加报告的页面*/
-	@RequestMapping(value="toSaveReport/{orderid}/{approval_id}/{type}",method=RequestMethod.GET)
-	public JsonResult toSaveReport(@PathVariable(name="orderid") Integer orderid,@PathVariable(name="approval_id") Integer approval_id,
-			@PathVariable(name="type") Integer type){
+	@RequestMapping(value="toSaveReport/{orderid}/{type}",method=RequestMethod.GET)
+	public JsonResult toSaveReport(@PathVariable(name="orderid") Integer orderid,@PathVariable(name="type") Integer type){
 		Map<String, Object> map=new HashMap<>();
 		map.put("orderid", orderid);
-		map.put("approval_id", approval_id);
 		map.put("type", type);
 		return new JsonResult(true, map);
 	}
@@ -60,7 +58,7 @@ public class ReportController {
 	 */
 	@RequestMapping(value = "/reportSave", method = RequestMethod.POST)
 	public JsonResult reportSave( @RequestBody Report report){	
-		Map<String, Object> map=reportService.addReportAndOrder_report(report);
+		Map<String, Object> map=reportService.addReport(report);
 
 		if((Integer)map.get("result")==1){
 			return new JsonResult(true, map);
@@ -99,11 +97,9 @@ public class ReportController {
 	 * 根据报告id获取报告的详情
 	 * 
 	 * */
-	@RequestMapping(value="reportDetail/{report_id}/{approval_id}/{type}",method=RequestMethod.GET)
-	public JsonResult reportDetail(@PathVariable(name="report_id") Integer report_id,
-		@PathVariable(name="approval_id") Integer approval_id,@PathVariable(name="type") Integer type){
-
-		Map<String,Object> map=reportService.findReportById(report_id,approval_id,type);
+	@RequestMapping(value="reportDetail/{report_id}/{type}",method=RequestMethod.GET)
+	public JsonResult reportDetail(@PathVariable(name="report_id") Integer report_id,@PathVariable(name="approval_id") Integer approval_id,@PathVariable(name="type") Integer type){
+		Map<String,Object> map=reportService.findReportById(report_id,type);
 		if (map.get("item")!=null) {
 			return new JsonResult(true, map);
 		}else{
