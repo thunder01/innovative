@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.List;
 /**
  * 报告，方案线索、寻源报告、会议记录、出差报告、问题记录、项目总结
  * @author huang
@@ -24,7 +25,7 @@ public class Report implements Serializable{
 	private String[] lable;//标签信息
 	private String abstracts;//摘要信息
 	private String type;//报告的类型，方案线索1、寻源报告2、会议记录3、出差报告4、问题记录5、项目总结6
-    private String file;//文件存储路径
+    private String fileid;//文件存储路径
     private String create_date;//创建时间 
 	private String create_by;//创建人
 	private String late_date;//创建时间
@@ -33,6 +34,7 @@ public class Report implements Serializable{
 	private String delete_date;//删除的状态的时间
 	private String delete_by;//谁删除的
 	private String typeName;//类型名称
+	private List<FileBean> list;
 	
 	public Report() {
 		super();
@@ -110,12 +112,12 @@ public class Report implements Serializable{
 		this.type = type;
 	}
 
-	public String getFile() {
-		return file;
+	public String getFileid() {
+		return fileid;
 	}
 
-	public void setFile(String file) {
-		this.file = file;
+	public void setFileid(String fileid) {
+		this.fileid = fileid;
 	}
 
 	public String getCreate_date() {
@@ -189,14 +191,23 @@ public class Report implements Serializable{
 		return serialVersionUID;
 	}
 
+	public List<FileBean> getList() {
+		return list;
+	}
+
+	public void setList(List<FileBean> list) {
+		this.list = list;
+	}
+
 	@Override
 	public String toString() {
 		return "Report [id=" + id + ", order_id=" + order_id + ", demand_name=" + demand_name + ", title=" + title
 				+ ", content=" + content + ", sector=" + sector + ", lable=" + Arrays.toString(lable) + ", abstracts="
-				+ abstracts + ", type=" + type + ", file=" + file + ", create_date=" + create_date + ", create_by="
+				+ abstracts + ", type=" + type + ", fileid=" + fileid + ", create_date=" + create_date + ", create_by="
 				+ create_by + ", late_date=" + late_date + ", late_by=" + late_by + ", delete_status=" + delete_status
-				+ ", delete_date=" + delete_date + ", delete_by=" + delete_by + ", typeName=" + typeName + "]";
+				+ ", delete_date=" + delete_date + ", delete_by=" + delete_by + ", typeName=" + typeName + ", list="
+				+ list + "]";
 	}
-	
+
 	
 }

@@ -95,9 +95,11 @@ public class ReportController {
 	
 	/**
 	 * 根据报告id获取报告的详情
-	 * 
-	 * */
-	@RequestMapping(value="reportDetail/{report_id}/{type}",method=RequestMethod.GET)
+	 * @param report_id
+	 * @param type
+	 * @return
+	 */
+	@RequestMapping(value="/reportDetail/{report_id}/{type}",method=RequestMethod.GET)
 	public JsonResult reportDetail(@PathVariable(name="report_id") Integer report_id,@PathVariable(name="type") Integer type){
 		Map<String,Object> map=reportService.findReportById(report_id,type);
 	

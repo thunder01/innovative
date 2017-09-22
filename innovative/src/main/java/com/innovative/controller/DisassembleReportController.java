@@ -29,14 +29,6 @@ public class DisassembleReportController {
 	@Autowired
     private DisassembleReportService disassembleService;
 	
-	/**
-	 * 拆解报告的文件上传
-	 * */
-	public JsonResult uploadDisassembleFile(@RequestParam("") MultipartFile[] files){
-		String path=HttpClientUpload.httpClientUploadFile(files, "disassemble");
-		return new JsonResult(true, path);
-	}
-	
 	/*跳转上传页面*/
 	@RequestMapping(value="/toUpload/{orderid}",method = RequestMethod.GET)
 	public JsonResult toUpload(@PathVariable(name="orderid") Integer orderid){
@@ -52,6 +44,7 @@ public class DisassembleReportController {
 	 * */
 	@RequestMapping(value = "/upload", method = RequestMethod.POST)
 	public JsonResult saveDisassembleReport(@RequestBody DisassembleReport report){
+		System.out.println(report);
 		Map<String, Object> map= disassembleService.saveDisassembleReport(report,report.getOrder_id());
         if (map!=null) {
             return new JsonResult(true, map);

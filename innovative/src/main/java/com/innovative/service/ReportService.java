@@ -11,10 +11,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.innovative.bean.Demand;
+import com.innovative.bean.FileBean;
 import com.innovative.bean.Order;
 import com.innovative.bean.ProjectApproval;
 import com.innovative.bean.Report;
 import com.innovative.dao.DemandDao;
+import com.innovative.dao.FileDao;
 import com.innovative.dao.OrderDao;
 import com.innovative.dao.ProjectApprovalDao;
 import com.innovative.dao.ReportDao;
@@ -31,6 +33,8 @@ public class ReportService{
 	private DemandDao demandDao;
 	@Resource
 	private ProjectApprovalDao projectApprovalDao;
+	@Resource
+	private FileDao fileDao;
 	
 	/**
 	 * 添加一个报告
@@ -38,6 +42,7 @@ public class ReportService{
 	 */
 	public Map<String, Object> addReport(Report report) {
 		Map<String, Object> map=new HashMap<>();
+		fileDao.updateFile(report.getFileid());
 		
 		if(report!=null){
 			/*查询报告对应的需求名称*/
@@ -143,7 +148,14 @@ public class ReportService{
 	public Map<String, Object> findReportById(Integer reportid,Integer type){
 		Map<String, Object> map=new HashMap<>();
 		Report report=reportDao.findReportById(reportid);
-
+		System.out.println(report);
+		/*獲取文件id*/
+		String fileid=report.getFileid();
+		if (fileid!=null) {
+			List<FileBean> listFiles=fileDao.getFileById(fileid, "orderReport");
+			report.setList(listFiles);
+		}
+		
 		map.put("orderid", report.getOrder_id());
 		map.put("item", report);
 		map.put("type", type);
