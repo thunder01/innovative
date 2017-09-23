@@ -67,6 +67,7 @@ public class OrderController {
 	 * */
 	@RequestMapping(value="/disassembleDetail/{orderid}",method=RequestMethod.GET)
 	public JsonResult selectDisassemble(@PathVariable(name="orderid") Integer orderid){
+		System.out.println(orderid+">>>>>>>>>>>>>>>>");
 		/*查询需求报告信息*/
 		Map<String, Object> map=orderService.getDisassembleAndApprovalListByOrderid(orderid);
 

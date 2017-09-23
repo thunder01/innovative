@@ -112,7 +112,7 @@ public class DisassembleReportService {
 		String fileid=dReport.getFileid();
 		List<FileBean> listFiles=fileDao.getFileById(fileid, "disassemble");
 		dReport.setList(listFiles);
-		
+		map.put("disid", dReport.getId());
 		map.put("item", dReport);
 		map.put("orderid", orderid);
 		
@@ -126,11 +126,15 @@ public class DisassembleReportService {
 	 */
 	public Map<String, Object> updateDisassembleReportById(DisassembleReport disassembleReport){
 		Map<String, Object> map=new HashMap<>();
-		
+		fileDao.updateFile(disassembleReport.getFileid());
 		int result=reportDao.updateDisassembleReportById(disassembleReport);
+		List<FileBean> listFiles=fileDao.getFileById(disassembleReport.getFileid(), "disassemble");
+		DisassembleReport report = reportDao.getDisassembleReportById(disassembleReport.getId());
+		report.setList(listFiles);
 		map.put("result", result);
-		map.put("item",disassembleReport);
-		
+		map.put("item",report);
+		map.put("orderid", report.getOrder_id());
+		map.put("disid", report.getId());
 		return map;
 	}
 	

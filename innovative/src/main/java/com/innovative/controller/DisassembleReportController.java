@@ -76,8 +76,8 @@ public class DisassembleReportController {
 	 * @param order_id
 	 * @return
 	 * */
-	@RequestMapping(value="/select/{id}/{order_id}", method=RequestMethod.GET)
-	public JsonResult a(@PathVariable(name="id") Integer disid,@PathVariable(name="order_id") Integer order_id){
+	@RequestMapping(value="/select/{disid}/{order_id}", method=RequestMethod.GET)
+	public JsonResult a(@PathVariable(name="disid") Integer disid,@PathVariable(name="order_id") Integer order_id){
 		Map<String,Object> map=disassembleService.getDisassembleReportById(disid,order_id);
 		/*判断结果是否存在*/
 		if (map!=null) {
@@ -95,8 +95,8 @@ public class DisassembleReportController {
 	 * @return
 	 * */
 	@RequestMapping(value="/edit" ,method=RequestMethod.POST)
-	@ResponseBody
 	public JsonResult updateDisassembleReport(@RequestBody DisassembleReport report) {
+		System.out.println(report);
 		Map<String,Object> map=disassembleService.updateDisassembleReportById(report);
 		/*判断是否修改成功*/
 		if ((Integer)map.get("result")==1) {

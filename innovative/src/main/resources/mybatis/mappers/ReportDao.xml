@@ -43,12 +43,12 @@
 		
 	<!-- 更改报告的删除状态 -->
 	<update id="updateReportDeleted" parameterType="java.util.Map">
-		UPDATE xacx_report_v2 SET deleted = 1 ,delete_date=now(),delete_by=#{userid} WHERE id = #{id} 
+		UPDATE xacx_report_v2 SET delete_status = 1 ,delete_date=now(),delete_by=#{userid} WHERE id = #{id} 
 	</update>
 	
 	<!-- 更新报告 -->
 	<update id="updateReport" parameterType="Report">
-		UPDATE xacx_report_v2 SET title=#{title},content=#{content},sector=
+		UPDATE xacx_report_v2 SET title=#{title},content=#{content},lable=
 		 <choose>
             <when test="lable != null">
                 <foreach item="lable" collection="lable" separator="," open="'{" close="}'" index="">
@@ -58,7 +58,7 @@
             <otherwise>'{}'</otherwise>
         </choose> 
 		,abstracts=#{abstracts},
-		fileid=#{fileid},lable=#{lable},late_date=now(),late_by=#{late_by} WHERE id=#{id}
+		fileid=#{fileid},sector=#{sector},late_date=now(),late_by=#{late_by} WHERE id=#{id}
 	</update>
 	
 	<!-- 通过报告id查询报告 -->
@@ -69,17 +69,17 @@
 	<!-- 通过订单id和报告的类型来查找报告的集合 分页-->
 	<select id="findReportListByOrder_id" parameterType="java.util.Map" resultMap="ReportMap">
 		SELECT id,order_id,demand_name,title,content,sector,lable,abstracts,type,fileid,create_by,create_date,late_by,
-		late_date,delete_by,delete_date,delete_status FROM xacx_report_v2 WHERE order_id=#{order_id} and type=#{type}
+		late_date,delete_by,delete_date,delete_status FROM xacx_report_v2 WHERE order_id=#{order_id} and type=#{type} and delete_status=0
 		ORDER BY create_date DESC limit #{pageSize} offset #{startIndex} 
 	</select>
 	
 	<!-- 通过立项表单的id和报告的类型来查找报告总数-->
 	<select id="findReportCountByOrder_id" parameterType="java.util.Map" resultType="int">
-		SELECT COUNT(*) FROM xacx_report_v2 WHERE order_id=#{order_id} and type=#{type}
+		SELECT COUNT(*) FROM xacx_report_v2 WHERE order_id=#{order_id} and type=#{type} and delete_status=0
 	</select>	
 	
 	<!-- 通过订单id来找所有报告并按创建时间排序 -->
 	<select id="rankReport" parameterType="int" resultMap="ReportMap">
-		SELECT * FROM xacx_report_v2 WHERE order_id=#{order_id} ORDER BY create_date DESC
+		SELECT * FROM xacx_report_v2 WHERE order_id=#{order_id} and delete_status=0 ORDER BY create_date DESC
 	</select>
 </mapper>

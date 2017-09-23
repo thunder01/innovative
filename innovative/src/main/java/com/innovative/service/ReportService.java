@@ -81,8 +81,19 @@ public class ReportService{
 	 * @param report
 	 */
 	@Transactional
-	public int updateReport(Report report) {
-		return reportDao.updateReport(report);
+	public Map<String, Object> updateReport(Report report) {
+		Map<String, Object> map=new HashMap<>();
+		fileDao.updateFile(report.getFileid());
+		List<FileBean> listFiles=fileDao.getFileById(report.getFileid(), "orderReport");
+		
+		map.put("result", reportDao.updateReport(report));
+		Report r = reportDao.findReportById(report.getId());
+		r.setList(listFiles);
+		map.put("item",r);
+		map.put("orderid", r.getOrder_id());
+		map.put("reportid", r.getId());
+		map.put("type", r.getType());
+		return map;
 	}
 	
 	/**
@@ -141,7 +152,6 @@ public class ReportService{
 	/**
 	 * 根据报告id查询报告详情
 	 * @param reportid
-	 * @param approval_id
 	 * @param type
 	 * @return
 	 */
@@ -155,7 +165,7 @@ public class ReportService{
 			List<FileBean> listFiles=fileDao.getFileById(fileid, "orderReport");
 			report.setList(listFiles);
 		}
-		
+		map.put("reportid", report.getId());
 		map.put("orderid", report.getOrder_id());
 		map.put("item", report);
 		map.put("type", type);

@@ -31,7 +31,7 @@
     
     <!-- 删除拆解报告 -->
     <update id="deleteDisassembleReportById" parameterType="DisassembleReport">
-    	update xacx_disassemble_report_v2 set delete_status=1,delete_by=#{delete_by},delete_date=now() 
+    	update xacx_disassemble_report_v2 set order_id=null, delete_status=1,delete_by=#{delete_by},delete_date=now() 
     	where id=#{id}
     </update>
     

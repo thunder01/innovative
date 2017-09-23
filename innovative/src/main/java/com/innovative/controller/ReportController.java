@@ -71,10 +71,12 @@ public class ReportController {
 	 * @param id
 	 * @return
 	 */
-	@RequestMapping(value="/reportDelete/{id}/{userid}",method=RequestMethod.GET)
-	public JsonResult reportDelete(@PathVariable(name="id")Integer id,@PathVariable String userid){
-		if(reportService.updateReportDeleted(id,userid)>0){
-			return new JsonResult(true, "删除成功");
+	@RequestMapping(value="/reportDelete",method=RequestMethod.POST)
+	public Object reportDelete(@RequestBody Report report){
+		Map<String, Object> map = reportService.findReportById(report.getId(), 3);
+		Report r =(Report) map.get("item");
+		if(reportService.updateReportDeleted(report.getId(),report.getDelete_by())>0){
+			return reportSelect(0,r.getOrder_id(),r.getType());
 		}
 		return new JsonResult(false, "删除失败");
 	}
@@ -87,8 +89,10 @@ public class ReportController {
 	 */
 	@RequestMapping(value="/reportEdit",method=RequestMethod.POST)
 	public JsonResult reportEdit( @RequestBody Report report){
-		if(reportService.updateReport(report)>0){
-			return new JsonResult(true, "修改成功");
+		System.out.println(">>>>>>>>>>>>>>"+report);
+		Map<String, Object> map = reportService.updateReport(report);
+		if((int)map.get("result")>0){
+			return new JsonResult(true, map);
 		}
 		return new JsonResult(false, "修改失败");
 	}
