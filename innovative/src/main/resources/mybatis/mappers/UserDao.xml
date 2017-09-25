@@ -5,25 +5,40 @@
 <mapper namespace="com.innovative.dao.UserDao">
 
 <resultMap id="userMap" type="User">
-	  <id property="userId" column="UserId" />
-	  <result property="userName" column="UserName"/>
-	  <result property="userIntegration" column="UserIntegration"/>
-	  <result property="userPost" column="UserPost"/>
-	  <result property="userSex" column="UserSex"/>
-	  <result property="userAge" column="UserAge"/>
+	  <id property="userId" column="pernr" />
+	  <result property="itcode" column="itcode"/><!-- itcode -->
+	  <result property="userIntegration" column="userIntegration"/><!-- 用户积分 -->
+	  <result property="usrid_u" column="usrid_u"/><!-- 用户名拼音 -->
+	  <result property="nachn" column="nachn"/><!-- 用户姓 -->
+	  <result property="vorna" column="vorna"/><!-- //用户名 -->
+	  <result property="gesch" column="gesch"/><!-- 性别 -->
+	  <result property="teleno" column="teleno"/><!-- 电话 -->
+	  <result property="mobile" column="mobile"/><!-- 移动电话 -->
+	  <result property="mail" column="mail"/><!-- 电子邮件 -->
+	  <result property="werks" column="werks"/><!-- 人事范围 -->
+	  <result property="pbtxt" column="pbtxt"/><!-- 电子邮件 -->
+	  <result property="plans" column="plans"/><!-- 职位代码 -->
+	  <result property="stext" column="stext"/><!-- 职位名称 -->
+	  <result property="orgeh" column="orgeh"/><!-- 部门编号 --> 
+	  <result property="dstext" column="dstext"/><!-- 部门名称 -->
+	  <result property="stat2" column="stat2"/><!-- 是否离职（0代表离职，3代表在职） -->
+	  <result property="operaction" column="operaction"/><!-- 操作操作类型 -->
+	  <result property="glstdm" column="glstdm"/><!-- 管理实体代码 -->
+	  <result property="glst" column="glst"/><!-- 管理实体-->
+	  <result property="lzrq" column="lzrq"/><!-- 离职日期 -->
 	</resultMap> 
 
  <!--添加用户信息-->
-	<insert id="insertUser" parameterType="map">
+	<!-- <insert id="insertUser" parameterType="map">
 		INSERT INTO "xacx_user"
 		 ("UserId", "UserName",   "UserPost", "CreateAt", "UserSex", "UserAge","Department","JobNumber")
 		VALUES 
 		(#{userId}, #{userName},  #{userPost}, now(),#{userSex}, #{userAge},#{department},#{jobNumber})
-	</insert>
+	</insert> -->
 
 
 	<!--批量添加用户信息-->
-	<insert id="insertUserList" parameterType="java.util.List">
+	<!-- <insert id="insertUserList" parameterType="java.util.List">
 			INSERT INTO "xacx_user"
 		 ("UserId", "UserName",   "UserPost", "CreateAt", "UserSex", "UserAge","Department","JobNumber")
 		VALUES 
@@ -31,13 +46,13 @@
 	        #{item.userId}, #{item.userName},  #{item.userPost}, now(),#{item.userSex}, #{item.userAge}, #{item.department},#{item.jobNumber}
 	    </foreach>  
 		
-	</insert>
+	</insert> -->
 
 	
 	 <!--根据id获取用户信息-->
-	<select id="getUser" resultType="User">
+	<select id="getUser" resultMap="userMap">
 		SELECT * FROM "xacx_user"  
-		  WHERE "UserId" =  #{userId};
+		  WHERE "pernr" =  #{userId};
 	</select>
 	
 	 <!--根据id与角色id查用户是否拥有该角色-->
@@ -47,34 +62,22 @@
 	</select>
 	
 	 <!--根据工号获取用户信息-->
-	<select id="getUserByJobNumber" resultType="User">
+	<!-- <select id="getUserByJobNumber" resultType="User">
 		SELECT * FROM "xacx_user"  
 		  WHERE "JobNumber" =  #{jobNumber};
-	</select>
+	</select> -->
 
 
 	 <!--根据姓名模糊匹配获取用户信息-->
-	<select id="getUserByName" resultType="User">
-		WITH RECURSIVE T ("UserName", "UserPost", "Department","orgeh","up_orgeh", PATH, DEPTH)  AS (
-		    SELECT e."UserName", e."UserPost", e."Department",e."orgeh",o."up_orgeh", e."UserId"||'/' AS PATH, 1 AS DEPTH
-		    FROM xacx_user e LEFT JOIN xacx_user_organization o on e.orgeh = o.orgeh
-		    WHERE e."UserName" like  #{name}
-		
-		    UNION ALL
-		
-		    SELECT  D."UserName",D."UserPost", D."Department", d."orgeh",org."up_orgeh",T.PATH || D."UserName", T.DEPTH + 1 AS DEPTH
-		    FROM xacx_user D LEFT JOIN xacx_user_organization org on d.orgeh = org.orgeh
-		    JOIN T ON D."orgeh" = T."up_orgeh" 
-		    )
-		    SELECT "UserName", "UserPost", "Department", "orgeh","up_orgeh",PATH, DEPTH FROM T
-		ORDER BY PATH;
+	<select id="getUserByName" resultMap="userMap">
+		select * from "xacx_user"  where nachn||vorna like  #{name}
 	</select>
 	
 	
 	
 	
-	<!--修改专家信息-->
-	<update id="updateUser" parameterType="User">
+	<!--修改用户信息-->
+	<!-- <update id="updateUser" parameterType="User">
 		UPDATE "xacx_user"
 		<set>
 			<if test="userState!=null and userState!=''">
@@ -86,10 +89,10 @@
 				"UpdateAt" = now()
 		</set>
 		where "UserId" = #{userId}
-	</update>
+	</update> -->
 	
 		<!--根据查询条件获取列表-->
-	<select id="getUserList" resultType="User">
+	<select id="getUserList" resultMap="userMap">
 		SELECT * FROM "xacx_user"
 		limit #{pageSize} offset #{startIndex}
 	</select>

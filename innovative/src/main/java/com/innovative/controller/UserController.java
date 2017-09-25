@@ -77,7 +77,7 @@ public class UserController {
 	   * @param req
 	   * @return
 	   */
-	    @RequestMapping(value = "/updateUser", method = RequestMethod.POST)
+	   /* @RequestMapping(value = "/updateUser", method = RequestMethod.POST)
 	    @ResponseBody
 	    public JsonResult updateUser(@RequestBody User user,HttpServletRequest req) {
 
@@ -87,7 +87,7 @@ public class UserController {
 	        user.setUpdateBy(CookiesUtil.getCookieValue(req,"user_name"));
 	        
 	        return userService.updateUser(user) ?   new JsonResult(true, "修改成功！") : new JsonResult(false, "修改失败！");
-	    }
+	    }*/
 	    
 	    
 	    /**
