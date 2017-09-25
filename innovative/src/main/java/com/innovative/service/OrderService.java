@@ -93,7 +93,7 @@ public class OrderService {
 		User user=userDao.getUser(userid);
 		
 		if (user!=null) {
-			String role=user.getUserPost();//获取用户角色
+			String role=user.getStext();//获取用户角色
 			if ("需求工程师".equals(role)) {
 				/*根据用户id获取其所有的订单*/
 				List<Order> list=orderDao.selectOrderListByUserId(userid,pageInfo.getStartIndex(), pageInfo.getPageSize());

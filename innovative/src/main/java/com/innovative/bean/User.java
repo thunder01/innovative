@@ -23,6 +23,7 @@ public class User implements Serializable {
 	 */
 	private static final long serialVersionUID = 4148405984845574540L;
 	private String userId ;//用户id
+	private String userName ;//名字
 	private String pernr ;//pernr(对应员工号)主键(在这里我们的这个字段用处不大)
 	private String itcode ;//ITOCDE
 	private String usrid_u ;//用户名拼音
@@ -54,12 +55,13 @@ public class User implements Serializable {
 			
 		}
 	
-	public User(String userId, String pernr, String itcode, String usrid_u, String nachn, String vorna, String gesch,
-			String teleno, String mobile, String mail, String werks, String pbtxt, String plans, String stext,
-			String orgeh, String dstext, String stat2, String createAt, String operaction, String glstdm, String glst,
-			String lzrq, String updateAt, String createBy, String updateBy, String roleId, String sys_pass_flag,
-			List<String> roleIds) {
+	public User(String userId, String userName, String pernr, String itcode, String usrid_u, String nachn, String vorna,
+			String gesch, String teleno, String mobile, String mail, String werks, String pbtxt, String plans,
+			String stext, String orgeh, String dstext, String stat2, String createAt, String operaction, String glstdm,
+			String glst, String lzrq, String updateAt, String createBy, String updateBy, String roleId,
+			String sys_pass_flag, List<String> roleIds) {
 		this.userId = userId;
+		this.userName = userName;
 		this.pernr = pernr;
 		this.itcode = itcode;
 		this.usrid_u = usrid_u;
@@ -94,6 +96,12 @@ public class User implements Serializable {
 	}
 	public void setUserId(String userId) {
 		this.userId = userId;
+	}
+	public String getUserName() {
+		return nachn+vorna;
+	}
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 	public String getPernr() {
 		return pernr;
