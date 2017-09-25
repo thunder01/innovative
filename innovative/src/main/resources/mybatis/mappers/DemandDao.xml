@@ -29,6 +29,7 @@
         <result property="status" column="status"/>
         <result property="path" column="file"/>
         <result property="xqf" column="xqf"/>
+        <result property="userName" column="username" typeHandler="com.innovative.mybatisHandler.ArrayTypeHandler"/>
     </resultMap>
 
     <!--根据id获取内容详情-->
@@ -46,13 +47,21 @@
         </selectKey>
         INSERT  INTO "xacx_demand"
         ("name","number","iphone","create_date","create_by","late_date","late_by","bgd","demandd","interestpg","ninterestpg",
-        "hzms","hzrequest","productm","product_date","bz","check_name","ddmj","option","file","xqf","gjc")
+        "hzms","hzrequest","productm","product_date","bz","check_name","ddmj","option","file","xqf","gjc","username")
         VALUES(#{name},#{number},#{iphone},now(),#{cteateBy},now(),#{lateBy},#{bgd},#{demandd},#{interestpg},#{ninterestpg},
         #{hzms},#{hzrequest},#{productm},#{productDate},#{bz},#{checkName},#{ddmj},#{option},#{path},#{xqf},
         <choose>
             <when test="gjc != null">
-                <foreach item="gjc" collection="gjc" separator="," open="'{" close="}'" index="">
+                <foreach item="gjc" collection="gjc" separator="," open="'{" close="}'," index="">
                     ${gjc}
+                </foreach>
+            </when>
+            <otherwise>'{},'</otherwise>
+        </choose>
+        <choose>
+            <when test="userName != null">
+                <foreach item="userName" collection="userName" separator="," open="'{" close="}'" index="">
+                    ${userName}
                 </foreach>
             </when>
             <otherwise>'{}'</otherwise>
@@ -65,11 +74,30 @@
     </select>
     <!--根据查询条件获取列表-->
     <select id="getDemandList" resultMap="demandMap">
-        SELECT * FROM "xacx_demand"
+        SELECT * FROM (SELECT * FROM "xacx_demand"
         <where>
         status='1'
         </where>
+        )B
+        <where>
+         B.ddmj='0' or B.ddmj='1'and username @> '${userName}'
+        </where>
         limit #{pageSize} offset #{startIndex}
+    </select>
+    <!--根据查询条件获取列表-->
+    <select id="getQueryList" resultMap="demandMap">
+       SELECT * FROM "xacx_demand"
+        <where>
+            create_by=#{userName}
+        </where>
+        limit #{pageSize} offset #{startIndex}
+    </select>
+    <!--查询总条数-->
+    <select id="getTotalCounts" resultType="int">
+        SELECT count(1) FROM "xacx_demand"
+        <where>
+            create_by=#{userName}
+        </where>
     </select>
 
 </mapper>

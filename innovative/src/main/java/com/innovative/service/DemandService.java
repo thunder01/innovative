@@ -44,12 +44,32 @@ public class DemandService {
      * @param pageNum 页数（默认为1）
      * @return
      */
-    public Map<String, Object> getDemandList(Integer pageNum){
+    public Map<String, Object> getDemandList(Integer pageNum,String userName){
         PageInfo pageInfo = new PageInfo();
         pageInfo.setCurrentPageNum(pageNum);
-        List<Demand> demands = demandDao.getDemandList(pageInfo.getStartIndex(), pageInfo.getPageSize());
+        userName = "{" + userName + "}".trim();
+        List<Demand> demands = demandDao.getDemandList(pageInfo.getStartIndex(), pageInfo.getPageSize(),userName);
         int totalCount = demandDao.getTotalCount();
 
+        Map<String, Object> map = new HashMap<>();
+        map.put("items", demands);
+        map.put("totalCount", totalCount);
+        map.put("Count", pageInfo.getPageSize());
+        map.put("itemCount", pageInfo.getPageSize());
+        map.put("offset", pageInfo.getStartIndex());
+        map.put("limit", pageInfo.getPageSize());
+        return map;
+    }
+    /**
+     * 行列表页
+     * @param pageNum 页数（默认为1）
+     * @return
+     */
+    public Map<String, Object> getQueryList(Integer pageNum,String userName){
+        PageInfo pageInfo = new PageInfo();
+        pageInfo.setCurrentPageNum(pageNum);
+        List<Demand> demands = demandDao.getQueryList(pageInfo.getStartIndex(), pageInfo.getPageSize(),userName);
+        int totalCount = demandDao.getTotalCounts(userName);
         Map<String, Object> map = new HashMap<>();
         map.put("items", demands);
         map.put("totalCount", totalCount);

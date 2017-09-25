@@ -1,5 +1,7 @@
 package com.innovative.bean;
 
+import java.util.List;
+
 public class Demand {
     private  int id;//uuid
     private  String name;//项目名称
@@ -25,9 +27,11 @@ public class Demand {
     private  String option;//审批意见
     private  String status;//状态
     private  String path;//文件路径
+    private  String []userName;//自定用户名
+    private List<FileBean> list;
 
 
-    public Demand(int id, String name, String number, String iphone, String createDate, String cteateBy, String lateDate, String lateBy, String bgd, String demandd, String interestpg, String ninterestpg, String []gjc, String hzms, String hzrequest, String productm, String productDate, String bz, String checkName, String ddmj, String option, String status,String path,String xqf) {
+    public Demand(int id, String name, String number, String iphone, String createDate, String cteateBy, String lateDate, String lateBy, String bgd, String demandd, String interestpg, String ninterestpg, String []gjc, String hzms, String hzrequest, String productm, String productDate, String bz, String checkName, String ddmj, String option, String status,String path,String xqf,String [] userName) {
         this.id = id;
         this.name = name;
         this.number = number;
@@ -52,6 +56,7 @@ public class Demand {
         this.status = status;
         this.path=path;
         this.xqf=xqf;
+        this.userName=userName;
     }
 
     public Demand() {
@@ -247,5 +252,21 @@ public class Demand {
 
     public void setXqf(String xqf) {
         this.xqf = xqf;
+    }
+
+    public String[] getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String[] userName) {
+        this.userName = userName;
+    }
+
+    public List<FileBean> getList() {
+        return list;
+    }
+
+    public void setList(List<FileBean> list) {
+        this.list = list;
     }
 }

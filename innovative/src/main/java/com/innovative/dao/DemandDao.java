@@ -31,11 +31,22 @@ public interface DemandDao {
      * 列表页
      * @return
      */
-    List<Demand> getDemandList(@Param("startIndex") int startIndex, @Param("pageSize") int pageSize);
+    List<Demand> getDemandList(@Param("startIndex") int startIndex, @Param("pageSize") int pageSize,@Param("userName") String userName);
+    /**
+     * 列表页
+     * @return
+     */
+    List<Demand> getQueryList(@Param("startIndex") int startIndex, @Param("pageSize") int pageSize,@Param("userName") String userName);
 
     /**
      * 查询相关行业领域的记录总条数
      * @return
      */
     int getTotalCount();
+    /**
+     * 查询相关行业领域的记录总条数
+     * @return
+     */
+    int getTotalCounts(@Param("userName") String userName);
+
 }
