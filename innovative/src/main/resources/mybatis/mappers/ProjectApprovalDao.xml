@@ -104,7 +104,7 @@
 	</select>
 	
 	<!-- 通过立项表单的id更改立项表单,被接单 -->
-	<update id="updateProjectApprovalReceive" parameterType="int">
+	<update id="updateProjectApprovalReceive" parameterType="map">
 		UPDATE xacx_project_approval_v2 SET source_id=#{source_id},source_status=1,source_time=now() WHERE id = #{id}
 	</update>
 	

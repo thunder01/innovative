@@ -92,64 +92,47 @@ public class OrderService {
         
 		/*首先根据用户id获取用户信息*/
 		User user=userDao.getUser(userid);
-		
+		List<Demand> list=null;
 		if (user!=null) {
-			//String role=user.getRoleId();//获取用户角色
-			//if ("需求工程师".equals(role)) {
-				/*根据用户id获取其所有的订单*/
-				List<Order> list=orderDao.selectOrderListByUserId(userid,pageInfo.getStartIndex(), pageInfo.getPageSize());
-				map.put("totalCount", orderDao.getTotalCOuntMyorder(userid));
-				if (list.size()>0) {
-					for(Order order:list){
-						Demand demand=demandDao.getDemand(order.getDemandId());
-						order.setDemand(demand);
-					}
-				}else{
-					map.put("message", "您还没有订单信息");
-				}
-				map.put("items", list);
-			/*}else if ("寻源工程师".equals(role)) {
-				查出其所有接过的立项表单
-				List<ProjectApproval> listApp=projectApprovalDao.selectApprovalListByUserId(userid,pageInfo.getStartIndex(), pageInfo.getPageSize());
-				map.put("totalCount", projectApprovalDao.getSourceCount(userid));
-				if (listApp.size()==0) {
-					map.put("message", "您还没有接过订单");	
-				}
-				map.put("items", listApp);
-			}else {
-				map.put("message", "不是相关角色");
-			}*/
-		}else{
-			map.put("message", "用户不存在");
+			list=demandDao.getQueryList(pageInfo.getStartIndex(), pageInfo.getPageSize(), userid);
 		}
-		map.put("user", user);     
+		map.put("items", list);
+		map.put("user", user); 
+		map.put("userid", userid);    
         map.put("Count", pageInfo.getPageSize());
         map.put("itemCount", pageInfo.getPageSize());
         map.put("offset", pageInfo.getStartIndex());
         map.put("limit", pageInfo.getPageSize());
+    
 		return map;
 	}
 	
 	/**
-	 * 根据订单id，查询订单信息
-	 * @param orderid 订单id
+	 * 根据需求id，查询订单信息
+	 * @param demandid 需求id
 	 * @return
 	 * */
-	public Map<String, Object> selectOrderByOrderId(Integer orderid){
+	public Map<String, Object> selectOrderByOrderId(Integer demandid){
 		Map<String, Object> map=new HashMap<>();
 
-		Order order=orderDao.selectOrderByOrderId(orderid);//根据订单id查询出订单信息
-		if(order!=null){
-			User user=userDao.getUser(order.getCreate_byId());
-			Demand demand=demandDao.getDemand(order.getDemandId());
-			order.setDemand(demand);
-			map.put("item", order);
+		/*根据需求id查出对应的订单id*/
+		Integer orderid=orderDao.getOrderIdByDemandId(demandid);
+		
+			Demand demand=demandDao.getDemand(demandid);
+			User user=null;
+			if (demand!=null) {
+				user=userDao.getUser(demand.getCteateBy());
+			}
+			map.put("id", demandid);
+			map.put("item", demand);
 			map.put("user", user);
-			map.put("orderid", orderid);
-			map.put("result", 1);
-		}else{
-			map.put("result", 0);//结果为空
-		}
+			
+			if (orderid==null) {
+				map.put("orderid", -1);
+			}else{
+				map.put("orderid", orderid);
+			}
+			
 		return map;
 	}
 	

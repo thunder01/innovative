@@ -78,14 +78,14 @@ public interface ProjectApprovalDao {
 	 * @param id
 	 * @return
 	 */
-	public int updateProjectApprovalReceive(Integer id);
+	public Integer updateProjectApprovalReceive(@Param("id")Integer id,@Param("source_id")String source_id);
 	
 	/**
 	 * 根据表单id查询接单状态
 	 * @param id 立项表单id
 	 * @return
 	 */
-	public int findSource_statusById(Integer id);
+	public Integer findSource_statusById(Integer id);
 	
 	/**
 	 * 通过订单的id查询寻源工程师的id数组 

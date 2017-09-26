@@ -18,7 +18,7 @@ public interface OrderDao {
 	 * @param demandid 需求id
 	 * @return 受影响的行数
 	 * */
-	public int insertOrder(@Param("demandId") Integer demandId,@Param("create_byId") String create_byId);
+	public Integer insertOrder(@Param("demandId") Integer demandId,@Param("create_byId") String create_byId);
 	
 	/**
 	 * 根据用户id查出其所有的订单信息（已通过拆解报告确认，或未进行确认的）
@@ -30,7 +30,7 @@ public interface OrderDao {
 	/**
 	 * 根据订单id删除订单信息
 	 * */
-	public int deleteByOrderId(Integer orderid);
+	public Integer deleteByOrderId(Integer orderid);
 	
 	/**
 	 * 根据订单id查询订单信息
@@ -44,14 +44,14 @@ public interface OrderDao {
 	 * @param userid
 	 * @return
 	 */
-	public int getTotalCOuntMyorder(String userid);
+	public Integer getTotalCOuntMyorder(String userid);
 	
 	/**
 	 * 根据订单id查出需求id
 	 * @param order_id
 	 * @return
 	 */
-	public int getDemandIdByOrderId(Integer order_id);
+	public Integer getDemandIdByOrderId(Integer order_id);
 	
 
 	/**
@@ -59,21 +59,21 @@ public interface OrderDao {
 	 * @param demandid
 	 * @return
 	 */
-	public int getOrderIdByDemandId(Integer demandid);
+	public Integer getOrderIdByDemandId(Integer demandid);
 	
 	/**
 	 * 确认拆解报告
 	 * @param order_id
 	 * @return
 	 */
-	public int updateConfirm_status(Integer order_id);
+	public Integer updateConfirm_status(Integer order_id);
 	
 	/**
 	 * 拆解报告通过
 	 * @param order_id
 	 * @return
 	 */
-	public int updatePass_status(Order order);
+	public Integer updatePass_status(Order order);
 	
 	/**
 	 * 通过订单的id查询需求工程师的id
@@ -87,12 +87,13 @@ public interface OrderDao {
 	 * @param order
 	 * @return
 	 */
-	public int proEvaluate(Order order);
+	public Integer proEvaluate(Order order);
 	
 	/**
-	 * 
+	 * 根据id获取订单信息
 	 * @param id
 	 * @return
 	 */
 	public Order getOrderById(Integer id);
+
 }
