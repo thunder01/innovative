@@ -21,14 +21,14 @@ public interface DisassembleReportDao {
 	 * @param dReport
 	 * @return
 	 */
-	public int saveDisassembleReport(DisassembleReport dReport);
+	public Integer saveDisassembleReport(DisassembleReport dReport);
 	
 	/**
 	 * 删除拆解报告，记录删除人时间
 	 * @param dReport
 	 * @return
 	 */
-	public int deleteDisassembleReportById(Integer id);
+	public Integer deleteDisassembleReportById(Integer id);
 	
 	/**
 	 * 根据id查询拆解报告详情
@@ -42,19 +42,19 @@ public interface DisassembleReportDao {
 	 * @param dReport
 	 * @return
 	 */
-	public int updateDisassembleReportById(DisassembleReport dReport);
+	public Integer updateDisassembleReportById(DisassembleReport dReport);
 	
 	/**
 	 * 根据订单id查询拆解报告id
 	 * @param orderid
 	 * @return
 	 */
-	public int getIdByOrderId(Integer orderid);
+	public Integer getIdByOrderId(Integer orderid);
 	
 	/**
 	 * 根据id删除拆解报告
 	 * @param id
 	 * @return
 	 */
-	public int deleteDisassembleReportByIdReal(Integer id);
+	public Integer deleteDisassembleReportByIdReal(Integer id);
 }

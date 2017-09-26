@@ -177,12 +177,13 @@ public class ProjectApprovalService {
 	 * @param id 立项表单的id
 	 * @return
 	 */
-	public Map<String, Object> updateProjectApprovalReceive(Integer app_id){
+	public Map<String, Object> updateProjectApprovalReceive(ProjectApproval projectApproval){
+		int app_id=projectApproval.getId();
 		Map<String, Object> map=getProjectApprovalById(app_id);
 		if (projectApprovalDao.findApprovalById(app_id)!=null) {
 			int status=projectApprovalDao.findSource_statusById(app_id);//查询立项表单的接单状态
 			if (status==0) {//可接单
-				projectApprovalDao.updateProjectApprovalReceive(app_id);
+				projectApprovalDao.updateProjectApprovalReceive(app_id,projectApproval.getSource_id());
 			}else{//已被接单
 				map.put("message", "订单已经被人接了");
 			}

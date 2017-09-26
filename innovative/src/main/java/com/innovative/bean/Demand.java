@@ -96,6 +96,9 @@ public class Demand {
     }
 
     public String getCreateDate() {
+    	if (createDate!=null) {
+			return createDate.substring(0, 16);
+		}
         return createDate;
     }
 
