@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.innovative.dao.CaseDao">
+    <resultMap id="caseMap" type="Case">
+        <id property="id" column="id" />
+        <result property="title" column="title"/>
+        <result property="titleImage" column="titleImage"/>
+        <result property="file" column="file"/>
+        <collection property="filelist" ofType="FileBean">
+            <result property="refId" column="refId"/>
+            <result property="refType" column="refType"/>
+            <result property="url" column="url"/>
+            <result property="fileName" column="filename"/>
+        </collection>
+    </resultMap>
+    <!--获取所有的List集合-->
+    <select id="getFileList" resultMap="caseMap">
+        select ca.id,ca.title,f.filename,f.url,ca."titleImage",ca.file,f."refId" from xacx_case ca LEFT JOIN xacx_file f on ca."file"=f."refId"
+    </select>
+    <!--根据ID获得-->
+    <select id="getListById" resultMap="caseMap">
+        select ca.id,ca.title,f.filename,f.url,ca."titleImage",ca.file,f."refId" from xacx_case ca LEFT JOIN xacx_file f on ca."file"=f."refId"
+        <if test="id!=null and id!=''">
+         WHERE ca.id=#{id}
+        </if>
+    </select>
+    <!-- 添加内容-->
+    <insert id="add" parameterType="Case">
+      INSERT INTO "xacx_case"("title","titleImage","file")VALUES(
+        #{title},#{titleImage},#{file}
+        )
+    </insert>
+    <!--根据ID修改内容-->
+    <update id="update" parameterType="Case">
+        UPDATE  "xacx_case" SET "title"=#{title},"titleImage"=#{titleImage},
+        "file"=#{file}
+        WHERE id=#{id}
+    </update>
+</mapper>
