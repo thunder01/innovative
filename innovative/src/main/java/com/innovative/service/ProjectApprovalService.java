@@ -124,9 +124,9 @@ public class ProjectApprovalService {
         
 		for(ProjectApproval pro:list){
 			if (pro!=null) {
-				User user=userDao.getUser(pro.getSource_id());
+				User user=userDao.getUser(pro.getSource_id());//获取寻源工程师的信息
 				if (user!=null) {
-					pro.setUserName(user.getUserName());
+					pro.setUserName(user.getNachn()+user.getVorna());
 				}		
 			}	
 		}	
@@ -150,18 +150,22 @@ public class ProjectApprovalService {
 		/*查询对应的立项表单信息*/
 		ProjectApproval projectApproval=projectApprovalDao.findApprovalById(app_id);
 		
-		String userId=projectApprovalDao.findUserIdByApp_id(app_id);
-		User user=userDao.getUser(userId);
-		
+		/*补全需求方确认人的姓名*/
+		String userId=projectApprovalDao.findUserIdByApp_id(app_id);//找出需求方确认人的id
+		User user=userDao.getUser(userId);//然后查出其个人信息	
 		if (user!=null&&projectApproval!=null) {
-			projectApproval.setUserName(user.getUserName());
+			projectApproval.setConfirmName(user.getNachn()+user.getVorna());//添加需求方确认人的姓名
 		}
 		
-		Order order=orderDao.getOrderById(projectApproval.getOrder_id());
+		/*补全寻源工程师的姓名信息*/
+		String sourceId=projectApproval.getSource_id();//获取接单人的id，即是寻源工程师的id
+		User user_source=userDao.getUser(sourceId);
+		if (user_source!=null) {
+			projectApproval.setUserName(user_source.getNachn()+user_source.getVorna());
+		}
+		int orderid=projectApproval.getOrder_id();
 		
-		/*order.getPass_by获取到的只是用户的id，还要查出用户姓名，系统暂时没有用户信息，故没有操作*/
-		projectApproval.setConfirmName(order.getPass_by());
-		map.put("orderid", projectApproval.getOrder_id());
+		map.put("orderid", orderid);
 		map.put("approvalid",app_id);
 		map.put("item", projectApproval);	
 
@@ -176,10 +180,10 @@ public class ProjectApprovalService {
 	public Map<String, Object> updateProjectApprovalReceive(Integer app_id){
 		Map<String, Object> map=getProjectApprovalById(app_id);
 		if (projectApprovalDao.findApprovalById(app_id)!=null) {
-			int status=projectApprovalDao.findSource_statusById(app_id);
-			if (status==0) {
+			int status=projectApprovalDao.findSource_statusById(app_id);//查询立项表单的接单状态
+			if (status==0) {//可接单
 				projectApprovalDao.updateProjectApprovalReceive(app_id);
-			}else{
+			}else{//已被接单
 				map.put("message", "订单已经被人接了");
 			}
 		}

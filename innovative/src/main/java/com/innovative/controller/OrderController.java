@@ -1,6 +1,5 @@
 package com.innovative.controller;
 
-import java.util.HashMap;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -39,8 +38,7 @@ public class OrderController {
 	public JsonResult selectMyOrder(@RequestParam(name="userid") String userid,@RequestParam(name="offset",defaultValue="0") Integer offset){
 		Integer page = offset/(new PageInfo().getPageSize()) +1;
 		
-		Map<String, Object> map=orderService.selectMyOrder(userid,page);
-		
+		Map<String, Object> map=orderService.selectMyOrder(userid,page);		
 		return new JsonResult(true, map);
 	}
 	
