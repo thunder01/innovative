@@ -62,6 +62,13 @@ public class AssociationService {
         pageInfo.setCurrentPageNum(pageNum);
 
         List<Association> associations = associationDao.getAssociationList( pageInfo.getStartIndex(), pageInfo.getPageSize());
+        for(Association ass : associations){
+        	if(ass.getId()==null || "".equals(ass.getId()))
+        		continue;
+        	List<String> urllist = fileDao.getPhotoByMOdAndId(ass.getId(), "indusinfoPhoto");
+  		   if(urllist != null && urllist.size() > 0 )
+  			 ass.setLogo( urllist.get(0));
+        }
         int totalCount = associationDao.getTotalCount();
 
         Map<String, Object> map = new HashMap<>();

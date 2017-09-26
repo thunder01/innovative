@@ -59,6 +59,13 @@ public class TechnicalReportService {
 
         //分页条件查询
         List<TechnicalReport> items = technicalReportDao.getTechnicalReportListByCondition(offset, limit);
+        for(TechnicalReport te : items){
+        	if(null == te || "".equals(te.getId()))
+        		continue;
+        	  List<String> url = fileDao.getPhotoByMOdAndId(te.getId(), "reportPhoto");
+   		   if(url != null && url.size() > 0 )
+   			   te.setPictures(url.get(0));
+        }
         int totalCount = technicalReportDao.getCountByCondition();
 
         //数据组装

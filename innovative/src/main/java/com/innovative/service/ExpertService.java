@@ -64,6 +64,13 @@ public class ExpertService {
         pageInfo.setCurrentPageNum(pageNum);
 
         List<Expert> experts = expertDao.getExpertList(sectors, pageInfo.getStartIndex(), pageInfo.getPageSize());
+        for(Expert e: experts){
+        	if(e==null || "".equals(e.getId()))
+        		continue;
+        	List<String> url = fileDao.getPhotoByMOdAndId(e.getId(), "expertPhoto");
+  		   if(url != null && url.size() > 0 )
+  			  	e.setAvatar( url.get(0));
+        }
         int totalCount = expertDao.getTotalCount(sectors);
 
         Map<String, Object> map = new HashMap<>();

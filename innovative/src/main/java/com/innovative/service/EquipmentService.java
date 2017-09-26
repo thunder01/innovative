@@ -63,6 +63,13 @@ public class EquipmentService {
 
         //分页条件查询
         List<Equipment> items = equipmentDao.getEquipmentListByCondition( offset, limit);
+        for(Equipment e: items){
+        	if(null==e || "".equals(e.getId()))
+        		continue;
+        	List<String> urllist = fileDao.getPhotoByMOdAndId(e.getId(), "equipmentPhoto");
+  		   if(urllist != null && urllist.size() > 0 )
+  			  e.setPicture( urllist.get(0));
+        }
         int totalCount = equipmentDao.getCountByCondition();
 
         //数据组装

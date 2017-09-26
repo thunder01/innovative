@@ -48,19 +48,19 @@
 
 	<!--根据查询条件获取列表-->
 	<select id="getExpertList" resultMap="expertMap">
-		SELECT * FROM "Experts"
+		SELECT * FROM "Experts" e  LEFT JOIN "xacx_file" f on f."refId" = e."Id" and f."refType" = 'expertFile' and f."sign" = 'add'
 		<where>
 			<if test="sectors!=null and sectors!=''">
-				 "Sectors" @> '${sectors}'
+				 e."Sectors" @> '${sectors}'
 			</if>
 		</where>
-		order by (case when "Px" is null then 0 else "Px" end)  DESC ,"UpdatedAt" DESC ,"HFactor" DESC
+		order by (case when e."Px" is null then 0 else e."Px" end)  DESC ,e."UpdatedAt" DESC ,e."HFactor" DESC
 		limit #{pageSize} offset #{startIndex}
 	</select>
 	<!--根据查询条件获取列表-->
 	<select id="getExpertLists" resultMap="expertMap">
-		SELECT * FROM "Experts"
-		order by (case when "Px" is null then 0 else "Px" end)  DESC ,"UpdatedAt" DESC ,"HFactor" DESC
+		SELECT * FROM "Experts" e  LEFT JOIN "xacx_file" f on f."refId" = e."Id" and f."refType" = 'expertFile' and f."sign" = 'add'
+		order by (case when e."Px" is null then 0 else e."Px" end)  DESC ,e."UpdatedAt" DESC ,e."HFactor" DESC
 		limit #{pageSize} offset #{startIndex}
 	</select>
 

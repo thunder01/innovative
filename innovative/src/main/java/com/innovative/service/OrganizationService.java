@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import static org.mockito.Matchers.contains;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -61,6 +63,13 @@ public class OrganizationService {
         pageInfo.setCurrentPageNum(pageNum);
 
         List<Organization> organizations = organizationDao.getOrganizationList( pageInfo.getStartIndex(), pageInfo.getPageSize());
+        for (Organization or : organizations){
+        	if(null ==  or || "".equals(or.getId()))
+        		continue;
+        	 List<String> url = fileDao.getPhotoByMOdAndId(or.getId(), "expertPhoto");
+  		   if(url != null && url.size() > 0 )
+  			   or.setLogo( url.get(0));
+        }
         int totalCount = organizationDao.getTotalCount();
 
         Map<String, Object> map = new HashMap<>();
