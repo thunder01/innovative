@@ -41,6 +41,19 @@ public class UserController {
 		       return new JsonResult(false, "参数不合法");
 	 }
 	 /**
+	  * 根据用户id获取sid
+	  * @param id
+	  * @return
+	  */
+	 @RequestMapping(value = "/getUser/{id}/{type}", method = RequestMethod.GET)
+	    public JsonResult getSidByPernr(@PathVariable(name = "id") String id,@PathVariable(name = "type") String type) {
+	    
+		 if(id == null || "".equals(id))
+			 return new JsonResult(false, "参数不合法");
+			String sid = userService.getSidById(id,type);
+		       return new JsonResult(true, sid);
+	 }
+	 /**
 	  * 查看用户是否有该角色
 	  * @param id
 	  * @return

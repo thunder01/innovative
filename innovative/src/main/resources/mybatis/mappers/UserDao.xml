@@ -73,6 +73,11 @@
 		select * from "xacx_user"  where nachn||vorna like  #{name}
 	</select>
 	
+	 <!--根据员工账号获取全称-->
+	<select id="getQcName" resultType="map">
+		select u.pernr,u.orgeh,e.PATH from xacx_user u left join  v_xacx_user_org e on u.orgeh = e.orgeh where pernr = #{pernr}
+	</select>
+	
 	
 	
 	

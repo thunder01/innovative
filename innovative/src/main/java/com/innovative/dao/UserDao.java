@@ -2,6 +2,7 @@ package com.innovative.dao;
 
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 
@@ -86,6 +87,8 @@ public interface  UserDao {
 		 * @param userId  用户id
 		 */
 		void deleteUserRoles(@Param("userId")String userId);
+		//根据员工号获取员工所在组织全称
+		Map<String,String> getQcName(String pernr);
 }
 
 
