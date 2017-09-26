@@ -45,6 +45,13 @@
 			 "refId"=#{refid}
 		</where>
 	</delete>
+	 <!--删除指定文件-->
+	<delete id="deleteFile" parameterType="map">
+		delete from "xacx_file"
+		<where>
+			 "refId"=#{refid} and "filename" = #{filename}
+		</where>
+	</delete>
 	
 	  <!--更新图片时删除图片-->
 	<update id="updateAddPhotoToDelete" parameterType="map">

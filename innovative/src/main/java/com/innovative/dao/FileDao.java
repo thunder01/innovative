@@ -34,5 +34,7 @@ public interface FileDao {
 	List<String> getPhotoByMOdAndId(@Param("id")String id ,@Param("refType") String mod);
 	//重复上传图片的时候把之前的图片变成已删除状态
 	void updateAddPhotoToDelete(@Param("refid")String refid,@Param("refType") String refType);
+	//删除指定的莫个文件
+	boolean deleteZdFile(@Param(value="refid")String refid,@Param(value="filename")String filename);
 
 }
