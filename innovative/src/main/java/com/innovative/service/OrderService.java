@@ -49,8 +49,9 @@ public class OrderService {
 	private FileDao fileDao;
 	
 	/**
-	 * 新增订单信息 需求池
-	 * @param order 订单对象
+	 * 新增订单信息 需求池接单
+	 * @param userid 用户的id
+	 * @param demandid 需求id
 	 * @return 受影响的行数
 	 * */
 	public Map<String, Object> insertOrder(String userid,Integer demandid){
@@ -79,7 +80,7 @@ public class OrderService {
 	
 	/**
 	 * 根据当前用户id查询我的订单
-	 * @param id 用户id
+	 * @param userid 用户id
 	 * @param pageNum分页信息
 	 * @return
 	 * */
@@ -93,8 +94,8 @@ public class OrderService {
 		User user=userDao.getUser(userid);
 		
 		if (user!=null) {
-			String role=user.getStext();//获取用户角色
-			if ("需求工程师".equals(role)) {
+			//String role=user.getRoleId();//获取用户角色
+			//if ("需求工程师".equals(role)) {
 				/*根据用户id获取其所有的订单*/
 				List<Order> list=orderDao.selectOrderListByUserId(userid,pageInfo.getStartIndex(), pageInfo.getPageSize());
 				map.put("totalCount", orderDao.getTotalCOuntMyorder(userid));
@@ -103,22 +104,21 @@ public class OrderService {
 						Demand demand=demandDao.getDemand(order.getDemandId());
 						order.setDemand(demand);
 					}
-					map.put("items", list);
 				}else{
 					map.put("message", "您还没有订单信息");
-				}		
-			}else if ("寻源工程师".equals(role)) {
-				/*查出其所有接过的立项表单*/
-				List<ProjectApproval> list=projectApprovalDao.selectApprovalListByUserId(userid,pageInfo.getStartIndex(), pageInfo.getPageSize());
-				map.put("totalCount", projectApprovalDao.getSourceCount(userid));
-				if (list.size()>0) {
-					map.put("items", list);
-				}else{
-					map.put("message", "您还没有接过订单");
 				}
+				map.put("items", list);
+			/*}else if ("寻源工程师".equals(role)) {
+				查出其所有接过的立项表单
+				List<ProjectApproval> listApp=projectApprovalDao.selectApprovalListByUserId(userid,pageInfo.getStartIndex(), pageInfo.getPageSize());
+				map.put("totalCount", projectApprovalDao.getSourceCount(userid));
+				if (listApp.size()==0) {
+					map.put("message", "您还没有接过订单");	
+				}
+				map.put("items", listApp);
 			}else {
 				map.put("message", "不是相关角色");
-			}
+			}*/
 		}else{
 			map.put("message", "用户不存在");
 		}
@@ -155,6 +155,8 @@ public class OrderService {
 	
 	/**
 	 * 根据订单id获取拆解报告信息和立项表单列表
+	 * @param orderid 订单id
+	 * @return
 	 * */
 	public Map<String, Object> getDisassembleAndApprovalListByOrderid(Integer orderid){
 		Map<String, Object> map=new HashMap<>();
@@ -162,26 +164,21 @@ public class OrderService {
 		/*根据订单id查出拆解报告信息*/
 		DisassembleReport disassembleReport=disassembleReportDao.getDisassembleByOrderid(orderid);	
 		if (disassembleReport!=null) {
-			/*獲取文件id*/
+			/*获取文件id*/
 			String fileid=disassembleReport.getFileid();
 			List<FileBean> listFiles=fileDao.getFileById(fileid, "disassemble");
-			
-			System.out.println(fileid+"--"+listFiles);
-			
-			disassembleReport.setList(listFiles);
-			
-			map.put("disassemble", disassembleReport);
+			disassembleReport.setList(listFiles);		
 		}else{
 			map.put("message1", "没有拆解报告");
 		}
+		map.put("disassemble", disassembleReport);
 		
 		/*根据订单id查询所有的立项表单*/
 		List<ProjectApproval> list=projectApprovalDao.getApprovalListByOrderid(orderid);
-		if (list.size()>0) {
-			map.put("items", list);
-		}else{
-			map.put("message2", "没有立项表单");
+		if (list.size()==0) {
+			map.put("message2", "没有立项表单");			
 		}
+		map.put("items", list);
 		
 		map.put("orderid", orderid);
 		return map;
@@ -196,7 +193,6 @@ public class OrderService {
 		Map<String, Object> map=new HashMap<>();
 			
 		User demandMaster;
-		List list;
 		try {
 			/*1 通过订单的id查询需求工程师的id */
 			String demandMasterId=orderDao.findCreate_by_idById(order_id);
@@ -207,7 +203,7 @@ public class OrderService {
 			/*3 获取用户信息*/
 			demandMaster = userDao.getUser(demandMasterId);
 			
-			list = new ArrayList<>();
+			List<User> list = new ArrayList<User>();
 			for(int i=0;i<sourceMasterId.length;i++){
 				User source=userDao.getUser(sourceMasterId[i]);
 				if (sourceMasterId[i]!=null) {
@@ -264,7 +260,7 @@ public class OrderService {
 	public Map<String, Object> projectGrade(Order order){
 		Map<String, Object> map=new HashMap<>();
 		
-		int flag=orderDao.proEvaluate(order);
+		int flag=orderDao.proEvaluate(order);//添加评分信息
 		
 		if (flag==1) {
 			map.put("message", "成功");

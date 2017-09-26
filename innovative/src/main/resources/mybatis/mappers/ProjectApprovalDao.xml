@@ -98,7 +98,7 @@
 		late_date FROM xacx_project_approval_v2 WHERE id=#{id}
 	</select>
 	
-	<!-- 通过立项表单的id来查询确认用户id -->
+	<!-- 通过立项表单的id来查询需求方确认用户id -->
 	<select id="findUserIdByApp_id" parameterType="int" resultType="string">
 		SELECT pass_by FROM xacx_order_v2 WHERE id = (SELECT order_id FROM xacx_project_approval_v2 WHERE id = #{id})
 	</select>

@@ -121,7 +121,6 @@ public class DisassembleReportController {
 	/**
 	 * 确认拆解报告
 	 * @param id 拆解报告id
-	 * @param order_id
 	 * @param status 0未通过，1通过
 	 * @return
 	 */

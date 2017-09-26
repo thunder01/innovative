@@ -62,8 +62,7 @@ public class DisassembleReportService {
 			/*先将次订单的所有拆解报告删除*/
 			reportDao.deleteDisassembleReportByIdReal(reportDao.getIdByOrderId(orderid));
 			/*保存拆解报告*/
-			int result = reportDao.saveDisassembleReport(report);
-			
+			int result = reportDao.saveDisassembleReport(report);	
 			/*根据订单id查询需求id*/
 			int projectId=orderDao.getDemandIdByOrderId(orderid);
 			
@@ -108,7 +107,7 @@ public class DisassembleReportService {
 		
 		DisassembleReport dReport=reportDao.getDisassembleReportById(disid);
 		
-		/*獲取文件id*/
+		/*获取文件id*/
 		String fileid=dReport.getFileid();
 		List<FileBean> listFiles=fileDao.getFileById(fileid, "disassemble");
 		dReport.setList(listFiles);
@@ -160,7 +159,7 @@ public class DisassembleReportService {
 		/*根据创建人的id，查出创建人的信息*/
 		User user=userDao.getUser(dReport.getCreate_by());
 		
-		/*獲取文件id*/
+		/*获取文件id*/
 		String fileid=dReport.getFileid();
 		List<FileBean> listFiles=fileDao.getFileById(fileid, "disassemble");
 		dReport.setList(listFiles);
@@ -179,14 +178,16 @@ public class DisassembleReportService {
 	 */
 	public Map<String, Object> confirmDisassembleStatus(DisassembleReport dReport){
 		Map<String, Object> map=new HashMap<>();
+		/*根据id查出拆解报告信息*/
+		DisassembleReport report=reportDao.getDisassembleReportById(dReport.getId());
 		
 		/*未通过*/
 		if ("0".equals(dReport.getStatus2())) {
 			/*先判断拆解报告是否已经通过*/
-			Order order = orderDao.getOrderById(dReport.getOrder_id());
+			Order order = orderDao.getOrderById(report.getOrder_id());
 			if (order.getPass_status()==0) {
 				/*将订单信息删除*/
-				orderDao.deleteByOrderId(dReport.getOrder_id());
+				orderDao.deleteByOrderId(report.getOrder_id());
 				/*删除拆解报告*/
 				reportDao.deleteDisassembleReportByIdReal(dReport.getId());
 			}
@@ -199,6 +200,7 @@ public class DisassembleReportService {
 		if ("1".equals(dReport.getStatus())) {
 			/*将订单的confirm_status置为1*/
 			orderDao.updateConfirm_status(dReport.getOrder_id());
+			
 			/*将订单的pass_status置为1*/
 			Order order=new Order();
 			order.setId(dReport.getOrder_id());
@@ -207,12 +209,15 @@ public class DisassembleReportService {
 			map.put("message", "拆解报告通过");
 		}
 		
-		int demand_id=orderDao.getDemandIdByOrderId(dReport.getOrder_id());
+		int demand_id=orderDao.getDemandIdByOrderId(report.getOrder_id());
 		Demand demand=demandDao.getDemand(demand_id);
-		User user=userDao.getUser(dReport.getCreate_by());
-		map.put("item", reportDao.getDisassembleByOrderid(dReport.getOrder_id()));
-		map.put("user", user);
+		
+		System.out.println(report.getCreate_by());
+		User user=userDao.getUser(report.getCreate_by());
 		System.out.println(user);
+		
+		map.put("item", report);
+		map.put("user", user);
 		map.put("contact", demand.getIphone());
 		return map;
 	}
