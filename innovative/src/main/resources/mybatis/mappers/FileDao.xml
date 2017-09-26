@@ -46,7 +46,7 @@
 		</where>
 	</delete>
 	 <!--删除指定文件-->
-	<delete id="deleteFile" parameterType="map">
+	<delete id="deleteZdFile" parameterType="map">
 		delete from "xacx_file"
 		<where>
 			 "refId"=#{refid} and "filename" = #{filename}
