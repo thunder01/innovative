@@ -79,7 +79,8 @@ public class OrderService {
 	}
 	
 	/**
-	 * 根据当前用户id查询我的订单
+	 * 根据当前用户id查询我的订单，用户需求下单之后经过审批进入需求池，需求工程师接单之后才会在我的订单展示，
+	 * 注意：此时展示的还是客户的需求下单信息
 	 * @param userid 用户id
 	 * @param pageNum分页信息
 	 * @return
@@ -96,7 +97,17 @@ public class OrderService {
 		if (user!=null) {
 			list=demandDao.getQueryList(pageInfo.getStartIndex(), pageInfo.getPageSize(), userid);
 		}
-		map.put("items", list);
+		
+		/*没有被接单的需求是不会在我的订单展示的*/
+		List<Demand> demandList=new ArrayList<Demand>();
+		for(Demand demand:list){
+			Integer orderid=orderDao.getOrderIdByDemandId(demand.getId());
+			if (orderid!=null) {
+				demandList.add(demand);
+			}
+		}
+		
+		map.put("items", demandList);
 		map.put("user", user); 
 		map.put("userid", userid);    
         map.put("Count", pageInfo.getPageSize());
