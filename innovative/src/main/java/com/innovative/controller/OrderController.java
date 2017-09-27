@@ -53,9 +53,9 @@ public class OrderController {
 	 * @param demandid 订单id
 	 * @return
 	 * */
-	@RequestMapping(value="/orderdetail/{demandid}",method=RequestMethod.GET)
-	public JsonResult selectById(@PathVariable(name="demandid") Integer demandid){
-		Map<String, Object> map=orderService.selectOrderByOrderId(demandid);
+	@RequestMapping(value="/orderdetail/{orderid}",method=RequestMethod.GET)
+	public JsonResult selectById(@PathVariable(name="orderid") Integer orderid){
+		Map<String, Object> map=orderService.selectOrderByOrderId(orderid);
 				
 		return new JsonResult(true, map);
 	}

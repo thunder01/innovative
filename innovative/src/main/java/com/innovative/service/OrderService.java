@@ -58,23 +58,14 @@ public class OrderService {
 		Map<String, Object> map=new HashMap<>();
 	
 		//首先查询该需求是否可接
+		Integer orderid=orderDao.getOrderIdByDemandId(demandid);
 		Demand demand=demandDao.getDemand(demandid);
-		
-		if (demand!=null/*&&demand.get接单状态==0*/ ) {
-			//若可接则生成订单,并将需求的接单状态改为1
-			/*demandDao.updateDemand(demand);*/
-			
-			int flag=orderDao.insertOrder(demandid,userid);
-			if (flag!=0) {
-				/*demandDao.update接单状态;*/
-				map.put("demand", demand);
-				map.put("userid", userid);
-			}else{
-				map.put("message", "生成订单失败");
-			}
-		}else{
-			map.put("message", "此需求已经有人接单");
+		if (orderid==null) {
+			orderDao.insertOrder(demandid,userid);
 		}		
+	
+		map.put("demand", demand);
+		map.put("userid", userid);				
 		return map;
 	}
 	
@@ -100,13 +91,16 @@ public class OrderService {
 		
 		/*没有被接单的需求是不会在我的订单展示的*/
 		List<Demand> demandList=new ArrayList<Demand>();
-		for(Demand demand:list){
-			Integer orderid=orderDao.getOrderIdByDemandId(demand.getId());
-			if (orderid!=null) {
-				demandList.add(demand);
+		if(list!=null&&list.size()>0){
+			for(Demand demand:list){
+				Integer orderid=orderDao.getOrderIdByDemandId(demand.getId());
+				if (orderid!=null) {
+					demand.setOrderid(orderid);
+					demandList.add(demand);
+				}
 			}
 		}
-		
+			
 		map.put("items", demandList);
 		map.put("user", user); 
 		map.put("userid", userid);    
@@ -123,11 +117,11 @@ public class OrderService {
 	 * @param demandid 需求id
 	 * @return
 	 * */
-	public Map<String, Object> selectOrderByOrderId(Integer demandid){
+	public Map<String, Object> selectOrderByOrderId(Integer orderid){
 		Map<String, Object> map=new HashMap<>();
 
 		/*根据需求id查出对应的订单id*/
-		Integer orderid=orderDao.getOrderIdByDemandId(demandid);
+		Integer demandid=orderDao.getDemandIdByOrderId(orderid);
 		
 			Demand demand=demandDao.getDemand(demandid);
 			User user=null;
