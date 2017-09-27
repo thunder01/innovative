@@ -1,7 +1,6 @@
 package com.innovative.service;
 
 
-import com.innovative.bean.Expert;
 import com.innovative.bean.Organization;
 import com.innovative.dao.FileDao;
 import com.innovative.dao.OrganizationDao;
@@ -11,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static org.mockito.Matchers.contains;
 
 import java.util.HashMap;
 import java.util.List;
