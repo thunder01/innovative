@@ -1,7 +1,6 @@
 package com.innovative.service;
 
 
-import com.innovative.bean.Organization;
 import com.innovative.bean.Solution;
 import com.innovative.dao.FileDao;
 import com.innovative.dao.SolutionDao;
@@ -63,6 +62,13 @@ public class SolutionService {
 
         //分页条件查询
         List<Solution> items = solutionDao.getSolutionListByCondition( offset, limit);
+        for(Solution so : items){
+        	if(null == so|| "".equals(so.getId()))
+        		continue;
+        	 List<String> urllist = fileDao.getPhotoByMOdAndId(so.getId(), "programPhoto");
+  		   if(urllist != null && urllist.size() > 0 )
+  			   so.setPictures(urllist.get(0));
+        }
         int totalCount = solutionDao.getCountByCondition();
 
         //数据组装

@@ -60,7 +60,10 @@ public class DisassembleReportService {
 			map.put("orderid", orderid);
 		}else{
 			/*先将次订单的所有拆解报告删除*/
-			reportDao.deleteDisassembleReportByIdReal(reportDao.getIdByOrderId(orderid));
+			if (reportDao.getIdByOrderId(orderid)!=null) {
+				reportDao.deleteDisassembleReportByIdReal(reportDao.getIdByOrderId(orderid));
+			}
+			
 			/*保存拆解报告*/
 			int result = reportDao.saveDisassembleReport(report);	
 			/*根据订单id查询需求id*/

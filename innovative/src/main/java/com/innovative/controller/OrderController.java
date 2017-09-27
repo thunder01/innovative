@@ -1,13 +1,19 @@
 package com.innovative.controller;
 
 import java.util.Map;
+
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.SessionAttributes;
+
 import com.innovative.bean.Order;
 import com.innovative.bean.ProjectApproval;
 import com.innovative.service.DisassembleReportService;
@@ -44,19 +50,14 @@ public class OrderController {
 	
 	/**
 	 * 订单详情
-	 * @param orderid 订单id
+	 * @param demandid 订单id
 	 * @return
 	 * */
 	@RequestMapping(value="/orderdetail/{orderid}",method=RequestMethod.GET)
 	public JsonResult selectById(@PathVariable(name="orderid") Integer orderid){
 		Map<String, Object> map=orderService.selectOrderByOrderId(orderid);
-		/*判断结果是否为空*/
-		if (map!=null) {
-			if ((Integer)map.get("result")==1) {
-				return new JsonResult(true, map);
-			}
-		}
-		return new JsonResult(false, "结果为空");
+				
+		return new JsonResult(true, map);
 	}
 	
 	/**
@@ -64,8 +65,9 @@ public class OrderController {
 	 * @param orderid 订单id
 	 * */
 	@RequestMapping(value="/disassembleDetail/{orderid}",method=RequestMethod.GET)
-	public JsonResult selectDisassemble(@PathVariable(name="orderid") Integer orderid){
-		System.out.println(orderid+">>>>>>>>>>>>>>>>");
+	public JsonResult selectDisassemble(@PathVariable(name="orderid") Integer orderid,HttpSession session){
+		System.out.println("orderid="+session.getAttribute("orderid"));
+		
 		/*查询需求报告信息*/
 		Map<String, Object> map=orderService.getDisassembleAndApprovalListByOrderid(orderid);
 
@@ -143,7 +145,8 @@ public class OrderController {
 	@RequestMapping(value="/sourceOrder",method=RequestMethod.POST)
 	public JsonResult updateOrderLate_byId(@RequestBody ProjectApproval pApproval){		
 		/*修改订单表的订单信息*/
-		Map<String, Object> map=projectApprovalService.updateProjectApprovalReceive(pApproval.getId());
+		System.out.println(pApproval+"--------");
+		Map<String, Object> map=projectApprovalService.updateProjectApprovalReceive(pApproval);
 		return new JsonResult(true,map);
 	}
 	

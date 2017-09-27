@@ -44,15 +44,15 @@
 
     <!--根据查询条件获取列表-->
     <select id="getEquipmentListByCondition" resultMap="equipmentMap">
-        SELECT "Name","Picture","Unit","State","Manufacturer","Introduction","Sharing","Contact","Sectors","Tags","Rank","RowVersion","IsActive","Id","File","Deleted","CreatedAt","UpdatedAt"
-        FROM "Equipments"
+        SELECT "Name","Picture","Unit","State","Manufacturer","Introduction","Sharing","Contact","Sectors","Tags","Rank","RowVersion","IsActive","Id","File","Deleted","CreatedAt","UpdatedAt",f."url",f."refId",f."refType",f."filename"
+        FROM "Equipments" e LEFT JOIN "xacx_file" f on f."refId" = e."Id" and f."refType" = 'equipmentFile' and f."sign" = 'add'
        <where>
             <!--  <if test="sectors != null and sectors != ''">
                  "Sectors" @> '${sectors}'
             </if> -->
-               "Deleted" = 'f' AND "IsActive" = 't'
+               e."Deleted" = 'f' AND e."IsActive" = 't'
         </where>
-        order by "UpdatedAt"  DESC 
+        order by e."UpdatedAt"  DESC 
         limit #{pageSize} offset #{startIndex}
     </select>
 

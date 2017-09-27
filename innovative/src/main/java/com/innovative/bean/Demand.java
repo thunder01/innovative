@@ -29,7 +29,7 @@ public class Demand {
     private  String path;//文件路径
     private  String []userName;//自定用户名
     private List<FileBean> list;
-
+    private Integer orderid;
 
     public Demand(int id, String name, String number, String iphone, String createDate, String cteateBy, String lateDate, String lateBy, String bgd, String demandd, String interestpg, String ninterestpg, String []gjc, String hzms, String hzrequest, String productm, String productDate, String bz, String checkName, String ddmj, String option, String status,String path,String xqf,String [] userName) {
         this.id = id;
@@ -96,6 +96,9 @@ public class Demand {
     }
 
     public String getCreateDate() {
+    	if (createDate!=null) {
+			return createDate.substring(0, 16);
+		}
         return createDate;
     }
 
@@ -269,4 +272,14 @@ public class Demand {
     public void setList(List<FileBean> list) {
         this.list = list;
     }
+
+	public Integer getOrderid() {
+		return orderid;
+	}
+
+	public void setOrderid(Integer orderid) {
+		this.orderid = orderid;
+	}
+    
+    
 }

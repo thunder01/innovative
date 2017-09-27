@@ -44,14 +44,14 @@
 
 	<!--根据查询条件获取列表-->
 	<select id="getOrganizationList"  resultMap="organizationMap">
-		SELECT * FROM "Organizations"
+		SELECT * FROM "Organizations"  e LEFT JOIN "xacx_file" f on f."refId" = e."Id" and f."refType" = 'addunionFile' and f."sign" = 'add'
 		<where>
 			<!-- <if test="sectors!=null and sectors!=''">
 				 "Sectors" @> '${sectors}'
 			</if> -->
-			 "Deleted" = 'f' AND "IsActive" = 't'
+			 e."Deleted" = 'f' AND e."IsActive" = 't'
 		</where>
-		order by "UpdatedAt"  DESC 
+		order by e."UpdatedAt"  DESC 
 		limit #{pageSize} offset #{startIndex}
 	</select>
 
