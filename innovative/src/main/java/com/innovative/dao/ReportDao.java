@@ -16,19 +16,19 @@ public interface ReportDao {
 	 * 添加一个报告
 	 * @param report
 	 */
-	public int addReport(Report report);
+	public Integer addReport(Report report);
 	
 	/**
 	 * 把报告的删除状态改变
 	 * @param map 里面有userid和报告的id
 	 */
-	public int updateReportDeleted(Map<String, Object> map);
+	public Integer updateReportDeleted(Map<String, Object> map);
 	
 	/**
 	 * 更新报告信息
 	 * @param report
 	 */
-	public int updateReport(Report report);
+	public Integer updateReport(Report report);
 	
 	/**
 	 * 通过报告id来查询报告信息
@@ -49,7 +49,7 @@ public interface ReportDao {
 	 * @param map(order_id,type)
 	 * @return
 	 */
-	public int findReportCountByOrder_id(Map<String, Object> map);
+	public Integer findReportCountByOrder_id(Map<String, Object> map);
 
 	/**
 	 * 通过订单id来找所有报告并按创建时间排序 
