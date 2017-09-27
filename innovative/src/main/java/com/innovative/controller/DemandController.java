@@ -71,7 +71,10 @@ public class DemandController{
      */
     @RequestMapping(value = "/add",method = RequestMethod.POST)
     @Transactional
-    public  JsonResult add(@RequestBody Demand demand){
+    public  JsonResult add(@RequestBody Demand demand,HttpServletRequest servletRequest){
+        HttpSession session=servletRequest.getSession();
+        User user= (User) session.getAttribute("userId");
+        demand.setCteateBy(user.getUserId());
         Message message=new Message();
         String messge="保存成功!";
         boolean code=true;
@@ -89,9 +92,11 @@ public class DemandController{
      *  查询list
      */
     @RequestMapping(value = "/getDemandList",method = RequestMethod.GET)
-    public JsonResult getList(@RequestParam(name="offset",defaultValue="0") Integer offset){
+    public JsonResult getList(@RequestParam(name="offset",defaultValue="0") Integer offset,HttpServletRequest servletRequest){
         Integer page = offset/(new PageInfo().getPageSize()) +1;
-        String userName="321";
+        HttpSession session=servletRequest.getSession();
+        User user= (User) session.getAttribute("userId");
+        String userName=user.getUserName();
         return new JsonResult(true, demandService.getDemandList(page,userName));
     }
 
@@ -111,7 +116,7 @@ public class DemandController{
         Integer page = offset/(new PageInfo().getPageSize()) +1;
         HttpSession session=servletRequest.getSession();
         User user= (User) session.getAttribute("userId");
-        String userName="321";
+        String userName=user.getUserName();
         return new JsonResult(true, demandService.getQueryList(page,userName));
      }
 }

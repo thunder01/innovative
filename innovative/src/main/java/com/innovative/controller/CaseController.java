@@ -7,6 +7,7 @@ import com.innovative.service.CaseService;
 import com.innovative.utils.JsonResult;
 import org.apache.commons.beanutils.converters.CharacterArrayConverter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.LinkedList;
@@ -39,15 +40,18 @@ public class CaseController {
      * 添加功能
      */
     @RequestMapping(value = "/add",method = RequestMethod.POST)
+    @Transactional
     public  JsonResult add(@RequestBody Case cases){
         String messge="添加失败!";
         boolean code=false;
+        System.out.println(cases.getTitleImage());
+        dao.updateFile(cases.getTitleImage());
         cases.setTitleImage(dao.getFileById(cases.getTitleImage(),"logo").get(0).getUrl());
         if (service.add(cases)) {
             messge = "添加成功！";
             code = true;
         }
-        return  new JsonResult(code,messge);
+        return  new JsonResult(code,service.getFileList());
     }
     /**
      * 修改功能
@@ -74,6 +78,6 @@ public class CaseController {
             messge = "删除成功！";
             code = true;
         }
-        return  new JsonResult(code,messge);
+        return  new JsonResult(code,service.getFileList());
     }
 }
