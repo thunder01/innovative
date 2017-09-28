@@ -86,55 +86,31 @@ public class UserService {
 		return userdao.insertUserRoles(user);
 	}
 	//获取用户组织id
-	public String getSidById(String id, String type) {
+	public Map<String,String> getSidById(String id) {
+		Map<String,String> sidmap = new HashMap<String,String>();
 		Map<String,String> map =  userdao.getQcName(id);
 		if(null==map){
-			return "";
+			return sidmap;
 		}
 		String qc = (String)map.get("path");
-		if(null == qc || "".equals(qc) || type == null || "".equals(type)){
-			return "";
+		if(null == qc || "".equals(qc)){
+			return sidmap;
 		//成员公司
-		}else if(type.equals("lxsq")&&(qc.indexOf("石家庄燃气")>0 || qc.indexOf("青岛燃气")>0 || qc.indexOf("廊坊燃气")>0)){
-			return  Config.cygs_lxsq;
-		}else if(type.equals("yssq")&&(qc.indexOf("石家庄燃气")>0 || qc.indexOf("青岛燃气")>0 || qc.indexOf("廊坊燃气")>0)){
-			return Config.cygs_yssq;
-		}else if(type.equals("fxdj")&&(qc.indexOf("石家庄燃气")>0 || qc.indexOf("青岛燃气")>0 || qc.indexOf("廊坊燃气")>0)){
-			return Config.cygs_fxdj;
-		}else if(type.equals("yxcy")&&(qc.indexOf("石家庄燃气")>0 || qc.indexOf("青岛燃气")>0 || qc.indexOf("廊坊燃气")>0)){
-			return Config.cygs_yxcy;
+		}else if((qc.indexOf("石家庄燃气")>0 || qc.indexOf("青岛燃气")>0 || qc.indexOf("廊坊燃气")>0)){
+			return  Config.cygsmap;
 		//健康研究院
-		}else if(type.equals("lxsq")&&(qc.indexOf("健康研究院")>0)){
-			return Config.jkyjy_lxsq;
-		}else if(type.equals("yssq")&&(qc.indexOf("健康研究院")>0)){
-			return Config.jkyjy_yssq;
-		}else if(type.equals("fxdj")&&(qc.indexOf("健康研究院")>0)){
-			return Config.jkyjy_fxdj;
-		}else if(type.equals("yxcy")&&(qc.indexOf("健康研究院")>0)){
-			return Config.jkyjy_yxcy;
+		}else if((qc.indexOf("健康研究院")>0)){
+			return Config.jkyjymap;
 		//研发项目管理系统（产业层）
-		}else if(type.equals("lxsq")&&(qc.indexOf("能源控股")>0 || qc.indexOf("新智云数据服务有限公司")>0 || qc.indexOf("技术工程")>0)){
-			return Config.cyc_lxsq;
-		}else if(type.equals("yssq")&&(qc.indexOf("能源控股")>0 || qc.indexOf("新智云数据服务有限公司")>0 || qc.indexOf("技术工程")>0)){
-			return Config.cyc_yssq;
-		}else if(type.equals("fxdj")&&(qc.indexOf("能源控股")>0 || qc.indexOf("新智云数据服务有限公司")>0 || qc.indexOf("技术工程")>0)){
-			return Config.cyc_fxdj;
-		}else if(type.equals("yxcy")&&(qc.indexOf("能源控股")>0 || qc.indexOf("新智云数据服务有限公司")>0 || qc.indexOf("技术工程")>0)){
-			return Config.cyc_yxcy;
+		}else if(qc.indexOf("能源控股")>0 || qc.indexOf("新智云数据服务有限公司")>0 || qc.indexOf("技术工程")>0){
+			return Config.cycmap;
 		//石墨烯
-		}else if(type.equals("lxsq")&&(qc.indexOf("石墨烯")>0)){
-			return Config.smx_lxsq;
-		}else if(type.equals("yssq")&&(qc.indexOf("石墨烯")>0)){
-			return Config.smx_yssq;
-		}else if(type.equals("fxdj")&&(qc.indexOf("石墨烯")>0)){
-			return Config.smx_fxdj;
-		}else if(type.equals("yxcy")&&(qc.indexOf("石墨烯")>0)){
-			return Config.smx_yxcy;
-		}
-		else{
-			return "";
-		}
+		}else if((qc.indexOf("石墨烯")>0)){
+			return Config.smxmap;
+		}else{
+			return null;
 		
+		}
 			
 	}
 

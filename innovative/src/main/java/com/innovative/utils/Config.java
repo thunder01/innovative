@@ -1,5 +1,8 @@
 package com.innovative.utils;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * 常量处理类
  */
@@ -8,12 +11,14 @@ public class Config {
 
     //文件上传路径(测试)
     public static final  String FILE_URL = "/data/images/";
+   //二期的文件上传路径
+    public static final String FILE2_URL = "/data/wwwroot/default/attachments/file/";
 
     //文件上传路径(正式)
     //public static final  String FILE_URL = "/data/file/";
     
-    //二期的文件上传路径
-    public static final String FILE2_URL = "/data/wwwroot/default/attachments/file/";
+   
+    
     //立项申请模块SID
     //健康研究院-立项申请模块
     public static final String jkyjy_lxsq = "732A2632-6B94-4888-AA75-1D34907CDB4C";
@@ -54,4 +59,38 @@ public class Config {
     public static final String cygs_yxcy = "B966B657-9CBA-4F7C-81BB-1FC69809DF32";
     //石墨烯（成员公司）-立项申请模块
     public static final String smx_yxcy = "5CDF7DAC-8567-4FE1-909D-EE41434F6A4E";
+    
+   //健康研究院
+    public static final Map<String,String> jkyjymap = new HashMap<String,String>();
+    //研发项目管理系统（产业层）
+    public static final Map<String,String> cycmap = new HashMap<String,String>();
+    //研发项目管理系统（成员公司）
+    public static final Map<String,String> cygsmap = new HashMap<String,String>();
+    
+  
+    public static final Map<String,String> smxmap = new HashMap<String,String>();
+    static{
+    	////研发项目管理系统（成员公司）
+    	smxmap.put("lxsq", smx_lxsq);
+    	smxmap.put("yssq", smx_yssq);
+    	smxmap.put("fxdj", smx_fxdj);
+    	smxmap.put("yxcy", smx_yxcy);
+    	
+    	//健康研究院
+    	jkyjymap.put("lxsq", jkyjy_lxsq);
+    	jkyjymap.put("yssq", jkyjy_yssq);
+    	jkyjymap.put("fxdj", jkyjy_fxdj);
+    	jkyjymap.put("yxcy", jkyjy_yxcy);
+    	
+    	 //研发项目管理系统（产业层）
+    	cycmap.put("lxsq", cyc_lxsq);
+    	cycmap.put("yssq", cyc_yssq);
+    	cycmap.put("fxdj", cyc_fxdj);
+    	cycmap.put("yxcy", cyc_yxcy);
+    	//研发项目管理系统（成员公司）
+    	cygsmap.put("lxsq", cygs_lxsq);
+    	cygsmap.put("yssq", cygs_yssq);
+    	cygsmap.put("fxdj", cygs_fxdj);
+    	cygsmap.put("yxcy", cygs_yxcy);
+     }
 }

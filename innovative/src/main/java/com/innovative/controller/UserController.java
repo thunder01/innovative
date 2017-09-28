@@ -1,6 +1,7 @@
 package com.innovative.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -45,12 +46,12 @@ public class UserController {
 	  * @param id
 	  * @return
 	  */
-	 @RequestMapping(value = "/getUser/{id}/{type}", method = RequestMethod.GET)
-	    public JsonResult getSidByPernr(@PathVariable(name = "id") String id,@PathVariable(name = "type") String type) {
+	 @RequestMapping(value = "/getSidByPernr/{id}", method = RequestMethod.GET)
+	    public JsonResult getSidByPernr(@PathVariable(name = "id") String id) {
 	    
 		 if(id == null || "".equals(id))
 			 return new JsonResult(false, "参数不合法");
-			String sid = userService.getSidById(id,type);
+			Map<String,String> sid = userService.getSidById(id);
 		       return new JsonResult(true, sid);
 	 }
 	 /**
