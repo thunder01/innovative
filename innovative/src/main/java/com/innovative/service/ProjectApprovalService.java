@@ -64,8 +64,6 @@ public class ProjectApprovalService {
 			Integer order_id=projectApproval.getOrder_id();
 			if ("1".equals(messge)) {
 				/*添加一条立项表单信息*/
-//				Order order=orderDao.getOrderById(order_id);//根据订单id查询订单信息
-//				projectApproval.setCreate_by(order.getCreate_byId());
 				projectApprovalDao.addProjectApproval(projectApproval);//添加立项表单
 				map.put("message", "1");//拆解报告已通过
 			}else if ("2".equals(messge)) {

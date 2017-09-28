@@ -177,6 +177,7 @@ public class DisassembleReportService {
 	@Transactional
 	public Map<String, Object> confirmDisassembleStatus(DisassembleReport dReport){
 		Map<String, Object> map=new HashMap<>();
+		System.out.println("参数:"+dReport);
 		Integer dReportID=dReport.getId();
 		/*根据id查出拆解报告信息*/
 		DisassembleReport report=reportDao.getDisassembleReportById(dReportID);

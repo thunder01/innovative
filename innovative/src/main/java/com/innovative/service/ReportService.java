@@ -161,4 +161,16 @@ public class ReportService{
 		map.put("type", type);
 		return map;
 	}
+	
+	/**
+	 * 查询用户的文件上传记录
+	 * @param userid
+	 * @return
+	 */
+	public Map<String, Object> getMyFile(String userid){
+		Map<String, Object> map=new HashMap<>();
+		List<FileBean> list = reportDao.getMyFile(userid);
+		map.put("files", list);
+		return map;
+	}
 }

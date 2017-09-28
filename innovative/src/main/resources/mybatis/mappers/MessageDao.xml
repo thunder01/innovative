@@ -31,10 +31,11 @@
             me."project_id"
             FROM
             xacx_demand de,
-            xacx_messge me
+            xacx_messge me 
         <where>
-            de."id" = me.project_id
+            de."id" = me.project_id 
         </where>
+        order by me.create_date desc
         limit #{pageSize} offset #{startIndex}
     </select>
 

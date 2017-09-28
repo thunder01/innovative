@@ -48,5 +48,15 @@ public interface DemandDao {
      * @return
      */
     int getTotalCounts(@Param("userName") String userName);
+    
+    /**
+     * 获取用户下过的并且被接过需求订单
+     * @param startIndex
+     * @param pageSize
+     * @param userid
+     * @return
+     */
+    List<Demand> getMyDemand(@Param("startIndex") int startIndex, @Param("pageSize") int pageSize,@Param("userid") String userid);
+    
 
 }
