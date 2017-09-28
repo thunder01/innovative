@@ -1,4 +1,4 @@
-package com.innovative.utils;
+/*package com.innovative.utils;
 
 import java.nio.charset.Charset;
 import java.util.ArrayList;
@@ -46,4 +46,4 @@ public class CustomMVCConfiguration extends WebMvcConfigurerAdapter {
             ContentNegotiationConfigurer configurer) {
         configurer.favorPathExtension(false);
     }
-}
+}*/

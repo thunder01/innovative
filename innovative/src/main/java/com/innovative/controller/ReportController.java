@@ -109,4 +109,16 @@ public class ReportController {
 			return new JsonResult(false, "结果空");
 		}
 	}
+	
+	/**
+	 * 根据用户id查询用户的文件上传记录
+	 * @param userid
+	 * @return
+	 */
+	@RequestMapping(value="/getMyFile/{userid}",method=RequestMethod.GET)
+	public JsonResult getMyFile(@PathVariable(name="userid")String userid){
+		Map<String, Object> map=reportService.getMyFile(userid);
+		return new JsonResult(true, map);
+	}
+	
 }

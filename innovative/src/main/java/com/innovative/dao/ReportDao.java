@@ -3,6 +3,7 @@ package com.innovative.dao;
 import java.util.List;
 import java.util.Map;
 
+import com.innovative.bean.FileBean;
 import com.innovative.bean.Report;
 
 /**
@@ -57,4 +58,11 @@ public interface ReportDao {
 	 * @return
 	 */
 	public List<Report> rankReport(Integer order_id);
+	
+	/**
+	 * 查询用户的文件上传记录
+	 * @param userid
+	 * @return
+	 */
+	public List<FileBean> getMyFile(String userid);
 }

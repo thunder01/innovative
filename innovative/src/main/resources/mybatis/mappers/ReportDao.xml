@@ -82,4 +82,9 @@
 	<select id="rankReport" parameterType="int" resultMap="ReportMap">
 		SELECT * FROM xacx_report_v2 WHERE order_id=#{order_id} and delete_status=0 ORDER BY create_date DESC
 	</select>
+	
+	<!-- 查询用户的文件上传记录 -->
+	<select id="getMyFile" parameterType="string" resultType="FileBean">
+		select b."filename",b."createAt" from xacx_report_v2 a,xacx_file b where a.fileid=b."refId" and a.create_by=#{userid}
+	</select>
 </mapper>

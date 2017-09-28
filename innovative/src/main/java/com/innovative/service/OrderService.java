@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.innovative.bean.Demand;
 import com.innovative.bean.DisassembleReport;
 import com.innovative.bean.FileBean;
@@ -82,23 +84,10 @@ public class OrderService {
 		List<Demand> list=null;
 		if (user!=null) {
 			/*查询该用户的所有需求订单*/
-			list=demandDao.getQueryList(pageInfo.getStartIndex(), pageInfo.getPageSize(), userid);
-		}
-		
-		/*没有被接单的需求是不会在我的订单展示的*/
-		List<Demand> demandList=new ArrayList<Demand>();
-		if(list!=null&&list.size()>0){
-			for(Demand demand:list){
-				/*查询每一条需求订单是否有对应的订单信息，有则显示，没有则不显示*/
-				Integer orderid=orderDao.getOrderIdByDemandId(demand.getId());
-				if (orderid!=null) {
-					demand.setOrderid(orderid);
-					demandList.add(demand);
-				}
-			}
+			list=demandDao.getMyDemand(pageInfo.getStartIndex(), pageInfo.getPageSize(), userid);
 		}
 			
-		map.put("items", demandList);
+		map.put("items", list);
 		map.put("user", user); 
 		map.put("userid", userid);    
         map.put("Count", pageInfo.getPageSize());
@@ -115,7 +104,7 @@ public class OrderService {
 	 * */
 	public Map<String, Object> selectOrderByOrderId(Integer orderid){
 		Map<String, Object> map=new HashMap<>();
-		Integer demandid=orderDao.getDemandIdByOrderId(orderid);//根据需求id查出对应的订单id
+		int demandid=orderDao.getDemandIdByOrderId(orderid);//根据需求id查出对应的订单id
 		Demand demand=demandDao.getDemand(demandid);//根据需求id查询需求的信息
 		User user=null;
 		if (demand!=null) {
