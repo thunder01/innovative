@@ -65,7 +65,7 @@
     </update>
     
     <!-- 拆解报告通过 -->
-    <update id="updatePass_status" parameterType="Order">
+    <update id="updatePass_status" parameterType="map">
    		update xacx_order_v2 set pass_status=1,pass_by=#{pass_by},pass_date=now() where id=#{id}
     </update>
     

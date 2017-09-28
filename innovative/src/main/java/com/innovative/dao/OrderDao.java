@@ -1,11 +1,9 @@
 package com.innovative.dao;
 
 import java.util.List;
-
 import org.apache.ibatis.annotations.Param;
-
 import com.innovative.bean.Order;
-import com.innovative.bean.Report;
+
 
 /**
  * 订单信息处理的持久层接口
@@ -71,9 +69,10 @@ public interface OrderDao {
 	/**
 	 * 拆解报告通过
 	 * @param order_id
+	 * @param pass_by 确认拆解报告的人
 	 * @return
 	 */
-	public Integer updatePass_status(Order order);
+	public Integer updatePass_status(@Param("id")Integer id,@Param("pass_by")String pass_by);
 	
 	/**
 	 * 通过订单的id查询需求工程师的id

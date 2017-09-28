@@ -1,22 +1,15 @@
 package com.innovative.controller;
 
 import java.util.Map;
-
-import javax.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.SessionAttributes;
-
 import com.innovative.bean.Order;
 import com.innovative.bean.ProjectApproval;
-import com.innovative.service.DisassembleReportService;
 import com.innovative.service.OrderService;
 import com.innovative.service.ProjectApprovalService;
 import com.innovative.utils.JsonResult;
@@ -31,8 +24,6 @@ public class OrderController {
 	@Autowired
 	private OrderService orderService;//订单业务
 	@Autowired
-	private DisassembleReportService disassembleService;//拆解报告业务
-	@Autowired
 	private ProjectApprovalService projectApprovalService;//立项报告业务
 	
 	/**
@@ -43,7 +34,6 @@ public class OrderController {
 	@RequestMapping(value="/myorder",method=RequestMethod.GET)
 	public JsonResult selectMyOrder(@RequestParam(name="userid") String userid,@RequestParam(name="offset",defaultValue="0") Integer offset){
 		Integer page = offset/(new PageInfo().getPageSize()) +1;
-		
 		Map<String, Object> map=orderService.selectMyOrder(userid,page);		
 		return new JsonResult(true, map);
 	}
@@ -55,8 +45,7 @@ public class OrderController {
 	 * */
 	@RequestMapping(value="/orderdetail/{orderid}",method=RequestMethod.GET)
 	public JsonResult selectById(@PathVariable(name="orderid") Integer orderid){
-		Map<String, Object> map=orderService.selectOrderByOrderId(orderid);
-				
+		Map<String, Object> map=orderService.selectOrderByOrderId(orderid);		
 		return new JsonResult(true, map);
 	}
 	
@@ -65,12 +54,9 @@ public class OrderController {
 	 * @param orderid 订单id
 	 * */
 	@RequestMapping(value="/disassembleDetail/{orderid}",method=RequestMethod.GET)
-	public JsonResult selectDisassemble(@PathVariable(name="orderid") Integer orderid,HttpSession session){
-		System.out.println("orderid="+session.getAttribute("orderid"));
-		
+	public JsonResult selectDisassemble(@PathVariable(name="orderid") Integer orderid){
 		/*查询需求报告信息*/
 		Map<String, Object> map=orderService.getDisassembleAndApprovalListByOrderid(orderid);
-
 		return new JsonResult(true, map);
 	}
 	
@@ -80,7 +66,6 @@ public class OrderController {
 	@RequestMapping(value="/toApprovalUpload/{orderid}",method = RequestMethod.GET)
 	public JsonResult toUpload(@PathVariable(name="orderid") Integer orderid){	
 		Map<String,Object> map=projectApprovalService.toApprovalUpload(orderid);
-		
 		return new JsonResult(true,map);
 	}
 	
@@ -93,7 +78,6 @@ public class OrderController {
 		System.out.println(projectApproval);
 		/*保存立项表单*/
 		Map<String, Object> map = projectApprovalService.addProjectApproval(projectApproval);
-		
 		return new JsonResult(true, map);
 	}
 	
@@ -104,7 +88,6 @@ public class OrderController {
 	@RequestMapping(value="/postApproval",method=RequestMethod.POST)
 	public JsonResult postApproval(@RequestBody ProjectApproval pApproval){
 		Map<String,Object> map=projectApprovalService.postApproval(pApproval);
-
 		return new JsonResult(true, map);
 	}
 	
@@ -145,7 +128,6 @@ public class OrderController {
 	@RequestMapping(value="/sourceOrder",method=RequestMethod.POST)
 	public JsonResult updateOrderLate_byId(@RequestBody ProjectApproval pApproval){		
 		/*修改订单表的订单信息*/
-		System.out.println(pApproval+"--------");
 		Map<String, Object> map=projectApprovalService.updateProjectApprovalReceive(pApproval);
 		return new JsonResult(true,map);
 	}

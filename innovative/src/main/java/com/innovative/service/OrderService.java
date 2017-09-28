@@ -1,9 +1,5 @@
 package com.innovative.service;
 
-import java.io.File;
-import java.nio.file.Files;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -49,18 +45,18 @@ public class OrderService {
 	private FileDao fileDao;
 	
 	/**
-	 * 新增订单信息 需求池接单
+	 * 新增订单信息 ，需求池接单
 	 * @param userid 用户的id
 	 * @param demandid 需求id
-	 * @return 受影响的行数
+	 * @return 
 	 * */
 	public Map<String, Object> insertOrder(String userid,Integer demandid){
 		Map<String, Object> map=new HashMap<>();
 	
 		//首先查询该需求是否可接
 		Integer orderid=orderDao.getOrderIdByDemandId(demandid);
-		Demand demand=demandDao.getDemand(demandid);
-		if (orderid==null) {
+		Demand demand=demandDao.getDemand(demandid);//查询需求信息
+		if (orderid==null) {//若是订单不存在，则新产生一条订单信息；若订单已经存在，说明此需求已经被人接单了
 			orderDao.insertOrder(demandid,userid);
 		}		
 	
@@ -77,8 +73,7 @@ public class OrderService {
 	 * @return
 	 * */
 	public Map<String,Object> selectMyOrder(String userid,Integer pageNum){
-		Map<String , Object> map=new HashMap<>();
-		
+		Map<String , Object> map=new HashMap<>();		
 		PageInfo pageInfo = new PageInfo();
         pageInfo.setCurrentPageNum(pageNum);
         
@@ -86,6 +81,7 @@ public class OrderService {
 		User user=userDao.getUser(userid);
 		List<Demand> list=null;
 		if (user!=null) {
+			/*查询该用户的所有需求订单*/
 			list=demandDao.getQueryList(pageInfo.getStartIndex(), pageInfo.getPageSize(), userid);
 		}
 		
@@ -93,6 +89,7 @@ public class OrderService {
 		List<Demand> demandList=new ArrayList<Demand>();
 		if(list!=null&&list.size()>0){
 			for(Demand demand:list){
+				/*查询每一条需求订单是否有对应的订单信息，有则显示，没有则不显示*/
 				Integer orderid=orderDao.getOrderIdByDemandId(demand.getId());
 				if (orderid!=null) {
 					demand.setOrderid(orderid);
@@ -107,37 +104,28 @@ public class OrderService {
         map.put("Count", pageInfo.getPageSize());
         map.put("itemCount", pageInfo.getPageSize());
         map.put("offset", pageInfo.getStartIndex());
-        map.put("limit", pageInfo.getPageSize());
-    
+        map.put("limit", pageInfo.getPageSize()); 
 		return map;
 	}
 	
 	/**
-	 * 根据需求id，查询订单信息
-	 * @param demandid 需求id
+	 * 根据订单id查询订单的详细信息
+	 * @param orderid 订单id
 	 * @return
 	 * */
 	public Map<String, Object> selectOrderByOrderId(Integer orderid){
 		Map<String, Object> map=new HashMap<>();
-
-		/*根据需求id查出对应的订单id*/
-		Integer demandid=orderDao.getDemandIdByOrderId(orderid);
+		Integer demandid=orderDao.getDemandIdByOrderId(orderid);//根据需求id查出对应的订单id
+		Demand demand=demandDao.getDemand(demandid);//根据需求id查询需求的信息
+		User user=null;
+		if (demand!=null) {
+			user=userDao.getUser(demand.getCteateBy());//查询需求下单人的详细
+		}
 		
-			Demand demand=demandDao.getDemand(demandid);
-			User user=null;
-			if (demand!=null) {
-				user=userDao.getUser(demand.getCteateBy());
-			}
-			map.put("id", demandid);
-			map.put("item", demand);
-			map.put("user", user);
-			
-			if (orderid==null) {
-				map.put("orderid", -1);
-			}else{
-				map.put("orderid", orderid);
-			}
-			
+		map.put("id", demandid);
+		map.put("item", demand);
+		map.put("user", user);
+		map.put("orderid", orderid);			
 		return map;
 	}
 	
@@ -147,65 +135,55 @@ public class OrderService {
 	 * @return
 	 * */
 	public Map<String, Object> getDisassembleAndApprovalListByOrderid(Integer orderid){
-		Map<String, Object> map=new HashMap<>();
+		long start=System .currentTimeMillis();
 		
+		Map<String, Object> map=new HashMap<>();		
 		/*根据订单id查出拆解报告信息*/
 		DisassembleReport disassembleReport=disassembleReportDao.getDisassembleByOrderid(orderid);	
 		if (disassembleReport!=null) {
-			/*获取文件id*/
+			/*查出拆解报告所拥有的文件*/
 			String fileid=disassembleReport.getFileid();
 			List<FileBean> listFiles=fileDao.getFileById(fileid, "disassemble");
 			disassembleReport.setList(listFiles);		
 		}else{
 			map.put("message1", "没有拆解报告");
-		}
-		map.put("disassemble", disassembleReport);
-		
+		}		
 		/*根据订单id查询所有的立项表单*/
 		List<ProjectApproval> list=projectApprovalDao.getApprovalListByOrderid(orderid);
-		if (list.size()==0) {
-			map.put("message2", "没有立项表单");			
-		}
-		map.put("items", list);
 		
+		map.put("disassemble", disassembleReport);
+		map.put("items", list);		
 		map.put("orderid", orderid);
+		
+		long time=System.currentTimeMillis()-start;
+		System.out.println(time);
 		return map;
 	}
 	
 	/**
 	 * 项目团队
-	 * @param order_id
+	 * @param order_id 订单id
 	 * @return
 	 */
 	public Map<String, Object> getTeamByOrderId(Integer order_id){
-		Map<String, Object> map=new HashMap<>();
-			
-		User demandMaster;
-		try {
-			/*1 通过订单的id查询需求工程师的id */
-			String demandMasterId=orderDao.findCreate_by_idById(order_id);
-			
-			/*2  通过订单的id查询寻源工程师的id数组*/
-			String[] sourceMasterId=projectApprovalDao.findSource_idByOrder_id(order_id);
-			
-			/*3 获取用户信息*/
-			demandMaster = userDao.getUser(demandMasterId);
-			
-			List<User> list = new ArrayList<User>();
-			for(int i=0;i<sourceMasterId.length;i++){
-				User source=userDao.getUser(sourceMasterId[i]);
-				if (sourceMasterId[i]!=null) {
-					list.add(source);
-				}	
-			}
-			
-			map.put("demandMaster", demandMaster);
-			map.put("source", list);
-			map.put("orderid", order_id);
-		} catch (Exception e) {
-			map.put("message", "结果错误");
-			e.printStackTrace();
+		Map<String, Object> map=new HashMap<>();		
+		/*1 、通过订单的id查询需求工程师的id */
+		String demandMasterId=orderDao.findCreate_by_idById(order_id);	
+		/*2、 通过订单的id查询次项目所有参与的寻源工程师*/
+		String[] sourceMasterId=projectApprovalDao.findSource_idByOrder_id(order_id);			
+		/*3、获取用户信息*/
+		User demandMaster = userDao.getUser(demandMasterId);//需求工程师		
+		List<User> list = new ArrayList<User>();//寻源工程师
+		for(int i=0;i<sourceMasterId.length;i++){
+			User source=userDao.getUser(sourceMasterId[i]);
+			if (sourceMasterId[i]!=null) {
+				list.add(source);
+			}	
 		}
+		
+		map.put("demandMaster", demandMaster);
+		map.put("source", list);
+		map.put("orderid", order_id);
 		return map;
 	}
 	
@@ -215,11 +193,9 @@ public class OrderService {
 	 * @return
 	 */
 	public Map<String, Object> rankReport(Integer order_id){
-		Map<String, Object> map=new HashMap<>();
-		
+		Map<String, Object> map=new HashMap<>();	
 		/*通过订单id来找所有报告并按创建时间排序*/
-		List<Report> list=reportDao.rankReport(order_id);
-		
+		List<Report> list=reportDao.rankReport(order_id);	
 		for(Report report:list){
 			if ("1".equals(report.getType())) {
 				report.setTypeName("方案线索");
@@ -235,6 +211,7 @@ public class OrderService {
 				report.setTypeName("项目总结");
 			}
 		}
+		
 		map.put("items", list);
 		map.put("orderid", order_id);
 		return map;
@@ -246,16 +223,8 @@ public class OrderService {
 	 * @return
 	 */
 	public Map<String, Object> projectGrade(Order order){
-		Map<String, Object> map=new HashMap<>();
-		
-		int flag=orderDao.proEvaluate(order);//添加评分信息
-		
-		if (flag==1) {
-			map.put("message", "成功");
-		}else{
-			map.put("message", "失败");
-		}
-		
+		Map<String, Object> map=new HashMap<>();	
+		orderDao.proEvaluate(order);//添加评分信息		
 		map.put("orderid", order.getId());
 		return map;
 	}

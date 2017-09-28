@@ -8,10 +8,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 import com.innovative.bean.Report;
 import com.innovative.service.ReportService;
-import com.innovative.utils.HttpClientUpload;
 import com.innovative.utils.JsonResult;
 import com.innovative.utils.PageInfo;
 
@@ -30,10 +28,8 @@ public class ReportController {
 	@RequestMapping(value="/reportSelect/{offset}/{order_id}/{type}",method=RequestMethod.GET)
 	public JsonResult reportSelect(@PathVariable(name="offset") Integer offset, 
 			@PathVariable(name = "order_id") Integer order_id,@PathVariable(name = "type") String type){
-
 		Integer page = offset/(new PageInfo().getPageSize()) +1;		
-		Map<String,Object> map = reportService.findReportByOrderId(order_id, type,page);
-		
+		Map<String,Object> map = reportService.findReportByOrderId(order_id, type,page);		
 		if((Integer)map.get("result")==1){
 			return new JsonResult(true, map);
 		}
