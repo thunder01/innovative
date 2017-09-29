@@ -170,6 +170,14 @@
 	</update>
 
 
+ <!--删除行业协会-->
+	<delete id="deleteAssociation" parameterType="map">
+		delete from "Associations"
+		<where>
+			 "Id"=#{id}
+		</where>
+	</delete>
+
 
 
 

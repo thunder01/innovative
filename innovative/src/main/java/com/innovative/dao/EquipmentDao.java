@@ -46,4 +46,10 @@ public interface EquipmentDao {
      * @return
      */
     int updateEquipment(Equipment equipment);
+    /**
+     * 删除仪器设备
+     * @param id
+     * @return
+     */
+	boolean deleteEquipment(String id);
 }

@@ -49,6 +49,13 @@ public interface OrganizationDao {
      */
     int updateOrganization(Organization organization);
 
+/**
+ * 删除
+ * @param id
+ * @return
+ */
+	boolean deleteOrganization(String id);
+
 
 
 

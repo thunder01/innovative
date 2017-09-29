@@ -112,4 +112,11 @@ public class SolutionService {
 
         return result > 0 ;
     }
+
+	public boolean deleteSolution(String id) {
+		if(null == id || "".equals(id)){
+			return false;
+		}
+		return solutionDao.deleteSolution(id);
+	}
 }

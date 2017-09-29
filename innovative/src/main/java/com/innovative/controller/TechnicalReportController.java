@@ -44,6 +44,22 @@ public class TechnicalReportController {
         return new JsonResult(true, technicalReport);
 
     }
+    
+    /**
+     * 根据删除技术报告
+     * @param id 协会id
+     * @return
+     */
+    @RequestMapping(value = "/deleteTechnicalReport/{id}", method = RequestMethod.GET)
+    public JsonResult deleteSolution(@PathVariable(name = "id") String id) {
+
+       boolean flag = technicalReportService.deleteTechnicalReport(id);
+        if (flag) {
+            return new JsonResult(true, "已删除");
+        }
+        return new JsonResult(false, "参数不合法");
+    }
+
 
     /**
      * 分页条件查询技术报告list

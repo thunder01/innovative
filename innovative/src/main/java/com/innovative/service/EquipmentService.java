@@ -114,4 +114,12 @@ public class EquipmentService {
 
         return result > 0 ;
     }
+
+	public boolean deleteEquipment(String id) {
+		// TODO Auto-generated method stub
+				if(null == id || "".equals(id)){
+					return false;
+				}
+				return equipmentDao.deleteEquipment(id);
+	}
 }

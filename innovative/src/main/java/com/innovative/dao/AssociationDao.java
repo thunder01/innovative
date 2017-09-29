@@ -53,5 +53,10 @@ public interface AssociationDao {
 
 
 
+	boolean deleteAssociation(@Param("id")String id);
+
+
+
+
 
 }

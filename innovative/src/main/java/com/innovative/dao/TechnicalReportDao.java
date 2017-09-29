@@ -46,4 +46,10 @@ public interface TechnicalReportDao {
      * @return
      */
     int updateTechnicalReport(TechnicalReport technicalReport);
+    /**
+     * 删除技术报告
+     * @param id
+     * @return
+     */
+	boolean deleteTechnicalReport(@Param("id")String id);
 }

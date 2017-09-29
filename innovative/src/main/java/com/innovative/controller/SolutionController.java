@@ -42,6 +42,22 @@ public class SolutionController {
         return new JsonResult(true, solution);
 
     }
+    
+    /**
+     * 根据删除解决方案
+     * @param id 协会id
+     * @return
+     */
+    @RequestMapping(value = "/deleteSolution/{id}", method = RequestMethod.GET)
+    public JsonResult deleteSolution(@PathVariable(name = "id") String id) {
+
+       boolean flag = solutionService.deleteSolution(id);
+        if (flag) {
+            return new JsonResult(true, "已删除");
+        }
+        return new JsonResult(false, "参数不合法");
+    }
+
 
     /**
      * 分页条件查询方案list

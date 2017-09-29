@@ -46,4 +46,11 @@ public interface SolutionDao {
      * @return
      */
     int updateSolution(Solution solution);
+    
+    /**
+     * 删除解决方案
+     * @param id
+     * @return
+     */
+	boolean deleteSolution(@Param("id")String id);
 }

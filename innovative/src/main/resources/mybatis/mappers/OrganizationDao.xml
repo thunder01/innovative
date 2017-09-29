@@ -161,7 +161,13 @@
 
 
 
-
+	<!--删除组织机构-->
+	<delete id="deleteOrganization" parameterType="map">
+		delete from "Organizations"
+		<where>
+			 "Id"=#{id}
+		</where>
+	</delete>
 
 	
 

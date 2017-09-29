@@ -135,5 +135,13 @@
             "Id" = #{id}
         </where>
     </update>
+    
+    <!--删除组织机构-->
+	<delete id="deleteTechnicalReport" parameterType="map">
+		delete from "TechnicalReports"
+		<where>
+			 "Id"=#{id}
+		</where>
+	</delete>
 
 </mapper>

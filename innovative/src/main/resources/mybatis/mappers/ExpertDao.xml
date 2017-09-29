@@ -194,7 +194,13 @@
 
 
 
-
+	<!--删除仪器设备-->
+	<delete id="deleteExpert" parameterType="map">
+		delete from "Experts"
+		<where>
+			 "Id"=#{id}
+		</where>
+	</delete>
 	
 
 </mapper>

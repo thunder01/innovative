@@ -148,4 +148,14 @@ public class ExpertService {
 
 
 
+
+	public boolean deleteExpert(String id) {
+		if(null == id || "".equals(id)){
+			return false;
+		}
+		return expertDao.deleteExpert(id);
+	}
+
+
+
 }

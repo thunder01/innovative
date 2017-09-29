@@ -109,4 +109,11 @@ public class TechnicalReportService {
 
         return result > 0 ;
     }
+
+	public boolean deleteTechnicalReport(String id) {
+		if(null == id || "".equals(id)){
+			return false;
+		}
+		return technicalReportDao.deleteTechnicalReport(id);
+	}
 }

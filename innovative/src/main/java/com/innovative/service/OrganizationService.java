@@ -109,5 +109,14 @@ public class OrganizationService {
 
 
 
+	public boolean deleteOrganization(String id) {
+		if(null == id || "".equals(id)){
+			return false;
+		}
+		return organizationDao.deleteOrganization(id);
+	}
+
+
+
 
 }

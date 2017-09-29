@@ -43,6 +43,22 @@ public class EquipmentController {
         return new JsonResult(true, equipment);
 
     }
+    
+    /**
+     * 根据id获取仪器设备
+     * @param id 协会id
+     * @return
+     */
+    @RequestMapping(value = "/deleteEquipment/{id}", method = RequestMethod.GET)
+    public JsonResult deleteAssociation(@PathVariable(name = "id") String id) {
+
+       boolean flag = equipmentService.deleteEquipment(id);
+        if (flag) {
+            return new JsonResult(true, "已删除");
+        }
+        return new JsonResult(false, "参数不合法");
+    }
+
 
     /**
      * 分页条件查询设备list

@@ -111,6 +111,20 @@ public class AssociationService {
     }
 
 
+    /**
+     * 根据id删除行业协会
+     * @param id
+     * @return
+     */
+	public boolean deleteAssociation(String id) {
+		// TODO Auto-generated method stub
+		if(null == id || "".equals(id)){
+			return false;
+		}
+		return associationDao.deleteAssociation(id);
+	}
+
+
 
 
 

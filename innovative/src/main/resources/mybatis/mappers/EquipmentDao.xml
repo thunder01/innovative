@@ -158,5 +158,14 @@
             "Id" = #{id}
         </where>
     </update>
+    
+    
+  <!--删除仪器设备-->
+	<delete id="deleteEquipment" parameterType="map">
+		delete from "Equipments"
+		<where>
+			 "Id"=#{id}
+		</where>
+	</delete>
 
 </mapper>

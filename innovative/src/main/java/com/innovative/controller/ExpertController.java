@@ -46,6 +46,21 @@ public class ExpertController extends BaseController {
         return new JsonResult(false, "参数不合法");
     }
 
+    /**
+     * 根据id获取仪器设备
+     * @param id 协会id
+     * @return
+     */
+    @RequestMapping(value = "/deleteExpert/{id}", method = RequestMethod.GET)
+    public JsonResult deleteExpert(@PathVariable(name = "id") String id) {
+
+       boolean flag = expertService.deleteExpert(id);
+        if (flag) {
+            return new JsonResult(true, "已删除");
+        }
+        return new JsonResult(false, "参数不合法");
+    }
+
 
 
 

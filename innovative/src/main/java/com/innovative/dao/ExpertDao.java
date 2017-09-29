@@ -79,6 +79,15 @@ public interface ExpertDao {
 
 
 
+	/**
+	 * 删除id
+	 * @param id 专家id
+	 * @return
+	 */
+	boolean deleteExpert(String id);
+
+
+
 
 
 

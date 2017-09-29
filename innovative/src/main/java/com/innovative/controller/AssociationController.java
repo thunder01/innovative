@@ -40,6 +40,21 @@ public class AssociationController extends BaseController {
         }
         return new JsonResult(false, "参数不合法");
     }
+    
+    /**
+     * 根据id获取行业协会详情
+     * @param id 协会id
+     * @return
+     */
+    @RequestMapping(value = "/deleteAssociation/{id}", method = RequestMethod.GET)
+    public JsonResult deleteAssociation(@PathVariable(name = "id") String id) {
+
+       boolean flag = associationService.deleteAssociation(id);
+        if (flag) {
+            return new JsonResult(true, "已删除");
+        }
+        return new JsonResult(false, "参数不合法");
+    }
 
 
 
