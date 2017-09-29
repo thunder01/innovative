@@ -52,6 +52,7 @@ public class Fileter implements Filter {
             isfile =false;
         }
         if (isfile) filterChain.doFilter(servletRequest,servletResponse);
+    	filterChain.doFilter(servletRequest,servletResponse);
     }
 
     @Override
