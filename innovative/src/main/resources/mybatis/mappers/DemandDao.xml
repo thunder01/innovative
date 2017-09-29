@@ -71,6 +71,13 @@
     <!--查询总条数-->
     <select id="getTotalCount" resultType="int">
         SELECT count(1) FROM "xacx_demand"
+        <where>
+            status='1'
+        </where>
+        )B
+        <where>
+            B.ddmj='0' or B.ddmj='1'and username @> '${userName}'
+        </where>
     </select>
     <!--根据查询条件获取列表-->
     <select id="getDemandList" resultMap="demandMap">
