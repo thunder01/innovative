@@ -101,12 +101,17 @@
     </select>
     
     <!-- 查询用户已经被接过的需求订单 -->
-    <select id="getMyDemand" parameterType="map" resultType="Demand">
+    <select id="getMyDemand" parameterType="map" resultMap="demandMap">
     	select a."id",a."name",a."number",a."iphone",a."create_date" as createDate,a."create_by" as cteateBy,a."late_date" as lateDate,a."late_by" as lateBy,a."bgd",a."demandd",a."interestpg",a."ninterestpg",
         a."hzms",a."hzrequest",a."productm",a."product_date",a."bz",a."check_name" as checkName,a."ddmj",a."option",a."file",a."xqf",a."gjc",a."username" as userName,b.id as orderid
         from xacx_demand a,xacx_order_v2 b 
     	where a.id=b.demandid and a.create_by=#{userid} 
     	order by a.create_date desc limit #{pageSize} offset #{startIndex}
+    </select>
+    <!-- 查询用户接单总条数 -->
+    <select id="getMyDemandTotal" parameterType="string" resultType="int">
+   		select count(*) from xacx_demand a,xacx_order_v2 b 
+    	where a.id=b.demandid and a.create_by=#{userid}
     </select>
 
 </mapper>

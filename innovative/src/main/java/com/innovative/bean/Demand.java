@@ -1,5 +1,6 @@
 package com.innovative.bean;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class Demand {
@@ -279,6 +280,17 @@ public class Demand {
 
 	public void setOrderid(Integer orderid) {
 		this.orderid = orderid;
+	}
+
+	@Override
+	public String toString() {
+		return "Demand [id=" + id + ", name=" + name + ", number=" + number + ", iphone=" + iphone + ", xqf=" + xqf
+				+ ", createDate=" + createDate + ", cteateBy=" + cteateBy + ", lateDate=" + lateDate + ", lateBy="
+				+ lateBy + ", bgd=" + bgd + ", demandd=" + demandd + ", interestpg=" + interestpg + ", ninterestpg="
+				+ ninterestpg + ", gjc=" + Arrays.toString(gjc) + ", hzms=" + hzms + ", hzrequest=" + hzrequest
+				+ ", productm=" + productm + ", productDate=" + productDate + ", bz=" + bz + ", checkName=" + checkName
+				+ ", ddmj=" + ddmj + ", option=" + option + ", status=" + status + ", path=" + path + ", userName="
+				+ Arrays.toString(userName) + ", list=" + list + ", orderid=" + orderid + "]";
 	}
     
     

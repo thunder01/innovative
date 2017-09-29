@@ -58,5 +58,5 @@ public interface DemandDao {
      */
     List<Demand> getMyDemand(@Param("startIndex") int startIndex, @Param("pageSize") int pageSize,@Param("userid") String userid);
     
-
+    int getMyDemandTotal(String userid);
 }

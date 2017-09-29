@@ -82,14 +82,18 @@ public class OrderService {
 		/*首先根据用户id获取用户信息*/
 		User user=userDao.getUser(userid);
 		List<Demand> list=null;
+		int total = 0;
 		if (user!=null) {
 			/*查询该用户的所有需求订单*/
 			list=demandDao.getMyDemand(pageInfo.getStartIndex(), pageInfo.getPageSize(), userid);
+			total = demandDao.getMyDemandTotal(userid);
+			System.out.println(list);
 		}
-			
+		
 		map.put("items", list);
 		map.put("user", user); 
-		map.put("userid", userid);    
+		map.put("userid", userid);  
+		map.put("totalCount", total);
         map.put("Count", pageInfo.getPageSize());
         map.put("itemCount", pageInfo.getPageSize());
         map.put("offset", pageInfo.getStartIndex());
