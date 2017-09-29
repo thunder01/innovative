@@ -49,7 +49,7 @@ public class DemandService {
         pageInfo.setCurrentPageNum(pageNum);
         userName = "{" + userName + "}".trim();
         List<Demand> demands = demandDao.getDemandList(pageInfo.getStartIndex(), pageInfo.getPageSize(),userName);
-        int totalCount = demandDao.getTotalCount();
+        int totalCount = demandDao.getTotalCount(userName);
 
         Map<String, Object> map = new HashMap<>();
         map.put("items", demands);
