@@ -42,7 +42,7 @@ public interface DemandDao {
      * 查询相关行业领域的记录总条数
      * @return
      */
-    int getTotalCount();
+    int getTotalCount(@Param("userName") String userName);
     /**
      * 查询相关行业领域的记录总条数
      * @return
