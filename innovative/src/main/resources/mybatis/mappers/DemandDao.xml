@@ -70,7 +70,7 @@
     </insert>
     <!--查询总条数-->
     <select id="getTotalCount" resultType="int">
-        SELECT count(1) FROM "xacx_demand"
+        SELECT count(1) FROM (SELECT * FROM "xacx_demand"
         <where>
             status='1'
         </where>
