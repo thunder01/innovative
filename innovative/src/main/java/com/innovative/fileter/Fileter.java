@@ -30,9 +30,8 @@ public class Fileter implements Filter {
         HttpServletRequest request= (HttpServletRequest) servletRequest;
         HttpServletResponse response= (HttpServletResponse) servletResponse;
         String url = request.getRequestURI().substring(request.getContextPath().length());
-        System.out.println(url);
         String [] urls=url.split("/");
-        /*if (urls[1].equals("file")||urls[1].equals("poi")||url.equals("/crossdomain.xml")){
+        if (urls[1].equals("file")||urls[1].equals("poi")||url.equals("/crossdomain.xml")){
             filterChain.doFilter(servletRequest,servletResponse);
         }else{
             UserService service;
@@ -58,8 +57,7 @@ public class Fileter implements Filter {
                 isfile =false;
             }
             if (isfile) filterChain.doFilter(servletRequest,servletResponse);
-        }*/
-      filterChain.doFilter(servletRequest,servletResponse);
+        }
     }
 
     @Override
