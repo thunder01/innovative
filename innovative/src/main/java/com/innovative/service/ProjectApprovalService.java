@@ -5,10 +5,13 @@ import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.innovative.bean.Demand;
 import com.innovative.bean.DisassembleReport;
 import com.innovative.bean.Order;
 import com.innovative.bean.ProjectApproval;
 import com.innovative.bean.User;
+import com.innovative.dao.DemandDao;
 import com.innovative.dao.DisassembleReportDao;
 import com.innovative.dao.OrderDao;
 import com.innovative.dao.ProjectApprovalDao;
@@ -17,6 +20,8 @@ import com.innovative.utils.PageInfo;
 
 @Service("projectApprovalService")
 public class ProjectApprovalService {	
+	@Autowired
+	private DemandDao demandDao;
 	@Autowired 
 	private ProjectApprovalDao projectApprovalDao;
 	@Autowired
@@ -47,7 +52,13 @@ public class ProjectApprovalService {
 		}else {
 			map.put("message", "4");//需求不存在
 		}
-		
+		Integer demandId = orderDao.getDemandIdByOrderId(orderid);
+		Demand demand = demandDao.getDemand(demandId);
+		List<ProjectApproval> list = projectApprovalDao.getApprovalListByOrderid(orderid);
+		int count = list.size()+1;
+		if(demand!=null){
+			map.put("pronum", demand.getNumber()+"-"+count);
+		}
 		map.put("orderid", orderid);
 		return map;
 	}
