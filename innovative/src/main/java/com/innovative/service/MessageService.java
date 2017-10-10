@@ -45,4 +45,11 @@ public class MessageService {
         map.put("limit", pageInfo.getPageSize());
         return map;
     }
+    /**
+     * 修改状态
+     */
+    public  boolean upStatus(int id){
+        return (messageDao.upStatus(id)>0 ? true:false);
+    }
+
     }

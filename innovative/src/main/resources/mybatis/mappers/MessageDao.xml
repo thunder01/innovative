@@ -17,6 +17,10 @@
         ("project_id","type","create_date")
         VALUES(#{projectId},#{type},now())
     </insert>
+    <!--修改状态-->
+    <update id="upStatus" parameterType="int">
+        UPDATE  "xacx_messge" SET "status"='2' WHERE project_id=#{id} and type='0'
+    </update>
     <!--根据查询条件获取列表-->
     <select id="getMessageList" resultType="map">
             SELECT
@@ -26,6 +30,7 @@
             de."xqf",
             de."bgd",
             de."status",
+            de."option",
             me.create_date createDate,
             me."type",
             me."project_id"

@@ -22,4 +22,8 @@ public interface MessageDao {
      * @return
      */
     int getTotalCount();
+    /**
+     * 修改状态
+     */
+    int upStatus(int id);
 }
