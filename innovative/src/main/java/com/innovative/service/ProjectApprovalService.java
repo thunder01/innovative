@@ -56,7 +56,9 @@ public class ProjectApprovalService {
 		Demand demand = demandDao.getDemand(demandId);
 		List<ProjectApproval> list = projectApprovalDao.getApprovalListByOrderid(orderid);
 		int count = list.size()+1;
-		if(demand!=null){
+		if(count<10&&demand!=null){
+			map.put("pronum", demand.getNumber()+"-0"+count);
+		}else{
 			map.put("pronum", demand.getNumber()+"-"+count);
 		}
 		map.put("orderid", orderid);
