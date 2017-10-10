@@ -38,7 +38,7 @@
     </select>
     <!--根据ID修改内容-->
     <update id="updateDemand" parameterType="Demand">
-        UPDATE  "xacx_demand" SET "status"='1',"option" =#{option} WHERE id=#{id}
+        UPDATE  "xacx_demand" SET "status"=#{status},"option" =#{option} WHERE id=#{id}
     </update>
     <!-- 新增-->
     <insert id="addDemand" parameterType="Demand">
@@ -76,7 +76,7 @@
         </where>
         )B
         <where>
-            B.ddmj='0' or B.ddmj='1'and username @> '${userName}'
+            B.ddmj='0' or B.ddmj='1'and B.username @> '${userName}'
         </where>
     </select>
     <!--根据查询条件获取列表-->
@@ -87,7 +87,7 @@
         </where>
         )B
         <where>
-         B.ddmj='0' or B.ddmj='1'and username @> '${userName}'
+         B.ddmj='0' or B.ddmj='1'and B.username @> '${userName}' order by B.create_date desc
         </where>
         limit #{pageSize} offset #{startIndex}
     </select>
@@ -95,7 +95,7 @@
     <select id="getQueryList" resultMap="demandMap">
        SELECT * FROM "xacx_demand"
         <where>
-            create_by=#{userName}
+            create_by=#{userName} order by a.create_date desc
         </where>
         limit #{pageSize} offset #{startIndex}
     </select>

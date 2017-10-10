@@ -20,10 +20,8 @@ import javax.annotation.Resource;
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * 下订单的需求
@@ -36,6 +34,28 @@ public class DemandController{
      private DemandService demandService;
     @Autowired
      private  MessageService messageService;
+     private  static int orderNum=0;
+    /**
+     * 订单号生成
+     */
+    @RequestMapping(value = "/getOder",method = RequestMethod.GET)
+    public JsonResult getOder(){
+        String oderNumber="";
+        long no=0;
+        SimpleDateFormat sdf=new SimpleDateFormat("yyyyMM");
+        String nowdate = sdf.format(new Date());
+        no=Long.parseLong(nowdate)*10000;
+        no+=getNo();
+        String oderNo=no+"";
+        String oder=oderNo.substring(0,6);
+        String code=oderNo.substring(6,10);
+        oderNumber=oder+"-"+code;
+        return new JsonResult(true,oderNumber);
+    }
+    public static int getNo(){//返回当天的订单数+1
+        orderNum++;
+        return orderNum;
+    }
 
     /**
      * 根据ID查询内容
@@ -59,6 +79,7 @@ public class DemandController{
         Demand demandList=null;
         boolean code=true;
         if(demandService.updateDemand(demand)){
+            messageService.upStatus(demand.getId());
             demandList=demandService.getDemand(demand.getId());
         }else{
             messge="审核失败";
