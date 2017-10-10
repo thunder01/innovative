@@ -6,6 +6,7 @@
 
 <resultMap id="userMap" type="User">
 	  <id property="userId" column="pernr" />
+	  <result property="userName" column="username"/><!-- 用户名 -->
 	  <result property="itcode" column="itcode"/><!-- itcode -->
 	  <result property="userIntegration" column="userIntegration"/><!-- 用户积分 -->
 	  <result property="usrid_u" column="usrid_u"/><!-- 用户名拼音 -->
@@ -70,7 +71,7 @@
 
 	 <!--根据姓名模糊匹配获取用户信息-->
 	<select id="getUserByName" resultMap="userMap">
-		select * from "xacx_user"  where nachn||vorna like  #{name}
+		select * from "xacx_user"  where username like  #{name}
 	</select>
 	
 	 <!--根据员工账号获取全称-->
