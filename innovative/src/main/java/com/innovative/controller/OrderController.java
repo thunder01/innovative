@@ -87,6 +87,7 @@ public class OrderController {
 	 * */
 	@RequestMapping(value="/postApproval",method=RequestMethod.POST)
 	public JsonResult postApproval(@RequestBody ProjectApproval pApproval){
+		System.out.println(pApproval);
 		Map<String,Object> map=projectApprovalService.postApproval(pApproval);
 		return new JsonResult(true, map);
 	}
