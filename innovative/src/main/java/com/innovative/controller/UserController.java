@@ -115,6 +115,17 @@ public class UserController {
 	        return new JsonResult(true, userService.getUserLists(page));
 	    }
 	    /**
+	     * 用户列表页
+	     *
+	     * @return
+	     */
+	    @RequestMapping(value = "/getUsers", method = RequestMethod.GET)
+	    public JsonResult getUsers() {
+	    	List<User> list = userService.getUsers();
+	    	System.out.println(list);
+	        return new JsonResult(true, list);
+	    }
+	    /**
 	     * 给用户分角色
 	     * @param role
 	     * @param req

@@ -113,6 +113,10 @@ public class UserService {
 		}
 			
 	}
+	public List<User> getUsers() {
+		// TODO Auto-generated method stub
+		return userdao.getUsers();
+	}
 
 
 }

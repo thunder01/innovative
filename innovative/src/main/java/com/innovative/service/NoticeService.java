@@ -2,6 +2,7 @@ package com.innovative.service;
 
 
 import com.innovative.bean.Notice;
+import com.innovative.dao.FileDao;
 import com.innovative.dao.NoticeDao;
 import com.innovative.utils.FileUpload;
 import com.innovative.utils.HttpClientUpload;
@@ -23,6 +24,8 @@ public class NoticeService {
 
     @Autowired
     NoticeDao noticeDao;
+    @Autowired
+    FileDao fileDao;
 
 
 
@@ -33,9 +36,8 @@ public class NoticeService {
      * @param file 文件（多个）
      * @return
      */
-    public boolean addNotice(String title, MultipartFile[] file) {
-
-
+    public boolean addNotice(Notice notice) {
+   
         //map集合存放请求参数
         Map<String, Object> params = new HashMap<>();
         //params.put("id", 1);
@@ -44,16 +46,17 @@ public class NoticeService {
         params.put("createdBy", "");
         params.put("deleted", false);
         params.put("deletedBy", "");
-        params.put("fileName", "");
+        params.put("title", notice.getTitle());
+        //params.put("fileName", file[0].getOriginalFilename());
         params.put("isActive", true);
         params.put("rank", 0);
         params.put("rowVersion", 0);
         params.put("summary", "");
         params.put("tags", "{" + "" + "}");
-        params.put("title", title);
+        params.put("id", notice.getId());
         params.put("updatedBy", "");
-        params.put("file", HttpClientUpload.httpClientUploadFile(file, "noticePhoto"));
-
+       // params.put("file", HttpClientUpload.httpClientUploadFile(file, "noticePhoto"));
+        fileDao.updateFile(notice.getId());
         return (noticeDao.addNotice(params) > 0);
     }
 
@@ -77,10 +80,18 @@ public class NoticeService {
      * @param id id
      * @return
      */
-    public boolean delNotice(Integer id){
+    public boolean delNotice(String id){
 
         return (noticeDao.delNotice(id) > 0);
     }
+
+
+
+
+	public boolean updateNotice(Notice notice) {
+		// TODO Auto-generated method stub
+		return noticeDao.updateNotice(notice.getTitle(),notice.getId());
+	}
 
 
 

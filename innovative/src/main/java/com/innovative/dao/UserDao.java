@@ -89,6 +89,11 @@ public interface  UserDao {
 		void deleteUserRoles(@Param("userId")String userId);
 		//根据员工号获取员工所在组织全称
 		Map<String,String> getQcName(String pernr);
+		/**
+		 * 获取所有在职的用户
+		 * @return
+		 */
+		List<User> getUsers();
 }
 
 

@@ -79,7 +79,12 @@
 		select u.pernr,u.orgeh,e.PATH from xacx_user u left join  v_xacx_user_org e on u.orgeh = e.orgeh where pernr = #{pernr}
 	</select>
 	
-	
+		<!--根据查询条件获取列表-->
+	<select id="getUsers" resultMap="userMap">
+		SELECT username,stext,dstext FROM "xacx_user" where
+		stat2 = '3' and  stext is not null
+		limit 100 offset 0
+	</select>
 	
 	
 	<!--修改用户信息-->

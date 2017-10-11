@@ -52,7 +52,7 @@ public class CarouselController {
                 e.printStackTrace();
                 
             }*/
-            url =  HttpClientUpload.httpClientUploadFile(FileData, "");
+            url =  HttpClientUpload.httpClientUploadFile(FileData, "lunboPhoto");
         }
 
         if (url == null || url.length() <= 0) {

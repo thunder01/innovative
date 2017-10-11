@@ -35,7 +35,12 @@ public interface NoticeDao {
      * @param id id
      * @return
      */
-    int delNotice(@Param("id") Integer id);
+    int delNotice(@Param("id") String id);
+
+
+
+
+	boolean updateNotice(@Param("title")String title, @Param("id")String id);
 
 
 }
