@@ -107,7 +107,7 @@ public class NoticeController extends BaseController {
      * @return
      */
     @RequestMapping(value = "/delNotice", method = RequestMethod.POST)
-    public JsonResult delNotice(@RequestParam(name = "id") String id) {
+    public JsonResult delNotice(@RequestParam(name = "id") String id) {  
 
         if(!noticeService.delNotice(id)){
             return new JsonResult(false, "删除失败");

@@ -37,6 +37,6 @@ public interface CarouselDao {
      * @param id 图片id
      * @return
      */
-    Carousel getCarouselById(@Param("id") int id);
+    Carousel getCarouselById(@Param("id") String id);
 
 }

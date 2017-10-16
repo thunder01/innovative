@@ -66,7 +66,7 @@ public class CarouselController {
      * @return
      */
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
-    public JsonResult deleteImg(@RequestParam(name = "id", required = true) Integer id) {
+    public JsonResult deleteImg(@RequestParam(name = "id", required = true) String id) {
 
         if (id == null) {
             return new JsonResult(false, "参数不合法，请重新操作！");

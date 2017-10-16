@@ -60,9 +60,9 @@ public class CarouselService {
     	 for(Carousel e: catousels){
          	if(e==null || "".equals(e.getId()))
          		continue;
-         	List<String> url = fileDao.getPhotoByMOdAndId(e.getId(), "expertPhoto");
+         	List<String> url = fileDao.getPhotoByMOdAndId(e.getId(), "lunboPhoto");
    		   if(url != null && url.size() > 0 )
-   			  	e.setLink( url.get(0));
+   			  	e.setUrl( url.get(0));
          }
         return catousels;
 
@@ -74,7 +74,7 @@ public class CarouselService {
      * @param id 图片id
      * @return
      */
-    public Carousel getCarouselById(int id) {
+    public Carousel getCarouselById(String id) {
 
         return carouselDao.getCarouselById(id);
 

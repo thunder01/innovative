@@ -31,7 +31,7 @@
 	<insert id="addNotice" parameterType="map">
 		INSERT INTO "Notices"
 		("Id","Content", "CreatedAt", "CreatedBy", "Deleted", "DeletedAt", "DeletedBy", "FileName", "IsActive", "Rank", "RowVersion", "Summary", "Tags", "Title", "UpdatedAt", "UpdatedBy", "file")
-		VALUES (#{id},#{content}, #{createdAt}, #{createdBy}, #{deleted}, #{createdAt}, #{deletedBy}, #{fileName}, #{isActive}, #{rank}, #{rowVersion}, #{summary}, '${tags}', #{title}, #{createdAt}, #{updatedBy}, #{file})
+		VALUES (#{id},#{content}, now(), #{createdBy}, #{deleted}, #{createdAt}, #{deletedBy}, #{fileName}, #{isActive}, #{rank}, #{rowVersion}, #{summary}, '${tags}', #{title}, #{createdAt}, #{updatedBy}, #{file})
 	</insert>
 
 
@@ -40,7 +40,7 @@
 
 	<!--公告列表-->
 	<select id="getNotices" resultMap="noticeMap">
-		SELECT e."Title",e."Id",f."refId",f."refType",f."filename",f."url" FROM "Notices"  e  LEFT JOIN "xacx_file" f on f."refId" = e."Id" and f."refType" = 'gonggaoFile' and f."sign" = 'add' WHERE e."Deleted" = 'f' AND e."IsActive" = 't' ORDER BY e."CreatedAt" DESC
+		SELECT e."Title",e."Id",f."refId",f."refType",f."filename",f."url",e."CreatedAt" FROM "Notices"  e  LEFT JOIN "xacx_file" f on f."refId" = e."Id" and f."refType" = 'gonggaoFile' and f."sign" = 'add' WHERE e."Deleted" = 'f' AND e."IsActive" = 't' ORDER BY e."CreatedAt" DESC
 	</select>
 
 
@@ -48,7 +48,7 @@
 	<update id="updateNotice" parameterType="map">
 		UPDATE "Notices"
 		<set>
-			"Title" = #{title}
+			"Title" = #{title} ,"CreatedAt" = now()
 		</set>
 		where "Id"=#{id}
 	</update>
