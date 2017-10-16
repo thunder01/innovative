@@ -22,7 +22,7 @@ public class CustomMVCConfiguration extends WebMvcConfigurerAdapter {
                 Charset.forName("UTF-8"));
         return converter;
     }
-   /* @Bean
+    @Bean
         public FilterRegistrationBean getFilter(){
         Fileter fileter = new Fileter();
         FilterRegistrationBean registrationBean = new FilterRegistrationBean();
@@ -32,7 +32,7 @@ public class CustomMVCConfiguration extends WebMvcConfigurerAdapter {
         registrationBean.setUrlPatterns(urlPatterns);
         registrationBean.setOrder(1);
         return registrationBean;
-    }*/
+    }
 
     @Override
     public void configureMessageConverters(

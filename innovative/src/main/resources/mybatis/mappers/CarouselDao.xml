@@ -7,10 +7,11 @@
     <!--将图片保存到服务器，将记录保存到数据库-->
     <insert id="insertImg" parameterType="list">
         INSERT INTO "Carousels"
-        ("CreatedAt", "Deleted", "IsActive", "UpdatedAt", "Url")
+        ("Id","CreatedAt", "Deleted", "IsActive", "UpdatedAt", "Link","Title")
         VALUES
-        <foreach collection="list" item="item" separator=",">
-            (now(), false, true, now(), #{item})
+         
+        <foreach collection="lists" item="item" separator=",">
+            (#{item.id},now(), false, true, now(), #{item.link},#{item.title})
         </foreach>
     </insert>
 
@@ -27,7 +28,7 @@
 
     <!--获取图片列表，根据时间排序，取3张-->
     <select id="getCarouselList" resultType="Carousel">
-        SELECT "Id", "Url", "UpdatedAt" FROM "Carousels"
+        SELECT "Id", "Url", "UpdatedAt","Link","Title" FROM "Carousels"
         <where>
             "Deleted" = 'f' AND "IsActive" = 't'
         </where>

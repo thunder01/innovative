@@ -6,14 +6,19 @@ import com.innovative.service.CarouselService;
 import com.innovative.utils.HttpClientUpload;
 import com.innovative.utils.JsonResult;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 @RestController
@@ -31,36 +36,22 @@ public class CarouselController {
      * @return
      */
     @RequestMapping(value = "/insert", method = RequestMethod.POST)
-    public JsonResult insertImg(@RequestParam(name = "FileData", required = true) MultipartFile[] FileData) {
+    @ResponseBody 
+    public JsonResult insertImg(@RequestBody Carousel carousel) {
+    	if(carousel ==  null )
+    		 return new JsonResult(false, "上传图片失败！");
+    	List<Map<String,String>> lists = new ArrayList<Map<String,String>>();
+    	Map<String,String> map ;
+    	for (int i = 0 ;i < carousel.getIds().length ; i++){
+    		map = new HashMap<String,String>();
+    		map.put("id", carousel.getIds()[i]);
+    		map.put("link", carousel.getLinks()[i]);
+    		map.put("title", carousel.getTitles()[i]);
+    		lists.add(map);
+    	}
 
-        //用于存储上传后的图片地址
-        /*List<String> list = new ArrayList();*/
-        String url = "" ;
-
-        //上传图片操作
-        if (FileData != null && FileData.length > 0) {
-            /*try {
-                String url = null;
-                for (int i = 0; i < FileData.length; i++) {
-
-                    url = FileUpload.copyInputStreamToFile(FileData[i], "carousel");
-                    list.add(url);
-
-                }
-              
-            } catch (IOException e) {
-                e.printStackTrace();
-                
-            }*/
-            url =  HttpClientUpload.httpClientUploadFile(FileData, "lunboPhoto");
-        }
-
-        if (url == null || url.length() <= 0) {
-            return new JsonResult(false, "上传图片失败！");
-        }
-       List<String> list = Arrays.asList(url.split(","));
         //向数据库插入图片信息
-        boolean result = carouselService.insertImg(list);
+        boolean result = carouselService.insertImg(lists);
         if (!result) {
             return new JsonResult(false, "上传图片失败！");
         }
