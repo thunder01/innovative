@@ -36,5 +36,7 @@ public interface FileDao {
 	void updateAddPhotoToDelete(@Param("refid")String refid,@Param("refType") String refType);
 	//删除指定的莫个文件
 	boolean deleteZdFile(@Param(value="refid")String refid,@Param(value="filename")String filename);
+	//删除之前的文件
+	void deleteFiles(@Param(value="refid")String refid, @Param(value="reftype")String reftype);
 
 }

@@ -45,6 +45,13 @@
 			 "refId"=#{refid}
 		</where>
 	</delete>
+	 <!--删除模块时删除文件-->
+	<delete id="deleteFiles" parameterType="map">
+		delete from "xacx_file"
+		<where>
+			 "refId"=#{refid} and "refType" = #{reftype}
+		</where>
+	</delete>
 	 <!--删除指定文件-->
 	<delete id="deleteZdFile" parameterType="map">
 		delete from "xacx_file"

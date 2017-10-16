@@ -107,6 +107,9 @@ public class SolutionService {
      * @return
      */
     public boolean updateSolution(Solution solution) {
+    	 //删除之前的文件
+        fileDao.deleteFiles(solution.getId(),"programFile");
+        //新增新的文件
     	fileDao.updateFile(solution.getId());
         int result = solutionDao.updateSolution(solution);
 

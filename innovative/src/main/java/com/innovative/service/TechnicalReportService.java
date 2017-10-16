@@ -104,7 +104,9 @@ public class TechnicalReportService {
     public boolean updateTechnicalReport(TechnicalReport technicalReport) {
 
         int result = technicalReportDao.updateTechnicalReport(technicalReport);
-        
+        //删除之前的文件
+        fileDao.deleteFiles(technicalReport.getId(),"reportFile");
+        //新增新的文件
         fileDao.updateFile(technicalReport.getId());
 
         return result > 0 ;
