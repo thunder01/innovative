@@ -113,7 +113,7 @@ public class PoiService {
                         expert.setRowVersion(getCellIntValue(row.getCell((short)14)));
                         expert.setTags(getArrCellValue(row.getCell((short)15)));
                         expert.setId(Misc.uuid());
-                        /*expert.setTags("{}");*/
+                        /*expert.setTags("{}");*///123
                         //封装第a行的对象信息,用map封装expert 对象 key值对应sheet.row下标
                         map.put(String.valueOf(she)+","+String.valueOf(a), expert);
                         beanList.add(map);
