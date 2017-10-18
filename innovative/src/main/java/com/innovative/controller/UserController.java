@@ -1,5 +1,6 @@
 package com.innovative.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -13,6 +14,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.innovative.bean.User;
 import com.innovative.service.UserService;
 import com.innovative.utils.CookiesUtil;
@@ -79,10 +83,16 @@ public class UserController {
 	    public JsonResult getExpertByName(@PathVariable(name = "name") String name) {
 	    
 			List<User> user = userService.getUserByName(name);
+			List<String> list = new ArrayList<String>();
 		        if (user != null) {
-		            return new JsonResult(true, user);
+		        	for(User u: user){
+		        		list.add("username:"+u.getUserName()+";userpost:"+u.getStext()+";userdepart:"+u.getDstext());
+		        	}
+		        	System.out.println(JSON.toJSONString(JSON.toJSON(new JsonResult(true, user)),SerializerFeature.DisableCircularReferenceDetect,SerializerFeature.WriteMapNullValue));
+		        	/*JSON.toJSONString(user,SerializerFeature.DisableCircularReferenceDetect,SerializerFeature.WriteMapNullValue)*/
+		        	return new JsonResult(true, user);
 		        }
-		       return new JsonResult(false, "参数不合法");
+		       return  new JsonResult(false, "获取失败");
 	 }
 	 
 	 /**

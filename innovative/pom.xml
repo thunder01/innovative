@@ -132,6 +132,20 @@
 		    <artifactId>commons-lang3</artifactId>
 		    <version>3.4</version>
 		</dependency>
+		<!-- 记录日志需要另个jar 一个 javax.servlet 另一个 fastjson 包 -->
+		<!-- https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api  -->
+		<dependency>
+		    <groupId>javax.servlet</groupId>
+		    <artifactId>javax.servlet-api</artifactId>
+		    <version>3.1.0</version>
+		    <scope>provided</scope>
+		</dependency>
+		<!-- 阿里巴巴fastjson 解析json视图 -->
+		<dependency>
+		    <groupId>com.alibaba</groupId>
+		    <artifactId>fastjson</artifactId>
+		    <version>1.2.31</version>
+		</dependency>
 		
 		<!-- webservice -->
 		<!-- <dependency>

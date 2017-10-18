@@ -1,6 +1,8 @@
 package com.innovative.bean;
 
 import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 /**
@@ -11,6 +13,7 @@ public class Notice {
     private String id;
     private String content;//内容
     private Timestamp createdAt;//创建时间
+    private String createdAts;//创建时间
     private String createdBy;//创建人
     private boolean deleted;//是否删除
     private Timestamp deletedAt;//删除时间
@@ -49,6 +52,16 @@ public class Notice {
 		this.updatedAt = updatedAt;
 		this.updatedBy = updatedBy;
 		this.filelist = filelist;
+	}
+	
+
+	public String getCreatedAts() {
+		 DateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+		return sdf.format(createdAt);
+	}
+
+	public void setCreatedAts(String createdAts) {
+		this.createdAts = createdAts;
 	}
 
 	public String getId() {
