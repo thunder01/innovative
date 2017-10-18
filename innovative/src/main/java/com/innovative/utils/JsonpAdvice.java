@@ -10,7 +10,7 @@ import org.springframework.web.servlet.mvc.method.annotation.AbstractJsonpRespon
  *
  */
 
-@ControllerAdvice(basePackages = "com.innovative.controller.UserController")  
+@ControllerAdvice(basePackages = "com.innovative.controller")  
 public class JsonpAdvice extends AbstractJsonpResponseBodyAdvice{  
   
 	  public JsonpAdvice() {  
