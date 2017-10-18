@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.innovative.dao.CollectDao">
+
+	<resultMap id="collectMap" type="Collect">
+		<id property="id" column="id"/>
+		<result property="proname" column="proname"/>
+		<result property="source_name" column="source_name"/>
+		<result property="contact" column="contact"/>
+		<result property="demand_bg" column="demand_bg"/>
+		<result property="demand_core" column="demand_core"/>
+		<result property="demand_count" column="demand_count"/>
+		<result property="keyword" column="keyword" typeHandler="com.innovative.mybatisHandler.ArrayTypeHandler"/>
+		<result property="coopmodel" column="coopmodel"/>
+		<result property="require" column="require"/>
+		<result property="cost" column="cost"/>
+		<result property="completion" column="completion"/>
+		<result property="remark" column="remark"/>
+		<result property="collect_content" column="collect_content" typeHandler="com.innovative.mybatisHandler.ArrayTypeHandler"/>
+		<result property="files" column="files"/>
+		<result property="create_by" column="create_by"/>
+		<result property="create_date" column="create_date"/>
+		<result property="delete_date" column="delete_date"/>
+		<result property="delete_by" column="delete_by"/>
+		<result property="delete_status" column="delete_status"/>
+		<result property="last_by" column="last_by"/>
+		<result property="last_date" column="last_date"/>
+	</resultMap>
+	<!-- 添加一个征集 -->
+	<insert id="saveCollection" parameterType="Collect">
+		INSERT INTO xacx_collection(proname,source_name,contact,demand_bg,demand_core,demand_count,keywords,coopmodel,require,
+		cost,completion,remark,collect_content,files,create_by,create_date,delete_status)VALUES(#{proname},#{source_name},#{contact},
+		#{demand_bg},#{demand_core},#{demand_count},
+		<choose>
+				<when test="keyword != null">
+					<foreach item="keyword" collection="keywords" separator="," open="'{" close="}'," index="">  
+				      ${keyword}
+				    </foreach>  
+				</when>
+			<otherwise>'{}',</otherwise>
+		</choose>
+		#{coopmodel},#{require},#{cost},#{completion},#{remark},
+		<choose>
+				<when test="collect_content != null">
+					<foreach item="collect" collection="collect_content" separator="," open="'{" close="}'," index="">  
+				      ${collect}
+				    </foreach>  
+				</when>
+			<otherwise>'{}',</otherwise>
+		</choose>
+		#{files},#{create_by},now(),0)
+	</insert>
+	
+	<!-- 全员征集分页，排序按创建时间 -->
+	<select id="findAllCollection" parameterType="map" resultMap="collectMap">
+		SELECT id,proname,demand_bg,source_name,contact,files,create_date FROM xacx_collection 
+		ORDER BY create_date DESC limit #{pageSize} offset #{startIndex}
+	</select>
+	
+	<!-- 全员征集总数-->
+	<select id="findTotal" resultType="int">
+		SELECT COUNT(*) FROM xacx_collection
+	</select>
+	
+	<!-- 通过id查询征集详情 -->
+	<select id="findCollectionById" parameterType="int" resultMap="collectMap">
+		SELECT * FROM xacx_collection WHERE id =#{id}
+	</select>
+</mapper>
