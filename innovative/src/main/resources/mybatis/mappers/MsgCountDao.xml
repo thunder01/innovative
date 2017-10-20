@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.innovative.dao.MsgCountDao">
+    <resultMap id="msgCountMap" type="MsgCount">
+        <id property="userid" column="userid" />
+    	<result property="message_count" column="message_count"/>
+    	<result property="notice_count" column="notice_count"/>  
+    	<result property="finish_count" column="finish_count"/>  
+    	<result property="unfinish_count" column="unfinish_count"/>  
+    	<result property="old_message_count" column="old_message_count"/>  
+    	<result property="old_notice_count" column="old_notice_count"/>  
+    	<result property="old_finish_count" column="old_finish_count"/>  
+    	<result property="old_unfinish_count" column="old_unfinish_count"/>  
+	</resultMap>
+	
+	<!-- 增加一个用户消息，增加前先判断这个用户是否在这个表中存在 -->
+	<insert id="saveMsgCount" parameterType="string">
+		INSERT INTO xacx_user_msgcount(userid,message_count,notice_count,finish_count,unfinish_count,old_message_count,
+		old_notice_count,old_finish_count,old_unfinish_count) VALUES(#{userid},0,0,0,0,0,0,0,0)
+	</insert>
+	
+	<!-- 用户存在的话就更新用户消息数 -->
+	<update id="updateMsgCount" parameterType="MsgCount">
+		UPDATE xacx_user_msgcount SET message_count=#{message_count},notice_count=#{notice_count},finish_count=#{finish_count},
+		unfinish_count=#{unfinish_count},old_message_count=#{old_message_count},old_notice_count=#{old_notice_count},
+		old_finish_count=#{old_finish_count},old_unfinish_count=#{old_unfinish_count} WHERE userid=#{userid}
+	</update>
+	<!-- 通过用户id查询用户信息条数，即可知道该用户是否有新消息，读取之后更新 -->
+	<select id="showMsgCount" parameterType="string" resultMap="msgCountMap">
+		SELECT * FROM xacx_user_msgcount WHERE userid = #{userid}
+	</select>
+	
+	<!-- 通过用户id查询用户信息条数，即可知道该用户是否有新消息，读取之后更新 -->
+	<select id="existMsgCount" parameterType="string" resultType="int">
+		SELECT COUNT(userid) FROM xacx_user_msgcount WHERE userid = #{userid}
+	</select>
+</mapper>

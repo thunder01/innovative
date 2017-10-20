@@ -3,7 +3,11 @@ import com.innovative.bean.Message;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
-
+/**
+ * 消息列表
+ * @author huang
+ *
+ */
 public interface MessageDao {
     /**
      * 添加消息表
@@ -26,4 +30,34 @@ public interface MessageDao {
      * 修改状态
      */
     int upStatus(int id);
+    
+    
+    /*       分界线                */
+    
+    /**
+     * 添加待办消息
+     * @param message
+     * @return
+     */
+    public int saveBacklogMessage(Message message);
+    /**
+     * 添加通知消息
+     * @param message
+     * @return
+     */
+    public int saveNoticeMessage(Message message);
+    /**
+     * 通知消息集合
+     * @param userid
+     * @return
+     */
+    public List<Message> showNoticeMessage(@Param("userid") String userid,@Param("notice") Integer notice,@Param("startIndex") Integer startIndex, @Param("pageSize") Integer pageSize);
+    /**
+     * 消息通知数
+     * @param userid
+     * @return
+     */
+    public int totalNoticeMessage(@Param("userid") String userid,@Param("notice") Integer notice);
+    
+    
 }
