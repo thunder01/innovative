@@ -36,7 +36,6 @@ public class UserController {
 	  */
 	 @RequestMapping(value = "/getUser/{id}", method = RequestMethod.GET)
 	    public JsonResult getUser(@PathVariable(name = "id") String id) {
-	    
 		 if(id == null || "".equals(id))
 			 return new JsonResult(false, "参数不合法");
 			User user = userService.getUser(id);

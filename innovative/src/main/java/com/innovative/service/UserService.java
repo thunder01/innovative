@@ -3,6 +3,7 @@ package com.innovative.service;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,11 +13,20 @@ import com.innovative.bean.User;
 import com.innovative.dao.UserDao;
 import com.innovative.utils.Config;
 import com.innovative.utils.PageInfo;
+import com.innovative.utils.SerializeUtil;
+
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisCluster;
+import redis.clients.jedis.JedisPool;
 
 @Service
 public class UserService {
 	@Autowired
 	UserDao userdao;
+	//注入redis数据库连接池
+	@Autowired
+	JedisCluster jedisCluster;
+	
 	/**
 	 * 根据职位获取用户信息
 	 * @param userpost
@@ -25,14 +35,48 @@ public class UserService {
 	public  List<User>  getUserList (String userpost){
 		return null;
 	}
+	
+	/**
+	 * 根据用户id获取用户信息,先从缓存中中查，再从数据库中查
+	 * @param userId
+	 * @return
+	 */
 	public User getUser(String userId) {
-		// TODO Auto-generated method stub
-		return userdao.getUser(userId);
+		//引入序列化工具
+		SerializeUtil serializeUtil=SerializeUtil.getInstance();
+		User user = null;
+		if (userId!=null) {
+			//redis数据库中存储的内容
+			String serStr=jedisCluster.get(userId);
+			//反序列化
+			user=(User)serializeUtil.objectDeserialization(serStr);
+			//判断从redis中查的结果是否为空，为空再到数据库中查询
+			if (user==null) {
+				user=userdao.getUser(userId);
+				//若结果不为空，再加进缓存中
+				if (user!=null) {
+					//序列化
+					serStr=serializeUtil.objectSerialiable(user);
+					jedisCluster.set(userId, serStr);
+				}
+			}
+		}
+			
+		return user;
 	}
+	
+	/**
+	 * 根据用户的姓、名查找用户信息，这里直接从数据库查询较慢，所以加入缓存
+	 * @param name
+	 * @return
+	 */
 	public List<User> getUserByName(String name) {
 		name = "%"+name+"%";
-		return userdao.getUserByName(name);
+		List<User> listUser = userdao.getUserByName(name);
+		return listUser;
 	}
+	
+	
 	public boolean updateUser(User user) {
 		return userdao.updateUser(user);
 	}
@@ -47,7 +91,7 @@ public class UserService {
 
 	        List<User> users = userdao.getUserList( pageInfo.getStartIndex(), pageInfo.getPageSize());
 	        int totalCount = userdao.getTotalCount();
-
+      
 	        Map<String, Object> map = new HashMap<>();
 	        map.put("items", users);
 	        map.put("totalCount", totalCount);
@@ -113,9 +157,14 @@ public class UserService {
 		}
 			
 	}
+	
+	/**
+	 * 获取所有的在职员工，并将数据插入到缓存中
+	 * @return
+	 */
 	public List<User> getUsers() {
-		// TODO Auto-generated method stub
-		return userdao.getUsers();
+		List<User> listUser=userdao.getUsers();	
+		return listUser;
 	}
 
 
