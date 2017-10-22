@@ -70,7 +70,7 @@ public class UserService {
 	 * @param name
 	 * @return
 	 */
-	public List<User> getUserByName(String name) {
+	public List<Map> getUserByName(String name) {
 		name = "%"+name+"%";
 		List<User> listUser = userdao.getUserByName(name);
 		return listUser;

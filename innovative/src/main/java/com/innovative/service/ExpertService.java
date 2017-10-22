@@ -153,6 +153,8 @@ public class ExpertService {
 		if(null == id || "".equals(id)){
 			return false;
 		}
+		//删除上传的附件
+		fileDao.deleteFile(id);
 		return expertDao.deleteExpert(id);
 	}
 

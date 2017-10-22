@@ -113,6 +113,8 @@ public class OrganizationService {
 		if(null == id || "".equals(id)){
 			return false;
 		}
+		//删除上传的附件
+		fileDao.deleteFile(id);
 		return organizationDao.deleteOrganization(id);
 	}
 

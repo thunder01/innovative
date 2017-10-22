@@ -49,7 +49,7 @@
 	<delete id="deleteFiles" parameterType="map">
 		delete from "xacx_file"
 		<where>
-			 "refId"=#{refid} and "refType" = #{reftype}
+			 "refId"=#{refid} and "refType" = #{reftype} and "sign" = 'add'
 		</where>
 	</delete>
 	 <!--删除指定文件-->

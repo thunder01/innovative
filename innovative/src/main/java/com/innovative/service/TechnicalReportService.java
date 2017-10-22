@@ -107,7 +107,7 @@ public class TechnicalReportService {
         //删除之前的文件
         fileDao.deleteFiles(technicalReport.getId(),"reportFile");
         //新增新的文件
-        fileDao.updateFile(technicalReport.getId());
+        fileDao.updateFile(technicalReport.getId());  
 
         return result > 0 ;
     }
@@ -116,6 +116,8 @@ public class TechnicalReportService {
 		if(null == id || "".equals(id)){
 			return false;
 		}
+		//删除上传的附件
+		fileDao.deleteFile(id);
 		return technicalReportDao.deleteTechnicalReport(id);
 	}
 }

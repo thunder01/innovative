@@ -121,6 +121,8 @@ public class AssociationService {
 		if(null == id || "".equals(id)){
 			return false;
 		}
+		//删除上传的附件
+		fileDao.deleteFile(id);
 		return associationDao.deleteAssociation(id);
 	}
 
