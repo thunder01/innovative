@@ -29,7 +29,7 @@ public class UserService {
 		// TODO Auto-generated method stub
 		return userdao.getUser(userId);
 	}
-	public List<User> getUserByName(String name) {
+	public List<Map> getUserByName(String name) {
 		name = "%"+name+"%";
 		return userdao.getUserByName(name);
 	}

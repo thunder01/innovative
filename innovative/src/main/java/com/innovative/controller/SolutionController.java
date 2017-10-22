@@ -48,12 +48,13 @@ public class SolutionController {
      * @param id 协会id
      * @return
      */
-    @RequestMapping(value = "/deleteSolution/{id}", method = RequestMethod.GET)
-    public JsonResult deleteSolution(@PathVariable(name = "id") String id) {
+    @RequestMapping(value = "/deleteSolution", method = RequestMethod.POST)
+    @ResponseBody
+    public JsonResult deleteSolution(@RequestBody Solution solution) {
 
-       boolean flag = solutionService.deleteSolution(id);
+       boolean flag = solutionService.deleteSolution(solution.getId());
         if (flag) {
-            return new JsonResult(true, "已删除");
+            return new JsonResult(true, solutionService.getSolutionListByCondition( 1));
         }
         return new JsonResult(false, "参数不合法");
     }

@@ -21,7 +21,7 @@ public interface  UserDao {
 		 * @param name 用户姓名
 		 * @return
 		 */
-		 List<User> getUserByName(@Param("name")String name);
+		 List<Map> getUserByName(@Param("name")String name);
 		 
 		 /**
 			 * 根据工号字获取用户信息

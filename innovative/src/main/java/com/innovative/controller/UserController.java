@@ -82,13 +82,9 @@ public class UserController {
 	 @RequestMapping(value = "/getUserByName/{name}", method = RequestMethod.GET)
 	    public JsonResult getExpertByName(@PathVariable(name = "name") String name) {
 	    
-			List<User> user = userService.getUserByName(name);
-			List<String> list = new ArrayList<String>();
+			List<Map> user = userService.getUserByName(name);
 		        if (user != null) {
-		        	for(User u: user){
-		        		list.add("username:"+u.getUserName()+";userpost:"+u.getStext()+";userdepart:"+u.getDstext());
-		        	}
-		        	System.out.println(JSON.toJSONString(JSON.toJSON(new JsonResult(true, user)),SerializerFeature.DisableCircularReferenceDetect,SerializerFeature.WriteMapNullValue));
+		        	//System.out.println(JSON.toJSONString(JSON.toJSON(new JsonResult(true, user)),SerializerFeature.DisableCircularReferenceDetect,SerializerFeature.WriteMapNullValue));
 		        	/*JSON.toJSONString(user,SerializerFeature.DisableCircularReferenceDetect,SerializerFeature.WriteMapNullValue)*/
 		        	return new JsonResult(true, user);
 		        }

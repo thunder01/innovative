@@ -120,6 +120,8 @@ public class EquipmentService {
 				if(null == id || "".equals(id)){
 					return false;
 				}
-				return equipmentDao.deleteEquipment(id);
+		//删除上传的附件
+		fileDao.deleteFile(id);
+		return equipmentDao.deleteEquipment(id);
 	}
 }

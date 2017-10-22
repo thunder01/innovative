@@ -3,6 +3,8 @@ package com.innovative.utils;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.UUID;
 
 public class Misc {
@@ -94,6 +96,36 @@ public class Misc {
 		}
 		
 
+		/**
+		 * 判断日期
+		 * @param date
+		 * @param format
+		 * @return
+		 */
+		public final static String getDate(Date date, String format) {
+			if (date == null) {
+				return null;
+			}
+			SimpleDateFormat sdf = new SimpleDateFormat(format);
+			return sdf.format(date);
+		}
+		//判断是不是今天
+		  public static boolean isNowDay(Date date) {
+		        //当前时间
+		        Date now = new Date();
+		        SimpleDateFormat sf = new SimpleDateFormat("yyyyMMdd");
+		        //获取今天的日期
+		        String nowDay = sf.format(now);
+		         
+		         
+		        //对比的时间
+		        String day = sf.format(date);
+		         
+		        return day.equals(nowDay);
+		         
+		         
+		         
+		    }
 		
 	}
 

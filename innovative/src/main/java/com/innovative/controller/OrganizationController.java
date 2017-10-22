@@ -46,12 +46,13 @@ public class OrganizationController extends BaseController {
      * @param id 协会id
      * @return
      */
-    @RequestMapping(value = "/deleteOrganization/{id}", method = RequestMethod.GET)
-    public JsonResult deleteOrganization(@PathVariable(name = "id") String id) {
+    @RequestMapping(value = "/deleteOrganization", method = RequestMethod.POST)
+    @ResponseBody
+    public JsonResult deleteOrganization(@RequestBody Organization organization) {
 
-       boolean flag = organizationService.deleteOrganization(id);
+       boolean flag = organizationService.deleteOrganization(organization.getId());
         if (flag) {
-            return new JsonResult(true, "已删除");
+            return new JsonResult(true, organizationService.getOrganizationList(1));
         }
         return new JsonResult(false, "参数不合法");
     }

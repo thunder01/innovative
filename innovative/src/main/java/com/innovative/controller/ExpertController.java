@@ -51,12 +51,13 @@ public class ExpertController extends BaseController {
      * @param id 协会id
      * @return
      */
-    @RequestMapping(value = "/deleteExpert/{id}", method = RequestMethod.GET)
-    public JsonResult deleteExpert(@PathVariable(name = "id") String id) {
+    @RequestMapping(value = "/deleteExpert", method = RequestMethod.POST)
+    @ResponseBody
+    public JsonResult deleteExpert(@RequestBody Expert expert) {
 
-       boolean flag = expertService.deleteExpert(id);
+       boolean flag = expertService.deleteExpert(expert.getId());
         if (flag) {
-            return new JsonResult(true, "已删除");
+            return new JsonResult(true, expertService.getExpertLists(1));
         }
         return new JsonResult(false, "参数不合法");
     }

@@ -50,12 +50,13 @@ public class TechnicalReportController {
      * @param id 协会id
      * @return
      */
-    @RequestMapping(value = "/deleteTechnicalReport/{id}", method = RequestMethod.GET)
-    public JsonResult deleteSolution(@PathVariable(name = "id") String id) {
+    @RequestMapping(value = "/deleteTechnicalReport", method = RequestMethod.POST)
+    @ResponseBody
+    public JsonResult deleteSolution(@RequestBody TechnicalReport technicalReport) {
 
-       boolean flag = technicalReportService.deleteTechnicalReport(id);
+       boolean flag = technicalReportService.deleteTechnicalReport(technicalReport.getId());
         if (flag) {
-            return new JsonResult(true, "已删除");
+            return new JsonResult(true, technicalReportService.getTechnicalReportListByCondition( 1));
         }
         return new JsonResult(false, "参数不合法");
     }

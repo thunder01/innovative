@@ -46,12 +46,13 @@ public class AssociationController extends BaseController {
      * @param id 协会id
      * @return
      */
-    @RequestMapping(value = "/deleteAssociation/{id}", method = RequestMethod.GET)
-    public JsonResult deleteAssociation(@PathVariable(name = "id") String id) {
+    @RequestMapping(value = "/deleteAssociation", method = RequestMethod.POST)
+    @ResponseBody
+    public JsonResult deleteAssociation(@RequestBody Association association) {
 
-       boolean flag = associationService.deleteAssociation(id);
+       boolean flag = associationService.deleteAssociation(association.getId());
         if (flag) {
-            return new JsonResult(true, "已删除");
+            return new JsonResult(true, associationService.getAssociationList( 1));
         }
         return new JsonResult(false, "参数不合法");
     }

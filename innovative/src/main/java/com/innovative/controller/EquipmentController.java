@@ -49,12 +49,13 @@ public class EquipmentController {
      * @param id 协会id
      * @return
      */
-    @RequestMapping(value = "/deleteEquipment/{id}", method = RequestMethod.GET)
-    public JsonResult deleteAssociation(@PathVariable(name = "id") String id) {
+    @RequestMapping(value = "/deleteEquipment", method = RequestMethod.POST)
+    @ResponseBody
+    public JsonResult deleteAssociation(@RequestBody Equipment equipment) {
 
-       boolean flag = equipmentService.deleteEquipment(id);
+       boolean flag = equipmentService.deleteEquipment(equipment.getId());
         if (flag) {
-            return new JsonResult(true, "已删除");
+            return new JsonResult(true, equipmentService.getEquipmentListByCondition( 1));
         }
         return new JsonResult(false, "参数不合法");
     }
