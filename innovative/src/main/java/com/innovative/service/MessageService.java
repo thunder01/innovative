@@ -77,15 +77,18 @@ public class MessageService {
 				(message.getUserid(), message.getNotice(), pageInfo.getStartIndex(), pageInfo.getPageSize());
 		MsgCount msgCount = msgCountDao.showMsgCount(message.getUserid());
 		MsgCount msg = new MsgCount();
-		msg.setUserid(msg.getUserid());
-		msg.setMessage_count(msgCount.getMessage_count());
-		msg.setOld_message_count(msgCount.getOld_message_count());
-		msg.setNotice_count(msgCount.getNotice_count());
-		msg.setUnfinish_count(msgCount.getUnfinish_count());
-		msg.setFinish_count(msgCount.getFinish_count());
-		msg.setOld_notice_count(msgCount.getOld_notice_count());
-		msg.setOld_unfinish_count(msgCount.getOld_unfinish_count());
-		msg.setOld_finish_count(msgCount.getOld_finish_count());
+		msg.setUserid(message.getUserid());
+		if(msgCount!=null){
+			msg.setMessage_count(msgCount.getMessage_count());
+			msg.setOld_message_count(msgCount.getOld_message_count());
+			msg.setNotice_count(msgCount.getNotice_count());
+			msg.setUnfinish_count(msgCount.getUnfinish_count());
+			msg.setFinish_count(msgCount.getFinish_count());
+			msg.setOld_notice_count(msgCount.getOld_notice_count());
+			msg.setOld_unfinish_count(msgCount.getOld_unfinish_count());
+			msg.setOld_finish_count(msgCount.getOld_finish_count());
+		}
+		
 		if(message.getNotice()==1){//消息里面的通知
 			if(msgCount!=null){
 				//需要判断消息的类型  0是下单审批，1是拆解报告确认，2是团队评价
