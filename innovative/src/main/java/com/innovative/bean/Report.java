@@ -35,6 +35,7 @@ public class Report implements Serializable{
 	private String delete_by;//谁删除的
 	private String typeName;//类型名称
 	private List<FileBean> list;
+	private User user;
 	
 	public Report() {
 		super();
@@ -197,6 +198,14 @@ public class Report implements Serializable{
 
 	public void setList(List<FileBean> list) {
 		this.list = list;
+	}
+	
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 	@Override

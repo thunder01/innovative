@@ -120,5 +120,13 @@
    		select count(*) from xacx_demand a,xacx_order_v2 b 
     	where a.id=b.demandid and a.create_by=#{userid}
     </select>
-
+	
+	<!-- 我的需求 -->
+	<select id="getMyselfDemand" parameterType="map" resultMap="demandMap">
+		SELECT * FROM xacx_demand WHERE create_by=#{userid} ORDER BY create_date DESC LIMIT #{pageSize} OFFSET #{startIndex}
+	</select>
+	<!-- 我的需求数 -->
+	<select id="getMyselfDemandTotal" parameterType="map" resultType="int">
+		SELECT COUNT(create_by) FROM xacx_demand WHERE create_by=#{userid}
+	</select>
 </mapper>

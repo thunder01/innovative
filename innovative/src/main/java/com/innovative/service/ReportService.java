@@ -10,6 +10,7 @@ import com.innovative.bean.Demand;
 import com.innovative.bean.FileBean;
 import com.innovative.bean.Order;
 import com.innovative.bean.Report;
+import com.innovative.bean.User;
 import com.innovative.dao.DemandDao;
 import com.innovative.dao.FileDao;
 import com.innovative.dao.OrderDao;
@@ -29,6 +30,8 @@ public class ReportService{
 	private ProjectApprovalDao projectApprovalDao;
 	@Resource
 	private FileDao fileDao;
+	@Resource
+	private UserService userService;
 	
 	/**
 	 * 添加一个报告，一次add操作无需事务
@@ -127,7 +130,8 @@ public class ReportService{
 				if (demand!=null) {
 					report.setDemand_name(demand.getName());
 				}
-			}		
+			}
+			report.setUser(userService.getUser(report.getCreate_by()));
 		}	
 		
 		if (list!=null&&list.size()>0) {
@@ -154,11 +158,12 @@ public class ReportService{
 			List<FileBean> listFiles=fileDao.getFileById(fileid, "orderReport");//找出所有的相关文件
 			report.setList(listFiles);
 		}
-		
+		User user = userService.getUser(report.getCreate_by());
 		map.put("reportid", report.getId());
 		map.put("orderid", report.getOrder_id());
 		map.put("item", report);
 		map.put("type", type);
+		map.put("user", user);
 		return map;
 	}
 	

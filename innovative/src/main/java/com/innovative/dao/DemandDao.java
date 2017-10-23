@@ -59,4 +59,18 @@ public interface DemandDao {
     List<Demand> getMyDemand(@Param("startIndex") int startIndex, @Param("pageSize") int pageSize,@Param("userid") String userid);
     
     int getMyDemandTotal(String userid);
+    /**
+     * 我的需求（不管通过没通过）
+     * @param startIndex
+     * @param pageSize
+     * @param userid
+     * @return
+     */
+    List<Demand> getMyselfDemand(@Param("startIndex") int startIndex, @Param("pageSize") int pageSize,@Param("userid") String userid);
+    /**
+     *我的需求总数
+     * @param userid
+     * @return
+     */
+    int getMyselfDemandTotal(String userid);
 }

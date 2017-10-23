@@ -36,9 +36,9 @@ public class MessageController {
     
     /**
      * 消息查询
-     * @param offset
-     * @param userid
-     * @param notice
+     * @param offset 分页的偏移量
+     * @param userid 用户的id
+     * @param notice 消息的类型（1通知，2已办，3待办）
      * @return
      */
     @RequestMapping(value = "/getMessage/{userid}/{notice}",method = RequestMethod.GET)
