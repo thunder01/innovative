@@ -35,8 +35,6 @@
     </insert>
     <!--根据ID修改内容-->
     <update id="update" parameterType="Case">
-        UPDATE  "xacx_case" SET "title"=#{title},"titleImage"=#{titleImage},
-        "file"=#{file}
-        WHERE id=#{id}
+        UPDATE  "xacx_case" SET "file"=#{file} WHERE id=#{id}
     </update>
 </mapper>

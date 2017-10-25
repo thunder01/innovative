@@ -79,7 +79,7 @@ public class DemandController{
         Demand demandList=null;
         boolean code=true;
         if(demandService.updateDemand(demand)){
-            messageService.upStatus(demand.getId());
+            //messageService.upStatus(demand.getId());
             demandList=demandService.getDemand(demand.getId());
         }else{
             messge="审核失败";
@@ -98,11 +98,14 @@ public class DemandController{
         demand.setCteateBy(user.getUserId());
         Message message=new Message();
         String messge="保存成功!";
+        message.setType("0");
+        message.setNotice(3);
+        message.setUserid(demand.getCheckName());
         boolean code=true;
         if(demandService.addDemand(demand)){
             message.setProjectId(demand.getId());
-            message.setType("0");
             messageService.addMessage(message);
+            messageService.updateMsgCount(user.getUserId());
         }else{
             messge="保存失败";
             code=false;
