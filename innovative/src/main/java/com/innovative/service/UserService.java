@@ -72,7 +72,7 @@ public class UserService {
 	 */
 	public List<Map> getUserByName(String name) {
 		name = "%"+name+"%";
-		List<User> listUser = userdao.getUserByName(name);
+		List<Map> listUser = userdao.getUserByName(name);
 		return listUser;
 	}
 	

@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 
 import static com.innovative.utils.FileUpload.mkdirsmy;
+import static org.hamcrest.CoreMatchers.instanceOf;
 
 public class PoiUtil {
 
@@ -78,12 +79,17 @@ public class PoiUtil {
             if (dr instanceof XSSFDrawing) {
                 XSSFDrawing drawing = (XSSFDrawing) dr;
                 List<XSSFShape> shapes = drawing.getShapes();
-                for (XSSFShape shape : shapes) {
-                    XSSFPicture pic = (XSSFPicture) shape;
-                    XSSFClientAnchor anchor = pic.getPreferredSize();
-                    CTMarker ctMarker = anchor.getFrom();
-                    String picIndex = String.valueOf(sheetNum) +","+String.valueOf(ctMarker.getRow());
-                    sheetIndexPicMap.put(picIndex, pic.getPictureData());
+                for (int i=0 ;i< shapes.size();i++) {
+                	XSSFShape shape = shapes.get(i);
+                	if(shape instanceof XSSFPicture){
+                		 XSSFPicture pic = (XSSFPicture) shape;
+                         
+                         XSSFClientAnchor anchor = pic.getPreferredSize();
+                         CTMarker ctMarker = anchor.getFrom();
+                         String picIndex = String.valueOf(sheetNum) +","+String.valueOf(ctMarker.getRow());
+                         sheetIndexPicMap.put(picIndex, pic.getPictureData());
+                	}
+                   
                 }
             }
         }
@@ -115,7 +121,7 @@ public class PoiUtil {
             for(Object PicMapKey : keys){
                 if(key[0].toString().equals(PicMapKey.toString())){
                     //说明一样，进行上传合并
-                   // 
+                    // 
                     //说明2个集合的key是一样
                     //生成此条记录的头像地址
                     // 获取图片流
