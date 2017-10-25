@@ -31,10 +31,7 @@ public class PoiController {
      */
     @RequestMapping(value = "/importExcel", method = RequestMethod.POST)
     public JsonResult importExcel(@RequestParam(name = "FileData") MultipartFile[] FileData , HttpServletRequest request) {
-            if(!poiService.importExcel(FileData,request)){
-                return new JsonResult(false, "导入失败");
-            }
-            return new JsonResult(true, "导入成功");
+            return poiService.importExcel(FileData,request);
     }
     /**
      * 上传协会
@@ -43,10 +40,7 @@ public class PoiController {
      */
     @RequestMapping(value = "/importAssociation", method = RequestMethod.POST)
     public JsonResult importAssociation(@RequestParam(name = "FileData") MultipartFile FileData,HttpServletRequest request) {
-            if(!poiService.importAssociation(FileData,request)){
-                return new JsonResult(false, "导入失败,请检查数据!");
-            }
-            return new JsonResult(true, "导入成功");
+            return poiService.importAssociation(FileData,request);
     }
     /**
      * 上传仪器设备
@@ -55,10 +49,7 @@ public class PoiController {
      */
     @RequestMapping(value = "/importEquipment", method = RequestMethod.POST)
     public JsonResult importEquipment(@RequestParam(name = "FileData") MultipartFile FileData,HttpServletRequest request) {
-            if(!poiService.importEquipment(FileData,request)){
-                return new JsonResult(false, "导入失败,请检查数据!");
-            }
-            return new JsonResult(true, "导入成功");
+            return poiService.importEquipment(FileData,request);
     }
     
     /**
@@ -68,10 +59,7 @@ public class PoiController {
      */
     @RequestMapping(value = "/importOrganization", method = RequestMethod.POST)
     public JsonResult importOrganization(@RequestParam(name = "FileData") MultipartFile FileData,HttpServletRequest request) {
-            if(!poiService.importOrganizations(FileData,request)){
-                return new JsonResult(false, "导入失败,请检查数据!");
-            }
-            return new JsonResult(true, "导入成功");
+            return poiService.importOrganizations(FileData,request);
     }
     
     /**
@@ -81,10 +69,7 @@ public class PoiController {
      */
     @RequestMapping(value = "/importSolution", method = RequestMethod.POST)
     public JsonResult importSolution(@RequestParam(name = "FileData") MultipartFile FileData,HttpServletRequest request) {
-            if(!poiService.importSolution(FileData,request)){
-                return new JsonResult(false, "导入失败,请检查数据!");
-            }
-            return new JsonResult(true, "导入成功");
+            return poiService.importSolution(FileData,request);
     }
     
     /**
@@ -94,10 +79,7 @@ public class PoiController {
      */
     @RequestMapping(value = "/importTechnicalReports", method = RequestMethod.POST)
     public JsonResult importTechnicalReports(@RequestParam(name = "FileData") MultipartFile FileData,HttpServletRequest request) {
-            if(!poiService.importTechnicalReports(FileData,request)){
-                return new JsonResult(false, "导入失败,请检查数据!");
-            }
-            return new JsonResult(true, "导入成功");
+            return poiService.importTechnicalReports(FileData,request);
     }
 
 

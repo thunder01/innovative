@@ -10,6 +10,7 @@ import com.innovative.bean.Solution;
 import com.innovative.bean.TechnicalReport;
 import com.innovative.dao.PoiDao;
 import com.innovative.utils.CookiesUtil;
+import com.innovative.utils.JsonResult;
 import com.innovative.utils.Misc;
 import com.innovative.utils.PoiUtil;
 import org.apache.log4j.Logger;
@@ -19,7 +20,6 @@ import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -48,10 +48,10 @@ public class PoiService {
      * @return
      */
     
-    public boolean importExcel(MultipartFile[] file,HttpServletRequest req){
+    public JsonResult importExcel(MultipartFile[] file,HttpServletRequest req){
 
         if(file == null){
-            return false;
+            return new JsonResult(false,"没有要解析的文件!");
         }
         // 创建Workbook
         Workbook wb = null;
@@ -86,6 +86,7 @@ public class PoiService {
                     }
                     //获得当前sheet的总行数
                     int totalRowNum = sheet.getLastRowNum();
+                    System.out.println(totalRowNum);
                     //封装每行sheet的数据
                     for(int a = 1 ; a <= totalRowNum ; a++){
                         //获得第a行对象
@@ -93,25 +94,23 @@ public class PoiService {
                         map = new HashMap<>();
                         expert = new Expert();
                         if(StringUtil.isEmpty(row.getCell((short)1).getStringCellValue().toString())){
-                            break;
+                        	 throw new Exception(a+"这个怎么没有专家名字呢核对数据吧!");
                         }
                         //获得获得第a行第1列的对象,excel文档必须按照格式，根据最终的排版定义从第几个开始读取
-                        expert.setName(getCellValue(row.getCell((short)0)));
-                        expert.setSectors(getArrCellValue(row.getCell((short)1)));  
-                        expert.setUnit(getCellValue(row.getCell((short)2)));
-                        expert.setEducation(getCellValue(row.getCell((short)3)));
-                        expert.setJobTitle(getCellValue(row.getCell((short)4)));
-                        expert.sethFactor(getCellIntValue(row.getCell((short)5)));
-                        expert.setResearchDirection(getCellValue(row.getCell((short)6)));
-                        expert.setResearchAchievement(getCellValue(row.getCell((short)7)));
-                        expert.setResume(getCellValue(row.getCell((short)8 )));
-                        expert.setContact(getCellValue(row.getCell((short)9 )));
-                        //合作状态
+                        expert.setName(getCellValue(row.getCell((short)1)));
+                        expert.setSectors(getArrCellValue(row.getCell((short)2)));  
+                        expert.setTags(getArrCellValue(row.getCell((short)3)));
+                        expert.setUnit(getCellValue(row.getCell((short)4)));
+                        expert.setEducation(getCellValue(row.getCell((short)5)));
+                        expert.setJobTitle(getCellValue(row.getCell((short)6)));
+                        expert.sethFactor(getCellIntValue(row.getCell((short)7)));
+                        expert.setResearchDirection(getCellValue(row.getCell((short)8)));
+                        expert.setResearchAchievement(getCellValue(row.getCell((short)9)));
+                        expert.setResume(getCellValue(row.getCell((short)10)));//个人信息
                         expert.setCooperationStatus(getCellIntValue(row.getCell((short)11)));
+                        expert.setContact(getCellValue(row.getCell((short)12 )));
+                        //合作状态
                         expert.setCreatedBy(CookiesUtil.getCookieValue(req,"user_name"));
-                        expert.setRank(getCellIntValue(row.getCell((short)13)));
-                        expert.setRowVersion(getCellIntValue(row.getCell((short)14)));
-                        expert.setTags(getArrCellValue(row.getCell((short)15)));
                         expert.setId(Misc.uuid());
                         /*expert.setTags("{}");*///123
                         //封装第a行的对象信息,用map封装expert 对象 key值对应sheet.row下标
@@ -129,7 +128,9 @@ public class PoiService {
                     }
                     //sheetIndexPicMap存放当前sheet所有的图片Key是角标
                     //将此sheet的map数据跟sheet对象集合进行对比，相同key的时候将此文件路径set到头像中，是个上传后的地址,并上传图片
+                    
                     List<Map<String, Object>> resultList = PoiUtil.getbeanListAndPic(beanList, sheetIndexPicMap);
+                    System.out.println(beanList.size());
                     //重新规整后的sheet集合对象进行数据库保存操作
                  /*   for (Map<String, Object> result : resultList){
                         Object key[] = result.keySet().toArray();
@@ -139,30 +140,31 @@ public class PoiService {
                         poiDao.addPoiExpert(addExpert);
                     }*/
                      poiDao.batchAddPoiExpert(resultList);
+                     System.out.println(resultList.size());
                     
                 }
         }
         }catch (Exception e){
         	e.printStackTrace();
             log.error("文件上传解析异常："+e);
-            return false;
+            return new JsonResult(false, "文件上传解析异常："+e);
         }
         //每个文件都读取成功
-        return true;
+        return new JsonResult(true, "解析成功!");
     }
 
 
 
 
 /**
- * 上传协会
+ * 上传行业协会
  * @param file
  * @param request 
  * @return
  */
-	public boolean importAssociation(MultipartFile file, HttpServletRequest request) {
+	public JsonResult importAssociation(MultipartFile file, HttpServletRequest request) {
 		if(file == null){
-            return false;
+            return new JsonResult(false,"没有接收到文件，请联系管理员!");
         }
         // 创建Workbook
         Workbook wb = null;
@@ -203,23 +205,23 @@ public class PoiService {
                         map = new HashMap<>();
                        
                         if(StringUtil.isEmpty(row.getCell((short)1).getStringCellValue().toString())){
-                            break;
+                        	 throw new Exception(a+"缺少数据请核对!");
                         }
                         association = new Association();
                         //获得获得第a行第1列的对象,excel文档必须按照格式，根据最终的排版定义从第几个开始读取
-                        association.setAvailableResources(getCellValue(row.getCell((short)0)));
-                        association.setContact(getCellValue(row.getCell((short)1)));
-                        association.setCooperationStatus(getCellIntValue(row.getCell((short)2)));
-                        association.setDuration(getCellValue(row.getCell((short)3)));
-                        association.setIntroduction(getCellValue(row.getCell((short)4)));
-                        association.setLogo(getCellValue(row.getCell((short)5)));
-                        association.setName(getCellValue(row.getCell((short)6)));
-                        association.setNature(getCellValue(row.getCell((short)7)));
+                        association.setName(getCellValue(row.getCell((short)1)));//协会名称
+                        association.setSectors(getArrCellValue(row.getCell((short)2)));//领域
+                        association.setTags(getArrCellValue(row.getCell((short)3)));//标签
+                        association.setIntroduction(getCellValue(row.getCell((short)5)));//简介
+                        association.setNature(getCellValue(row.getCell((short)6)));//性质
+                        association.setDuration(getCellValue(row.getCell((short)7)));//入会有效期
+                        association.setAvailableResources(getCellValue(row.getCell((short)8)));//可用资源
+                        association.setCooperationStatus(getCellIntValue(row.getCell((short)9)));//合作状态
+                        association.setContact(getCellValue(row.getCell((short)10)));//联系方式
+                        association.setWebsite(getCellValue(row.getCell((short)11)));//网站链接
+                      /*  association.setLogo(getCellValue(row.getCell((short)5)));
                         association.setRank(getCellIntValue(row.getCell((short)8)));
-                        association.setRowVersion(getCellIntValue(row.getCell((short)9)));
-                        association.setSectors(getArrCellValue(row.getCell((short)10)));
-                        association.setTags(getArrCellValue(row.getCell((short)11)));
-                        association.setWebsite(getCellValue(row.getCell((short)12)));
+                        association.setRowVersion(getCellIntValue(row.getCell((short)9)));*/
                         association.setCreatedBy(CookiesUtil.getCookieValue(request,"user_name"));
                         association.setId(Misc.uuid());
                         //封装第a行的对象信息,用map封装expert 对象 key值对应sheet.row下标
@@ -239,7 +241,7 @@ public class PoiService {
                     if(resultList.size()>0){
                     	 poiDao.batchAddPoiAssociation(resultList);
                     }else{
-                    	return false;
+                    	 return new JsonResult(false,"没有要解析的内容");
                     }
                     
                     
@@ -247,19 +249,19 @@ public class PoiService {
         }catch (Exception e){
         	e.printStackTrace();
             log.error("文件上传解析异常："+e);
-            return false;
+            return new JsonResult(false,"文件上传解析异常："+e);
         }
         //每个文件都读取成功
-        return true;
+        return new JsonResult(true,"解析成功!");
 	}
 	
 
 
 
 
-		public boolean importEquipment(MultipartFile file, HttpServletRequest request) {
+		public JsonResult importEquipment(MultipartFile file, HttpServletRequest request) {
 			if(file == null){
-	            return false;
+				 return new JsonResult(false,"没有要解析的文件!");
 	        }
 	        // 创建Workbook
 	        Workbook wb = null;
@@ -300,7 +302,7 @@ public class PoiService {
 	                        map = new HashMap<>();
 	                       
 	                        if(StringUtil.isEmpty(row.getCell((short)1).getStringCellValue().toString())){
-	                            break;
+	                            continue;
 	                        }
 	                        equipment = new Equipment();
 	                        //获得获得第a行第1列的对象,excel文档必须按照格式，根据最终的排版定义从第几个开始读取
@@ -335,7 +337,7 @@ public class PoiService {
 	                    if(resultList.size()>0){
 	                    	 poiDao.batchAddPoiEquipment(resultList);
 	                    }else{
-	                    	return false;
+	                    	return new JsonResult(false,"没有要解析的文件");
 	                    }
 	                    
 	                    
@@ -343,17 +345,22 @@ public class PoiService {
 	        }catch (Exception e){
 	        	e.printStackTrace();
 	            log.error("文件上传解析异常："+e);
-	            return false;
+	            return new JsonResult(false,"文件上传解析异常："+e);
 	        }
 	        //每个文件都读取成功
-	        return true;
+	        return new JsonResult(true,"文件解析成功");
 		}	
 		
 		
-
-		public boolean importOrganizations(MultipartFile file, HttpServletRequest request) {
+		/**
+		 * 合作机构
+		 * @param file
+		 * @param request
+		 * @return
+		 */
+		public JsonResult importOrganizations(MultipartFile file, HttpServletRequest request) {
 			if(file == null){
-	            return false;
+				 return new JsonResult(false,"没有要解析的文件！");
 	        }
 	        // 创建Workbook
 	        Workbook wb = null;
@@ -394,21 +401,19 @@ public class PoiService {
 	                        map = new HashMap<>();
 	                       
 	                        if(StringUtil.isEmpty(row.getCell((short)1).getStringCellValue().toString())){
-	                            break;
+	                            continue;
 	                        }
 	                        organization = new Organization();
 	                        //获得获得第a行第1列的对象,excel文档必须按照格式，根据最终的排版定义从第几个开始读取
-	                        organization.setAchievements(getCellValue(row.getCell((short)0)));
-	                        organization.setContact(getCellValue(row.getCell((short)1)));
-	                        organization.setCooperationStatus(getCellIntValue(row.getCell((short)2)));
-	                        organization.setIntroduction(getCellValue(row.getCell((short)3)));
-	                        organization.setName(getCellValue(row.getCell((short)5)));
-	                        organization.setNature(getCellValue(row.getCell((short)6)));
-	                        organization.setRowVersion(getCellIntValue(row.getCell((short)7)));
-	                        organization.setSectors(getArrCellValue(row.getCell((short)8)));
-	                        organization.setTags(getArrCellValue(row.getCell((short)9)));
-	                        
-	                        organization.setWebsite(getCellValue(row.getCell((short)10)));
+	                        organization.setName(getCellValue(row.getCell((short)1)));//合作机构名称
+	                        organization.setSectors(getArrCellValue(row.getCell((short)2)));//领域
+	                        organization.setTags(getArrCellValue(row.getCell((short)3)));//标签
+	                        organization.setIntroduction(getCellValue(row.getCell((short)5)));//简介
+	                        organization.setNature(getCellValue(row.getCell((short)6)));//性质
+	                        organization.setAchievements(getCellValue(row.getCell((short)7)));//成果
+	                        organization.setCooperationStatus(getCellIntValue(row.getCell((short)8)));//合作状态
+	                        organization.setContact(getCellValue(row.getCell((short)9)));//联系方式
+	                        organization.setWebsite(getCellValue(row.getCell((short)10)));//网址
 	                        organization.setId(Misc.uuid());
 	                        organization.setCreatedBy(CookiesUtil.getCookieValue(request,"user_name"));
 	                        //封装第a行的对象信息,用map封装expert 对象 key值对应sheet.row下标
@@ -428,7 +433,7 @@ public class PoiService {
 	                    if(resultList.size()>0){
 	                    	 poiDao.batchAddPoiOrganization(resultList);
 	                    }else{
-	                    	return false;
+	                    	return new JsonResult(false,"没有要上传的数据，请检查数据");
 	                    }
 	                    
 	                    
@@ -436,10 +441,10 @@ public class PoiService {
 	        }catch (Exception e){
 	        	e.printStackTrace();
 	            log.error("文件上传解析异常："+e);
-	            return false;
+	            return new JsonResult(false,"文件上传解析异常："+e);
 	        }
 	        //每个文件都读取成功
-	        return true;
+	           return new JsonResult(true,"文件上传成功!");
 		}	
 		
 
@@ -522,9 +527,9 @@ public class PoiService {
 
 
 
-			public boolean importSolution(MultipartFile file, HttpServletRequest request) {
+			public  JsonResult importSolution(MultipartFile file, HttpServletRequest request) {
 				if(file == null){
-		            return false;
+		            return new JsonResult(false,"没有要解析的文件");
 		        }
 		        // 创建Workbook
 		        Workbook wb = null;
@@ -565,7 +570,7 @@ public class PoiService {
 		                        map = new HashMap<>();
 		                       
 		                        if(StringUtil.isEmpty(row.getCell((short)1).getStringCellValue().toString())){
-		                            break;
+		                            continue;
 		                        }
 		                        solution = new Solution();
 		                        //获得获得第a行第1列的对象,excel文档必须按照格式，根据最终的排版定义从第几个开始读取
@@ -595,7 +600,7 @@ public class PoiService {
 		                    if(resultList.size()>0){
 		                    	 poiDao.batchAddSolution(resultList);
 		                    }else{
-		                    	return false;
+		                    	return new JsonResult(false,"没有要上数据，请检查数据!");
 		                    }
 		                    
 		                    
@@ -603,18 +608,18 @@ public class PoiService {
 		        }catch (Exception e){
 		        	e.printStackTrace();
 		            log.error("文件上传解析异常："+e);
-		            return false;
+		            return  new JsonResult(false,"文件上传解析异常："+e);
 		        }
 		        //每个文件都读取成功
-		        return true;
+		        return new JsonResult(true,"文件上传解析成功");
 			}
 
 
 
 
-			public boolean importTechnicalReports(MultipartFile file, HttpServletRequest request) {
+			public JsonResult importTechnicalReports(MultipartFile file, HttpServletRequest request) {
 				if(file == null){
-		            return false;
+		            return new JsonResult(false,"没有要上传的文件!");
 		        }
 		        // 创建Workbook
 		        Workbook wb = null;
@@ -685,7 +690,7 @@ public class PoiService {
 		                    if(resultList.size()>0){
 		                    	 poiDao.batchAddTechnicalReports(resultList);
 		                    }else{
-		                    	return false;
+		                    	return new JsonResult(false,"没有要解析的数据！请检查！");
 		                    }
 		                    
 		                    
@@ -693,10 +698,10 @@ public class PoiService {
 		        }catch (Exception e){
 		        	e.printStackTrace();
 		            log.error("文件上传解析异常："+e);
-		            return false;
+		            return new JsonResult(false,"文件上传解析异常："+e);
 		        }
 		        //每个文件都读取成功
-		        return true;
+		        return new JsonResult(true,"解析成功！");
 			}
 
 

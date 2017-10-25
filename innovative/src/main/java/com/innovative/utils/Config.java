@@ -93,4 +93,10 @@ public class Config {
     	cygsmap.put("fxdj", cygs_fxdj);
     	cygsmap.put("yxcy", cygs_yxcy);
      }
+    //关于收藏数量的配置
+    public static final  int COLLCT_NUM = 5;
+    public static final  int COLLCT_STARTINDEX = 0;
+    //信息推特文件标志 
+    public static final  String INFORMATIONPUSHFILE = "informationpushFile";
+    
 }
