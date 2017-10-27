@@ -53,10 +53,12 @@ public class TechnicalReportController {
     @RequestMapping(value = "/deleteTechnicalReport", method = RequestMethod.POST)
     @ResponseBody
     public JsonResult deleteSolution(@RequestBody TechnicalReport technicalReport) {
-
+    	String sectors = null;
+    	if(technicalReport.getSectors() != null &&technicalReport.getSectors().length>0 )
+    		 sectors = technicalReport.getSectors()[0];
        boolean flag = technicalReportService.deleteTechnicalReport(technicalReport.getId());
         if (flag) {
-            return new JsonResult(true, technicalReportService.getTechnicalReportListByCondition( 1));
+            return new JsonResult(true, technicalReportService.getTechnicalReportListByCondition( 1,sectors));
         }
         return new JsonResult(false, "参数不合法");
     }
@@ -70,10 +72,10 @@ public class TechnicalReportController {
      * @return
      */
     @RequestMapping(value = "/getListByCondition", method = RequestMethod.GET)
-    public JsonResult getTechnicalReportListByCondition(@RequestParam(name="offset" , defaultValue="0") Integer offset) {
+    public JsonResult getTechnicalReportListByCondition(@RequestParam(name="offset" , defaultValue="0") Integer offset,@RequestParam(name="sectors",required=false) String sectors) {
 
     	Integer page = offset/(new PageInfo().getPageSize()) +1;
-        return new JsonResult(true, technicalReportService.getTechnicalReportListByCondition( page));
+        return new JsonResult(true, technicalReportService.getTechnicalReportListByCondition( page,sectors));
     }
 
     /**

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.innovative.dao.InformationPushPartagerDao">
+
+	<resultMap id="informationPushPartagerMap" type="InformationPushPartager">
+	  <id property="id" column="id" />
+	  <result property="partagerBy" column="partagerBy"/> <!-- 分享时间 -->
+	  <result property="partagerAt" column="partagerAt"/><!-- 分享人 -->
+	  <result property="pushId" column="pushId"/><!-- 推特信息id -->
+	    <collection property="filelist" ofType="FileBean">  
+           <result property="refId" column="refId"/>
+           <result property="refType" column="refType"/>
+	  	   <result property="url" column="url"/>
+	  	   <result property="fileName" column="filename"/>
+       </collection> 
+	</resultMap> 
+
+    <!--根据推特信息获取所有的分享记录-->
+	<select id="getInformationpushPartagersByPushid" resultMap="informationPushPartagerMap">
+	SELECT "id", "partagerBy", "partagerAt", "pushId" FROM "xacx_information_push_partager" 
+		 WHERE "pushId" =  #{pushId} ;
+	</select>
+	<!--增加一条分享记录-->
+	<insert id="addInformationPushPartager" parameterType="InformationPushPartager">
+		INSERT INTO "xacx_information_push_partager" ("id", "pushId", "partagerBy", "partagerAt") 
+		VALUES
+		 (#{id}, #{pushId}, #{partagerBy}, #{partagerAt});
+	</insert>
+	
+	<!-- 该用户今天是否对此信息已分享 -->
+	<select id="isTodayPartagerInfornaionPush" resultType="Integer">
+		SELECT count(*) FROM "xacx_information_push_partager" where "partagerBy" =   #{partagerBy} and "pushId" = #{pushId}  and to_date(cast("partagerAt" as TEXT),'yyyy-mm-dd') = current_date
+		
+
+	</select>
+	
+		  <!--获取用户的所有分享-->
+	<select id="getCollectionlist" resultType="map">
+		
+SELECT part."partagerAt",part."partagerBy",part."pushId",pu."title",pu."cotent",us."username" FROM "xacx_information_push_partager" part 
+		join xacx_information_push pu on pu."id" = part."pushId"
+		 join xacx_user us on us."pernr" = part."partagerBy"
+		WHERE "partagerBy" =  #{partagerBy}
+		order by "partagerAt" DESC
+		 LIMIT #{pageSize} offset #{startIndex}
+	</select>
+
+	<!--删除评论信息（级联删除回复信息）-->
+	<!-- <delete id="deleteInformationpushcoment" parameterType="map">
+		delete from "xacx_information_push_commenter"
+		<where>
+			 "id"=#{id} or "pid" = #{id} 级联删除回复信息
+		</where>
+	</delete> -->
+	
+	
+	
+	 <!--查询该用户分享次数-->
+	<select id="getTotalCountByUserId" resultType="Integer">
+		SELECT count(*) FROM "xacx_information_push_partager" where "partagerBy" = #{partagerBy}
+	</select> 
+
+</mapper>

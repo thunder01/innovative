@@ -1,6 +1,7 @@
 package com.innovative.service;
 
 
+import com.alibaba.druid.util.StringUtils;
 import com.innovative.bean.Organization;
 import com.innovative.dao.FileDao;
 import com.innovative.dao.OrganizationDao;
@@ -50,17 +51,18 @@ public class OrganizationService {
     /**
      * 创新资源列表页（根据行业领域查询对应机构的列表页）
      * @param pageNum 页数（默认为1）
+     * @param sectors 
      * @return
      */
-    public Map<String, Object> getOrganizationList(Integer pageNum){
+    public Map<String, Object> getOrganizationList(Integer pageNum, String sectors){
 
-        /*if (!StringUtils.isEmpty(sectors)) {
+        if (!StringUtils.isEmpty(sectors)) {
             sectors = "{" + sectors + "}";
-        }*/
+        }
         PageInfo pageInfo = new PageInfo();
         pageInfo.setCurrentPageNum(pageNum);
 
-        List<Organization> organizations = organizationDao.getOrganizationList( pageInfo.getStartIndex(), pageInfo.getPageSize());
+        List<Organization> organizations = organizationDao.getOrganizationList( pageInfo.getStartIndex(), pageInfo.getPageSize(),sectors);
         for (Organization or : organizations){
         	if(null ==  or || "".equals(or.getId()))
         		continue;
@@ -68,7 +70,7 @@ public class OrganizationService {
   		   if(url != null && url.size() > 0 )
   			   or.setLogo( url.get(0));
         }
-        int totalCount = organizationDao.getTotalCount();
+        int totalCount = organizationDao.getTotalCount(sectors);
 
         Map<String, Object> map = new HashMap<>();
         map.put("items", organizations);

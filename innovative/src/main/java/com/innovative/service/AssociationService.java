@@ -1,6 +1,7 @@
 package com.innovative.service;
 
 
+import com.alibaba.druid.util.StringUtils;
 import com.innovative.bean.Association;
 import com.innovative.dao.AssociationDao;
 import com.innovative.dao.FileDao;
@@ -51,17 +52,18 @@ public class AssociationService {
     /**
      * 行业协会列表页
      * @param pageNum 页数（默认为1）
+     * @param sectors 
      * @return
      */
-    public Map<String, Object> getAssociationList(Integer pageNum){
+    public Map<String, Object> getAssociationList(Integer pageNum, String sectors){
 
-       /* if (!StringUtils.isEmpty(sectors)) {
+        if (!StringUtils.isEmpty(sectors)) {
             sectors = "{" + sectors + "}";
-        }*/
+        }
         PageInfo pageInfo = new PageInfo();
         pageInfo.setCurrentPageNum(pageNum);
 
-        List<Association> associations = associationDao.getAssociationList( pageInfo.getStartIndex(), pageInfo.getPageSize());
+        List<Association> associations = associationDao.getAssociationList( pageInfo.getStartIndex(), pageInfo.getPageSize(),sectors);
         for(Association ass : associations){
         	if(ass.getId()==null || "".equals(ass.getId()))
         		continue;
@@ -69,7 +71,7 @@ public class AssociationService {
   		   if(urllist != null && urllist.size() > 0 )
   			 ass.setLogo( urllist.get(0));
         }
-        int totalCount = associationDao.getTotalCount();
+        int totalCount = associationDao.getTotalCount(sectors);
 
         Map<String, Object> map = new HashMap<>();
         map.put("items", associations);

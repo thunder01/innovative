@@ -47,10 +47,9 @@
         SELECT "Name","Picture","Unit","State","Manufacturer","Introduction","Sharing","Contact","Sectors","Tags","Rank","RowVersion","IsActive","Id","File","Deleted","CreatedAt","UpdatedAt",f."url",f."refId",f."refType",f."filename"
         FROM "Equipments" e LEFT JOIN "xacx_file" f on f."refId" = e."Id" and f."refType" = 'equipmentFile' and f."sign" = 'add'
        <where>
-            <!--  <if test="sectors != null and sectors != ''">
+             <if test="sectors != null and sectors != ''">
                  "Sectors" @> '${sectors}'
-            </if> -->
-               e."Deleted" = 'f' AND e."IsActive" = 't'
+            </if>
         </where>
         order by e."UpdatedAt"  DESC 
         limit #{pageSize} offset #{startIndex}
@@ -60,9 +59,9 @@
     <select id="getCountByCondition" resultType="int">
         SELECT COUNT("Id") FROM "Equipments"
         <where>
-            <!-- <if test="sectors != null and sectors != ''">
-                AND "Sectors" @> '${sectors}'
-            </if> -->
+            <if test="sectors != null and sectors != ''">
+                 "Sectors" @> '${sectors}'  and
+            </if>
              "Deleted" = 'f' AND "IsActive" = 't'
         </where>
     </select>

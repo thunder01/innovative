@@ -40,11 +40,11 @@
     <select id="getTechnicalReportListByCondition" resultMap="technicalReportMap">
         SELECT "Name","Summary","Content","Pictures","Sectors","Tags","Rank","Id","File","CreatedAt","UpdatedAt",f."url",f."refId",f."refType",f."filename" FROM "TechnicalReports"
          e LEFT JOIN "xacx_file" f on f."refId" = e."Id" and f."refType" = 'reportFile' and f."sign" = 'add'
-        <where>
-           <!--  <if test="sectors != null and sectors != ''">
-                AND "Sectors" @> '${sectors}'
-            </if> -->
-             e."Deleted" = 'f' AND e."IsActive" = 't'
+       <where>
+            <if test="sectors != null and sectors != ''">
+                "Sectors" @> '${sectors}' AND 
+            </if>
+             "Deleted" = 'f' AND "IsActive" = 't'
         </where>
         order by e."UpdatedAt"  DESC 
         limit #{pageSize} offset #{startIndex}
@@ -54,9 +54,9 @@
     <select id="getCountByCondition" resultType="int">
         SELECT COUNT("Id") FROM "TechnicalReports"
         <where>
-            <!-- <if test="sectors != null and sectors != ''">
-                AND "Sectors" @> '${sectors}'
-            </if> -->
+            <if test="sectors != null and sectors != ''">
+                "Sectors" @> '${sectors}' AND 
+            </if>
              "Deleted" = 'f' AND "IsActive" = 't'
         </where>
     </select>

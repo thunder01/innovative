@@ -21,17 +21,19 @@ public interface AssociationDao {
 
     /**
      * 行业协会列表页
+     * @param sectors 
      * @return
      */
-    List<Association> getAssociationList(@Param("startIndex") int startIndex, @Param("pageSize") int pageSize);
+    List<Association> getAssociationList(@Param("startIndex") int startIndex, @Param("pageSize") int pageSize, @Param("sectors") String sectors);
 
 
 
     /**
      * 查询相关行业领域的记录总条数
+     * @param sectors 
      * @return
      */
-    int getTotalCount();
+    int getTotalCount(@Param("sectors")String sectors);
 
 
 

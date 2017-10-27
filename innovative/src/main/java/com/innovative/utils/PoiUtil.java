@@ -10,21 +10,15 @@ import com.innovative.bean.TechnicalReport;
 import org.apache.poi.POIXMLDocumentPart;
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.ss.usermodel.PictureData;
-import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.usermodel.*;
 import org.openxmlformats.schemas.drawingml.x2006.spreadsheetDrawing.CTMarker;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.innovative.utils.FileUpload.mkdirsmy;
-import static org.hamcrest.CoreMatchers.instanceOf;
 
 public class PoiUtil {
 
@@ -141,7 +135,7 @@ public class PoiUtil {
                     write.write(data);
                     write.close();*/
                     //直接调用http客户端上传图片到图片服务器
-                    String picUrl = HttpClientUpload.httpClientUploadPic(pic, "ExpertPhoto");
+                    String picUrl = HttpClientUpload.httpClientUploadPic(pic, "expertPhoto");
 
                     expert.setAvatar(picUrl);
                 }

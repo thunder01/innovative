@@ -130,12 +130,21 @@ public class ExpertService {
 
 
 
-	public Map<String, Object> getExpertLists(Integer page) {
+	public Map<String, Object> getExpertLists(Integer page, String sectors) {
+		 if (!StringUtils.isEmpty(sectors)) {
+	            sectors = "{" + sectors + "}";
+	        }
 		 PageInfo pageInfo = new PageInfo();
 	       pageInfo.setCurrentPageNum(page);
-	       List<Expert> experts = expertDao.getExpertLists( pageInfo.getStartIndex(), pageInfo.getPageSize());
-	       int totalCount = expertDao.getTotalCountNum();
-		
+	       List<Expert> experts = expertDao.getExpertLists( pageInfo.getStartIndex(), pageInfo.getPageSize(),sectors);
+	       int totalCount = expertDao.getTotalCountNum(sectors);
+	       for(Expert e: experts){
+	        	if(e==null || "".equals(e.getId()))
+	        		continue;
+	        	List<String> url = fileDao.getPhotoByMOdAndId(e.getId(), "expertPhoto");
+	  		   if(url != null && url.size() > 0 )
+	  			  	e.setAvatar( url.get(0));
+	        }
 	        Map<String, Object> map = new HashMap<>();
 	        map.put("items", experts);
 	        map.put("totalCount", totalCount);

@@ -20,16 +20,18 @@ public interface SolutionDao {
      *
      * @param startIndex 开始条数
      * @param pageSize   展示条数
+     * @param sectors 
      * @return
      */
-    List<Solution> getSolutionListByCondition(@Param("startIndex") int startIndex, @Param("pageSize") int pageSize);
+    List<Solution> getSolutionListByCondition(@Param("startIndex") int startIndex, @Param("pageSize") int pageSize, @Param("sectors")String sectors);
 
     /**
      * 查询满足条件的总条数
+     * @param sectors 
      *
      * @return
      */
-    int getCountByCondition();
+    int getCountByCondition(@Param("sectors")String sectors);
 
     /**
      * 新增技术报告
