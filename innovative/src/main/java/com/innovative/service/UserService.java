@@ -1,20 +1,42 @@
 package com.innovative.service;
 
+import static org.mockito.Matchers.intThat;
+
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
+import org.apache.lucene.queryparser.xml.QueryBuilderFactory;
+import org.elasticsearch.action.bulk.BulkRequestBuilder;
+import org.elasticsearch.action.bulk.BulkResponse;
+import org.elasticsearch.action.get.GetRequestBuilder;
+import org.elasticsearch.action.get.GetResponse;
+import org.elasticsearch.action.index.IndexRequestBuilder;
+import org.elasticsearch.action.index.IndexResponse;
+import org.elasticsearch.action.search.SearchRequestBuilder;
+import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.client.transport.TransportClient;
+import org.elasticsearch.common.lucene.search.function.FiltersFunctionScoreQuery.ScoreMode;
+import org.elasticsearch.common.xcontent.XContentBuilder;
+import org.elasticsearch.common.xcontent.XContentFactory;
+import org.elasticsearch.index.query.QueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.search.SearchHit;
+import org.elasticsearch.search.SearchHits;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.google.common.collect.Lists;
 import com.innovative.bean.User;
 import com.innovative.dao.UserDao;
+import com.innovative.jedisclusterpipeline.JedisClusterPipeline;
 import com.innovative.utils.Config;
 import com.innovative.utils.PageInfo;
 import com.innovative.utils.SerializeUtil;
 
+import net.sf.json.util.JSONBuilder;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisCluster;
 import redis.clients.jedis.JedisPool;
@@ -26,6 +48,8 @@ public class UserService {
 	//注入redis数据库连接池
 	@Autowired
 	JedisCluster jedisCluster;
+	@Autowired
+	TransportClient client;
 	
 	/**
 	 * 根据职位获取用户信息
@@ -66,13 +90,32 @@ public class UserService {
 	}
 	
 	/**
-	 * 根据用户的姓、名查找用户信息，这里直接从数据库查询较慢，所以加入缓存
+	 * 根据用户的姓、名查找用户信息，使用
 	 * @param name
 	 * @return
 	 */
 	public List<Map> getUserByName(String name) {
-		name = "%"+name+"%";
-		List<Map> listUser = userdao.getUserByName(name);
+		//先从索引库查
+		List<Map> listUser = Lists.newArrayList();;
+		SearchRequestBuilder qBuilder=client.prepareSearch("user_index").setTypes("user");  
+		QueryBuilder qb = QueryBuilders.disMaxQuery()
+							.add(QueryBuilders.matchQuery("name", name))
+							.add(QueryBuilders.wildcardQuery("itcode", "*"+name+"*"))
+							.boost(1.2f)                             
+						    .tieBreaker(0.7f);
+		qBuilder.setQuery(qb);
+		SearchResponse response = qBuilder.execute().actionGet();  
+		SearchHits hits = response.getHits();
+		for(SearchHit hit:hits){
+			listUser.add(hit.getSource());
+		}
+		
+		//若是从索引库中没有查到结果，则到数据库再查一遍
+		if (listUser.size()==0) {
+			name = "%"+name+"%";
+			listUser = userdao.getUserByName(name);
+		}
+		
 		return listUser;
 	}
 	
@@ -159,13 +202,11 @@ public class UserService {
 	}
 	
 	/**
-	 * 获取所有的在职员工，并将数据插入到缓存中
+	 * 获取所有的在职员工
 	 * @return
 	 */
 	public List<User> getUsers() {
 		List<User> listUser=userdao.getUsers();	
 		return listUser;
 	}
-
-
 }
