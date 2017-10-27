@@ -92,7 +92,7 @@ public class SectionsController {
     }
     
     /**
-     * 根据id获取仪器设备
+     * 根据id删除科技专栏
      * @param id 协会id
      * @return
      */
