@@ -107,7 +107,7 @@
         </where>
     </select>
     
-    <!-- 查询用户已经被接过的需求订单 -->
+    <!-- 分页查询用户已经被接过的需求订单 -->
     <select id="getMyDemand" parameterType="map" resultMap="demandMap">
     	select a."id",a."name",a."number",a."iphone",a."create_date",a."create_by",a."late_date",a."late_by",a."bgd",a."demandd",a."interestpg",a."ninterestpg",
         a."hzms",a."hzrequest",a."productm",a."product_date",a."bz",a."check_name" as checkName,a."ddmj",a."option",a."file",a."xqf",a."gjc",a."username" as userName,b.id as orderid
@@ -126,7 +126,29 @@
 		SELECT * FROM xacx_demand WHERE create_by=#{userid} ORDER BY create_date DESC LIMIT #{pageSize} OFFSET #{startIndex}
 	</select>
 	<!-- 我的需求数 -->
-	<select id="getMyselfDemandTotal" parameterType="map" resultType="int">
+	<select id="getMyselfDemandTotal" parameterType="string" resultType="int">
 		SELECT COUNT(create_by) FROM xacx_demand WHERE create_by=#{userid}
+	</select>
+	
+	
+	<!-- 需求工程师订单集合 -->
+	<select id="getAllMyDemand" parameterType="map" resultMap="demandMap">
+		SELECT * FROM xacx_demand WHERE EXISTS 
+		(SELECT demandid FROM xacx_order_v2 WHERE create_by_id=#{userid} AND xacx_demand.id=xacx_order_v2.demandid) 
+		ORDER BY create_date DESC LIMIT #{pageSize} OFFSET #{startIndex}
+	</select>
+	
+	<select id="getAllMyDemandCount" parameterType="string" resultType="int">
+		SELECT COUNT(*) FROM xacx_demand WHERE EXISTS 
+		(SELECT demandid FROM xacx_order_v2 WHERE create_by_id=#{userid} AND xacx_demand.id=xacx_order_v2.demandid) 
+	</select>
+	
+	<!-- 查询用户已经被接过的需求订单 -->
+	<select id="findAllDemand" parameterType="string" resultMap="demandMap">
+		select a."id",a."name",a."number",a."iphone",a."create_date",a."create_by",a."late_date",a."late_by",a."bgd",a."demandd",a."interestpg",a."ninterestpg",
+        a."hzms",a."hzrequest",a."productm",a."product_date",a."bz",a."check_name" as checkName,a."ddmj",a."option",a."file",a."xqf",a."gjc",a."username" as userName,b.id as orderid
+        from xacx_demand a,xacx_order_v2 b 
+    	where a.id=b.demandid and a.create_by=#{userid} 
+    	order by a.create_date desc
 	</select>
 </mapper>

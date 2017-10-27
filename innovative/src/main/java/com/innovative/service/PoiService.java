@@ -9,15 +9,18 @@ import com.innovative.bean.Organization;
 import com.innovative.bean.Solution;
 import com.innovative.bean.TechnicalReport;
 import com.innovative.dao.PoiDao;
+import com.innovative.utils.BaseController;
 import com.innovative.utils.CookiesUtil;
 import com.innovative.utils.Misc;
 import com.innovative.utils.PoiUtil;
-import org.apache.log4j.Logger;
+//import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Service;
@@ -33,7 +36,8 @@ import javax.servlet.http.HttpServletRequest;
 @Transactional
 public class PoiService {
 
-    private static Logger log = Logger.getLogger(PoiService.class);
+//    private static Logger log = Logger.getLogger(PoiService.class);
+	private static Logger log = LoggerFactory.getLogger(PoiService.class);
 
     @Autowired
     PoiDao poiDao;

@@ -91,4 +91,10 @@ public interface ProjectApprovalDao {
 	 * @return
 	 */
 	public String[] findSource_idByOrder_id(Integer order_id);
+	/**
+	 * 寻源工程师的我的订单
+	 * @param userid
+	 * @return
+	 */
+	public List<ProjectApproval> findAllMyProjectApproval(String userid);
 }

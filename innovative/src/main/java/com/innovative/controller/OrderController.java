@@ -32,9 +32,11 @@ public class OrderController {
 	 * @return
 	 * */
 	@RequestMapping(value="/myorder",method=RequestMethod.GET)
-	public JsonResult selectMyOrder(@RequestParam(name="userid") String userid,@RequestParam(name="offset",defaultValue="0") Integer offset){
+	public JsonResult selectMyOrder(@RequestParam(name="userid") String userid,@RequestParam(name="type",defaultValue="1") int type,
+			@RequestParam(name="offset",defaultValue="0") Integer offset){
+		System.out.println(type+">>>>>>"+userid);
 		Integer page = offset/(new PageInfo().getPageSize()) +1;
-		Map<String, Object> map=orderService.selectMyOrder(userid,page);		
+		Map<String, Object> map=orderService.selectMyOrder(userid,page,type);		
 		return new JsonResult(true, map);
 	}
 	
