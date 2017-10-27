@@ -5,7 +5,6 @@ import com.innovative.bean.FileBean;
 import com.innovative.dao.FileDao;
 import com.innovative.service.CaseService;
 import com.innovative.utils.JsonResult;
-import org.apache.commons.beanutils.converters.CharacterArrayConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
