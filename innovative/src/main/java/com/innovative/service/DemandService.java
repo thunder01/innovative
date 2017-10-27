@@ -27,6 +27,10 @@ public class DemandService {
      */
     public  Demand getDemand(int id){
         Demand demand=demandDao.getDemand(id);
+        if (demand!=null) {
+            Integer orderId = orderDao.getOrderIdByDemandId(id);
+            demand.setOrderid(orderId);
+        }
         return demand;
     }
     /**
