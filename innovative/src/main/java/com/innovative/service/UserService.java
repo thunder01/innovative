@@ -80,7 +80,7 @@ public class UserService {
 		List<Map> listUser = Lists.newArrayList();;
 		SearchRequestBuilder qBuilder=client.prepareSearch("user_index").setTypes("user");  
 		QueryBuilder qb = QueryBuilders.disMaxQuery()
-							.add(QueryBuilders.matchQuery("name", name))
+							.add(QueryBuilders.matchQuery("username", name))
 							.add(QueryBuilders.wildcardQuery("itcode", "*"+name+"*"))
 							.boost(1.2f)                             
 						    .tieBreaker(0.7f);
@@ -90,7 +90,7 @@ public class UserService {
 		for(SearchHit hit:hits){
 			listUser.add(hit.getSource());
 		}
-		
+		System.out.println("数量"+listUser.size());
 		//若是从索引库中没有查到结果，则到数据库再查一遍
 		if (listUser.size()==0) {
 			name = "%"+name+"%";
