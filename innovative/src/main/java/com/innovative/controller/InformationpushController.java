@@ -46,9 +46,8 @@ public class InformationpushController extends BaseController {
      * @return
      */
     @RequestMapping(value = "/getInformationpush/{id}", method = RequestMethod.GET)
-    public JsonResult getInformationpush(@PathVariable(name = "id") String id) {
-    	
-    	Informationpush informationpush = informationpushService.getInformationpush(id);
+    public JsonResult getInformationpush(@PathVariable(name = "id") String id,HttpServletRequest req) {
+    	Informationpush informationpush = informationpushService.getInformationpush(id,CookiesUtil.getCookieValue(req,"user_name"));
         if (informationpush != null) {
             return new JsonResult(true, informationpush);
         }
@@ -125,7 +124,7 @@ public class InformationpushController extends BaseController {
         if (!informationpushService.addInformationpush(informationpush)) {
             return new JsonResult(false, "新增失败，请重试！");
         }
-        return new JsonResult(true, informationpushService.getInformationpush(informationpush.getId()));
+        return new JsonResult(true, informationpushService.getInformationpush(informationpush.getId(),informationpush.getComentBy()));
     }
 
 
@@ -143,13 +142,13 @@ public class InformationpushController extends BaseController {
     @ResponseBody
     public JsonResult updateInformationpush(@RequestBody Informationpush informationpush,HttpServletRequest req) {
 
-        if("".equals(informationpush.getId())||informationpushService.getInformationpush(informationpush.getId()) == null){
+        if("".equals(informationpush.getId())||informationpushService.getInformationpush(informationpush.getId(),CookiesUtil.getCookieValue(req,"user_name")) == null){
             return new JsonResult(false, "此记录不存在");
         }
         if (!informationpushService.updateInformationpush(informationpush)) {
             return new JsonResult(false, "修改失败，请重试！");
         }
-        Informationpush newInformationpush = informationpushService.getInformationpush(informationpush.getId());
+        Informationpush newInformationpush = informationpushService.getInformationpush(informationpush.getId(),CookiesUtil.getCookieValue(req,"user_name"));
         return newInformationpush != null ? new JsonResult(true, newInformationpush):new JsonResult(false, "获取新对象失败");
     }
 
@@ -184,7 +183,7 @@ public class InformationpushController extends BaseController {
     	collection.setCollectBy(CookiesUtil.getCookieValue(req,"user_name"));
     	collection.setId(Misc.uuid());
         if (!informationpushService.collectInformationpush(collection)) {
-            return new JsonResult(false, "您已收藏!");
+            return new JsonResult(false, "您已收藏!一天只能收藏一次");
         }
         return new JsonResult(true, informationpushService.getCollectNum(collection.getComentId()));
     }
