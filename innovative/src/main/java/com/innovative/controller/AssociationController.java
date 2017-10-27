@@ -49,10 +49,12 @@ public class AssociationController extends BaseController {
     @RequestMapping(value = "/deleteAssociation", method = RequestMethod.POST)
     @ResponseBody
     public JsonResult deleteAssociation(@RequestBody Association association) {
-
+    	String sectors = null;
+    	if(association.getSectors() != null &&association.getSectors().length>0 )
+    		 sectors = association.getSectors()[0];
        boolean flag = associationService.deleteAssociation(association.getId());
         if (flag) {
-            return new JsonResult(true, associationService.getAssociationList( 1));
+            return new JsonResult(true, associationService.getAssociationList( 1,sectors));
         }
         return new JsonResult(false, "参数不合法");
     }
@@ -68,9 +70,9 @@ public class AssociationController extends BaseController {
      * @return
      */
     @RequestMapping(value = "/getAssociationList", method = RequestMethod.GET)
-    public JsonResult getAssociationList(@RequestParam(name="offset",defaultValue="0") Integer offset) {
+    public JsonResult getAssociationList(@RequestParam(name="offset",defaultValue="0") Integer offset,@RequestParam(name="sectors",required=false) String sectors) {
     	Integer page = offset/(new PageInfo().getPageSize()) +1;
-        return new JsonResult(true, associationService.getAssociationList( page));
+        return new JsonResult(true, associationService.getAssociationList( page,sectors));
     }
 
 

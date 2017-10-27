@@ -5,7 +5,6 @@ import com.innovative.bean.FileBean;
 import com.innovative.dao.FileDao;
 import com.innovative.service.CaseService;
 import com.innovative.utils.JsonResult;
-import org.apache.commons.beanutils.converters.CharacterArrayConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -42,17 +41,25 @@ public class CaseController {
     @RequestMapping(value = "/add",method = RequestMethod.POST)
     @Transactional
     public  JsonResult add(@RequestBody Case cases){
-        String messge="添加失败!";
         boolean code=false;
-        System.out.println(cases.getTitleImage());
+        System.out.println(">>>>>>>>>>>>"+cases.getTitleImage());
         dao.updateFile(cases.getTitleImage());
         cases.setTitleImage(dao.getFileById(cases.getTitleImage(),"logo").get(0).getUrl());
         if (service.add(cases)) {
-            messge = "添加成功！";
             code = true;
         }
         return  new JsonResult(code,service.getFileList());
     }
+    @RequestMapping(value = "/addFile",method = RequestMethod.POST)
+    public JsonResult addFile(@RequestBody Case cases){
+        boolean code=false;
+        System.out.println(cases.getFile());
+        if (service.update(cases)){
+            code=true;
+        }
+        return  new JsonResult(code,service.getFileList());
+    }
+
     /**
      * 修改功能
      */
@@ -72,10 +79,8 @@ public class CaseController {
      */
     @RequestMapping(value = "/delete",method = RequestMethod.POST)
     public JsonResult delete(@RequestBody FileBean file){
-        String messge="删除失败!";
         boolean code=false;
         if (dao.deleteZdFile(file.getRefId(),file.getFileName())){
-            messge = "删除成功！";
             code = true;
         }
         return  new JsonResult(code,service.getFileList());

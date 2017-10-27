@@ -46,9 +46,9 @@
 	<select id="getOrganizationList"  resultMap="organizationMap">
 		SELECT * FROM "Organizations"  e LEFT JOIN "xacx_file" f on f."refId" = e."Id" and f."refType" = 'addunionFile' and f."sign" = 'add'
 		<where>
-			<!-- <if test="sectors!=null and sectors!=''">
-				 "Sectors" @> '${sectors}'
-			</if> -->
+			<if test="sectors!=null and sectors!=''">
+				 "Sectors" @> '${sectors}' and
+			</if>
 			 e."Deleted" = 'f' AND e."IsActive" = 't'
 		</where>
 		order by e."UpdatedAt"  DESC 
@@ -60,9 +60,9 @@
 	<select id="getTotalCount" resultType="int">
 		SELECT count(1) FROM "Organizations"
 		<where>
-			<!-- <if test="sectors!=null and sectors!=''">
-				"Sectors" @> '${sectors}'
-			</if> -->
+			<if test="sectors!=null and sectors!=''">
+				"Sectors" @> '${sectors}' and
+			</if>
 			 "Deleted" = 'f' AND "IsActive" = 't'
 		</where>
 	</select>

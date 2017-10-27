@@ -20,17 +20,19 @@ public interface OrganizationDao {
 
     /**
      * 创新资源列表页（根据行业领域查询对应机构的列表页）
+     * @param sectors 
      * @return
      */
-    List<Organization> getOrganizationList(@Param("startIndex") int startIndex, @Param("pageSize") int pageSize);
+    List<Organization> getOrganizationList(@Param("startIndex") int startIndex, @Param("pageSize") int pageSize, @Param("sectors") String sectors);
 
 
 
     /**
      * 查询相关行业领域的记录总条数
+     * @param sectors 
      * @return
      */
-    int getTotalCount();
+    int getTotalCount(@Param("sectors")String sectors);
 
 
     /**

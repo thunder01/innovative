@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.innovative.dao.InformationDao">
+
+	<resultMap id="informationMap" type="Information">
+	  <id property="id" column="id" />
+	  <result property="resource" column="resource"/>
+	  <result property="title" column="title"/>
+	  <result property="time" column="time"/>
+	  <result property="resume" column="resume"/>
+	  <result property="cotent" column="cotent"/>
+	  <result property="createAt" column="createAt"/>
+	  <result property="createBy" column="createBy"/>
+	  <result property="updateAt" column="updateAt"/>
+	  <result property="updateBy" column="updateBy"/>
+	  <result property="tags" column="tags" typeHandler="com.innovative.mybatisHandler.ArrayTypeHandler"/>
+	  <result property="sectors" column="sectors" typeHandler="com.innovative.mybatisHandler.ArrayTypeHandler"/>
+	</resultMap> 
+    <!--将图片保存到服务器，将记录保存到数据库-->
+    <insert id="addInformation" parameterType="map">
+       INSERT INTO "xacx_tech_information" 
+       ("id", "resource", "title", "time", "resume", "sectors", "tags", "cotent", "createAt", "createBy", "updateAt", "updateBy") 
+       VALUES
+       (#{id}, #{resource}, #{title}, #{time}, #{resume},
+        <choose>
+			<when test="sectors != null">
+				<foreach item="sector" collection="sectors" separator="," open="'{" close="}'," index="">  
+			      ${sector}
+			    </foreach>  
+			</when>
+			<otherwise>'{}',</otherwise>
+		</choose>
+		<choose>
+			<when test="tags != null">
+				<foreach item="tag" collection="tags" separator="," open="'{" close="}'," index="">  
+			      ${tag}
+			    </foreach>  
+			</when>
+			<otherwise>'{}',</otherwise>
+		</choose>
+         #{cotent}, now(), #{createBy}, now(), #{updateBy} );
+
+    </insert>
+    
+    <!--修改科技资讯-->
+	<update id="updateInformation" parameterType="map">
+		UPDATE "xacx_tech_information"
+		<set>
+			<if test="resource!=null and resource!=''">
+				"resource"=#{resource},
+			</if>
+			<if test="title!=null and title!=''">
+				"title"=#{title},
+			</if>
+			<if test="time!=null and time!=''">
+				"time"=#{time},
+			</if>
+			<if test="resume!=null and resume!=''">
+				"resume"=#{resume},
+			</if>
+			<if test="sectors!=null and sectors!=''">
+				"sectors"=
+				<choose>
+					<when test="sectors != null">
+						<foreach item="sector" collection="sectors" separator="," open="'{" close="}'," index="">  
+					      ${sector}
+					    </foreach>  
+					</when>
+					<otherwise>'{}',</otherwise>
+				</choose>
+			</if>
+			<if test="tags!=null and tags!=''">
+				"tags"=
+				<choose>
+					<when test="tags != null">
+						<foreach item="tag" collection="tags" separator="," open="'{" close="}'," index="">  
+					      ${tag}
+					    </foreach>  
+					</when>
+					<otherwise>'{}',</otherwise>
+				</choose>
+			</if>
+			<if test="cotent!=null and cotent!=''">
+				"cotent"=#{cotent},
+			</if>
+			<if test="updateBy!=null and updateBy!=''">
+				"updateBy"=#{updateBy},
+			</if>
+				"updateAt"=now()
+		</set>
+		where "id"=#{id}
+	</update>
+	
+	
+	 <!--根据id获取科技专栏-->
+	<select id="getInformationById" resultMap="informationMap">
+		SELECT "id", "resource", "title", "time", "resume", "sectors", "tags", "cotent", "createAt", "createBy", "updateAt", "updateBy" FROM "xacx_tech_information" 
+		 WHERE "id" =  #{id} ;
+	</select>
+	
+		<!--根据查询条件获取列表-->
+	<select id="getInformationLists" resultMap="informationMap">
+		SELECT "id", "resource", "title", "time", "resume", "sectors", "tags", "cotent", "createAt", "createBy", "updateAt", "updateBy" FROM "xacx_tech_information" 
+		limit #{pageSize} offset #{startIndex}
+	</select>
+	
+	
+		<!--根据查询条件获取剩余评论-->
+	<select id="getInformationpushSurplus" resultMap="informationMap">
+		SELECT "id", "resource", "title", "time", "resume", "sectors", "tags", "cotent", "createAt", "createBy", "updateAt", "updateBy" FROM "xacx_tech_information" 
+		offset #{startIndex}
+	</select>
+	
+
+
+
+	<!--查询行业领域搜索条件的总条数-->
+	<select id="getTotalCountNum" resultType="int">
+		SELECT count(*) FROM "xacx_tech_information"
+	</select>
+	
+	
+	
+	<!--删除科技专栏-->
+	<delete id="deleteInformation" parameterType="String">
+		delete from "xacx_tech_information"
+		<where>
+			 "id"=#{id}
+		</where>
+	</delete>
+	
+
+
+</mapper>

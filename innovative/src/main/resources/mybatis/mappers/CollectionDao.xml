@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.innovative.dao.CollectionDao">
+
+	<resultMap id="CollectionMap" type="com.innovative.bean.CollectionPush">
+	  <id property="id" column="id" />
+	  <result property="comentId" column="comentId"/>
+	  <result property="collectBy" column="collectBy"/>
+	  <result property="collectAt" column="collectAt"/>
+	</resultMap> 
+
+    <!--将图片保存到服务器，将记录保存到数据库-->
+    <insert id="insertCollection" parameterType="map">
+      INSERT INTO "xacx_information_push_collection" 
+		("id", "comentId", "collectBy", "collectAt") 
+		VALUES (#{id}, #{comentId}, #{collectBy}, now());
+    </insert>
+    
+      <!--获取最近收藏的5条记录-->
+	<select id="getCollectionLatest" resultType="map">
+		SELECT coll."collectAt",coll."collectBy",coll."comentId",pu."title",pu."cotent",us."username" FROM "xacx_information_push_collection" coll 
+		join xacx_information_push pu on pu."id" = coll."comentId"
+		join xacx_user us on us."pernr" = coll."collectBy"
+		 WHERE "collectBy" =  #{collectBy} order by  "collectAt" desc  LIMIT #{pageSize} offset #{startIndex};
+	</select>
+	
+	  <!--获取用户的所有收藏-->
+	<select id="getCollectionlist" resultType="map">
+		SELECT coll."collectAt",coll."collectBy",coll."comentId",pu."title",pu."cotent",us."username" FROM "xacx_information_push_collection" coll 
+		join xacx_information_push pu on pu."id" = coll."comentId"
+		join xacx_user us on us."pernr" = coll."collectBy"
+		WHERE "collectBy" =  #{collectBy}
+		order by "collectAt" DESC
+		 LIMIT #{pageSize} offset #{startIndex}
+	</select>
+	<!-- 获取该用户总条数 -->
+	<select id="getTotalCountByUser" resultType="Integer">
+		SELECT count(*) FROM "xacx_information_push_collection" where "collectBy" =  #{collectBy}
+	</select>
+	
+	<!-- 该用户今天是否对此信息已收藏 -->
+	<select id="isTodayCollectionInfornaionPush" resultType="Integer">
+		SELECT count(*) FROM "xacx_information_push_collection" where "collectBy" =  #{collectBy} and "comentId" =#{comentId} and to_date(cast("collectAt" as TEXT),'yyyy-mm-dd') = current_date
+	</select>
+	
+	<!-- 一条推特信息的收藏的数量 -->
+	<select id="getCollectNum" resultType="Integer">
+		select count(*)  from   "xacx_information_push_collection" where  "comentId" = #{comentId}
+	</select>
+	
+
+
+</mapper>

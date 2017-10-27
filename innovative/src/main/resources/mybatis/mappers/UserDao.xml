@@ -71,7 +71,7 @@
 
 	 <!--根据姓名模糊匹配获取用户信息-->
 	<select id="getUserByName" resultType="map">
-		select "username","stext","dstext","pernr"  as userid  from "xacx_user"  where username like  #{name}
+		select "username","stext","dstext","pernr"  as userid  from "xacx_user"  where itcode like  #{name} or username like #{name}
 	</select>
 	
 	 <!--根据员工账号获取全称-->

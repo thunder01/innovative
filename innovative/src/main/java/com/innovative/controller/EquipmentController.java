@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
+import com.alibaba.druid.util.StringUtils;
 
 @RestController
 @RequestMapping("/equipment")
@@ -52,10 +53,12 @@ public class EquipmentController {
     @RequestMapping(value = "/deleteEquipment", method = RequestMethod.POST)
     @ResponseBody
     public JsonResult deleteAssociation(@RequestBody Equipment equipment) {
-
+    	String sectors = null;
+    	if(equipment.getSectors() != null &&equipment.getSectors().length>0 )
+    		 sectors = equipment.getSectors()[0];
        boolean flag = equipmentService.deleteEquipment(equipment.getId());
         if (flag) {
-            return new JsonResult(true, equipmentService.getEquipmentListByCondition( 1));
+            return new JsonResult(true, equipmentService.getEquipmentListByCondition( 1,sectors));
         }
         return new JsonResult(false, "参数不合法");
     }
@@ -69,11 +72,11 @@ public class EquipmentController {
      * @return
      */
     @RequestMapping(value = "/getListByCondition", method = RequestMethod.GET)
-    public JsonResult getEquipmentListByCondition(@RequestParam(name="offset" ,defaultValue="0") Integer offset) {
+    public JsonResult getEquipmentListByCondition(@RequestParam(name="offset" ,defaultValue="0") Integer offset,@RequestParam(name="sectors",required=false) String sectors) {
 
     	Integer page = offset/(new PageInfo().getPageSize()) +1;
 
-        return new JsonResult(true, equipmentService.getEquipmentListByCondition( page));
+        return new JsonResult(true, equipmentService.getEquipmentListByCondition( page,sectors));
     }
 
     /**

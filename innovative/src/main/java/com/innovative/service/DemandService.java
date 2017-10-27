@@ -2,7 +2,9 @@ package com.innovative.service;
 
 import com.innovative.bean.Association;
 import com.innovative.bean.Demand;
+import com.innovative.bean.Order;
 import com.innovative.dao.DemandDao;
+import com.innovative.dao.OrderDao;
 import com.innovative.utils.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,6 +17,8 @@ import java.util.Map;
 public class DemandService {
     @Autowired
     DemandDao demandDao;
+    @Autowired
+    OrderDao  orderDao;
 
 
     /**
@@ -49,6 +53,10 @@ public class DemandService {
         pageInfo.setCurrentPageNum(pageNum);
         userName = "{" + userName + "}".trim();
         List<Demand> demands = demandDao.getDemandList(pageInfo.getStartIndex(), pageInfo.getPageSize(),userName);
+        for (Demand d :demands){
+            Integer orderId = orderDao.getOrderIdByDemandId(d.getId());
+            d.setOrderid(orderId);
+        }
         int totalCount = demandDao.getTotalCount(userName);
 
         Map<String, Object> map = new HashMap<>();
