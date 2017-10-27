@@ -60,6 +60,12 @@
 	<!--根据查询条件获取列表-->
 	<select id="getExpertLists" resultMap="expertMap">
 		SELECT * FROM "Experts" e  LEFT JOIN "xacx_file" f on f."refId" = e."Id" and f."refType" = 'expertFile' and f."sign" = 'add'
+		<where>
+			<if test="sectors!=null and sectors!=''">
+				e."Sectors" @> '${sectors}' AND
+			</if>
+			"Deleted" = 'f' AND "IsActive" = 't'
+		</where>
 		order by (case when e."Px" is null then 0 else e."Px" end)  DESC ,e."UpdatedAt" DESC ,e."HFactor" DESC
 		limit #{pageSize} offset #{startIndex}
 	</select>
@@ -71,14 +77,20 @@
 		SELECT count(1) FROM "Experts"
 		<where>
 			<if test="sectors!=null and sectors!=''">
-				"Sectors" @> '${sectors}'
+				"Sectors" @> '${sectors}' AND
 			</if>
-			AND "Deleted" = 'f' AND "IsActive" = 't'
+			 "Deleted" = 'f' AND "IsActive" = 't'
 		</where>
 	</select>
 	
 	<select id="getTotalCountNum" resultType="int">
 		SELECT count(1) FROM "Experts"
+		<where>
+			<if test="sectors!=null and sectors!=''">
+				"Sectors" @> '${sectors}' AND
+			</if>
+			 "Deleted" = 'f' AND "IsActive" = 't'
+		</where>
 	</select>
 
 

@@ -9,6 +9,7 @@ import com.innovative.utils.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.alibaba.druid.util.StringUtils;
 
 import java.util.HashMap;
 import java.util.List;
@@ -46,14 +47,15 @@ public class EquipmentService {
      * 分页条件查询设备list
      *
      * @param pageNum  页码
+     * @param sectors 
      * @return
      */
-    public Map<String, Object> getEquipmentListByCondition(int pageNum) {
+    public Map<String, Object> getEquipmentListByCondition(int pageNum, String sectors) {
 
 
-       /* if (!StringUtil.isEmpty(sectors)) {
+        if (!StringUtils.isEmpty(sectors)) {
             sectors = "{" + sectors + "}";
-        }*/
+        }
 
         //获取分页信息
         PageInfo pageInfo = new PageInfo();
@@ -62,7 +64,7 @@ public class EquipmentService {
         int limit = pageInfo.getPageSize();
 
         //分页条件查询
-        List<Equipment> items = equipmentDao.getEquipmentListByCondition( offset, limit);
+        List<Equipment> items = equipmentDao.getEquipmentListByCondition( offset, limit,sectors);
         for(Equipment e: items){
         	if(null==e || "".equals(e.getId()))
         		continue;
@@ -70,7 +72,7 @@ public class EquipmentService {
   		   if(urllist != null && urllist.size() > 0 )
   			  e.setPicture( urllist.get(0));
         }
-        int totalCount = equipmentDao.getCountByCondition();
+        int totalCount = equipmentDao.getCountByCondition(sectors);
 
         //数据组装
         Map<String, Object> map = new HashMap<>();

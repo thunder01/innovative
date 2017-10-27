@@ -1,6 +1,7 @@
 package com.innovative.service;
 
 
+import com.alibaba.druid.util.StringUtils;
 import com.innovative.bean.Solution;
 import com.innovative.dao.FileDao;
 import com.innovative.dao.SolutionDao;
@@ -45,15 +46,16 @@ public class SolutionService {
      * 分页条件查询方案list
      *
      * @param pageNum  页码
+     * @param sectors 
      * @return
      */
-    public Map<String, Object> getSolutionListByCondition(int pageNum) {
+    public Map<String, Object> getSolutionListByCondition(int pageNum, String sectors) {
 
 
-      /*  if (sectors != null) {
-            sectors = "{" + sectors + "}";
-        }
-*/
+    	  if (!StringUtils.isEmpty(sectors)) {
+              sectors = "{" + sectors + "}";
+          }
+
         //获取分页信息
         PageInfo pageInfo = new PageInfo();
         pageInfo.setCurrentPageNum(pageNum);
@@ -61,7 +63,7 @@ public class SolutionService {
         int limit = pageInfo.getPageSize();
 
         //分页条件查询
-        List<Solution> items = solutionDao.getSolutionListByCondition( offset, limit);
+        List<Solution> items = solutionDao.getSolutionListByCondition( offset, limit,sectors);
         for(Solution so : items){
         	if(null == so|| "".equals(so.getId()))
         		continue;
@@ -69,7 +71,7 @@ public class SolutionService {
   		   if(urllist != null && urllist.size() > 0 )
   			   so.setPictures(urllist.get(0));
         }
-        int totalCount = solutionDao.getCountByCondition();
+        int totalCount = solutionDao.getCountByCondition(sectors);
 
         //数据组装
         Map<String, Object> map = new HashMap<>();

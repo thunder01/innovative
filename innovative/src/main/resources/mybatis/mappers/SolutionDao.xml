@@ -41,10 +41,9 @@
         SELECT "Name","Summary","Content","Pictures","Sectors","Tags","Rank","Id","File","CreatedAt","UpdatedAt" ,f."url",f."refId",f."refType",f."filename" FROM "Solutions" e
           LEFT JOIN "xacx_file" f on f."refId" = e."Id" and f."refType" = 'programFile' and f."sign" = 'add'
         <where>
-            <!-- <if test="sectors != null and sectors != ''">
+            <if test="sectors != null and sectors != ''">
                 AND "Sectors" @> '${sectors}'
-            </if> -->
-             e."Deleted" = 'f' AND e."IsActive" = 't'
+            </if>
         </where>
         order by e."UpdatedAt"  DESC 
         limit #{pageSize} offset #{startIndex}
@@ -54,9 +53,9 @@
     <select id="getCountByCondition" resultType="int">
         SELECT COUNT("Id") FROM "Solutions"
         <where>
-            <!-- <if test="sectors != null and sectors != ''">
-                AND "Sectors" @> '${sectors}'
-            </if> -->
+            <if test="sectors != null and sectors != ''">
+              "Sectors" @> '${sectors}'    AND
+            </if>
              "Deleted" = 'f' AND "IsActive" = 't'
         </where>
     </select>

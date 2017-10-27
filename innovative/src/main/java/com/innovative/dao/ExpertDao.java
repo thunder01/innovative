@@ -70,12 +70,12 @@ public interface ExpertDao {
 
 
 
-	List<Expert> getExpertLists(@Param("startIndex") int startIndex, @Param("pageSize") int pageSize);
+	List<Expert> getExpertLists(@Param("startIndex") int startIndex, @Param("pageSize") int pageSize,  @Param("sectors")String sectors);
 
 
 
 
-	int getTotalCountNum();
+	int getTotalCountNum(@Param("sectors")String sectors);
 
 
 

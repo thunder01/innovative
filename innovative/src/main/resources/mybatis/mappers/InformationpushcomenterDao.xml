@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.innovative.dao.InformationpushDao">
+
+	<resultMap id="informationpushcomentMap" type="Informationpushcomenter">
+	  <id property="id" column="id" />
+	  <result property="pid" column="pid"/> <!-- 回复的父节点 -->
+	  <result property="comentAt" column="comentAt"/> <!-- 评论时间 -->
+	  <result property="comentBy" column="comentBy"/><!-- 评论人 -->
+	  <result property="cotent" column="cotent"/><!-- 评论内容 -->
+	  <result property="type" column="type"/><!-- 0代表评论 1代表回复 -->
+	  <result property="depth" column="depth"/>
+	  <result property="pushId" column="pushId"/><!-- 推特信息id -->
+      <!--  获取评论的回复 -->
+        <collection property="Informationpushcomenters" ofType="Informationpushcomenter">  
+           <result property="id" column="hid"/>
+           <result property="pid" column="hpid"/>
+		  <result property="comentAt" column="hcomentAt"/>
+		  <result property="comentBy" column="hcomentBy"/>
+		  <result property="comentByC" column="hcomentByC"/>
+		  <result property="cotent" column="hcotent"/>
+       </collection> 
+	</resultMap> 
+	
+	<resultMap id="informationpushMaps" type="com.innovative.bean.Informationpush">
+	  <id property="id" column="id" />
+	  <result property="pid" column="pid"/>
+	  <result property="comentAt" column="comentAt"/>
+	  <result property="comentBy" column="comentBy"/>
+	  <result property="comentByC" column="comentByC"/>
+	  <result property="cotent" column="cotent"/>
+	  <result property="title" column="title"/>
+       <collection property="commentlist" ofType="com.innovative.bean.Informationpushcomenter">  
+           <result property="id" column="pid"/>
+		   <result property="comentAt" column="pcomentAt"/>
+		  <result property="comentBy" column="pcomentBy"/>
+		  <result property="comentByC" column="pcomentByC"/>
+		  <result property="cotent" column="pcotent"/>
+       </collection> 
+	</resultMap> 
+
+    <!--根据推特信息获取所有的评论-->
+	<select id="getInformationpushcomenterByPushId" resultMap="informationpushcomentMap">
+		SELECT comenter."id",comenter."pid", comenter."comentAt", comenter."comentBy" ,us.username comentByC, comenter."cotent", comenter."type", comenter."pushId" ,
+				hf."id" hid,hf."pid" hpid, hf."comentAt" hcomentAt,hf."comentBy", hf.comentByC hcomentByC, hf."cotent" hcotent, hf."type" htype, hf."pushId"  hpushId
+		FROM "xacx_information_push_commenter"  comenter 
+		 left join 
+		(select h."id",h."pid", h."comentAt",h."comentBy", u.username comentByC, h."cotent", h."type", h."pushId"  from xacx_information_push_commenter h left join  xacx_user u on u."pernr" = h."comentBy" order by h."comentAt")hf   on hf."pid" = comenter."id"
+		 left join xacx_user us on us."pernr" = comenter."comentBy"
+		 WHERE comenter."pid" is null or comenter."pid" = '' and comenter."pushId" = #{pushId} 
+ 		order by comenter."comentAt"
+	</select>
+	  <!--用户评论推特信息，分页查找-->
+	<select id="getInformationPushComentersByUserid" resultMap="informationpushMaps">
+		select pu.title,pu.cotent,pu."comentAt",pu."comentBy",us.username comentByC,
+		commenter."id" pid ,commenter."comentBy" pcomentBy,commenter."comentAt" pcomentAt,commenter."comentBy" pcomentBy, pus.username pcomentByC from "xacx_information_push" pu
+		left join "xacx_information_push_commenter" commenter  on pu."id" = commenter."pushId"
+		left join "xacx_user" pus on pus.pernr = commenter."comentBy"
+		left join "xacx_user" us on us.pernr = pu."comentBy"
+		where commenter."comentBy" = #{comentBy}
+		order by commenter."comentAt" DESC
+		 LIMIT #{pageSize} offset #{startIndex}
+	</select>
+	
+	<!-- 获取该用户总条数 -->
+	<select id="getTotalCountByUserId" resultType="Integer">
+		select count (commenter.*) from "xacx_information_push" pu
+		left join "xacx_information_push_commenter" commenter  on pu."id" = commenter."pushId"
+		where commenter."comentBy" = #{comentBy}
+	</select>
+	<!--删除评论信息（级联删除回复信息）-->
+	<delete id="deleteInformationpushcoment" parameterType="map">
+		delete from "xacx_information_push_commenter"
+		<where>
+			 "id"=#{id} or "pid" = #{id} <!-- 级联删除回复信息 -->
+		</where>
+	</delete>
+	
+	<!--发布评论或回复-->
+	<insert id="addInformationpushcomenter" parameterType="map">
+		INSERT INTO "xacx_information_push_commenter" 
+			("id", "pid", "comentAt", "comentBy", "cotent", "type", "pushId") 
+			VALUES (#{id},#{pid}, now(), #{comentBy},  #{cotent}, #{type},  #{pushId});
+	</insert>
+	
+	 <!--根据评论id获取评论-->
+	<select id="getformationpushcomenter" resultMap="informationpushcomentMap">
+		SELECT "id", "pid", "comentAt", "comentBy", "cotent", "type", "pushId" FROM "xacx_information_push_commenter" 
+		 WHERE "id" =  #{id} ;
+	</select>
+	
+	
+	<!--修改评论或回复信息-->
+	<update id="updateInformationpushcomenter" parameterType="Informationpushcomenter">
+		UPDATE "xacx_information_push_commenter"
+		<set>
+			<if test="cotent!=null and cotent!=''">
+				"cotent"=#{cotent},
+			</if>
+			
+		</set>
+		where "id"=#{id}
+	</update>
+	
+	
+
+
+
+	<!--根据查询条件获取列表-->
+	<!-- <select id="getInformationpushList" resultMap="informationpushMap">
+			
+	SELECT e."id", e."pid", e."comentAt", e."comentBy", e."cotent", e."approuverNum", e."transmettreNum", collv.colletionNum, e."commenterNum", e."title",e."path",e."type",e."depth",
+					vl.id as sid,vl.pid as spid,vl."comentAt" as scomentAt,vl."comentBy" as scomentBy ,vl.cotent as scotent
+		 FROM "v_xacx_information_push_list"  e
+		  LEFT JOIN "xacx_file" f on f."refId" = e."id" and f."refType" = 'informationpushFile' and f."sign" = 'add'
+			LEFT JOIN v_xacx_information_push_list vl on e.id = vl.pid 
+			left join v_information_push_collect_list collv on collv."comentId" = e."id"
+			where e.pid is null or e.pid =''
+		limit #{pageSize} offset #{startIndex}
+	</select> -->
+	
+	
+	<!--根据父id获取评论列表-->
+<!-- 	<select id="getInformationpushListByPid" resultMap="informationpushMap">
+			SELECT e."id", e."pid", e."comentAt", e."comentBy", e."cotent", e."approuverNum", e."transmettreNum", e."colletionNum", e."commenterNum", e."title",e."path",e."type",e."depth",
+					vl.id as sid,vl.pid as spid,vl."comentAt" as scomentAt,vl."comentBy" as scomentBy ,vl.cotent as scotent
+		 FROM "v_xacx_information_push_list"  e
+		  LEFT JOIN "xacx_file" f on f."refId" = e."id" and f."refType" = 'informationpushFile' and f."sign" = 'add'
+			LEFT JOIN v_xacx_information_push_list vl on e.id = vl.pid 
+			where e."pid" = #{pid};
+	</select> -->
+	
+	<!--根据查询剩余评论-->
+	<!-- <select id="getInformationpushSurplus" resultMap="informationpushMap">
+			SELECT e."id", e."pid", e."comentAt", e."comentBy", e."cotent", e."approuverNum", e."transmettreNum", collv.colletionNum, e."commenterNum", e."title",e."path",e."type",e."depth",
+					vl.id as sid,vl.pid as spid,vl."comentAt" as scomentAt,vl."comentBy" as scomentBy ,vl.cotent as scotent
+		 FROM "v_xacx_information_push_list"  e
+		  LEFT JOIN "xacx_file" f on f."refId" = e."id" and f."refType" = 'informationpushFile' and f."sign" = 'add'
+			LEFT JOIN v_xacx_information_push_list vl on e.id = vl.pid 
+			left join v_information_push_collect_list collv on collv."comentId" = e."id"
+			where e.pid is null or e.pid =''
+		offset #{startIndex}
+	</select> -->
+	<!--查询发表信息总条数-->
+	<!-- <select id="getTotalCount" resultType="int">
+		SELECT count(*) FROM "xacx_information_push" where "pid" is null or "pid" =''
+	</select> -->
+	<!-- 查询一个用户的发表推特信息的总条数 -->
+	<!-- <select id="getTotalCountNum" resultType="int">
+		SELECT count(1) FROM "xacx_information_push" where "comentBy"=#{comentBy} and "depth" = 1 
+	</select> -->
+
+<!-- 查询一个用户评论的总条数 -->
+	<!-- <select id="getComentTotalCount" resultType="int">
+		SELECT count(1) FROM "xacx_information_push" where "comentBy"=#{comentBy} and "depth" = 2
+	</select> -->
+
+
+	<!--发布信息-->
+	<!-- <insert id="addInformationpush" parameterType="map">
+		INSERT INTO "public"."xacx_information_push" 
+		("id", "pid", "comentAt", "comentBy", "cotent", "approuverNum", "transmettreNum", "colletionNum", "commenterNum", "title") 
+		VALUES (#{id}, #{pid},now(), #{comentBy}, #{cotent}, 0, 0, 0, 0, #{title});
+	</insert> -->
+
+
+
+
+
+
+	<!--修改信息推特-->
+	<!-- <update id="updateInformationpush" parameterType="Informationpush">
+		UPDATE "xacx_information_push"
+		<set>
+			<if test="cotent!=null and cotent!=''">
+				"cotent"=#{cotent},
+			</if>
+			<if test="title!=null and title!=''">
+				"title"=#{title},
+			</if>
+		</set>
+		where "id"=#{id}
+	</update> -->
+	
+	<!--修改评论数-->
+	<!-- <update id="updateCommenterNum" parameterType="Informationpush">
+		UPDATE "xacx_information_push"
+		<set>
+			"commenterNum" = "commenterNum" +1
+		</set>
+		where "id"=#{id}
+	</update> -->
+
+
+
+	
+	
+	<!-- //返回赞的总数量 -->
+	<!-- <select id="getCommenterNum" resultType="int">
+		SELECT "commenterNum" FROM "xacx_information_push" where  "id"=#{id}
+	</select> -->
+	
+	
+	 <!--查询该用户发表评论的总条数-->
+	<!-- <select id="getTotalCount" resultType="int">
+		SELECT count(*) FROM "v_xacx_information_push_list" where "depth" = 1 
+	</select> --> 
+
+</mapper>

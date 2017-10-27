@@ -51,10 +51,12 @@ public class SolutionController {
     @RequestMapping(value = "/deleteSolution", method = RequestMethod.POST)
     @ResponseBody
     public JsonResult deleteSolution(@RequestBody Solution solution) {
-
+    	String sectors = null;
+    	if(solution.getSectors() != null &&solution.getSectors().length>0 )
+    		 sectors = solution.getSectors()[0];
        boolean flag = solutionService.deleteSolution(solution.getId());
         if (flag) {
-            return new JsonResult(true, solutionService.getSolutionListByCondition( 1));
+            return new JsonResult(true, solutionService.getSolutionListByCondition( 1,sectors));
         }
         return new JsonResult(false, "参数不合法");
     }
@@ -68,10 +70,10 @@ public class SolutionController {
      * @return
      */
     @RequestMapping(value = "/getListByCondition", method = RequestMethod.GET)
-    public JsonResult getSolutionByCondition(@RequestParam(name="offset",defaultValue="0") Integer offset) {
+    public JsonResult getSolutionByCondition(@RequestParam(name="offset",defaultValue="0") Integer offset,@RequestParam(name="sectors",required=false) String sectors) {
 
     	Integer page = offset/(new PageInfo().getPageSize()) +1;
-        return new JsonResult(true, solutionService.getSolutionListByCondition( page));
+        return new JsonResult(true, solutionService.getSolutionListByCondition( page,sectors));
     }
 
     /**

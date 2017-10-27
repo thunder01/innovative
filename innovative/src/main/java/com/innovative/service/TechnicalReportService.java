@@ -5,6 +5,8 @@ import com.innovative.bean.TechnicalReport;
 import com.innovative.dao.FileDao;
 import com.innovative.dao.TechnicalReportDao;
 import com.innovative.utils.PageInfo;
+
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,15 +44,16 @@ public class TechnicalReportService {
      * 分页条件查询技术报告list
      *
      * @param pageNum  页码
+     * @param sectors 
      * @return
      */
-    public Map<String, Object> getTechnicalReportListByCondition(int pageNum) {
+    public Map<String, Object> getTechnicalReportListByCondition(int pageNum, String sectors) {
 
-/*
-        if (sectors != null) {
+
+        if (!StringUtils.isEmpty(sectors)) {
             sectors = "{" + sectors + "}";
         }
-*/
+
         //获取分页信息
         PageInfo pageInfo = new PageInfo();
         pageInfo.setCurrentPageNum(pageNum);
@@ -58,7 +61,7 @@ public class TechnicalReportService {
         int limit = pageInfo.getPageSize();
 
         //分页条件查询
-        List<TechnicalReport> items = technicalReportDao.getTechnicalReportListByCondition(offset, limit);
+        List<TechnicalReport> items = technicalReportDao.getTechnicalReportListByCondition(offset, limit,sectors);
         for(TechnicalReport te : items){
         	if(null == te || "".equals(te.getId()))
         		continue;
@@ -66,7 +69,7 @@ public class TechnicalReportService {
    		   if(url != null && url.size() > 0 )
    			   te.setPictures(url.get(0));
         }
-        int totalCount = technicalReportDao.getCountByCondition();
+        int totalCount = technicalReportDao.getCountByCondition(sectors);
 
         //数据组装
         Map<String, Object> map = new HashMap<>();
