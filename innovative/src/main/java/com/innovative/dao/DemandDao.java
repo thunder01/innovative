@@ -73,4 +73,21 @@ public interface DemandDao {
      * @return
      */
     int getMyselfDemandTotal(String userid);
+    
+    
+    /**
+     * 需求工程师订单集合
+     * @param userid
+     * @return
+     */
+    List<Demand> getAllMyDemand(@Param("startIndex") int startIndex, @Param("pageSize") int pageSize,@Param("userid") String userid);
+    
+    int getAllMyDemandCount(String userid);
+    
+    /**
+     * 当前登入用户的所有的已通过的需求
+     * @param userid
+     * @return
+     */
+    List<Demand> findAllDemand(String userid);
 }

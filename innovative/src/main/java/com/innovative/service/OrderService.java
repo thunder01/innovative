@@ -74,7 +74,7 @@ public class OrderService {
 	 * @param pageNum分页信息
 	 * @return
 	 * */
-	public Map<String,Object> selectMyOrder(String userid,Integer pageNum){
+	public Map<String,Object> selectMyOrder(String userid,Integer pageNum,int type){
 		Map<String , Object> map=new HashMap<>();		
 		PageInfo pageInfo = new PageInfo();
         pageInfo.setCurrentPageNum(pageNum);
@@ -82,15 +82,44 @@ public class OrderService {
 		/*首先根据用户id获取用户信息*/
 		User user=userDao.getUser(userid);
 		List<Demand> list=null;
+		List<ProjectApproval> list2 = null;
 		int total = 0;
 		if (user!=null) {
-			/*查询该用户的所有需求订单*/
-			list=demandDao.getMyDemand(pageInfo.getStartIndex(), pageInfo.getPageSize(), userid);
-			total = demandDao.getMyDemandTotal(userid);
-			System.out.println(list);
+			if(type==1){/*查询该用户的所有需求订单*/
+				list=demandDao.getMyDemand(pageInfo.getStartIndex(), pageInfo.getPageSize(), userid);
+				total = demandDao.getMyDemandTotal(userid);
+				for (Demand demand : list) {
+					if(demand!=null){
+						demand.setOrderid(orderDao.getOrderIdByDemandId(demand.getId()));
+					}
+				}
+				System.out.println(list);
+				map.put("items", list);
+			}
+			if(type==2){
+				//需求工程师的订单
+				list = demandDao.getAllMyDemand(pageInfo.getStartIndex(), pageInfo.getPageSize(), userid);	
+				total = demandDao.getAllMyDemandCount(userid);
+				for (Demand demand : list) {
+					if(demand!=null){
+						demand.setOrderid(orderDao.getOrderIdByDemandId(demand.getId()));
+					}
+				}
+				map.put("items", list);
+			}
+			if(type==3){
+				//寻源工程师的订单
+				list2 = projectApprovalDao.selectApprovalListByUserId(userid,pageInfo.getStartIndex(), pageInfo.getPageSize());
+				total = projectApprovalDao.getSourceCount(userid);
+				for (ProjectApproval projectApproval : list2) {
+					if(projectApproval!=null){
+						projectApproval.setCreate_date(projectApproval.getCreate_date().substring(0, 16));
+					}
+				}
+				map.put("items", list2);
+			}
+			
 		}
-		
-		map.put("items", list);
 		map.put("user", user); 
 		map.put("userid", userid);  
 		map.put("totalCount", total);

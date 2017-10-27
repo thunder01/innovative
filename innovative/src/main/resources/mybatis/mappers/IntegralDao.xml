@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.innovative.dao.IntegralDao">
+	<resultMap id="integralMap" type="Integral">
+        <id property="userid" column="userid" />
+        <result property="integral" column="integral"/>
+        <result property="label" column="label" typeHandler="com.innovative.mybatisHandler.ArrayTypeHandler"/>
+        <result property="login_count" column="login_count"/>
+        <result property="times" column="times"/>
+        <result property="count" column="count"/>
+    </resultMap>
+	<!-- 添加一个用户积分信息 -->
+	<insert id="addIntegral" parameterType="Integral">
+		INSERT INTO xacx_integral(userid,integral,login_count) VALUES(#{userid},110,1)
+	</insert>  
+	<!-- 更新用户积分信息 -->
+	<update id="updateIntegral" parameterType="Integral">
+		UPDATE xacx_integral 
+		<set>
+			<if test="integral != null">
+				integral=integral+#{integral},
+			</if>
+			<choose>
+	            <when test="label != null">
+	                <foreach item="label" collection="label" separator="," open="'{" close="}'," index="">
+	                    ${label}
+	                </foreach>
+	            </when>
+	            <otherwise>'{},'</otherwise>
+	        </choose>
+        	<if test="login_count != null">
+        		login_count=#{login_count}
+        	</if>
+        	<if test="times != null">
+        		times=#{times}
+        	</if>
+        	<if test="count != null">
+        		count=#{count}
+        	</if>
+		</set>
+		 WHERE userid=#{userid}
+	</update> 
+	
+	<!-- 根据用户id查询积分信息 -->
+	<select id="getIntegral" parameterType="string" resultMap="integralMap">
+		SELECT userid,integral,label,login_count,times,count FROM xacx_integral WHERE userid=#{userid}
+	</select> 
+</mapper>
