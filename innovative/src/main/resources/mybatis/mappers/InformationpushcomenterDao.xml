@@ -79,7 +79,7 @@
 	</delete>
 	
 	<!--发布评论或回复-->
-	<insert id="addInformationpushcomenter" parameterType="map">
+	<insert id="addInformationpushcomenter" parameterType="Informationpushcomenter">
 		INSERT INTO "xacx_information_push_commenter" 
 			("id", "pid", "comentAt", "comentBy", "cotent", "type", "pushId") 
 			VALUES (#{id},#{pid}, now(), #{comentBy},  #{cotent}, #{type},  #{pushId});

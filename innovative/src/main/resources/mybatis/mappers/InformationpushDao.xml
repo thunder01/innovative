@@ -140,14 +140,14 @@
 		where "id"=#{id}
 	</update>
 	
-	<!--修改评论数-->
-	<!-- <update id="updateCommenterNum" parameterType="Informationpush">
+	<!--修改点赞数量-->
+	<update id="updateApprouverNum" parameterType="Informationpush">
 		UPDATE "xacx_information_push"
 		<set>
 			"commenterNum" = "commenterNum" +1
 		</set>
 		where "id"=#{id}
-	</update> -->
+	</update>
 
 
 

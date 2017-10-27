@@ -50,12 +50,12 @@ public class ReportService{
 				}
 			}
 			int result=reportDao.addReport(report);//添加报告
-			
 			map.put("orderid", report.getOrder_id());
 			map.put("type", report.getType());
 			map.put("report_id", report.getId());
 			map.put("result", result);
 			map.put("item", result);
+			
 		}
 		return map;	
 	}
@@ -88,6 +88,8 @@ public class ReportService{
 		
 		Report r = reportDao.findReportById(report.getId());
 		r.setList(listFiles);
+		User user = userService.getUser(r.getCreate_by());
+		map.put("user", user);
 		map.put("item",r);
 		map.put("result", result);
 		map.put("orderid", r.getOrder_id());

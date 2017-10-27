@@ -1,6 +1,8 @@
 
 package com.innovative;
 
+import java.io.IOException;
+
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -12,8 +14,7 @@ import org.springframework.context.annotation.Bean;
 @MapperScan(basePackages = "com.innovative")
 public class InnovativeApplication {
 
-	public static void main(String[] args) {
-
+	public static void main(String[] args)  {
 		SpringApplication.run(InnovativeApplication.class, args);
 	} 
 	/**

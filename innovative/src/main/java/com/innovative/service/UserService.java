@@ -1,45 +1,25 @@
 package com.innovative.service;
 
-import static org.mockito.Matchers.intThat;
-
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import org.apache.lucene.queryparser.xml.QueryBuilderFactory;
-import org.elasticsearch.action.bulk.BulkRequestBuilder;
-import org.elasticsearch.action.bulk.BulkResponse;
-import org.elasticsearch.action.get.GetRequestBuilder;
-import org.elasticsearch.action.get.GetResponse;
-import org.elasticsearch.action.index.IndexRequestBuilder;
-import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.transport.TransportClient;
-import org.elasticsearch.common.lucene.search.function.FiltersFunctionScoreQuery.ScoreMode;
-import org.elasticsearch.common.xcontent.XContentBuilder;
-import org.elasticsearch.common.xcontent.XContentFactory;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.google.common.collect.Lists;
 import com.innovative.bean.User;
 import com.innovative.dao.UserDao;
-import com.innovative.jedisclusterpipeline.JedisClusterPipeline;
 import com.innovative.utils.Config;
 import com.innovative.utils.PageInfo;
 import com.innovative.utils.SerializeUtil;
 
-import net.sf.json.util.JSONBuilder;
-import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisCluster;
-import redis.clients.jedis.JedisPool;
 
 @Service
 public class UserService {
@@ -94,6 +74,7 @@ public class UserService {
 	 * @param name
 	 * @return
 	 */
+	@SuppressWarnings("rawtypes")
 	public List<Map> getUserByName(String name) {
 		//先从索引库查
 		List<Map> listUser = Lists.newArrayList();;
