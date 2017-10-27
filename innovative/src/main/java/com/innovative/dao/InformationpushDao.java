@@ -14,9 +14,10 @@ public interface InformationpushDao {
     /**
      * 根据id获取专家详情
      * @param id 专家id
+     * @param userid 当前登录人
      * @return
      */
-	Informationpush getInformationpush(@Param("id") String id);
+	Informationpush getInformationpush(@Param("id") String id,@Param("userid")String userid);
 
 
 
@@ -93,8 +94,8 @@ public interface InformationpushDao {
 
 
 
-	//增加评论数
-	void updateCommenterNum(@Param("id")String id);
+	//增加点赞数量
+	void updateApprouverNum(@Param("id")String id);
 
 
 

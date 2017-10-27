@@ -40,12 +40,13 @@ public class InformationpushService {
 
     /**
      * 根据id获取信息推送信息
-     * @param id 专家id
+     * @param id 推特信息id
+     * @param userid 当前登录人
      * @return
      */
-    public Informationpush getInformationpush(String id){
+    public Informationpush getInformationpush(String id, String userid){
     	
-    	Informationpush informationpush =	informationpushDao.getInformationpush(id);
+    	Informationpush informationpush =	informationpushDao.getInformationpush(id,userid);
         		if(informationpush!=null){
         		   List<FileBean> fileList = fileDao.getFileById(id, "informationpushFile");
         		   if(fileList != null && fileList.size() > 0 )
@@ -204,7 +205,8 @@ public class InformationpushService {
 			 
 		//今天没点过赞 继续点赞（否则点赞失败）(num==0)没有点过赞
 		if(num == 0){
-			informationpushDao.updateCommenterNum(approuver.getComentId());
+			informationpushDao.updateApprouverNum(approuver.getComentId());
+			//增加一条点赞信息(这个没什么用,但是我不记录怎么判断他今天有没有点赞呢)
 			return approuverDao.insertApprouver(approuver);
 		}
 		else{

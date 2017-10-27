@@ -19,7 +19,7 @@ public class Informationpushcomenter implements Serializable {
 	private String pushId;    //推特信息id
 	private String path;    //234//345
 	private String comentByC;    //评论人姓名
-	private int depth;    //深度，有几级
+	private String type;    //0评论 1回复
 	private List<Informationpushcomenter> Informationpushcomenters;   //此评论的所有的回复
 	
 	public Informationpushcomenter(){
@@ -27,7 +27,7 @@ public class Informationpushcomenter implements Serializable {
 	}
 
 	public Informationpushcomenter(String id, String pid, Timestamp comentAt, String comentBy, String cotent,
-			String pushId, String path, String comentByC, int depth,
+			String pushId, String path, String comentByC, String type,
 			List<Informationpushcomenter> informationpushcomenters) {
 		this.id = id;
 		this.pid = pid;
@@ -37,7 +37,7 @@ public class Informationpushcomenter implements Serializable {
 		this.pushId = pushId;
 		this.path = path;
 		this.comentByC = comentByC;
-		this.depth = depth;
+		this.type = type;
 		Informationpushcomenters = informationpushcomenters;
 	}
 
@@ -105,12 +105,12 @@ public class Informationpushcomenter implements Serializable {
 		this.comentByC = comentByC;
 	}
 
-	public int getDepth() {
-		return depth;
+	public String getType() {
+		return type;
 	}
 
-	public void setDepth(int depth) {
-		this.depth = depth;
+	public void setType(String type) {
+		this.type = type;
 	}
 
 	public List<Informationpushcomenter> getInformationpushcomenters() {
@@ -120,7 +120,6 @@ public class Informationpushcomenter implements Serializable {
 	public void setInformationpushcomenters(List<Informationpushcomenter> informationpushcomenters) {
 		Informationpushcomenters = informationpushcomenters;
 	}
-	
 
 	
 
