@@ -163,6 +163,7 @@ public class DisassembleReportService {
 		dReport.setList(listFiles);
 		
 		map.put("item", dReport);
+		map.put("demandname",demand.getName());
 		map.put("user", user);
 		map.put("contact", demand.getIphone());
 		return map;
