@@ -18,7 +18,6 @@ import com.innovative.dao.UserDao;
 import com.innovative.utils.Config;
 import com.innovative.utils.PageInfo;
 import com.innovative.utils.SerializeUtil;
-
 import redis.clients.jedis.JedisCluster;
 
 @Service
