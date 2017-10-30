@@ -161,7 +161,7 @@ public class DisassembleReportService {
 		String fileid=dReport.getFileid();
 		List<FileBean> listFiles=fileDao.getFileById(fileid, "disassemble");
 		dReport.setList(listFiles);
-		
+		map.put("count", listFiles.size());
 		map.put("item", dReport);
 		map.put("demandname",demand.getName());
 		map.put("user", user);
