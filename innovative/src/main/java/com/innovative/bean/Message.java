@@ -18,6 +18,7 @@ public class Message implements Serializable{
     private String userid;//用户的信息
     private int project_id;//对应的项目ID
     private String create_date;//创建时间
+    private String proid;
     
     private Object object;
 //    private int message_count;//最新的消息总数
@@ -143,12 +144,23 @@ public class Message implements Serializable{
 		this.object = object;
 	}
 
+	public String getProid() {
+		return proid;
+	}
+
+	public void setProid(String proid) {
+		this.proid = proid;
+	}
+
 	@Override
 	public String toString() {
 		return "Message [id=" + id + ", projectId=" + projectId + ", type=" + type + ", createDate=" + createDate
 				+ ", status=" + status + ", notice=" + notice + ", last_by=" + last_by + ", last_date=" + last_date
-				+ ", userid=" + userid + ", project_id=" + project_id + ", create_date=" + create_date + "]";
+				+ ", userid=" + userid + ", project_id=" + project_id + ", create_date=" + create_date + ", proid="
+				+ proid + ", object=" + object + "]";
 	}
+
+	
 	
 	
 }
