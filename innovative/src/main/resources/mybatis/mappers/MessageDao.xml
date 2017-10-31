@@ -16,6 +16,7 @@
         <result property="userid" column="userid"/>
         <result property="project_id" column="project_id"/>
         <result property="create_date" column="create_date"/>
+        <result property="proid" column="proid"/>
     </resultMap>
 
     <!-- 新增-->
@@ -60,8 +61,8 @@
     
     <!-- 添加通知消息 -->
     <insert id="saveMessage" parameterType="Message">
-    	INSERT INTO xacx_messge(project_id,type,create_date,status,notice,userid)
-    	VALUES(#{project_id},#{type},now(),0,#{notice},#{userid})
+    	INSERT INTO xacx_messge(project_id,type,create_date,status,notice,userid,proid)
+    	VALUES(#{project_id},#{type},now(),0,#{notice},#{userid},#{proid})
     </insert>
     
     <!-- 查询消息总数 -->
