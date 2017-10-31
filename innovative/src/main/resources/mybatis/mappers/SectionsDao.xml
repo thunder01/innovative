@@ -17,11 +17,13 @@
 	  <result property="updateBy" column="updateBy"/>
 	  <result property="tags" column="tags" typeHandler="com.innovative.mybatisHandler.ArrayTypeHandler"/>
 	  <result property="sectors" column="sectors" typeHandler="com.innovative.mybatisHandler.ArrayTypeHandler"/>
+	  <result property="state" column="state"/>
 	</resultMap> 
+	
     <!--将图片保存到服务器，将记录保存到数据库-->
     <insert id="addSection" parameterType="map">
        INSERT INTO "xacx_tech_sections" 
-       ("id", "resource", "title", "time", "resume", "sectors", "tags", "cotent", "createAt", "createBy", "updateAt", "updateBy") 
+       ("id", "resource", "title", "time", "resume", "sectors", "tags", "cotent", "createAt", "createBy", "updateAt", "updateBy", "state") 
        VALUES
        (#{id}, #{resource}, #{title}, #{time}, #{resume},
         <choose>
@@ -40,7 +42,7 @@
 			</when>
 			<otherwise>'{}',</otherwise>
 		</choose>
-         #{cotent}, now(), #{createBy}, now(), #{updateBy} );
+         #{cotent}, now(), #{createBy}, now(), #{updateBy}, "0");
 
     </insert>
     
@@ -96,13 +98,13 @@
 	
 	 <!--根据id获取科技专栏-->
 	<select id="getSectionById" resultMap="sectionsMap">
-		SELECT "id", "resource", "title", "time", "resume", "sectors", "tags", "cotent", "createAt", "createBy", "updateAt", "updateBy" FROM "xacx_tech_sections" 
+		SELECT "id", "resource", "title", "time", "resume", "sectors", "tags", "cotent", "createAt", "createBy", "updateAt", "updateBy", "state" FROM "xacx_tech_sections" 
 		 WHERE "id" =  #{id} ;
 	</select>
 	
 		<!--根据查询条件获取列表-->
 	<select id="getSectionsLists" resultMap="sectionsMap">
-		SELECT "id", "resource", "title", "time", "resume", "sectors", "tags", "cotent", "createAt", "createBy", "updateAt", "updateBy" FROM "xacx_tech_sections" 
+		SELECT "id", "resource", "title", "time", "resume", "sectors", "tags", "cotent", "createAt", "createBy", "updateAt", "updateBy", "state" FROM "xacx_tech_sections" 
 		limit #{pageSize} offset #{startIndex}
 	</select>
 
@@ -123,6 +125,9 @@
 		</where>
 	</delete>
 	
-
-
+	<!-- 审批 ，通过则把state置为1 -->
+	<update id="approvalSections" parameterType="String">
+		update "xacx_tech_sections" set "state"="1" where "id"=#{id}
+	</update>
+	
 </mapper>
