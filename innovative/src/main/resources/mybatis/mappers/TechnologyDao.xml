@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.innovative.dao.TechnologyDao">
+    <resultMap id="TechnologyMap" type="Technology">
+        <id property="id" column="id" />
+        <result property="title" column="name"/>
+        <result property="source" column="number"/>
+        <result property="date" column="iphone"/>
+        <result property="abstacts" column="abstact"/>
+        <result property="field" column="field" typeHandler="com.innovative.mybatisHandler.ArrayTypeHandler"/>
+        <result property="label" column="label" typeHandler="com.innovative.mybatisHandler.ArrayTypeHandler"/>
+        <result property="type" column="type"/>
+        <result property="content" column="content"/>
+        <result property="number" column="number"/>
+    </resultMap>
+     <!--科技专栏资讯-->
+    <select id="getSpecial" resultMap="TechnologyMap">
+        SELECT * FROM xacx_technology
+        <where>
+            type='1'
+        </where>
+    </select>
+    <!--科技专栏资讯详情-->
+    <select id="getTechnologyzx" resultMap="TechnologyMap">
+        SELECT * FROM xacx_technology
+        <where>
+            type='1' and id=#{id}
+        </where>
+    </select>
+    <!--科技资讯查询-->
+    <select id="getinformation" resultMap="TechnologyMap">
+        SELECT * FROM xacx_technology
+        <where>
+            type='0'
+        </where>
+    </select>
+    <!--科技资讯详情-->
+    <select id="getTechnologyzl" resultMap="TechnologyMap">
+        SELECT * FROM xacx_technology
+        <where>
+            type='0' and id=#{id}
+        </where>
+    </select>
+    <!--点赞数量-->
+    <select id="getTotalCounts" resultType="int" parameterType="int">
+        select count(1) from xacx_technology_number where project=#{id}
+    </select>
+    <!-- 新增-->
+    <insert id="addTechnology" parameterType="Technology">
+        INSERT  INTO "xacx_technology"
+        ("title","source","date","abstacts","field","label","type","content")
+        VALUES(#{title},#{source},now(),#{abstacts},
+        <choose>
+            <when test="field != null">
+                <foreach item="field" collection="field" separator="," open="'{" close="}'," index="">
+                    ${field}
+                </foreach>
+            </when>
+            <otherwise>'{},'</otherwise>
+        </choose>
+        <choose>
+            <when test="label != null">
+                <foreach item="label" collection="label" separator="," open="'{" close="},'" index="">
+                    ${userName}
+                </foreach>
+            </when>
+            <otherwise>'{},'</otherwise>
+        </choose>
+        #{type},#{content}
+        )
+    </insert>
+
+</mapper>

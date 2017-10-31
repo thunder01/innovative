@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.innovative.dao.IntelligenceDao">
+    <!--情报主表-->
+    <resultMap id="intelligenceMap" type="Intelligence">
+        <id property="id" column="id" />
+        <result property="name" column="name"/>
+        <result property="demand" column="demand"/>
+        <result property="tell" column="tell"/>
+        <result property="status" column="status"/>
+        <result property="number" column="number"/>
+        <result property="frequency" column="frequency"/>
+        <result property="startdate" column="startdate"/>
+        <result property="enddate" column="enddate"/>
+        <result property="content" column="content"/>
+        <result property="createDate" column="create_date"/>
+        <result property="createBy" column="create_by"/>
+        <result property="userid" column="userid"/>
+    </resultMap>
+    <resultMap id="feedBackMap" type="FeedBack">
+        <id property="id" column="id" />
+        <result property="title" column="title"/>
+        <result property="content" column="content"/>
+        <result property="path" column="path"/>
+        <collection property="filelist" ofType="FileBean">
+            <result property="refId" column="refId"/>
+            <result property="refType" column="refType"/>
+            <result property="url" column="url"/>
+            <result property="fileName" column="filename"/>
+        </collection>
+    </resultMap>
+    <!--情报池列表展示-->
+    <select id="getList" resultMap="intelligenceMap">
+        limit #{pageSize} offset #{startIndex}
+        SELECT * FROM (SELECT * FROM "xacx_intelligence"
+        <where>
+            status='1'
+        </where>
+        )B
+        <where>
+            B.ddmj='0' or B.ddmj='1'and B.username @> '${userName}' order by B.create_date desc
+        </where>
+        limit #{pageSize} offset #{startIndex}
+    </select>
+    <!--根据ID查询情报池详情页-->
+    <select id="getIntelligence" parameterType="int" resultMap="intelligenceMap">
+        SELECT * FROM "xacx_intelligence" WHERE "id" = #{id}
+    </select>
+    <!--情报定制-->
+    <insert id="addIntelligence" parameterType="Intelligence">
+        <selectKey resultType="int" keyProperty="id" order="AFTER">
+            SELECT currval('xacx_intelligence_id_seq'::regclass)
+        </selectKey>
+        INSERT  INTO xacx_intelligence ("name","demand","tell","number","frequency","startdate","enddate","content","create_date","create_by","ddmj","username")
+        VALUES(#{name},#{demand},#{tell},#{number},#{frequency},#{startdate},#{enddate},#{content},now(),#{createBy},#{ddmj},
+        <choose>
+            <when test="userName != null">
+                <foreach item="userName" collection="userName" separator="," open="'{" close="}'" index="">
+                    ${userName}
+                </foreach>
+            </when>
+            <otherwise>'{}'</otherwise>
+        </choose>
+        )
+    </insert>
+    <!--审批内容-->
+     <update id="checkIntelligence" parameterType="Intelligence">
+         UPDATE xacx_intelligence SET status='1'
+         <where>
+             id=#{id}
+         </where>
+     </update>
+     <!--接单-->
+     <update id="downOrder" parameterType="Intelligence">
+         UPDATE  xacx_intelligence  SET status='2',userid=#{userid}
+         <where>
+             id=#{id}
+         </where>
+     </update>
+    <!--情报反馈-->
+    <insert id="addfeedback" parameterType="FeedBack">
+        INSERT INTO xacx_feedback ("title","content","intellid","path")
+        VALUES(#{title},#{content},#{intellId},#{path})
+    </insert>
+    <!--情报信息列表-->
+    <select id="getFeedBack" resultMap="intelligenceMap">
+        SELECT * FROM "xacx_intelligence"
+        <where>
+         status='2' and userid=#{userid}
+        </where>
+    </select>
+    <!--根据id查询情报内容-->
+     <select id="getfeedBacks"  resultMap="feedBackMap">
+         SELECT
+         ca."id",
+         ca.title,
+         ca."content",
+         f.filename,
+         f.url,
+         ca."path",
+         f."refId"
+         FROM
+         xacx_feedback ca
+         LEFT JOIN xacx_file f ON ca."path" = f."refId" and ca.intellid=#{id}
+     </select>
+    <!-- 总数-->
+    <select id="getTotalCounts" resultType="int">
+        SELECT count(1) FROM "xacx_intelligence"
+        <where>
+            status='1'
+        </where>
+    </select>
+</mapper>
