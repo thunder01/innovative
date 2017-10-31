@@ -48,6 +48,11 @@ public interface InformationDao {
 	 * @return
 	 */
 	boolean deleteInformation(@Param("id")String id);
-
+	/**
+	 * 审批功能，通过就把state置为1
+	 * @param id
+	 * @return
+	 */
+	boolean approvalInformation(@Param("id")String id);
 
 }
