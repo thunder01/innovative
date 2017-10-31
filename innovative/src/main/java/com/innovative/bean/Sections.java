@@ -7,10 +7,6 @@ import java.sql.Timestamp;
  * 科技专栏
  */
 public class Sections implements Serializable {
-
-    /**
-	 * 
-	 */
 	private static final long serialVersionUID = -1013904529112097483L;
 	private String id;
 	private String resource;//来源
