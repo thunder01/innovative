@@ -9,6 +9,11 @@
             <KeyValuePair key="application" value="demo"/>
         </GELF> -->
     </Appenders>
+    
+    
+    
+    <!-- aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa -->
+    
     <Loggers>
         <Root level="warn">
             <AppenderRef ref="Console" />
