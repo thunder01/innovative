@@ -7,9 +7,8 @@ import com.innovative.service.InformationService;
 import com.innovative.utils.CookiesUtil;
 import com.innovative.utils.JsonResult;
 import com.innovative.utils.PageInfo;
-
 import javax.servlet.http.HttpServletRequest;
-
+import org.elasticsearch.client.transport.TransportClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -32,11 +31,12 @@ public class InformationController {
 
     @Autowired
     private InformationService informationService;
-
+    @Autowired 
+    private TransportClient client;
     /**
      * 增加科技资讯
      *
-     * @param Sections 科技资讯实体
+     * @param information 科技资讯实体
      * @return
      */
     @RequestMapping(value = "/addInformation", method = RequestMethod.POST)
@@ -54,7 +54,7 @@ public class InformationController {
     /**
      * 修改编辑科技资讯
      *
-     * @param Sections 科技资讯实体
+     * @param information 科技资讯实体
      * @return
      */
     @RequestMapping(value = "/updateInformation", method = RequestMethod.POST)
@@ -67,8 +67,7 @@ public class InformationController {
     }
     /**
      * 查询科技资讯
-     *
-     * @param Sections 科技专栏实体
+     * @param Sections 科技资讯id
      * @return
      */
     @RequestMapping(value = "/getInformationComentById/{id}", method = RequestMethod.GET)
@@ -81,9 +80,8 @@ public class InformationController {
     
     
     /**
-     * 分页查询科技专栏
-     *
-     * @param Sections 科技专栏实体
+     * 分页查询科技资讯
+     * @param 
      * @return
      */
     @RequestMapping(value = "/getInformationList", method = RequestMethod.GET)
@@ -92,22 +90,20 @@ public class InformationController {
         return new JsonResult(true, informationService.getInformationLists(page));
     }
     
-    /**
-     * 根据id获取仪器设备
-     * @param id 协会id
-     * @return
-     */
+   /**
+    * 根据id删除科技资讯
+    * @param information
+    * @return
+    */
     @RequestMapping(value = "/deleteInformation", method = RequestMethod.POST)
     @ResponseBody 
-    public JsonResult deleteInformation(@RequestBody Sections sections) {
+    public JsonResult deleteInformation(@RequestBody Information information) {
 
-       boolean flag = informationService.deleteInformation(sections.getId());
+       boolean flag = informationService.deleteInformation(information.getId());
         if (flag) {
             return new JsonResult(true, "已删除");
         }
         return new JsonResult(false, "参数不合法");
     }
-
-
 
 }

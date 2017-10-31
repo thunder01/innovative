@@ -176,7 +176,8 @@ public class OrderService {
 		map.put("disassemble", disassembleReport);
 		map.put("items", list);		
 		map.put("orderid", orderid);
-		
+		Order order = orderDao.getOrderById(orderid);
+		map.put("order", order);
 		long time=System.currentTimeMillis()-start;
 		System.out.println(time);
 		return map;
