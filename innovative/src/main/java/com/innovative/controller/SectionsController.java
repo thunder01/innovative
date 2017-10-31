@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 /**
- * 科技资讯
+ * 科技专栏
  * @author cj
  *
  */

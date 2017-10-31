@@ -1,7 +1,6 @@
 package com.innovative.service;
 
 
-import com.innovative.bean.Expert;
 import com.innovative.bean.Sections;
 import com.innovative.dao.SectionsDao;
 import com.innovative.utils.Misc;
