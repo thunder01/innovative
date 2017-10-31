@@ -202,11 +202,14 @@ public class DisassembleReportService {
 			/*将订单的pass_status置为1*/
 			orderDao.updatePass_status(order_id,dReport.getPass_by());
 			map.put("message", "拆解报告通过");
-		}		
+		}	
+		String fileid = report.getFileid();
+		List<FileBean> listFiles=fileDao.getFileById(fileid, "disassemble");
 		int demand_id=orderDao.getDemandIdByOrderId(order_id);
 		Demand demand=demandDao.getDemand(demand_id);//查询需求信息	
 		User user=userDao.getUser(report.getCreate_by());//查询拆解报告创建人的信息
-		
+		report.setList(listFiles);
+		map.put("count", listFiles.size());
 		map.put("item", report);
 		map.put("user", user);
 		map.put("contact", demand.getIphone());
