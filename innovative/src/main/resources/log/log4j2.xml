@@ -4,10 +4,10 @@
         <Console name="Console" target="SYSTEM_OUT" ignoreExceptions="false">
             <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} [%t] (%F:%L)  - %m%n" />
         </Console>
-        <GELF name="gelfAppender" server="10.39.6.36" port="12201" hostName="10.39.6.36" protocol="UDP">
+        <!-- <GELF name="gelfAppender" server="10.39.6.36" port="12201" hostName="10.39.6.36" protocol="UDP">
             <KeyValuePair key="environment" value="DEV"/>
             <KeyValuePair key="application" value="demo"/>
-        </GELF>
+        </GELF> -->
     </Appenders>
     <Loggers>
         <Root level="warn">
