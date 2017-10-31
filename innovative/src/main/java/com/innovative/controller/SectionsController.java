@@ -33,9 +33,9 @@ public class SectionsController {
     private SectionsService sectionsService;
 
     /**
-     * 增加科技专栏
+     * 增加科技资讯
      *
-     * @param Sections 科技专栏实体
+     * @param Sections 科技资讯实体
      * @return
      */
     @RequestMapping(value = "/addSection", method = RequestMethod.POST)
@@ -51,9 +51,9 @@ public class SectionsController {
     }
     
     /**
-     * 修改编辑科技专栏
+     * 修改编辑科技资讯
      *
-     * @param Sections 科技专栏实体
+     * @param Sections 科技资讯实体
      * @return
      */
     @RequestMapping(value = "/updateSection", method = RequestMethod.POST)
@@ -67,7 +67,7 @@ public class SectionsController {
     /**
      * 查询科技资讯
      *
-     * @param id 科技专栏id
+     * @param Sections 科技专栏实体
      * @return
      */
     @RequestMapping(value = "/getSectionById/{id}", method = RequestMethod.GET)
@@ -82,7 +82,7 @@ public class SectionsController {
     /**
      * 分页查询科技专栏
      *
-     * @param 
+     * @param Sections 科技专栏实体
      * @return
      */
     @RequestMapping(value = "/getSectionList", method = RequestMethod.GET)
@@ -93,7 +93,7 @@ public class SectionsController {
     
     /**
      * 根据id删除科技专栏
-     * @param sections 科技专栏实体
+     * @param id 协会id
      * @return
      */
     @RequestMapping(value = "/deleteSection", method = RequestMethod.POST)
