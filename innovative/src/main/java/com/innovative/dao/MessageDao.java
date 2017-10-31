@@ -35,17 +35,11 @@ public interface MessageDao {
     /*       分界线                */
     
     /**
-     * 添加待办消息
+     * 添加消息
      * @param message
      * @return
      */
-    public int saveBacklogMessage(Message message);
-    /**
-     * 添加通知消息
-     * @param message
-     * @return
-     */
-    public int saveNoticeMessage(Message message);
+    public int saveMessage(Message message);
     /**
      * 通知消息集合
      * @param userid

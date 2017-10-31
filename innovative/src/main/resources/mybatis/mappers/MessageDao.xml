@@ -58,16 +58,10 @@
     <!-- 分界线   下面是消息新版 -->
     
     
-    <!-- 添加待办消息 -->
-    <insert id="saveBacklogMessage" parameterType="Message">
+    <!-- 添加通知消息 -->
+    <insert id="saveMessage" parameterType="Message">
     	INSERT INTO xacx_messge(project_id,type,create_date,status,notice,userid)
-    	VALUES(#{project_id},#{type},now(),0,3,#{userid})
-    </insert>
-    
-    <!-- 添加待办消息 -->
-    <insert id="saveNoticeMessage" parameterType="Message">
-    	INSERT INTO xacx_messge(project_id,type,create_date,status,notice,userid)
-    	VALUES(#{project_id},#{type},now(),0,1,#{userid})
+    	VALUES(#{project_id},#{type},now(),0,#{notice},#{userid})
     </insert>
     
     <!-- 查询消息总数 -->

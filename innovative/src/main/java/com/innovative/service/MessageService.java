@@ -189,5 +189,29 @@ public class MessageService {
 		return result;
 	}
 	
+	/**
+	 * 
+	 * @param userid 消息发给谁
+	 * @param project_id 目标的id
+	 * @param type 类型  (0需求下单     1拆解报告	2项目评价	 3情报)谁添加不一样的消息类型，自己加上注释
+	 * @param notice 1是通知，2是已办，3是待办
+	 * @return
+	 */
+	@Transactional
+	public int insertMessage(String userid,int project_id,String type,int notice){
+		Message message = new Message();
+		message.setUserid(userid);
+		message.setProject_id(project_id);
+		message.setType(type);
+		message.setNotice(notice);
+		int result = messageDao.saveMessage(message);
+		if(result!=0){
+			updateMsgCount(userid);
+			return 1;
+		}
+		return 0;
+	}
+	
+	
 	
 }
