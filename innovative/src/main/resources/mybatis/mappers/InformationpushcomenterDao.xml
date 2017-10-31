@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.innovative.dao.InformationpushDao">
+<mapper namespace="com.innovative.dao.InformationpushcomenterDao">
 
 	<resultMap id="informationpushcomentMap" type="Informationpushcomenter">
 	  <id property="id" column="id" />
@@ -13,6 +13,7 @@
 	  <result property="type" column="type"/><!-- 0代表评论 1代表回复 -->
 	  <result property="depth" column="depth"/>
 	  <result property="pushId" column="pushId"/><!-- 推特信息id -->
+	    <result property="comentByC" column="comentByC"/>
       <!--  获取评论的回复 -->
         <collection property="Informationpushcomenters" ofType="Informationpushcomenter">  
            <result property="id" column="hid"/>
@@ -33,7 +34,7 @@
 	  <result property="cotent" column="cotent"/>
 	  <result property="title" column="title"/>
        <collection property="commentlist" ofType="com.innovative.bean.Informationpushcomenter">  
-           <result property="id" column="pid"/>
+           <result property="id" column="cid"/>
 		   <result property="comentAt" column="pcomentAt"/>
 		  <result property="comentBy" column="pcomentBy"/>
 		  <result property="comentByC" column="pcomentByC"/>
@@ -42,9 +43,9 @@
 	</resultMap> 
 
     <!--根据推特信息获取所有的评论-->
-	<select id="getInformationpushcomenterByPushId" resultMap="informationpushcomentMap">
+	<select id = "getInformationpushcomenterByPushId" resultMap="informationpushcomentMap">
 		SELECT comenter."id",comenter."pid", comenter."comentAt", comenter."comentBy" ,us.username comentByC, comenter."cotent", comenter."type", comenter."pushId" ,
-				hf."id" hid,hf."pid" hpid, hf."comentAt" hcomentAt,hf."comentBy", hf.comentByC hcomentByC, hf."cotent" hcotent, hf."type" htype, hf."pushId"  hpushId
+				hf."id" hid,hf."pid" hpid, hf."comentAt" hcomentAt,hf."comentBy" hcomentBy, hf.comentByC hcomentByC, hf."cotent" hcotent, hf."type" htype, hf."pushId"  hpushId
 		FROM "xacx_information_push_commenter"  comenter 
 		 left join 
 		(select h."id",h."pid", h."comentAt",h."comentBy", u.username comentByC, h."cotent", h."type", h."pushId"  from xacx_information_push_commenter h left join  xacx_user u on u."pernr" = h."comentBy" order by h."comentAt")hf   on hf."pid" = comenter."id"
@@ -54,12 +55,12 @@
 	</select>
 	  <!--用户评论推特信息，分页查找-->
 	<select id="getInformationPushComentersByUserid" resultMap="informationpushMaps">
-		select pu.title,pu.cotent,pu."comentAt",pu."comentBy",us.username comentByC,
-		commenter."id" pid ,commenter."comentBy" pcomentBy,commenter."comentAt" pcomentAt,commenter."comentBy" pcomentBy, pus.username pcomentByC from "xacx_information_push" pu
+	select pu."id",pu.title,pu.cotent,pu."comentAt",pu."comentBy",us.username comentByC,
+		commenter."id" cid ,commenter."comentBy" pcomentBy,commenter."comentAt" pcomentAt,commenter."comentBy" pcomentBy, pus.username pcomentByC from "xacx_information_push" pu
 		left join "xacx_information_push_commenter" commenter  on pu."id" = commenter."pushId"
 		left join "xacx_user" pus on pus.pernr = commenter."comentBy"
 		left join "xacx_user" us on us.pernr = pu."comentBy"
-		where commenter."comentBy" = #{comentBy}
+		where commenter."comentBy" =  #{comentBy}
 		order by commenter."comentAt" DESC
 		 LIMIT #{pageSize} offset #{startIndex}
 	</select>

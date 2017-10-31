@@ -79,7 +79,7 @@ public class InformationPushPartagerController extends BaseController {
     
     
     /**
-     * 根据推特id获取所有分享记录
+     * 根据用户id获取所有分享记录
      *
      * @param id 推特id
      * @return
@@ -89,7 +89,7 @@ public class InformationPushPartagerController extends BaseController {
     	String partagerBy = CookiesUtil.getCookieValue(req,"user_name");
     	 Integer page = offset/(new PageInfo().getPageSize()) +1;
     	 Map<String,Object> informationPushPartagermap = informationpushPartagerService.getInformationpushPartagersByUserid(partagerBy,page);
-        return new JsonResult(false, "参数不合法");
+        return new JsonResult(true, informationPushPartagermap);
     }
     
  

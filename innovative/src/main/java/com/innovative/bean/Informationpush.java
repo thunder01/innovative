@@ -14,7 +14,8 @@ public class Informationpush implements Serializable {
 	private String id;//主键
 	private String pid; //父id
 	private Timestamp comentAt;   //评论时间
-	private String comentBy;      //评论人 
+	private String comentBy;      //评论人 comentByC
+	private String comentByC;      //评论人 
 	private String cotent;    //内容
 	private String title;    //内容
 	private int approuverNum; //赞的数量
@@ -33,15 +34,17 @@ public class Informationpush implements Serializable {
 	public Informationpush(){
 		
 	}
+	
 
-	public Informationpush(String id, String pid, Timestamp comentAt, String comentBy, String cotent, String title,
-			int approuverNum, int todayIsAprouver, int transmettreNum, int todayIsTransmettre, int colletionNum,
-			int todayIsColletion, int commenterNum, String path, String type, int depth, List<FileBean> filelist,
-			List<Informationpush> commentlist) {
+	public Informationpush(String id, String pid, Timestamp comentAt, String comentBy, String comentByC, String cotent,
+			String title, int approuverNum, int todayIsAprouver, int transmettreNum, int todayIsTransmettre,
+			int colletionNum, int todayIsColletion, int commenterNum, String path, String type, int depth,
+			List<FileBean> filelist, List<Informationpush> commentlist) {
 		this.id = id;
 		this.pid = pid;
 		this.comentAt = comentAt;
 		this.comentBy = comentBy;
+		this.comentByC = comentByC;
 		this.cotent = cotent;
 		this.title = title;
 		this.approuverNum = approuverNum;
@@ -57,6 +60,7 @@ public class Informationpush implements Serializable {
 		this.filelist = filelist;
 		this.commentlist = commentlist;
 	}
+
 
 	public String getId() {
 		return id;
@@ -88,6 +92,14 @@ public class Informationpush implements Serializable {
 
 	public void setComentBy(String comentBy) {
 		this.comentBy = comentBy;
+	}
+
+	public String getComentByC() {
+		return comentByC;
+	}
+
+	public void setComentByC(String comentByC) {
+		this.comentByC = comentByC;
 	}
 
 	public String getCotent() {
@@ -201,7 +213,7 @@ public class Informationpush implements Serializable {
 	public void setCommentlist(List<Informationpush> commentlist) {
 		this.commentlist = commentlist;
 	}
-	
+
 
 
 

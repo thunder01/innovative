@@ -310,18 +310,28 @@ public class PoiService {
 	                        }
 	                        equipment = new Equipment();
 	                        //获得获得第a行第1列的对象,excel文档必须按照格式，根据最终的排版定义从第几个开始读取
-	                        equipment.setContact(getCellValue(row.getCell((short)0)));
-	                        equipment.setIntroduction(getCellValue(row.getCell((short)1)));
-	                        equipment.setManufacturer(getCellValue(row.getCell((short)2)));
-	                        equipment.setName(getCellValue(row.getCell((short)3)));
-	                        equipment.setPurchasedAt(getCellValue(row.getCell((short)5)));
-	                        equipment.setRank(getCellIntValue(row.getCell((short)6)));
-	                        equipment.setRowVersion(getCellIntValue(row.getCell((short)7)));
-	                        equipment.setSectors(getArrCellValue(row.getCell((short)8)));
-	                        equipment.setSharing(getCellValue(row.getCell((short)9)));
-	                        equipment.setState(getCellValue(row.getCell((short)10)));
-	                        equipment.setTags(getArrCellValue(row.getCell((short)11)));
-	                        equipment.setUnit(getCellValue(row.getCell((short)12)));
+	                        equipment.setName(getCellValue(row.getCell((short)1)));
+	                        equipment.setSectors(getArrCellValue(row.getCell((short)2)));
+	                        equipment.setTags(getArrCellValue(row.getCell((short)3)));
+	                        equipment.setUnit(getCellValue(row.getCell((short)4)));
+	                        equipment.setState(getCellValue(row.getCell((short)5)));
+	                        equipment.setManufacturer(getCellValue(row.getCell((short)6)));
+	                        equipment.setPurchasedAt(getCellValue(row.getCell((short)8)));
+	                        equipment.setIntroduction(getCellValue(row.getCell((short)9)));
+	                        equipment.setSharing(getCellValue(row.getCell((short)10)));
+	                        
+	                        equipment.setContact(getCellValue(row.getCell((short)11)));
+	                       
+	                        
+	                       
+	                       
+	                        /*equipment.setRank(getCellIntValue(row.getCell((short)6)));
+	                        equipment.setRowVersion(getCellIntValue(row.getCell((short)7)));*/
+	                        
+	                        
+	                       
+	                        
+	                        
 	                        equipment.setCreatedBy(CookiesUtil.getCookieValue(request,"user_name"));
 	                        equipment.setId(Misc.uuid());
 	                        //封装第a行的对象信息,用map封装expert 对象 key值对应sheet.row下标
