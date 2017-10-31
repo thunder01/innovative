@@ -1,7 +1,6 @@
 
 package com.innovative;
 
-import java.io.IOException;
 
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;

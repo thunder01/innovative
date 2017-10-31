@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 /**
- * 信息推特
+ * 信息推特 评论表
  * @author cj
  *
  */
@@ -122,10 +122,10 @@ public class InformationpushcomenterController extends BaseController {
      * @return
      */
      @RequestMapping(value = "/getInformationPushComentersByUserid", method = RequestMethod.GET,produces="application/json;charset=UTF-8")
-     public JsonResult getInformationPushComentersByUserid(@RequestParam(name = "userid") String userid ,@RequestParam(name="offset",defaultValue="0" ) Integer offset,HttpServletRequest req) {
+     public JsonResult getInformationPushComentersByUserid(@RequestParam(name = "userId") String userId ,@RequestParam(name="offset",defaultValue="0" ) Integer offset,HttpServletRequest req) {
      	Integer page = offset/(new PageInfo().getPageSize()) +1;
      	//此用户收藏记录分页查找
-         return new JsonResult(true,informationpushcomenterService.getInformationPushComentersByUserid(userid,page));
+         return new JsonResult(true,informationpushcomenterService.getInformationPushComentersByUserid(userId,page));
      }
 
 
