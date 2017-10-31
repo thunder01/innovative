@@ -24,7 +24,7 @@ public class IntelligenceController {
     private MessageService messageService;
 
     /**
-     * 情报池列表页
+     * 情报池列表页。
      * @param offset
      * @return
      */
