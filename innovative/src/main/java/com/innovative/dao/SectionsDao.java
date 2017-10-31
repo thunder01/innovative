@@ -48,6 +48,11 @@ public interface SectionsDao {
 	 * @return
 	 */
 	boolean deleteSection(@Param("id")String id);
-
+	/**
+	 * 审批功能，通过state置为1
+	 * @param id
+	 * @return
+	 */
+	boolean approvalSections(@Param("id")String id);
 
 }
