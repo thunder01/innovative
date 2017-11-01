@@ -56,6 +56,11 @@
 	</select>
 
 
+    <!--根据id获取专家详情-->
+	<select id="getInformationpushById" resultMap="informationpushMap">
+		 select "id","comentBy" from xacx_information_push where "id" = #{id}
+	</select>
+
 
 	<!--根据查询条件获取列表-->
 	<select id="getInformationpushList" resultMap="informationpushMap">

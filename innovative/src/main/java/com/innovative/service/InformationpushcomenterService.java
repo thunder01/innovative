@@ -1,12 +1,15 @@
 package com.innovative.service;
 
+import com.innovative.bean.Informationpush;
 import com.innovative.bean.Informationpushcomenter;
+import com.innovative.dao.InformationpushDao;
 import com.innovative.dao.InformationpushcomenterDao;
 import com.innovative.utils.Config;
 import com.innovative.utils.PageInfo;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.List;
@@ -17,6 +20,11 @@ public class InformationpushcomenterService {
 
     @Autowired
     InformationpushcomenterDao informationpushcomenterDao;
+    @Autowired
+    MessageService messageService;
+    @Autowired
+    InformationpushDao informationpushDao;
+  
   
     
 
@@ -45,8 +53,12 @@ public boolean deleteInformationpushcoment(String id) {
  * @param informationpushcomenter
  * @return
  */
+@Transactional
 public boolean addInformationpushcomenter(Informationpushcomenter informationpushcomenter) {
-	// TODO Auto-generated method stub
+	//推送消息
+	Informationpush informationpush = informationpushDao.getInformationpushById(informationpushcomenter.getPushId());
+	//增加消息推送（这条推特信息的主人推送消息）
+    messageService.insertMessage(informationpush.getComentBy(), informationpushcomenter.getId(), Config.TT_PL, 1);
 	return informationpushcomenterDao.addInformationpushcomenter(informationpushcomenter);
 }
 /**

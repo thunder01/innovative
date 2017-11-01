@@ -3,6 +3,7 @@ package com.innovative.service;
 import com.alibaba.druid.util.StringUtils;
 import com.innovative.bean.Expert;
 import com.innovative.bean.InformationPushPartager;
+import com.innovative.bean.Informationpush;
 import com.innovative.bean.Informationpushcomenter;
 import com.innovative.dao.InformationPushPartagerDao;
 import com.innovative.dao.InformationpushDao;
@@ -12,6 +13,7 @@ import com.innovative.utils.PageInfo;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.List;
@@ -24,7 +26,10 @@ public class InformationPushPartagerService {
     InformationPushPartagerDao informationPushPartagerDao;
     @Autowired
     InformationpushDao informationPushDao;
-  
+    @Autowired
+    MessageService messageService;
+    @Autowired
+    InformationpushDao informationpushDao;
     
 
 
@@ -38,11 +43,16 @@ public class InformationPushPartagerService {
  * @param informationPushPartager
  * @return
  */
+ @Transactional
 public boolean addInformationPushPartager(InformationPushPartager informationPushPartager) {
 	// TODO Auto-generated method stub
 	//用户今天是否分享过
 	Integer num = informationPushPartagerDao.isTodayPartagerInfornaionPush(informationPushPartager.getPushId(),informationPushPartager.getPartagerBy());
 	if(num == 0){
+		//推送消息
+		Informationpush informationpush = informationpushDao.getInformationpushById(informationPushPartager.getPushId());
+		//增加消息推送（这条推特信息的主人推送消息）
+	    messageService.insertMessage(informationpush.getComentBy(), informationPushPartager.getId(), Config.TT_ZF, 1);
 		informationPushPartagerDao.addInformationPushPartager(informationPushPartager);
 	}
 	else{
