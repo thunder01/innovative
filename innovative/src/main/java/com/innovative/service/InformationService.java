@@ -168,15 +168,20 @@ public class InformationService {
 		}
 		return flag;
 	}
-
+	
+	/**
+	 * 根据关键字搜索（elasticsearch）
+	 * @param key
+	 * @return
+	 */
 	public JsonResult queryByKey(String key){
 		List<Map> listInformation = Lists.newArrayList();
 		SearchRequestBuilder qBuilder=client.prepareSearch("information_index").setTypes("information");
 		BoolQueryBuilder builder=QueryBuilders.boolQuery()
 				.should(QueryBuilders.matchQuery("title",key))
-				.should(QueryBuilders.matchQuery("resume",key))
 				.should(QueryBuilders.matchQuery("sectors",key))
 				.should(QueryBuilders.matchQuery("tags",key))
+				.should(QueryBuilders.matchQuery("resume",key))
 				.should(QueryBuilders.matchQuery("cotent",key));
 		//结果分页
 		qBuilder.setQuery(builder).setFrom(0).setSize(10);
