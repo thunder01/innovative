@@ -103,5 +103,15 @@ public class InformationController {
         }
         return new JsonResult(false, "参数不合法");
     }
-
+    
+    /**
+     * 使用elastic search进行模糊搜索
+     * @param key 搜索的关键字
+     * @return
+     */
+    @RequestMapping(value = "/queryByKey/{key}", method = RequestMethod.GET)
+    public JsonResult queryByKey(@PathVariable("key")String key){
+    	JsonResult result=informationService.queryByKey(key);
+    	return result;
+    }
 }

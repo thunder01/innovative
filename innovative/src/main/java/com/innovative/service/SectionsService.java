@@ -1,7 +1,9 @@
 package com.innovative.service;
 
+import com.google.common.collect.Lists;
 import com.innovative.bean.Sections;
 import com.innovative.dao.SectionsDao;
+import com.innovative.utils.JsonResult;
 import com.innovative.utils.Misc;
 import com.innovative.utils.PageInfo;
 import java.io.IOException;
@@ -15,10 +17,16 @@ import org.elasticsearch.action.admin.indices.exists.indices.IndicesExistsRespon
 import org.elasticsearch.action.admin.indices.mapping.put.PutMappingRequest;
 import org.elasticsearch.action.delete.DeleteResponse;
 import org.elasticsearch.action.index.IndexResponse;
+import org.elasticsearch.action.search.SearchRequestBuilder;
+import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.Requests;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.common.xcontent.XContentFactory;
+import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.search.SearchHit;
+import org.elasticsearch.search.SearchHits;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -149,6 +157,36 @@ public class SectionsService {
 			DeleteResponse response=client.prepareDelete("sections_index","sections",id).get();
 		}
 		return flag;
+	}
+	
+	/**
+	 * 根据关键字搜索（elastic search）
+	 * @param key
+	 * @return
+	 */
+	public JsonResult queryByKey(String key){
+		List<Map> listSections = Lists.newArrayList();
+		SearchRequestBuilder qBuilder=client.prepareSearch("sections_index").setTypes("sections");
+		BoolQueryBuilder builder=QueryBuilders.boolQuery()
+				.should(QueryBuilders.matchQuery("title",key))
+				.should(QueryBuilders.matchQuery("sectors",key))
+				.should(QueryBuilders.matchQuery("tags",key))
+				.should(QueryBuilders.matchQuery("resume",key))
+				.should(QueryBuilders.matchQuery("cotent",key));
+		//结果分页
+		qBuilder.setQuery(builder).setFrom(0).setSize(10);
+		//发出查询请求
+		SearchResponse response = qBuilder.execute().actionGet();
+		
+		SearchHits hits = response.getHits();
+		for(SearchHit hit:hits){
+			listSections.add(hit.getSource());
+		}
+		System.out.println(hits);
+		if (listSections.size()==0) {
+			return new JsonResult(false, "没有结果");
+		}
+		return new JsonResult(true, listSections);
 	}
 	
 	/**
