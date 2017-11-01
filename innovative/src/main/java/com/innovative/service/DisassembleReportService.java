@@ -213,6 +213,7 @@ public class DisassembleReportService {
 		map.put("item", report);
 		map.put("user", user);
 		map.put("contact", demand.getIphone());
+		map.put("demandname", demand.getName());
 		return map;
 	}
 	
