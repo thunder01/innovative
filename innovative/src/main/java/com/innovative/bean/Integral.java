@@ -14,13 +14,13 @@ public class Integral implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private String userid;
-	private Integer integral;
-	private String[] label;
-	private Integer login_count;
-	private Integer times;
-	private Integer type;
-	private Integer count;
+	private String userid;//用户id
+	private Integer integral;//积分
+	private String[] label;//用户标签
+	private Integer login_count;//登入次数
+	private Integer times;//无用
+	private Integer type;//无用
+	private Integer count;//无用
 	
 	public Integral() {}
 
