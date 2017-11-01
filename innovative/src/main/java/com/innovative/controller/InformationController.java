@@ -83,9 +83,9 @@ public class InformationController {
      * @return
      */
     @RequestMapping(value = "/getInformationList", method = RequestMethod.GET)
-    public JsonResult getSectionList(@RequestParam(name="offset",defaultValue="0" ) Integer offset) {
+    public JsonResult getSectionList(@RequestParam(name="offset",defaultValue="0" ) Integer offset,@RequestParam(name="state",required=false) String state) {
     	Integer page = offset/(new PageInfo().getPageSize()) +1;
-        return new JsonResult(true, informationService.getInformationLists(page));
+        return new JsonResult(true, informationService.getInformationLists(page,state));
     }
     
    /**

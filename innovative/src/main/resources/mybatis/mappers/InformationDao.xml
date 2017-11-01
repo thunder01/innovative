@@ -87,6 +87,9 @@
 			<if test="cotent!=null and cotent!=''">
 				"cotent"=#{cotent},
 			</if>
+			<if test="state!=null and state!=''">
+				"state"=#{state},
+			</if>
 			<if test="updateBy!=null and updateBy!=''">
 				"updateBy"=#{updateBy},
 			</if>
@@ -105,6 +108,11 @@
 		<!--根据查询条件获取列表-->
 	<select id="getInformationLists" resultMap="informationMap">
 		SELECT "id", "resource", "title", "time", "resume", "sectors", "tags", "cotent", "createAt", "createBy", "updateAt", "updateBy", "state" FROM "xacx_tech_information" 
+		<where>
+			<if test="state!=null and state!=''">
+				"state" = #{state}
+			</if>
+		</where>
 		limit #{pageSize} offset #{startIndex}
 	</select>
 	
@@ -121,6 +129,11 @@
 	<!--查询行业领域搜索条件的总条数-->
 	<select id="getTotalCountNum" resultType="int">
 		SELECT count(*) FROM "xacx_tech_information"
+		<where>
+			<if test="state!=null and state!=''">
+				"state" = #{state}
+			</if>
+		</where>
 	</select>
 	
 	

@@ -4,6 +4,7 @@ package com.innovative.service;
 import com.google.common.collect.Lists;
 import com.innovative.bean.Information;
 import com.innovative.dao.InformationDao;
+import com.innovative.utils.Config;
 import com.innovative.utils.JsonResult;
 import com.innovative.utils.Misc;
 import com.innovative.utils.PageInfo;
@@ -49,6 +50,8 @@ public class InformationService {
     private InformationDao informationDao;
     @Autowired
     private TransportClient client;
+    @Autowired
+    MessageService messageService;
 /**
  * 添加科技资讯
  * @param sections
@@ -89,6 +92,7 @@ public class InformationService {
  * @return
  */
 	public boolean updateInformation(Information information) {
+		Information informationOld = informationDao.getInformationById(information.getId());
 		// 先修改数据库中的科技资讯信息
 		boolean flag=informationDao.updateInformation(information);
 		//成功之后，再修改索引库中的内容
@@ -120,6 +124,19 @@ public class InformationService {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+			//如果 科技专栏的发布者与修改人不同则  给创建人发消息
+			if(null!=information.getUpdateBy() &&  information.getUpdateBy().equals(informationOld.getCreateBy())){
+				//审核状态被修改
+				if(information.getState()!=null &&(!information.getState().endsWith(informationOld.getState()))){
+					//增加消息推送（科技资讯审核）
+					 messageService.insertMessage(informationOld.getCreateBy(), informationOld.getId(), Config.KJ_ZX_SH, 1);
+				}else{
+					//增加消息推送(科技资讯修改)
+					 messageService.insertMessage(informationOld.getCreateBy(), informationOld.getId(), Config.KJ_ZX_XG, 1);
+				}
+					
+				
+			}
 		}
 		
 		return flag;
@@ -136,13 +153,14 @@ public class InformationService {
 	/**
 	 * 查询科技资讯列表
 	 * @param page
+	 * @param state 
 	 * @return
 	 */
-	public  Map<String, Object> getInformationLists(Integer page) {
+	public  Map<String, Object> getInformationLists(Integer page, String state) {
 		 PageInfo pageInfo = new PageInfo();
 	       pageInfo.setCurrentPageNum(page);
-	       List<Information> informations = informationDao.getInformationLists( pageInfo.getStartIndex(), pageInfo.getPageSize());
-	       int totalCount = informationDao.getTotalCountNum();
+	       List<Information> informations = informationDao.getInformationLists( pageInfo.getStartIndex(), pageInfo.getPageSize(),state);
+	       int totalCount = informationDao.getTotalCountNum(state);
 		
 	        Map<String, Object> map = new HashMap<>();
 	        map.put("items", informations);
