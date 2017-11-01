@@ -20,7 +20,7 @@
     </resultMap>
 
     <!-- 新增-->
-    <insert id="addMessage" parameterType="Message">
+    <insert id="addMessage" parameterType="Message" >
         INSERT  INTO "xacx_messge"
         ("project_id","type","create_date")
         VALUES(#{projectId},#{type},now())

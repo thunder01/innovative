@@ -83,9 +83,9 @@ public class SectionsController {
      * @return
      */
     @RequestMapping(value = "/getSectionList", method = RequestMethod.GET)
-    public JsonResult getSectionList(@RequestParam(name="offset",defaultValue="0" ) Integer offset) {
+    public JsonResult getSectionList(@RequestParam(name="offset",defaultValue="0" ) Integer offset,@RequestParam(name="type",required=false) String type) {
     	Integer page = offset/(new PageInfo().getPageSize()) +1;
-        return new JsonResult(true, sectionsService.getSectionLists(page));
+        return new JsonResult(true, sectionsService.getSectionLists(page,type));
     }
     
     /**

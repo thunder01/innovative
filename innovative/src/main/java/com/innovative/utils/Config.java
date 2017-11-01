@@ -96,6 +96,22 @@ public class Config {
     //关于收藏数量的配置 分享,评论的数量
     public static final  int COLLCT_NUM = 5;
     public static final  int COLLCT_STARTINDEX = 0;
+    //信息推特点赞
+    public static final  String TT_DZ = "4";
+    //信息推特收藏
+    public static final  String TT_SC = "6";
+    //信息推特转发
+    public static final  String TT_ZF = "5";
+    //信息推特评论
+    public static final  String TT_PL = "7";
+    //科技专栏审核
+    public static final  String KJ_ZL_SH = "8";
+    //科技资讯审核
+    public static final  String KJ_ZX_SH = "9";
+    //科技专栏修改
+    public static final  String KJ_ZL_XG = "10";
+    //科技资讯修改
+    public static final  String KJ_ZX_XG = "11";
     //信息推特文件标志 
     public static final  String INFORMATIONPUSHFILE = "informationpushFile";
     

@@ -20,7 +20,7 @@ public class Sections implements Serializable {
 	private String createBy;//创建人
 	private Timestamp updateAt;//更新时间
 	private String updateBy;//更新人
-	private String state;//审批状态，0 未审批 1 已审批
+	private String state;//审批状态，0 未审批 1 审批完成 2审核不通过
 	
     public Sections() {
     }

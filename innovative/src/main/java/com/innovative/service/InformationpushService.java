@@ -35,6 +35,8 @@ public class InformationpushService {
     CollectionDao collectionDao;//主要用于信息推特收藏
     @Autowired
     FileDao fileDao;
+    @Autowired
+    MessageService messageService;
   
     
 
@@ -123,7 +125,11 @@ public class InformationpushService {
     }
 
 
-
+/**
+ * 增加一条推特信息
+ * @param informationpush
+ * @return
+ */
     @Transactional
 	public boolean addInformationpush(Informationpush informationpush) {
     	int num = informationpushDao.addInformationpush(informationpush);
@@ -205,7 +211,11 @@ public class InformationpushService {
 			 
 		//今天没点过赞 继续点赞（否则点赞失败）(num==0)没有点过赞
 		if(num == 0){
+			//记录点赞次数
 			informationpushDao.updateApprouverNum(approuver.getComentId());
+			Informationpush informationpush = informationpushDao.getInformationpushById(approuver.getComentId());
+			//增加消息推送（这条推特信息的主人推送消息）
+			 messageService.insertMessage(informationpush.getComentBy(), approuver.getId(), Config.TT_DZ, 1);
 			//增加一条点赞信息(这个没什么用,但是我不记录怎么判断他今天有没有点赞呢)
 			return approuverDao.insertApprouver(approuver);
 		}
@@ -240,7 +250,12 @@ public class InformationpushService {
 		// TODO Auto-generated method stub
 		//查看此推特信息今天是否已收藏
 		int flag =collectionDao.isTodayCollectionInfornaionPush(collection.getCollectBy(), collection.getComentId());
+		//没有收藏就出现增加收藏记录
 		if(flag<=0){
+			//推送消息
+			Informationpush informationpush = informationpushDao.getInformationpushById(collection.getComentId());
+			//增加消息推送（这条推特信息的主人推送消息）
+		    messageService.insertMessage(informationpush.getComentBy(), collection.getId(), Config.TT_SC, 1);
 			collectionDao.insertCollection(collection);
 			return true;
 		}else{

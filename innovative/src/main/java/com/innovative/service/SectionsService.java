@@ -3,7 +3,7 @@ package com.innovative.service;
 import com.google.common.collect.Lists;
 import com.innovative.bean.Sections;
 import com.innovative.dao.SectionsDao;
-import com.innovative.utils.JsonResult;
+import com.innovative.utils.Config;
 import com.innovative.utils.Misc;
 import com.innovative.utils.PageInfo;
 import java.io.IOException;
@@ -42,6 +42,8 @@ public class SectionsService {
     private SectionsDao sectionsDao;
     @Autowired
     private TransportClient client;
+    @Autowired
+    MessageService messageService;
 /**
  * 添加科技专栏
  * @param sections
@@ -80,8 +82,10 @@ public class SectionsService {
  * @return
  */
 	public boolean updateSection(Sections sections) {
+		Sections sectionOld = sectionsDao.getSectionById(sections.getId());
 		// 先修改数据库
 		boolean flag=sectionsDao.updateSection(sections);
+		
 		//成功之后，再修改索引库
 		if (flag) {
 			String id=sections.getId();
@@ -112,6 +116,20 @@ public class SectionsService {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+			//如果 科技专栏的发布者与修改人不同则  给创建人发消息
+			if(null!=sections.getUpdateBy() &&  sections.getUpdateBy().equals(sectionOld.getCreateBy())){
+				//审核状态被修改
+				if(sections.getState()!=null &&(!sections.getState().endsWith(sectionOld.getState()))){
+					//增加消息推送（科技专栏审核）
+					 messageService.insertMessage(sectionOld.getCreateBy(), sectionOld.getId(), Config.KJ_ZL_SH, 1);
+				}else{
+					//增加消息推送(科技专栏修改)
+					 messageService.insertMessage(sectionOld.getCreateBy(), sectionOld.getId(), Config.KJ_ZL_XG, 1);
+				}
+					
+				
+			}
+			
 		}
 		return flag;
 	}
@@ -127,13 +145,14 @@ public class SectionsService {
 	/**
 	 * 查询科技专栏列表
 	 * @param page
+	 * @param state 1是后台（全部显示） 2是前台（只显示审核通过的）
 	 * @return
 	 */
-	public  Map<String, Object> getSectionLists(Integer page) {
+	public  Map<String, Object> getSectionLists(Integer page, String state) {
 		 PageInfo pageInfo = new PageInfo();
 	       pageInfo.setCurrentPageNum(page);
-	       List<Sections> sections = sectionsDao.getSectionsLists( pageInfo.getStartIndex(), pageInfo.getPageSize());
-	       int totalCount = sectionsDao.getTotalCountNum();
+	       List<Sections> sections = sectionsDao.getSectionsLists( pageInfo.getStartIndex(), pageInfo.getPageSize(),state);
+	       int totalCount = sectionsDao.getTotalCountNum(state);
 		
 	        Map<String, Object> map = new HashMap<>();
 	        map.put("items", sections);

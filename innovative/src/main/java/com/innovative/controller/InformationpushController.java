@@ -113,7 +113,7 @@ public class InformationpushController extends BaseController {
 
 /**
  * 新增推特信息
- * @param informationpush 专家对象封装
+ * @param informationpush 推特信息对象
  * @return
  */
     @RequestMapping(value = "/addInformationpush", method = RequestMethod.POST,produces="application/json;charset=UTF-8")
