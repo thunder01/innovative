@@ -34,20 +34,27 @@ public interface InformationDao {
      * 分页查询科技专栏
      * @param startIndex
      * @param pageSize
+     * @param state 
      * @return
      */
-	List<Information> getInformationLists(@Param("startIndex")int startIndex, @Param("pageSize")int pageSize);
+	List<Information> getInformationLists(@Param("startIndex")int startIndex, @Param("pageSize")int pageSize,@Param("state") String state);
 	/**
 	 * 科技专栏的总条数
+	 * @param state 
 	 * @return
 	 */
-	int getTotalCountNum();
+	int getTotalCountNum(@Param("state")String state);
 	/**
 	 * 删除科技专栏
 	 * @param id
 	 * @return
 	 */
 	boolean deleteInformation(@Param("id")String id);
-
+	/**
+	 * 审批功能，通过就把state置为1
+	 * @param id
+	 * @return
+	 */
+	boolean approvalInformation(@Param("id")String id);
 
 }

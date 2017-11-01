@@ -193,7 +193,7 @@ public class MessageService {
 	 * 
 	 * @param userid 消息发给谁
 	 * @param proid 目标的id
-	 * @param type 类型  (0需求下单     1拆解报告	2项目评价	 3情报)谁添加不一样的消息类型，自己加上注释
+	 * @param type 类型  (0需求下单     1拆解报告	2项目评价	 3情报  4推特信息点赞    5 推特信息转发  6 推特信息收藏  7推特信息评论 8 科技专栏审核 9 科技资讯审核 10 科技专栏修改)谁添加不一样的消息类型，自己加上注释
 	 * @param notice 1是通知，2是已办，3是待办
 	 * @return
 	 */

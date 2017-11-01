@@ -77,7 +77,7 @@ public class UserService {
 	@SuppressWarnings("rawtypes")
 	public List<Map> getUserByName(String name) {
 		//先从索引库查
-		List<Map> listUser = Lists.newArrayList();;
+		List<Map> listUser = Lists.newArrayList();
 		SearchRequestBuilder qBuilder=client.prepareSearch("user_index").setTypes("user");  
 		QueryBuilder qb = QueryBuilders.disMaxQuery()
 							.add(QueryBuilders.matchQuery("username", name))

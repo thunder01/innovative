@@ -1,5 +1,6 @@
 package com.innovative.utils;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 
@@ -125,9 +126,31 @@ public class HttpClientUpload {
                 builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);//设置浏览器兼容模式
                 
                 	
+                /*String ext = pd.suggestFileExtension();
+                	String fileName ="";
+                	//关于emf图片解析问题 emf 不能很好的展示在页面就转换成png格式的
+                	if("emf".equals(ext)){
+                		fileName =String.valueOf(System.currentTimeMillis()) + ".png";
+                		 builder.addBinaryBody("file",  PoiUtil.emfToPng(pd), ContentType.DEFAULT_BINARY, fileName);// 文件流
+                	}else{
+                		 fileName = String.valueOf(System.currentTimeMillis()) + "." + ext ;
+                		 builder.addBinaryBody("file",  PoiUtil.emfToPng(pd), ContentType.DEFAULT_BINARY, fileName);// 文件流
+                	}*/
+                
+                	
                 	String ext = pd.suggestFileExtension();
                 	String fileName = String.valueOf(System.currentTimeMillis()) + "." + ext ;
-                	builder.addBinaryBody("file", pd.getData(), ContentType.DEFAULT_BINARY, fileName);// 文件流
+                	byte[] bytes = pd.getData();
+                	/*File f = null;
+                	if("emf".equals(ext)){
+                		 f = PoiUtil.saveEmf(pd.getData(),fileName);
+                		System.out.println(f.getAbsolutePath());
+                	    bytes = PoiUtil.emfToPng(f.getAbsolutePath() );
+                	}*/
+                	
+                	
+                	builder.addBinaryBody("file", bytes, ContentType.DEFAULT_BINARY, fileName);// 文件流
+
                 
                 /*类似浏览器表单提交，把文件分类信息传给文件服务器*/
                 ContentType contentType= ContentType.create(HTTP.PLAIN_TEXT_TYPE, HTTP.UTF_8);

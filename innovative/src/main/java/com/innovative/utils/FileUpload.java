@@ -23,7 +23,7 @@ public class FileUpload {
      * @throws IOException
      */
     public static File mkdirsmy(String dir, String realName) throws IOException {
-        File file = new File(dir, realName);
+        File file = new File( dir,realName);
         if (!file.exists()) {
             if (!file.getParentFile().exists()) {
                 file.getParentFile().mkdirs();

@@ -14,10 +14,18 @@ public interface InformationpushDao {
     /**
      * 根据id获取专家详情
      * @param id 专家id
-     * @param userid 当前登录人
+     * @param userid 当前登录人 主要用于当前登录人有没有  点赞呀转发呀 收藏呀（这几项都是一天只能一次操作）
      * @return
      */
 	Informationpush getInformationpush(@Param("id") String id,@Param("userid")String userid);
+	
+	
+	  /**
+     * 根据id获取推特信息
+     * @param id 推特信息id
+     * @return
+     */
+	Informationpush getInformationpushById(@Param("id") String id);
 
 
 

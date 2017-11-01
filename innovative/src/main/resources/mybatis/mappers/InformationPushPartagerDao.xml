@@ -37,9 +37,9 @@
 	</select>
 	
 		  <!--获取用户的所有分享-->
-	<select id="getCollectionlist" resultType="map">
+	<select id="getInformationpushPartagersByUserid" resultType="map">
 		
-SELECT part."partagerAt",part."partagerBy",part."pushId",pu."title",pu."cotent",us."username" FROM "xacx_information_push_partager" part 
+		SELECT part."partagerAt",part."partagerBy",part."pushId",pu."title",pu."cotent",us."username" FROM "xacx_information_push_partager" part 
 		join xacx_information_push pu on pu."id" = part."pushId"
 		 join xacx_user us on us."pernr" = part."partagerBy"
 		WHERE "partagerBy" =  #{partagerBy}

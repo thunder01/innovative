@@ -22,7 +22,7 @@ public class CaseController {
 
 
     /**
-     * 查询List
+     * 查询List报表
      */
     @RequestMapping(value = "/getCaseList",method = RequestMethod.GET)
     public JsonResult getList(){

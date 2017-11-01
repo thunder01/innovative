@@ -1,14 +1,11 @@
 package com.innovative.controller;
 
-
 import com.innovative.bean.Sections;
 import com.innovative.service.SectionsService;
 import com.innovative.utils.CookiesUtil;
 import com.innovative.utils.JsonResult;
 import com.innovative.utils.PageInfo;
-
 import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 /**
- * 科技资讯
+ * 科技专栏
  * @author cj
  *
  */
@@ -33,9 +30,9 @@ public class SectionsController {
     private SectionsService sectionsService;
 
     /**
-     * 增加科技资讯
+     * 增加科技专栏
      *
-     * @param Sections 科技资讯实体
+     * @param Sections 科技专栏实体
      * @return
      */
     @RequestMapping(value = "/addSection", method = RequestMethod.POST)
@@ -51,9 +48,9 @@ public class SectionsController {
     }
     
     /**
-     * 修改编辑科技资讯
+     * 修改编辑科技专栏
      *
-     * @param Sections 科技资讯实体
+     * @param Sections 科技专栏实体
      * @return
      */
     @RequestMapping(value = "/updateSection", method = RequestMethod.POST)
@@ -67,7 +64,7 @@ public class SectionsController {
     /**
      * 查询科技资讯
      *
-     * @param Sections 科技专栏实体
+     * @param id 科技专栏id
      * @return
      */
     @RequestMapping(value = "/getSectionById/{id}", method = RequestMethod.GET)
@@ -82,18 +79,18 @@ public class SectionsController {
     /**
      * 分页查询科技专栏
      *
-     * @param Sections 科技专栏实体
+     * @param 
      * @return
      */
     @RequestMapping(value = "/getSectionList", method = RequestMethod.GET)
-    public JsonResult getSectionList(@RequestParam(name="offset",defaultValue="0" ) Integer offset) {
+    public JsonResult getSectionList(@RequestParam(name="offset",defaultValue="0" ) Integer offset,@RequestParam(name="type",required=false) String type) {
     	Integer page = offset/(new PageInfo().getPageSize()) +1;
-        return new JsonResult(true, sectionsService.getSectionLists(page));
+        return new JsonResult(true, sectionsService.getSectionLists(page,type));
     }
     
     /**
      * 根据id删除科技专栏
-     * @param id 协会id
+     * @param sections 科技专栏实体
      * @return
      */
     @RequestMapping(value = "/deleteSection", method = RequestMethod.POST)
@@ -107,6 +104,15 @@ public class SectionsController {
         return new JsonResult(false, "参数不合法");
     }
 
-
+    /**
+     * 使用elastic search进行模糊搜索
+     * @param key 搜索的关键字
+     * @return
+     */
+    @RequestMapping(value = "/queryByKey/{key}", method = RequestMethod.GET)
+    public JsonResult queryByKey(@PathVariable("key")String key){
+    	JsonResult result=sectionsService.queryByKey(key);
+    	return result;
+    }
 
 }
