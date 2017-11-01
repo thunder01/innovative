@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.innovative.dao.TechSectionsCollectionDao">
+
+	<resultMap id="techSectionsCollectionMap" type="com.innovative.bean.TechSectionsCollection">
+	  <id property="id" column="id" />
+	  <result property="sectionId" column="sectionId"/>
+	  <result property="collectBy" column="collectBy"/>
+	  <result property="collectAt" column="collectAt"/>
+	</resultMap> 
+
+    <!--将图片保存到服务器，将记录保存到数据库-->
+    <insert id="insertTechSectionsCollection" parameterType="map">
+      INSERT INTO "xacx_tech_sections_collection" 
+		("id", "sectionId", "collectBy", "collectAt") 
+		VALUES (#{id}, #{sectionId}, #{collectBy}, now());
+    </insert>
+    
+	<!-- 该用户今天是否对此信息已收藏 -->
+	<select id="isCollectionSections" resultType="Integer">
+		SELECT count(*) FROM "xacx_tech_sections_collection" where "collectBy" =  #{collectBy} and "sectionId" =#{sectionId} 
+	</select>
+	
+
+
+</mapper>

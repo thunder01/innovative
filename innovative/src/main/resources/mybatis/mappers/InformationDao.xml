@@ -18,6 +18,8 @@
 	  <result property="tags" column="tags" typeHandler="com.innovative.mybatisHandler.ArrayTypeHandler"/>
 	  <result property="sectors" column="sectors" typeHandler="com.innovative.mybatisHandler.ArrayTypeHandler"/>
 	  <result property="state" column="state"/>
+	  <result property="todayIsApprouver" column="todayIsApprouver"/>
+	   <result property="isCollection" column="isCollection"/>
 	</resultMap> 
 	
     <!--将图片保存到服务器，将记录保存到数据库-->
@@ -42,7 +44,7 @@
 			</when>
 			<otherwise>'{}',</otherwise>
 		</choose>
-         #{cotent}, now(), #{createBy}, now(), #{updateBy},"0" );
+         #{cotent}, now(), #{createBy}, now(), #{updateBy},#{state} );
 
     </insert>
     
@@ -99,10 +101,26 @@
 	</update>
 	
 	
-	 <!--根据id获取科技专栏-->
+	  <!--修改科技资讯点赞次数-->
+	<update id="updateInformationApprouverNum" parameterType="map">
+			UPDATE "xacx_tech_information" set "approuverNum" = "approuverNum" + 1
+		where "id"=#{id}
+	</update>
+	
+	 <!--根据id获取科技资讯-->
 	<select id="getInformationById" resultMap="informationMap">
-		SELECT "id", "resource", "title", "time", "resume", "sectors", "tags", "cotent", "createAt", "createBy", "updateAt", "updateBy", "state" FROM "xacx_tech_information" 
-		 WHERE "id" =  #{id} ;
+	
+		SELECT "id", "resource", "title", "time", "resume", "sectors", "tags", "cotent", "createAt", 
+		  "createBy", "updateAt", "updateBy", "state" ,"approuverNum" ,e.todayIsApprouver,co.isCollection
+		FROM "xacx_tech_information" info
+		 left join 
+		(SELECT count(*) todayIsApprouver,"informationId" FROM "xacx_tech_information_approuver" where "approuverBy" = #{userid}
+		
+		and to_date(cast("approuverAt" as TEXT),'yyyy-mm-dd') = current_date group by "informationId"	) e on e."informationId" = info."id"
+    
+       left join (SELECT count(*) isCollection,"informationId" FROM "xacx_tech_information_collection" where "collectBy" = #{userid} 
+		group by "informationId"	) co on co."informationId" = info."id"
+		where info."id" = #{id}
 	</select>
 	
 		<!--根据查询条件获取列表-->

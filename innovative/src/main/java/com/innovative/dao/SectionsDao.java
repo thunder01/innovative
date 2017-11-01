@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
+import com.innovative.bean.Information;
 import com.innovative.bean.Sections;
 
 /**
@@ -56,5 +57,17 @@ public interface SectionsDao {
 	 * @return
 	 */
 	boolean approvalSections(@Param("id")String id);
+	/**
+	 * 更新科技专栏的点击次数
+	 * @param id 科技专栏id 
+	 */
+	void updateSectionApprouverNum(String id);
+	/**
+	 * 查询科技专栏
+	 * @param id 科技专栏id
+	 * @param userid  当前登录人
+	 * @return
+	 */
+	Sections getSectionByIdAndUserid(@Param("id")String id,@Param("userid") String userid);
 
 }

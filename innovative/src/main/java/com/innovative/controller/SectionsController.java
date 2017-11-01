@@ -1,9 +1,13 @@
 package com.innovative.controller;
 
 import com.innovative.bean.Sections;
+import com.innovative.bean.TechInformationCollection;
+import com.innovative.bean.TechSectionsApprouver;
+import com.innovative.bean.TechSectionsCollection;
 import com.innovative.service.SectionsService;
 import com.innovative.utils.CookiesUtil;
 import com.innovative.utils.JsonResult;
+import com.innovative.utils.Misc;
 import com.innovative.utils.PageInfo;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +32,7 @@ public class SectionsController {
 
     @Autowired
     private SectionsService sectionsService;
+    
 
     /**
      * 增加科技专栏
@@ -68,10 +73,10 @@ public class SectionsController {
      * @return
      */
     @RequestMapping(value = "/getSectionById/{id}", method = RequestMethod.GET)
-    public JsonResult getSectionById(@PathVariable(name = "id") String id) {
+    public JsonResult getSectionById(@PathVariable(name = "id") String id,HttpServletRequest req) {
     	if(id ==  null ||  id.length() <= 0)
     		 return new JsonResult(false, "请传递要修改的科技资讯!");
-    	Sections sections = sectionsService.getSectionById(id);
+    	Sections sections = sectionsService.getSectionByIdAndUserid(id,CookiesUtil.getCookieValue(req,"user_name"));
     	return  new JsonResult(true,sections);
     }
     
@@ -113,6 +118,42 @@ public class SectionsController {
     public JsonResult queryByKey(@PathVariable("key")String key){
     	JsonResult result=sectionsService.queryByKey(key);
     	return result;
+    }
+    
+    /**
+     * 增加科技资讯点赞记录
+     *
+     * @param information 科技资讯实体
+     * @return
+     */
+    @RequestMapping(value = "/addApprouver", method = RequestMethod.POST)
+    @ResponseBody 
+    public JsonResult addApprouver(@RequestBody TechSectionsApprouver techSectionsApprouver,HttpServletRequest req) {
+    	if(techSectionsApprouver ==  null || techSectionsApprouver.getSectionId() == null || techSectionsApprouver.getSectionId().trim().equals("") )
+    		 return new JsonResult(false, "没有获取到实体，添加科技资讯失败！");
+    	techSectionsApprouver.setId(Misc.uuid());
+    	//设置创建人，修改人
+    	techSectionsApprouver.setApprouverBy(CookiesUtil.getCookieValue(req,"user_name"));
+    	Sections  section = sectionsService.addApprouver(techSectionsApprouver);
+    	return section != null ? new JsonResult(true,section) : new JsonResult(false, "您今天已经点赞！") ;
+    }
+    
+    /**
+     *收藏科技专栏
+     *
+     * @param techInformationCollection 科技专栏收藏实体
+     * @return
+     */
+    @RequestMapping(value = "/collectionTechSection", method = RequestMethod.POST)
+    @ResponseBody 
+    public JsonResult collectionTechSection(@RequestBody TechSectionsCollection techSectionsCollection,HttpServletRequest req) {
+    	if(techSectionsCollection ==  null || techSectionsCollection.getSectionId() == null || techSectionsCollection.getSectionId().trim().equals("") )
+    		 return new JsonResult(false, "没有获取到实体，添加科技资讯失败！");
+    	techSectionsCollection.setId(Misc.uuid());
+    	//设置创建人，修改人
+    	techSectionsCollection.setCollectBy(CookiesUtil.getCookieValue(req,"user_name"));
+    	boolean flag = sectionsService.collectionTechSection(techSectionsCollection);
+    	return flag ? new JsonResult(true,"已收藏") : new JsonResult(false, "此科技资讯您之前收藏过！") ;
     }
 
 }

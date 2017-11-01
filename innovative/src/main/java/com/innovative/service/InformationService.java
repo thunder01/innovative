@@ -3,7 +3,11 @@ package com.innovative.service;
 
 import com.google.common.collect.Lists;
 import com.innovative.bean.Information;
+import com.innovative.bean.TechInformationApprouver;
+import com.innovative.bean.TechInformationCollection;
 import com.innovative.dao.InformationDao;
+import com.innovative.dao.TechInformationApprouverDao;
+import com.innovative.dao.TechInformationCollectionDao;
 import com.innovative.utils.Config;
 import com.innovative.utils.JsonResult;
 import com.innovative.utils.Misc;
@@ -14,7 +18,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.apache.lucene.queryparser.flexible.core.builders.QueryBuilder;
 import org.elasticsearch.action.admin.indices.exists.indices.IndicesExistsRequest;
 import org.elasticsearch.action.admin.indices.exists.indices.IndicesExistsResponse;
 import org.elasticsearch.action.admin.indices.mapping.put.PutMappingRequest;
@@ -35,6 +38,7 @@ import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
 import org.elasticsearch.xpack.ml.job.process.autodetect.state.Quantiles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 科技资讯,添加了elastic search搜索;
@@ -51,7 +55,11 @@ public class InformationService {
     @Autowired
     private TransportClient client;
     @Autowired
-    MessageService messageService;
+    private MessageService messageService;
+    @Autowired
+    private TechInformationApprouverDao techInformationApprouverDao;
+    @Autowired
+    private TechInformationCollectionDao techInformationCollectiondao;
 /**
  * 添加科技资讯
  * @param sections
@@ -92,7 +100,7 @@ public class InformationService {
  * @return
  */
 	public boolean updateInformation(Information information) {
-		Information informationOld = informationDao.getInformationById(information.getId());
+		Information informationOld = informationDao.getInformationById(information.getId(), information.getUpdateBy());
 		// 先修改数据库中的科技资讯信息
 		boolean flag=informationDao.updateInformation(information);
 		//成功之后，再修改索引库中的内容
@@ -101,7 +109,7 @@ public class InformationService {
 			//根据id从索引库删除科技资讯
 			client.prepareDelete("information_index","information",id).get();
 			//从数据库中查出更新后的数据
-			Information info=getInformationById(id);
+			Information info=getInformationById(id,information.getUpdateBy());
 			//再次添加到索引库
 			try {
 				SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -146,9 +154,9 @@ public class InformationService {
 	 * @param id
 	 * @return
 	 */
-	public Information getInformationById(String id) {
+	public Information getInformationById(String id,String userid) {
 		// TODO Auto-generated method stub
-		return informationDao.getInformationById(id);
+		return informationDao.getInformationById(id,userid);
 	}
 	/**
 	 * 查询科技资讯列表
@@ -329,4 +337,43 @@ public class InformationService {
 		}
     	return builder;
     }
+    /**
+     * 给科技资讯点赞增加记录 主要有俩个操作（1 给计数加1  2 给增加点赞记录） 
+     * @param techInformationApprouver
+     * @return
+     */
+    @Transactional
+	public Information addApprouver(TechInformationApprouver techInformationApprouver) {
+		int todayIsApprouver = techInformationApprouverDao.isTodayApprouverTechInfornaion(techInformationApprouver.getApprouverBy(), techInformationApprouver.getInformationId());
+		if(todayIsApprouver == 0){
+			//增加点赞记录
+			techInformationApprouverDao.insertTechInfornaionApprouver(techInformationApprouver);
+			//点赞次数加1
+			informationDao.updateInformationApprouverNum(techInformationApprouver.getInformationId());
+			return informationDao.getInformationById(techInformationApprouver.getInformationId(),techInformationApprouver.getApprouverBy());
+		}else{
+			return null;
+		}
+		
+		
+		
+	}
+    /**
+     * 收藏科技资讯
+     * @param techInformationCollection
+     * @return
+     */
+	public boolean collectionTechInformation(TechInformationCollection techInformationCollection) {
+		
+	int iscollect =	techInformationCollectiondao.isCollectionTechInformation(techInformationCollection.getCollectBy(), techInformationCollection.getInformationId());
+	if(iscollect == 0){
+		//增加科技资讯收藏消息
+		messageService.insertMessage(techInformationCollection.getCollectBy(), techInformationCollection.getId(), Config.KJ_ZX_SSH, 1);
+		//增加收藏记录
+		return techInformationCollectiondao.insertTechInformationCollection(techInformationCollection);
+	}else{
+		return false;
+	}
+		
+	}
 }

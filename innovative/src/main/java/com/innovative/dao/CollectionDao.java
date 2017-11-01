@@ -6,10 +6,9 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Param;
 
 import com.innovative.bean.CollectionPush;
-import com.innovative.bean.Informationpush;
 
 /**
- * 收藏记录
+ * 信息推特收藏记录
  * @author cj
  *
  */

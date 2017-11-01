@@ -21,14 +21,16 @@ public class Sections implements Serializable {
 	private Timestamp updateAt;//更新时间
 	private String updateBy;//更新人
 	private String state;//审批状态，0 未审批 1 审批完成 2审核不通过
+	private Integer approuverNum;//今天是否点赞
+	private int todayIsApprouver;//今天是否点赞
+	private int isCollection;//是否收藏
 	
     public Sections() {
     }
-    
+
 	public Sections(String id, String resource, String title, String time, String resume, String[] sectors,
 			String[] tags, String cotent, Timestamp createAt, String createBy, Timestamp updateAt, String updateBy,
-			String state) {
-		super();
+			String state, Integer approuverNum, int todayIsApprouver, int isCollection) {
 		this.id = id;
 		this.resource = resource;
 		this.title = title;
@@ -42,6 +44,9 @@ public class Sections implements Serializable {
 		this.updateAt = updateAt;
 		this.updateBy = updateBy;
 		this.state = state;
+		this.approuverNum = approuverNum;
+		this.todayIsApprouver = todayIsApprouver;
+		this.isCollection = isCollection;
 	}
 
 	public String getId() {
@@ -148,5 +153,32 @@ public class Sections implements Serializable {
 		this.state = state;
 	}
 
+	public Integer getApprouverNum() {
+		return approuverNum;
+	}
+
+	public void setApprouverNum(Integer approuverNum) {
+		this.approuverNum = approuverNum;
+	}
+
+	public int getTodayIsApprouver() {
+		return todayIsApprouver;
+	}
+
+	public void setTodayIsApprouver(int todayIsApprouver) {
+		this.todayIsApprouver = todayIsApprouver;
+	}
+
+	public int getIsCollection() {
+		return isCollection;
+	}
+
+	public void setIsCollection(int isCollection) {
+		this.isCollection = isCollection;
+	}
+    
+
+    
+	
 
 }

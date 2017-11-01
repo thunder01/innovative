@@ -2,25 +2,29 @@ package com.innovative.bean;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
-
-public class CollectionPush implements Serializable {
+/**
+ * 科技专栏收藏实体
+ * @author cj
+ *
+ */
+public class TechSectionsCollection implements Serializable {
 	
 	/**
-	 * 推特信息收藏记录
+	 * 科技专栏实体
 	 */
 	private static final long serialVersionUID = 855095553561895179L;
 	private String id;//主键
-	private String comentId; //推特信息id
+	private String sectionId; //科技专栏id
 	private String collectBy; //收藏人
 	private Timestamp collectAt; //收藏时间
 	
-	public CollectionPush(){
+	public TechSectionsCollection(){
 		
 	}
 
-	public CollectionPush(String id, String comentId, String collectBy, Timestamp collectAt) {
+	public TechSectionsCollection(String id, String sectionId, String collectBy, Timestamp collectAt) {
 		this.id = id;
-		this.comentId = comentId;
+		this.sectionId = sectionId;
 		this.collectBy = collectBy;
 		this.collectAt = collectAt;
 	}
@@ -33,12 +37,12 @@ public class CollectionPush implements Serializable {
 		this.id = id;
 	}
 
-	public String getComentId() {
-		return comentId;
+	public String getSectionId() {
+		return sectionId;
 	}
 
-	public void setComentId(String comentId) {
-		this.comentId = comentId;
+	public void setSectionId(String sectionId) {
+		this.sectionId = sectionId;
 	}
 
 	public String getCollectBy() {
@@ -56,6 +60,7 @@ public class CollectionPush implements Serializable {
 	public void setCollectAt(Timestamp collectAt) {
 		this.collectAt = collectAt;
 	}
+
 	
 	
 	

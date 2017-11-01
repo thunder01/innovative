@@ -115,6 +115,7 @@ public class EquipmentController {
         if (t == null) {
             return new JsonResult(false, "无此设备，请重试！");
         }
+        System.out.println(equipment.getId());
 
         equipment.setUpdatedBy(CookiesUtil.getCookieValue(req,"user_name"));
         //修改
