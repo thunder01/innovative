@@ -101,10 +101,11 @@ public class ProjectApprovalService {
 		Integer order_id=pApproval.getOrder_id();//获取订单id
 		/*根据订单id查出拆解报告信息*/
 		DisassembleReport disassembleReport=disassembleReportDao.getDisassembleByOrderid(order_id);	
-		/*根据订单id查询所有的立项表单*/
-		List<ProjectApproval> list=projectApprovalDao.getApprovalListByOrderid(pApproval.getOrder_id());	
 		projectApprovalDao.postApproval(pApproval.getId());//发布立项信息
-
+		/*根据订单id查询所有的立项表单*/
+		List<ProjectApproval> list=projectApprovalDao.getApprovalListByOrderid(pApproval.getOrder_id());
+		Order order = orderDao.getOrderById(order_id);
+		map.put("order", order);
 		map.put("orderid", order_id);
 		map.put("disassemble", disassembleReport);//node.js需要返回值，多余的查询
 		map.put("items", list);

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.innovative.dao.IntegralResourceDao">
+    <resultMap id="integralResourceMap" type="IntegralResource">
+        <id property="id" column="id" />
+        <result property="type" column="type"/>
+        <result property="resource_id" column="resource"/>
+        <result property="count" column="count"/>
+     </resultMap>
+     
+     <!-- 添加一个创新资源详情页进入次数（第一次进来为1） -->
+     <insert id="addIntegralResource" parameterType="IntegralResource">
+     	INSERT INTO xacx_integral_resource (type,resource_id,count)VALUES(#{type},#{resource_id},1)
+     </insert>
+     
+     <!-- 更新一个创新资源详情页进入次数 -->
+     <update id="updateIntegralResource" parameterType="IntegralResource">
+     	UPDATE xacx_integral_resource SET count=#{count}  WHERE id = #{id}
+     </update>
+     
+     <!--查询资源的访问数量，先查询，访问数量为4则增加20积分，其访问数量置0  -->
+     <select id="getIntegralResource" parameterType="map" resultMap="integralResourceMap">
+     	SELECT id,type,resource_id,count FROM xacx_integral_resource WHERE type=#{type} AND resource_id=#{resource_id}
+     </select>
+</mapper>        
