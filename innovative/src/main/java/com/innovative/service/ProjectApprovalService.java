@@ -104,7 +104,8 @@ public class ProjectApprovalService {
 		/*根据订单id查询所有的立项表单*/
 		List<ProjectApproval> list=projectApprovalDao.getApprovalListByOrderid(pApproval.getOrder_id());	
 		projectApprovalDao.postApproval(pApproval.getId());//发布立项信息
-
+		Order order = orderDao.getOrderById(order_id);
+		map.put("order", order);
 		map.put("orderid", order_id);
 		map.put("disassemble", disassembleReport);//node.js需要返回值，多余的查询
 		map.put("items", list);

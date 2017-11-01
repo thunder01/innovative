@@ -1,8 +1,10 @@
 package com.innovative.service;
 
 
+import com.google.common.collect.Lists;
 import com.innovative.bean.Information;
 import com.innovative.dao.InformationDao;
+import com.innovative.utils.JsonResult;
 import com.innovative.utils.Misc;
 import com.innovative.utils.PageInfo;
 import java.io.IOException;
@@ -11,15 +13,25 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.apache.lucene.queryparser.flexible.core.builders.QueryBuilder;
 import org.elasticsearch.action.admin.indices.exists.indices.IndicesExistsRequest;
 import org.elasticsearch.action.admin.indices.exists.indices.IndicesExistsResponse;
 import org.elasticsearch.action.admin.indices.mapping.put.PutMappingRequest;
 import org.elasticsearch.action.delete.DeleteResponse;
 import org.elasticsearch.action.index.IndexResponse;
+import org.elasticsearch.action.search.SearchRequestBuilder;
+import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.Requests;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.common.xcontent.XContentFactory;
+import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.DisMaxQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.search.SearchHit;
+import org.elasticsearch.search.SearchHits;
+import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
+import org.elasticsearch.xpack.ml.job.process.autodetect.state.Quantiles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -156,7 +168,36 @@ public class InformationService {
 		}
 		return flag;
 	}
-
+	
+	/**
+	 * 根据关键字搜索（elasticsearch）
+	 * @param key
+	 * @return
+	 */
+	public JsonResult queryByKey(String key){
+		List<Map> listInformation = Lists.newArrayList();
+		SearchRequestBuilder qBuilder=client.prepareSearch("information_index").setTypes("information");
+		BoolQueryBuilder builder=QueryBuilders.boolQuery()
+				.should(QueryBuilders.matchQuery("title",key))
+				.should(QueryBuilders.matchQuery("sectors",key))
+				.should(QueryBuilders.matchQuery("tags",key))
+				.should(QueryBuilders.matchQuery("resume",key))
+				.should(QueryBuilders.matchQuery("cotent",key));
+		//结果分页
+		qBuilder.setQuery(builder).setFrom(0).setSize(10);
+		//发出查询请求
+		SearchResponse response = qBuilder.execute().actionGet();
+		
+		SearchHits hits = response.getHits();
+		for(SearchHit hit:hits){
+			listInformation.add(hit.getSource());
+		}
+		System.out.println(hits);
+		if (listInformation.size()==0) {
+			return new JsonResult(false, "没有结果");
+		}
+		return new JsonResult(true, listInformation);
+	}
 	/**
      * 指定科技资讯的索引库映射
      * @return
