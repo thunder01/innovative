@@ -1,9 +1,12 @@
 package com.innovative.controller;
 
 import com.innovative.bean.Information;
+import com.innovative.bean.TechInformationApprouver;
+import com.innovative.bean.TechInformationCollection;
 import com.innovative.service.InformationService;
 import com.innovative.utils.CookiesUtil;
 import com.innovative.utils.JsonResult;
+import com.innovative.utils.Misc;
 import com.innovative.utils.PageInfo;
 import javax.servlet.http.HttpServletRequest;
 import org.elasticsearch.client.transport.TransportClient;
@@ -69,10 +72,10 @@ public class InformationController {
      * @return
      */
     @RequestMapping(value = "/getInformationComentById/{id}", method = RequestMethod.GET)
-    public JsonResult getInformationById(@PathVariable(name = "id") String id) {
+    public JsonResult getInformationById(@PathVariable(name = "id") String id,HttpServletRequest req) {
     	if(id ==  null ||  id.length() <= 0)
     		 return new JsonResult(false, "请传递要修改的科技资讯!");
-    	Information information = informationService.getInformationById(id);
+    	Information information = informationService.getInformationById(id,CookiesUtil.getCookieValue(req,"user_name"));
     	return  new JsonResult(true,information);
     }
     
@@ -114,4 +117,42 @@ public class InformationController {
     	JsonResult result=informationService.queryByKey(key);
     	return result;
     }
+    
+    /**
+     * 增加科技资讯点赞记录
+     *
+     * @param information 科技资讯实体
+     * @return
+     */
+    @RequestMapping(value = "/addApprouver", method = RequestMethod.POST)
+    @ResponseBody 
+    public JsonResult addApprouver(@RequestBody TechInformationApprouver techInformationApprouver,HttpServletRequest req) {
+    	if(techInformationApprouver ==  null || techInformationApprouver.getInformationId() == null || techInformationApprouver.getInformationId().trim().equals("") )
+    		 return new JsonResult(false, "没有获取到实体，添加科技资讯失败！");
+    	techInformationApprouver.setId(Misc.uuid());
+    	//设置创建人，修改人
+    	techInformationApprouver.setApprouverBy(CookiesUtil.getCookieValue(req,"user_name"));
+    	Information  information = informationService.addApprouver(techInformationApprouver);
+    	return information != null ? new JsonResult(true,information) : new JsonResult(false, "您今天已经点赞！") ;
+    }
+    
+    /**
+     *收藏科技资讯
+     *
+     * @param techInformationCollection 科技资讯收藏实体
+     * @return
+     */
+    @RequestMapping(value = "/collectionTechInformation", method = RequestMethod.POST)
+    @ResponseBody 
+    public JsonResult collectionTechInformation(@RequestBody TechInformationCollection techInformationCollection,HttpServletRequest req) {
+    	if(techInformationCollection ==  null || techInformationCollection.getInformationId() == null || techInformationCollection.getInformationId().trim().equals("") )
+    		 return new JsonResult(false, "没有获取到实体，添加科技资讯失败！");
+    	techInformationCollection.setId(Misc.uuid());
+    	//设置创建人，修改人
+    	techInformationCollection.setCollectBy(CookiesUtil.getCookieValue(req,"user_name"));
+    	boolean flag = informationService.collectionTechInformation(techInformationCollection);
+    	return flag ? new JsonResult(true,"已收藏") : new JsonResult(false, "此科技资讯您之前收藏过！") ;
+    }
+    
+    
 }

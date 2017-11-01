@@ -1,8 +1,13 @@
 package com.innovative.service;
 
 import com.google.common.collect.Lists;
+import com.innovative.bean.Information;
 import com.innovative.bean.Sections;
+import com.innovative.bean.TechSectionsApprouver;
+import com.innovative.bean.TechSectionsCollection;
 import com.innovative.dao.SectionsDao;
+import com.innovative.dao.TechSectionsApprouverDao;
+import com.innovative.dao.TechSectionsCollectionDao;
 import com.innovative.utils.Config;
 import com.innovative.utils.JsonResult;
 import com.innovative.utils.Misc;
@@ -45,6 +50,10 @@ public class SectionsService {
     private TransportClient client;
     @Autowired
     MessageService messageService;
+    @Autowired
+    TechSectionsApprouverDao techSectionsApprouverDao;
+    @Autowired
+    TechSectionsCollectionDao techSectionsCollectionDao;
 /**
  * 添加科技专栏
  * @param sections
@@ -142,6 +151,15 @@ public class SectionsService {
 	public Sections getSectionById(String id) {
 		// TODO Auto-generated method stub
 		return sectionsDao.getSectionById(id);
+	}
+	/**
+	 * 根据id查询科技专栏
+	 * @param id
+	 * @return
+	 */
+	public Sections getSectionByIdAndUserid(String id,String userid) {
+		// TODO Auto-generated method stub
+		return sectionsDao.getSectionByIdAndUserid(id, userid);
 	}
 	/**
 	 * 查询科技专栏列表
@@ -322,5 +340,37 @@ public class SectionsService {
 		}
     	return builder;
     }
+    /**
+     * 给科技专栏增加点赞
+     * @param techSectionsApprouver
+     * @return
+     */
+	public Sections addApprouver(TechSectionsApprouver techSectionsApprouver) {
+		int todayIsApprouver = techSectionsApprouverDao.isTodayApprouverTechInfornaion(techSectionsApprouver.getApprouverBy(), techSectionsApprouver.getSectionId());
+		if(todayIsApprouver == 0){
+			//增加点赞记录
+			techSectionsApprouverDao.insertTechApprouver(techSectionsApprouver);
+			//点赞次数加1
+			sectionsDao.updateSectionApprouverNum(techSectionsApprouver.getSectionId());
+			return sectionsDao.getSectionByIdAndUserid(techSectionsApprouver.getSectionId(),techSectionsApprouver.getApprouverBy()) ;  
+		}else{
+			return null;
+		}
+		
+	}
+	/**
+	 * 收藏科技专栏
+	 * @param techSectionsCollection
+	 * @return
+	 */
+	public boolean collectionTechSection(TechSectionsCollection techSectionsCollection) {
+		int isCollection = techSectionsCollectionDao.isCollectionSections(techSectionsCollection.getCollectBy(), techSectionsCollection.getSectionId());
+		if(isCollection == 0){
+			messageService.insertMessage(techSectionsCollection.getCollectBy(), techSectionsCollection.getId(), Config.KJ_ZL_SSH, 1);
+			return techSectionsCollectionDao.insertTechSectionsCollection(techSectionsCollection);
+		}else{
+			return false;
+		}
+	}
 
 }

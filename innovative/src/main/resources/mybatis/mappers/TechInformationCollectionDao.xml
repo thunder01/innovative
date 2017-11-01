@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.innovative.dao.TechInformationCollectionDao">
+
+	<resultMap id="techInformationCollectionMap" type="com.innovative.bean.TechInformationCollection">
+	  <id property="id" column="id" />
+	  <result property="informationId" column="informationId"/>
+	  <result property="collectBy" column="collectBy"/>
+	  <result property="collectAt" column="collectAt"/>
+	</resultMap> 
+
+    <!--收藏科技资讯-->
+    <insert id="insertTechInformationCollection" parameterType="map">
+      INSERT INTO "xacx_tech_information_collection" 
+		("id", "informationId", "collectBy", "collectAt") 
+		VALUES (#{id}, #{informationId}, #{collectBy}, now());
+    </insert>
+    
+	
+	<!-- 该用户是否已收藏 -->
+	<select id="isCollectionTechInformation" resultType="Integer">
+		SELECT count(*) FROM "xacx_tech_information_collection" where "collectBy" =  #{collectBy} and "informationId" =#{informationId} 
+	</select>
+	
+	
+
+
+</mapper>

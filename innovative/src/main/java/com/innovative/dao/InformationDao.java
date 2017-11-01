@@ -27,9 +27,10 @@ public interface InformationDao {
 	/**
 	 * 根据id获取科技专栏
 	 * @param id
+	 * @param userid 
 	 * @return
 	 */
-	Information getInformationById(@Param("id")String id);
+	Information getInformationById(@Param("id")String id, @Param("userid")String userid);
     /**
      * 分页查询科技专栏
      * @param startIndex
@@ -56,5 +57,10 @@ public interface InformationDao {
 	 * @return
 	 */
 	boolean approvalInformation(@Param("id")String id);
+	/**
+	 * 给科技资讯增加点赞次数
+	 * @param informationId
+	 */
+	boolean  updateInformationApprouverNum(@Param("id") String id);
 
 }

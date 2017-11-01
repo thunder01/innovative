@@ -112,6 +112,10 @@ public class Config {
     public static final  String KJ_ZL_XG = "10";
     //科技资讯修改
     public static final  String KJ_ZX_XG = "11";
+    //科技资讯收藏
+    public static final  String KJ_ZX_SSH = "12";
+    //科技专栏收藏
+    public static final  String KJ_ZL_SSH = "13";
     //信息推特文件标志 
     public static final  String INFORMATIONPUSHFILE = "informationpushFile";
     
