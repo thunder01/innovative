@@ -166,7 +166,7 @@
 	
 	<!-- 审批功能，即把state置为1 -->
 	<update id="approvalInformation" parameterType="String">
-		update "xacx_tech_information" set "state"="1" where "id"=#{id}
+		update "xacx_tech_information" set "state"='1' where "id"=#{id}
 	</update>
 
 </mapper>
