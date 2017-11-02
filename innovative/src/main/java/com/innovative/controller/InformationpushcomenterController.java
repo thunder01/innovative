@@ -1,4 +1,5 @@
 package com.innovative.controller;
+import com.innovative.bean.Informationpush;
 import com.innovative.bean.Informationpushcomenter;
 import com.innovative.service.InformationpushService;
 import com.innovative.service.InformationpushcomenterService;
@@ -128,10 +129,21 @@ public class InformationpushcomenterController extends BaseController {
          return new JsonResult(true,informationpushcomenterService.getInformationPushComentersByUserid(userId,page));
      }
 
-
+     
     
     
-
+     /**
+      * 根据推特的评论获取评论信息（展示信息的地方用）
+      *
+      * @param id 推特id
+      * @return
+      */
+     @RequestMapping(value = "/getInformationpushcomenterForMessage/{id}", method = RequestMethod.GET)
+     public JsonResult getInformationpushcomenter(@PathVariable(name = "id") String id,HttpServletRequest req) {
+     	
+    	 Informationpush informationpush = informationpushcomenterService.getInformationpushcomenterForMessage(id,CookiesUtil.getCookieValue(req, "user_name"));
+         return new JsonResult(true, informationpush);
+     }
 
 
 

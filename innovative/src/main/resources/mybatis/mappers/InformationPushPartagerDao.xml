@@ -17,6 +17,22 @@
        </collection> 
 	</resultMap> 
 
+	<resultMap id="informationpushMapsforpartner" type="com.innovative.bean.Informationpush">
+	  <id property="id" column="id" />
+	  <result property="pid" column="pid"/>
+	  <result property="comentAt" column="comentAt"/>
+	  <result property="comentBy" column="comentBy"/>
+	  <result property="comentByC" column="comentByC"/>
+	  <result property="cotent" column="cotent"/>
+	  <result property="title" column="title"/>
+       <collection property="informationPushPartagerlist" ofType="com.innovative.bean.InformationPushPartager">
+           <result property="id" column="cid"/>
+		   <result property="partagerBy" column="partagerBy"/>
+		  <result property="partagerAt" column="partagerAt"/>
+		  <result property="partagerByC" column="partagerByC"/>
+       </collection> 
+	</resultMap> 
+
     <!--根据推特信息获取所有的分享记录-->
 	<select id="getInformationpushPartagersByPushid" resultMap="informationPushPartagerMap">
 	SELECT "id", "partagerBy", "partagerAt", "pushId" FROM "xacx_information_push_partager" 
@@ -62,4 +78,11 @@
 		SELECT count(*) FROM "xacx_information_push_partager" where "partagerBy" = #{partagerBy}
 	</select> 
 
+ <!--根据收藏id获取收藏的推特信息详情-->
+	<select id="getInformationpushPartagersByIdForMessage" resultMap="informationpushMapsforpartner">
+		select pu."comentBy",pu.title,pu.cotent,co."id" cid,co."partagerBy" ,us.username partagerByC,co."partagerAt"  from xacx_information_push pu left join 
+		 xacx_information_push_partager co on pu."id" = co."pushId"
+		left join xacx_user  us on us.pernr =co."partagerBy"
+ 		where    co.id =#{id} and pu."comentBy" = #{userid}
+	</select>
 </mapper>

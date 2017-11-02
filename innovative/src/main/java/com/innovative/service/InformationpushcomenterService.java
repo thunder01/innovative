@@ -57,8 +57,12 @@ public boolean deleteInformationpushcoment(String id) {
 public boolean addInformationpushcomenter(Informationpushcomenter informationpushcomenter) {
 	//推送消息
 	Informationpush informationpush = informationpushDao.getInformationpushById(informationpushcomenter.getPushId());
-	//增加消息推送（这条推特信息的主人推送消息）
-    messageService.insertMessage(informationpush.getComentBy(), informationpushcomenter.getId(), Config.TT_PL, 1);
+	//如果是评论就把这条消息推送给推特消息的发布者
+    if(informationpushcomenter.getPid() == null ||"".equals(informationpushcomenter.getPid())){
+    	//增加消息推送（这条推特信息的主人推送消息）
+        messageService.insertMessage(informationpush.getComentBy(), informationpushcomenter.getId(), Config.TT_PL, 1);
+    }
+	
 	return informationpushcomenterDao.addInformationpushcomenter(informationpushcomenter);
 }
 /**
@@ -101,6 +105,15 @@ public Map<String,Object> getInformationPushComentersByUserid(String comentBy, I
         map.put("limit", pageInfo.getPageSize());
 	
 	 return map ;
+}
+/**
+ * 获取评论信息（带出推特信息  推特信息发布人     评论人     评论内容）
+ * @param id 评论id
+ * @param  userid
+ * @return
+ */
+public Informationpush getInformationpushcomenterForMessage(String id, String userid) {
+	return informationpushcomenterDao.getInformationpushcomenterForMessage(id,userid);
 }
 
 

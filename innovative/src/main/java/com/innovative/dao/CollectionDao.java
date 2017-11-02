@@ -6,6 +6,7 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Param;
 
 import com.innovative.bean.CollectionPush;
+import com.innovative.bean.Informationpush;
 
 /**
  * 信息推特收藏记录
@@ -57,6 +58,13 @@ public interface CollectionDao {
  * @return
  */
 	Integer getCollectNum(@Param("comentId")String comentId);
+	/**
+	 * 获取收藏当前登陆人的推特信息被收藏的记录
+	 * @param id 收藏id
+	 * @param userid  当前登陆人
+	 * @return
+	 */
+	Informationpush getCollectInformationForMessage(@Param("id")String id, @Param("userid")String userid);
 	
 
 

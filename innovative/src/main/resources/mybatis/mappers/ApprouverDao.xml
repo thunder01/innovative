@@ -10,6 +10,22 @@
 	  <result property="approuverBy" column="approuverBy"/>
 	  <result property="approuverAt" column="approuverAt"/>
 	</resultMap> 
+	
+	<resultMap id="informationpushMapsforapprouver" type="com.innovative.bean.Informationpush">
+	  <id property="id" column="id" />
+	  <result property="pid" column="pid"/>
+	  <result property="comentAt" column="comentAt"/>
+	  <result property="comentBy" column="comentBy"/>
+	  <result property="comentByC" column="comentByC"/>
+	  <result property="cotent" column="cotent"/>
+	  <result property="title" column="title"/>
+       <collection property="approuverlist" ofType="com.innovative.bean.Approuver">  
+           <result property="id" column="cid"/>
+		   <result property="approuverBy" column="approuverBy"/>
+		  <result property="approuverAt" column="approuverAt"/>
+		  <result property="approuverByC" column="approuverByC"/>
+       </collection> 
+	</resultMap> 
 
     <!--将图片保存到服务器，将记录保存到数据库-->
     <insert id="insertApprouver" parameterType="map">
@@ -29,6 +45,15 @@
 	<select id="isTodayApprouverInfornaionPush" resultType="Integer">
 		SELECT count(*) FROM "xacx_information_push_approuver" where "approuverBy" =  #{approuverBy} and "comentId" =  #{comentId} and to_date(cast("approuverAt" as TEXT),'yyyy-mm-dd') = current_date
 
+	</select>
+	
+		
+	 <!--根据点赞id获取评论 与推特信息-->
+	<select id="getApprouverByIdForMessage" resultMap="informationpushMapsforapprouver">
+		select pu."comentBy",pu.title,pu.cotent,co."id" cid,co."approuverBy" ,us.username approuverByC,co."approuverAt"  from xacx_information_push pu left join 
+		 xacx_information_push_approuver co on pu."id" = co."comentId"
+		left join xacx_user  us on us.pernr = co."approuverBy"
+ 		where    co.id =#{id} and pu."comentBy" = #{userid}
 	</select>
 
 

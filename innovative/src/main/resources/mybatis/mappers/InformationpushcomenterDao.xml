@@ -86,7 +86,7 @@
 			VALUES (#{id},#{pid}, now(), #{comentBy},  #{cotent}, #{type},  #{pushId});
 	</insert>
 	
-	 <!--根据评论id获取评论-->
+	 <!--根据评论id获取评论 -->
 	<select id="getformationpushcomenter" resultMap="informationpushcomentMap">
 		SELECT "id", "pid", "comentAt", "comentBy", "cotent", "type", "pushId" FROM "xacx_information_push_commenter" 
 		 WHERE "id" =  #{id} ;
@@ -104,6 +104,16 @@
 		</set>
 		where "id"=#{id}
 	</update>
+	
+	 <!--根据评论id获取评论 与推特信息-->
+	<select id="getInformationpushcomenterForMessage" resultMap="informationpushMaps">
+		select pu."comentBy",pu.title,pu.cotent,co."comentBy" pcomentBy,us.username pcomentByC,co."comentAt" pcomentAt,co.cotent pcotent from xacx_information_push pu left join 
+		 xacx_information_push_commenter co on pu."id" = co."pushId"
+		left join xacx_user  us on us.pernr = co."comentBy"
+
+
+ 		where  (co.pid is null or co.pid ='')and  co.id =#{id} and pu."comentBy" = #{userid}
+	</select>
 	
 	
 

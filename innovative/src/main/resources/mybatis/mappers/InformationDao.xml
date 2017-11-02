@@ -15,6 +15,7 @@
 	  <result property="createBy" column="createBy"/>
 	  <result property="updateAt" column="updateAt"/>
 	  <result property="updateBy" column="updateBy"/>
+	  <result property="updateByC" column="updateByC"/>
 	  <result property="tags" column="tags" typeHandler="com.innovative.mybatisHandler.ArrayTypeHandler"/>
 	  <result property="sectors" column="sectors" typeHandler="com.innovative.mybatisHandler.ArrayTypeHandler"/>
 	  <result property="state" column="state"/>
@@ -111,15 +112,17 @@
 	<select id="getInformationById" resultMap="informationMap">
 	
 		SELECT "id", "resource", "title", "time", "resume", "sectors", "tags", "cotent", "createAt", 
-		  "createBy", "updateAt", "updateBy", "state" ,"approuverNum" ,e.todayIsApprouver,co.isCollection
+		  "createBy", "updateAt", "updateBy", "state" ,"approuverNum",us.username updateByC ,e.todayIsApprouver,co.isCollection
 		FROM "xacx_tech_information" info
 		 left join 
 		(SELECT count(*) todayIsApprouver,"informationId" FROM "xacx_tech_information_approuver" where "approuverBy" = #{userid}
 		
 		and to_date(cast("approuverAt" as TEXT),'yyyy-mm-dd') = current_date group by "informationId"	) e on e."informationId" = info."id"
     
-       left join (SELECT count(*) isCollection,"informationId" FROM "xacx_tech_information_collection" where "collectBy" = #{userid} 
+       left join (SELECT count(*) isCollection,"informationId" FROM "xacx_tech_information_collection" where "collectBy" = #{userid}
 		group by "informationId"	) co on co."informationId" = info."id"
+
+       left join xacx_user us on us.pernr = info."updateBy"
 		where info."id" = #{id}
 	</select>
 	

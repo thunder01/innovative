@@ -1,6 +1,7 @@
 package com.innovative.dao;
 
 import com.innovative.bean.InformationPushPartager;
+import com.innovative.bean.Informationpush;
 import com.innovative.bean.Informationpushcomenter;
 
 import org.apache.ibatis.annotations.Param;
@@ -86,6 +87,13 @@ public interface InformationPushPartagerDao {
 	 * @return
 	 */
 	List<InformationPushPartager> getInformationpushPartagersByPushid(String pushId);
+	/**
+	 * 根据收藏id获得收藏的推特id
+	 * @param id 收藏的推特信息的id
+	 * @param userid  推特信息的发布者
+	 * @return
+	 */
+	Informationpush getInformationpushPartagersByIdForMessage(@Param("id")String id, @Param("userid")String userid);
 	
 
 
