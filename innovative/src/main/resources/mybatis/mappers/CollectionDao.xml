@@ -10,6 +10,21 @@
 	  <result property="collectBy" column="collectBy"/>
 	  <result property="collectAt" column="collectAt"/>
 	</resultMap> 
+	<resultMap id="informationpushMapsforcollection" type="com.innovative.bean.Informationpush">
+	  <id property="id" column="id" />
+	  <result property="pid" column="pid"/>
+	  <result property="comentAt" column="comentAt"/>
+	  <result property="comentBy" column="comentBy"/>
+	  <result property="comentByC" column="comentByC"/>
+	  <result property="cotent" column="cotent"/>
+	  <result property="title" column="title"/>
+       <collection property="collectionPushlist" ofType="com.innovative.bean.CollectionPush">  
+           <result property="id" column="cid"/>
+		   <result property="collectAt" column="collectAt"/>
+		  <result property="collectBy" column="collectBy"/>
+		  <result property="collectByC" column="collectByC"/>
+       </collection> 
+	</resultMap> 
 
     <!--将图片保存到服务器，将记录保存到数据库-->
     <insert id="insertCollection" parameterType="map">
@@ -48,6 +63,15 @@
 	<!-- 一条推特信息的收藏的数量 -->
 	<select id="getCollectNum" resultType="Integer">
 		select count(*)  from   "xacx_information_push_collection" where  "comentId" = #{comentId}
+	</select>
+	
+	
+	 <!--根据评论id获取评论 与推特信息-->
+	<select id="getCollectInformationForMessage" resultMap="informationpushMapsforcollection">
+		select pu."comentBy",pu.title,pu.cotent,co."id" cid,co."collectBy" ,us.username collectByC,co."collectAt"  from xacx_information_push pu left join 
+		 xacx_information_push_collection co on pu."id" = co."comentId"
+		left join xacx_user  us on us.pernr = co."collectBy"
+ 		where    co.id =#{id} and pu."comentBy" = #{userid}
 	</select>
 	
 

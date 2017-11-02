@@ -53,7 +53,7 @@ public class FileService {
 	}
 
 	@Transactional
-	public boolean uploadFile(MultipartFile[] files, String modname, String refid, String introductions,HttpServletRequest req) throws IOException {
+	public boolean uploadFile(MultipartFile[] files, String modname, String refid, String type,HttpServletRequest req) throws IOException {
 		   if (files != null && files.length > 0) {
 	               List<Map<String,String>> list = new ArrayList<Map<String,String>>();
 	                for (int i = 0; i < files.length; i++) {
@@ -65,7 +65,7 @@ public class FileService {
 	                }
 	                //新增成功返回true 否则false
 	                if (list.size()>0)
-	                	return (fileDao.addFileList(list, modname, refid,introductions))==list.size() ? true:false;
+	                	return (fileDao.addFileList(list, modname, refid,type))==list.size() ? true:false;
 		   }
 		   return false;
 	}

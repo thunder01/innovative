@@ -1,5 +1,6 @@
 package com.innovative.controller;
 import com.innovative.bean.InformationPushPartager;
+import com.innovative.bean.Informationpush;
 import com.innovative.bean.Informationpushcomenter;
 import com.innovative.service.InformationPushPartagerService;
 import com.innovative.service.InformationpushService;
@@ -92,6 +93,17 @@ public class InformationPushPartagerController extends BaseController {
         return new JsonResult(true, informationPushPartagermap);
     }
     
+    
+    /**
+  	 * 根据收藏id获取点收藏的推特信息
+  	 * @param informationpush 信息点赞
+  	 * @return
+  	 */
+      @RequestMapping(value = "/getInformationpushPartagersByIdForMessage/{id}", method = RequestMethod.GET,produces="application/json;charset=UTF-8")
+      public JsonResult getInformationpushPartagersByIdForMessage(@PathVariable(name ="id" ,required = true) String id ,HttpServletRequest req) {
+    	  Informationpush informationpush = informationpushPartagerService.getInformationpushPartagersByIdForMessage(id,CookiesUtil.getCookieValue(req, "user_name"));
+          return new JsonResult(true, informationpush);
+      }
  
 
 

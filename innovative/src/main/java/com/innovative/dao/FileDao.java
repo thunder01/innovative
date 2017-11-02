@@ -23,7 +23,7 @@ public interface FileDao {
 	/*
 	 * 批量增加
 	 */
-	int addFileList(@Param(value="urllist")List<Map<String, String>> list,@Param(value="reftype") String reftype, @Param(value="refid")String refid, @Param(value="introductions") String introductions);
+	int addFileList(@Param(value="urllist")List<Map<String, String>> list,@Param(value="reftype") String reftype, @Param(value="refid")String refid, @Param(value="type") String type);
 	
 	List<FileBean> getFileById(@Param(value="refid")String refid, @Param(value="reftype")String reftype);
 	

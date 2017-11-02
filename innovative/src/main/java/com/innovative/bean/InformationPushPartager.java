@@ -3,7 +3,11 @@ package com.innovative.bean;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.List;
-
+/**
+ * 信息推特点赞
+ * @author cj
+ *
+ */
 public class InformationPushPartager implements Serializable {
 	
 	/**
@@ -13,17 +17,19 @@ public class InformationPushPartager implements Serializable {
 	private String id;//主键
 	private String pushId; //推特信息id
 	private String partagerBy; //分享人
-	private Timestamp partagerAt; //分享时间
+	private String partagerByC; //分享人
+	private Timestamp partagerAt; //分享时间partagerByC
 	private List<Informationpush> informationpushs; //分享时间一个用户分享的推特信息
 	List<FileBean> filelist ;//文件
 	public InformationPushPartager(){
 		
 	}
-	public InformationPushPartager(String id, String pushId, String partagerBy, Timestamp partagerAt,
-			List<Informationpush> informationpushs, List<FileBean> filelist) {
+	public InformationPushPartager(String id, String pushId, String partagerBy, String partagerByC,
+			Timestamp partagerAt, List<Informationpush> informationpushs, List<FileBean> filelist) {
 		this.id = id;
 		this.pushId = pushId;
 		this.partagerBy = partagerBy;
+		this.partagerByC = partagerByC;
 		this.partagerAt = partagerAt;
 		this.informationpushs = informationpushs;
 		this.filelist = filelist;
@@ -45,6 +51,12 @@ public class InformationPushPartager implements Serializable {
 	}
 	public void setPartagerBy(String partagerBy) {
 		this.partagerBy = partagerBy;
+	}
+	public String getPartagerByC() {
+		return partagerByC;
+	}
+	public void setPartagerByC(String partagerByC) {
+		this.partagerByC = partagerByC;
 	}
 	public Timestamp getPartagerAt() {
 		return partagerAt;
