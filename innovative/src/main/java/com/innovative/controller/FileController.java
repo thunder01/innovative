@@ -89,7 +89,7 @@ public class FileController extends BaseController {
     	String userid = technicalReport.getCreatedBy();
     	User user = userService.getUser(userid);
     	if(user!=null){
-    		integralService.managerIntegral(7, userid, "8", id.toString());
+    		integralService.managerIntegral(7, userid, id.toString());
     	}
 		return new JsonResult(true, technicalReport);
     }
