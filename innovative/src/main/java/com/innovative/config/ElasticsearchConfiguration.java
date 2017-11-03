@@ -58,7 +58,7 @@ public class ElasticsearchConfiguration implements FactoryBean<TransportClient>,
 
 	protected void buildClient() {
 		try {
-			System.out.println("初始化开始"+clusterName);
+			logger.info("初始化开始"+clusterName);
 			@SuppressWarnings("resource")
 			PreBuiltXPackTransportClient preBuiltXPackTransportClient = new PreBuiltXPackTransportClient(settings());
 
@@ -69,10 +69,10 @@ public class ElasticsearchConfiguration implements FactoryBean<TransportClient>,
                     Integer  port = Integer.valueOf(InetSocket[1]);
                     preBuiltXPackTransportClient.addTransportAddress(new
                                      InetSocketTransportAddress(InetAddress.getByName(Address),port ));
-                    System.out.println("node地址"+Address+":"+port);
+                    logger.info("node地址"+Address+":"+port);
                 }
                 transportClient=preBuiltXPackTransportClient;
-                System.out.println("transportclient生成完毕");
+                logger.info("transportclient生成完毕");
 			}
 		} catch (UnknownHostException e) {
 			logger.error(e.getMessage());

@@ -74,9 +74,9 @@ public class InformationService {
     		//判断索引是否存在
     		IndicesExistsResponse  indicesExistsResponse = client.admin().indices().exists( 
     	                        new IndicesExistsRequest().indices(new String[]{"information_index"})).actionGet();
-    		boolean is_exist=indicesExistsResponse.isExists();
+    		boolean isExist=indicesExistsResponse.isExists();
     		//若索引不存在，则新建索引
-    		if (!is_exist) {
+    		if (!isExist) {
     			//生成索引的映射信息
     			XContentBuilder mapping=mapping();
     			PutMappingRequest putMappingRequest=Requests.putMappingRequest("information_index").type("information").source(mapping);
@@ -127,7 +127,8 @@ public class InformationService {
 						.field("createBy",info.getCreateBy())
 						.field("updateAt",sdf.format(info.getUpdateAt()))
 						.field("updateBy",info.getUpdateBy())
-						.field("state","0")//tips 这里要修改为info.getState()
+						//tips 这里要修改为info.getState()
+						.field("state","0")
 						.endObject()).get();
 			} catch (IOException e) {
 				e.printStackTrace();

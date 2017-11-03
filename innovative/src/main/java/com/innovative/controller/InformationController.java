@@ -3,6 +3,7 @@ package com.innovative.controller;
 import com.innovative.bean.Information;
 import com.innovative.bean.TechInformationApprouver;
 import com.innovative.bean.TechInformationCollection;
+import com.innovative.config.HttpAspect;
 import com.innovative.service.InformationService;
 import com.innovative.utils.CookiesUtil;
 import com.innovative.utils.JsonResult;
@@ -10,6 +11,8 @@ import com.innovative.utils.Misc;
 import com.innovative.utils.PageInfo;
 import javax.servlet.http.HttpServletRequest;
 import org.elasticsearch.client.transport.TransportClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -28,7 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/information")
 public class InformationController {
-
+	private final static Logger LOGGER = LoggerFactory.getLogger(InformationController.class);
 
     @Autowired
     private InformationService informationService;
@@ -43,6 +46,7 @@ public class InformationController {
     @RequestMapping(value = "/addInformation", method = RequestMethod.POST)
     @ResponseBody 
     public JsonResult addInformation(@RequestBody Information information,HttpServletRequest req) {
+    	LOGGER.info("收到的信息"+information);
     	if(information ==  null )
     		 return new JsonResult(false, "没有获取到实体，添加科技资讯失败！");
     	//设置创建人，修改人
