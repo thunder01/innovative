@@ -87,6 +87,8 @@ public class DemandController{
         }
         return  new JsonResult(code,demandList);
     }
+    
+    
     /**
      * 添加内容
      */
@@ -96,21 +98,28 @@ public class DemandController{
         HttpSession session=servletRequest.getSession();
         User user= (User) session.getAttribute("userId");
         demand.setCteateBy(user.getUserId());
+        String msg="保存成功!";
+        boolean code=true;
         Message message=new Message();
-        String messge="保存成功!";
         message.setType("0");
         message.setNotice(3);
         message.setUserid(demand.getCheckName());
-        boolean code=true;
         if(demandService.addDemand(demand)){
             message.setProjectId(demand.getId());
             messageService.addMessage(message);
             messageService.updateMsgCount(user.getUserId());
         }else{
-            messge="保存失败";
+        	msg="保存失败";
             code=false;
         }
-        return  new JsonResult(code,messge);
+//        if(demandService.addDemand(demand)){
+//        	messageService.insertMessage(demand.getCheckName(), demand.getId()+"", "0", 3);
+//        	messageService.updateMsgCount(demand.getCheckName());
+//        }else {
+//        	msg="保存失败";
+//        	code=false;
+//		}
+        return  new JsonResult(code,msg);
     }
     /**
      *  查询list
@@ -143,4 +152,48 @@ public class DemandController{
         String userName=user.getUserName();
         return new JsonResult(true, demandService.getQueryList(page,userName));
      }
+    
+    
+    //********************************************************************************************************
+    /**
+     * 添加内容
+     */
+    @RequestMapping(value = "/addDemand",method = RequestMethod.POST)
+    @Transactional
+    public  JsonResult addDemand(@RequestBody Demand demand,HttpServletRequest servletRequest){
+        HttpSession session=servletRequest.getSession();
+        User user= (User) session.getAttribute("userId");
+        demand.setCteateBy(user.getUserId());
+        String msg="保存成功!";
+        boolean code=true;
+        if(demandService.addDemand(demand)){
+        	messageService.insertMessage(demand.getCheckName(), demand.getId()+"","0", 3);
+        	messageService.updateMsgCount(demand.getCheckName());
+        }else {
+        	msg="保存失败";
+        	code=false;
+		}
+        return  new JsonResult(code,msg);
+    }
+    /**
+     * 审核内容
+     */
+    @RequestMapping(value = "/updateDemand",method =RequestMethod.POST)
+    public JsonResult updateDemand(@RequestBody Demand demand,HttpServletRequest request){
+    	User user = (User)request.getSession().getAttribute("userId");
+        Demand demandList=null;
+        boolean code=true;
+        if(demandService.updateDemand(demand)){
+        	demandList=demandService.getDemand(demand.getId());
+        	Message message = messageService.getMessageByTypeAndProid("0", demand.getId()+"");
+        	messageService.updateMessage(user.getUserId(),message.getId());
+        	messageService.updateMsgCount(user.getUserId());
+            //messageService.upStatus(demand.getId());
+            messageService.insertMessage(demandList.getCteateBy(), demandList.getId()+"", "0", 2);
+            messageService.updateMsgCount(demandList.getCteateBy());
+        }else{
+            code=false;
+        }
+        return  new JsonResult(code,demandList);
+    }
 }

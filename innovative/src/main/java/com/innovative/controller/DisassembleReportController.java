@@ -7,8 +7,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.innovative.bean.Demand;
 import com.innovative.bean.DisassembleReport;
 import com.innovative.service.DisassembleReportService;
+import com.innovative.service.MessageService;
 import com.innovative.utils.JsonResult;
 
 /**
@@ -21,7 +24,8 @@ import com.innovative.utils.JsonResult;
 public class DisassembleReportController {
 	@Autowired
     private DisassembleReportService disassembleService;
-	
+	@Autowired
+	private MessageService messageService;
 	/*跳转上传页面*/
 	@RequestMapping(value="/toUpload/{orderid}",method = RequestMethod.GET)
 	public JsonResult toUpload(@PathVariable(name="orderid") Integer orderid){
@@ -123,4 +127,26 @@ public class DisassembleReportController {
 		
 		return new JsonResult(true, map);
 	}
+	
+	//********************************************************************************************插入新的消息	
+	/**
+	 * 拆解报告上传之后，将上传记录添加到数据库，并向消息表添加一条记录
+	 * @param report 拆解报告表单提交
+	 * @param reportid 订单id
+	 * @return
+	 * */
+	@RequestMapping(value = "/saveDisassemble", method = RequestMethod.POST)
+	public JsonResult saveDisassemble(@RequestBody DisassembleReport report){
+		System.out.println(report);
+		Map<String, Object> map= disassembleService.saveDisassemble(report,report.getOrder_id());
+        if (map!=null) {
+        	Demand demand = (Demand) map.get("demand");
+        	//需要确认是谁来审批，是下需求的人还是需求的审批人
+        	messageService.insertMessage(demand.getCteateBy(), demand.getId()+"", "1", 3);
+        	messageService.updateMsgCount(demand.getCteateBy());
+            return new JsonResult(true, map);
+        }
+        return new JsonResult(false, "报告上传失败！");        
+	}
+	
 }

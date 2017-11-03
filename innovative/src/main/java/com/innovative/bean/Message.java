@@ -15,20 +15,12 @@ public class Message implements Serializable{
     private Integer notice;//1通知2已办3待办
     private String last_by;//最后修改时间
     private String last_date;//最后修改人
-    private String userid;//用户的信息
+    private String userid;//发信息给这个用户
     private int project_id;//对应的项目ID
     private String create_date;//创建时间
-    private String proid;
+    private String proid;//项目id
     
     private Object object;
-//    private int message_count;//最新的消息总数
-//    private int notice_count;//最新的通知消息数
-//    private int finish_count;//已办数
-//    private int unfinish_count;//代办数
-//    private int old_message_count;//上一次消息总数
-//    private int old_notice_count;//上一次通知消息数
-//    private int old_finish_count;//上一次已办数
-//    private int old_unfinish_count;//上一次代办数
     
 	public Message() {}
 
@@ -159,8 +151,4 @@ public class Message implements Serializable{
 				+ ", userid=" + userid + ", project_id=" + project_id + ", create_date=" + create_date + ", proid="
 				+ proid + ", object=" + object + "]";
 	}
-
-	
-	
-	
 }

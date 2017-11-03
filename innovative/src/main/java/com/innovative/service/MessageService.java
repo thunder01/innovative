@@ -7,6 +7,8 @@ import com.innovative.dao.DemandDao;
 import com.innovative.dao.MessageDao;
 import com.innovative.dao.MsgCountDao;
 import com.innovative.utils.PageInfo;
+
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -62,7 +64,7 @@ public class MessageService {
 	
 	
 	/**
-	 *  * 获取信息列表
+	 * 获取信息列表(0需求下单、1拆解报告、2项目评价、3情报、4推特信息点赞、5 推特信息转发、6 推特信息收藏、7推特信息评论、8科技专栏审核、9科技资讯审核、10科技专栏修改)
 	 * @param message 消息Bean  需要userid和notice值
 	 * @param pageNum 页数
 	 * @return
@@ -88,21 +90,21 @@ public class MessageService {
 			msg.setOld_unfinish_count(msgCount.getOld_unfinish_count());
 			msg.setOld_finish_count(msgCount.getOld_finish_count());
 		}
-		
+		map.put("msgCount", msg);
 		if(message.getNotice()==1){//消息里面的通知
 			if(msgCount!=null){
 				//需要判断消息的类型  0是下单审批，1是拆解报告确认，2是团队评价
 				for (Message m : list) {
 					if("0".equals(m.getType())){
-						Demand demand = demandDao.getDemand(m.getProject_id());
+						Demand demand = demandDao.getDemand(Integer.parseInt(m.getProid()));
 						m.setObject(demand);
 					}
 					if("1".equals(m.getType())){
-						Demand demand = demandDao.getDemand(m.getProject_id());
+						Demand demand = demandDao.getDemand(Integer.parseInt(m.getProid()));
 						m.setObject(demand);					
 					}
 					if("2".equals(m.getType())){
-						Demand demand = demandDao.getDemand(m.getProject_id());
+						Demand demand = demandDao.getDemand(Integer.parseInt(m.getProid()));
 						m.setObject(demand);
 					}
 				}
@@ -117,15 +119,15 @@ public class MessageService {
 				//需要判断消息的类型  0是下单审批，1是拆解报告确认，2是团队评价
 				for (Message m : list) {
 					if("0".equals(m.getType())){
-						Demand demand = demandDao.getDemand(m.getProject_id());
+						Demand demand = demandDao.getDemand(Integer.parseInt(m.getProid()));
 						m.setObject(demand);
 					}
 					if("1".equals(m.getType())){
-						Demand demand = demandDao.getDemand(m.getProject_id());
+						Demand demand = demandDao.getDemand(Integer.parseInt(m.getProid()));
 						m.setObject(demand);					
 					}
 					if("2".equals(m.getType())){
-						Demand demand = demandDao.getDemand(m.getProject_id());
+						Demand demand = demandDao.getDemand(Integer.parseInt(m.getProid()));
 						m.setObject(demand);
 					}
 				}
@@ -140,15 +142,15 @@ public class MessageService {
 				//需要判断消息的类型  0是下单审批，1是拆解报告确认，2是团队评价
 				for (Message m : list) {
 					if("0".equals(m.getType())){
-						Demand demand = demandDao.getDemand(m.getProject_id());
+						Demand demand = demandDao.getDemand(Integer.parseInt(m.getProid()));
 						m.setObject(demand);
 					}
 					if("1".equals(m.getType())){
-						Demand demand = demandDao.getDemand(m.getProject_id());
+						Demand demand = demandDao.getDemand(Integer.parseInt(m.getProid()));
 						m.setObject(demand);					
 					}
 					if("2".equals(m.getType())){
-						Demand demand = demandDao.getDemand(m.getProject_id());
+						Demand demand = demandDao.getDemand(Integer.parseInt(m.getProid()));
 						m.setObject(demand);
 					}
 				}
@@ -182,7 +184,7 @@ public class MessageService {
 		}else{
 			msg.setOld_notice_count(msgCount.getOld_notice_count());
 			msg.setOld_finish_count(msgCount.getOld_finish_count());
-			msg.setUnfinish_count(msgCount.getOld_unfinish_count());
+			msg.setOld_unfinish_count(msgCount.getOld_unfinish_count());
 		}
 		//更新MsgCount
 		int result = msgCountDao.updateMsgCount(msg);
@@ -193,7 +195,7 @@ public class MessageService {
 	 * 
 	 * @param userid 消息发给谁
 	 * @param proid 目标的id
-	 * @param type 类型  (0需求下单     1拆解报告	2项目评价	 3情报  4推特信息点赞    5 推特信息转发  6 推特信息收藏  7推特信息评论 8 科技专栏审核 9 科技资讯审核 10 科技专栏修改)谁添加不一样的消息类型，自己加上注释
+	 * @param type 类型  (0需求下单、1拆解报告、2项目评价、3情报、4推特信息点赞、5 推特信息转发、6 推特信息收藏、7推特信息评论、8 科技专栏审核、9 科技资讯审核、10 科技专栏修改)谁添加不一样的消息类型，自己加上注释
 	 * @param notice 1是通知，2是已办，3是待办
 	 * @return
 	 */
@@ -212,6 +214,26 @@ public class MessageService {
 		return 0;
 	}
 	
+	/**
+	 * 待办更新成已办
+	 * @param userid
+	 * @param id
+	 * @return
+	 */
+	public int updateMessage(String userid,Integer id){//待办更新成已办
+		int result = messageDao.updateNotice(id, userid);
+		return result;
+	}
+	/**
+     * 通过消息的类型和资源的id来找消息
+     * @param type 消息的类型
+     * @param proid 资源id
+     * @return
+     */
+	public Message getMessageByTypeAndProid(String type,String proid){
+		Message message = messageDao.getMessageByTypeAndProid(type, proid);
+		return message;
+	}
 	
 	
 }

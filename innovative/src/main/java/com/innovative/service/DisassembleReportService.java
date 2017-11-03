@@ -72,7 +72,7 @@ public class DisassembleReportService {
 			
 			/*发送消息*/
 			messageDao.addMessage(message);
-			
+			map.put("proid", projectId);
 			map.put("result",result);
 			map.put("orderid", orderid);
 		}
@@ -232,5 +232,39 @@ public class DisassembleReportService {
 		
 		map.put("orderid", orderid);
 		return map;
+	}
+	
+	
+	//********************************************************************************
+	/**
+	 * 拆解报告上传之后，将上传记录添加到数据库，并向消息表添加一条记录
+	 * @param repor 拆解报告信息
+	 * @param orderid 订单id
+     * @return
+	 * */
+	@Transactional
+	public Map<String, Object> saveDisassemble(DisassembleReport report,Integer orderid){
+		Map<String, Object> map=new HashMap<>();
+		fileDao.updateFile(report.getFileid());
+		
+		if ("1".equals(report.getMessage())) {
+			map.put("orderid", orderid);
+		}else{
+			/*先将次订单的所有拆解报告删除*/
+			Integer disassembleID=reportDao.getIdByOrderId(orderid);
+			if (disassembleID!=null) {
+				reportDao.deleteDisassembleReportByIdReal(disassembleID);
+			}
+			
+			/*保存拆解报告*/
+			int result = reportDao.saveDisassembleReport(report);	
+			/*根据订单id查询需求id*/
+			int projectId=orderDao.getDemandIdByOrderId(orderid);
+			Demand demand = demandDao.getDemand(projectId);
+			map.put("demand", demand);
+			map.put("result",result);
+			map.put("orderid", orderid);
+		}
+		return map;	 
 	}
 }
