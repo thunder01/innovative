@@ -3,9 +3,11 @@ package com.innovative.service;
 
 import com.google.common.collect.Lists;
 import com.innovative.bean.Information;
+import com.innovative.bean.Sections;
 import com.innovative.bean.TechInformationApprouver;
 import com.innovative.bean.TechInformationCollection;
 import com.innovative.dao.InformationDao;
+import com.innovative.dao.SectionsDao;
 import com.innovative.dao.TechInformationApprouverDao;
 import com.innovative.dao.TechInformationCollectionDao;
 import com.innovative.utils.Config;
@@ -52,6 +54,8 @@ public class InformationService {
 
     @Autowired
     private InformationDao informationDao;
+    @Autowired
+    private SectionsDao sectionsDao;
     //Elasticsearch客户端
     @Autowired
     private TransportClient client;
@@ -388,5 +392,25 @@ public class InformationService {
 		return false;
 	}
 		
+	}
+	
+	/**
+	 * 科技资讯、科技专栏的综合查询，每个查10条数据
+	 * @param page
+	 * @param state
+	 * @return
+	 */
+	public JsonResult getInformationAndSectionLists(Integer page, String state){
+		//PageInfo中的显示条数设的是10
+		   PageInfo pageInfo = new PageInfo();
+	       pageInfo.setCurrentPageNum(page);
+	       //科技资讯列表
+	       List<Information> informations = informationDao.getInformationLists( pageInfo.getStartIndex(), pageInfo.getPageSize(),state);
+	       //科技专栏列表
+	       List<Sections> sections = sectionsDao.getSectionsLists(pageInfo.getStartIndex(), pageInfo.getPageSize(), state);
+	       Map<String, Object> map = new HashMap<>();
+	       map.put("information", informations);
+	       map.put("section", sections);
+	       return new JsonResult(true, map);
 	}
 }
