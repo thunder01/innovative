@@ -19,6 +19,9 @@
         <result property="createDate" column="create_date"/>
         <result property="createBy" column="create_by"/>
         <result property="userid" column="userid"/>
+        <result property="projectId" column="projectId"/>
+        <result property="userName" column="username" typeHandler="com.innovative.mybatisHandler.ArrayTypeHandler"/>
+
     </resultMap>
     <resultMap id="feedBackMap" type="FeedBack">
         <id property="id" column="id" />
@@ -34,7 +37,6 @@
     </resultMap>
     <!--情报池列表展示-->
     <select id="getList" resultMap="intelligenceMap">
-        limit #{pageSize} offset #{startIndex}
         SELECT * FROM (SELECT * FROM "xacx_intelligence"
         <where>
             status='1'
@@ -54,8 +56,8 @@
         <selectKey resultType="int" keyProperty="id" order="AFTER">
             SELECT currval('xacx_intelligence_id_seq'::regclass)
         </selectKey>
-        INSERT  INTO xacx_intelligence ("name","demand","tell","number","frequency","startdate","enddate","content","create_date","create_by","ddmj","username")
-        VALUES(#{name},#{demand},#{tell},#{number},#{frequency},#{startdate},#{enddate},#{content},now(),#{createBy},#{ddmj},
+        INSERT  INTO xacx_intelligence ("name","demand","tell","number","frequency","startdate","enddate","content","create_date","create_by","ddmj","checkname","projectId","username")
+        VALUES(#{name},#{demand},#{tell},#{number},#{frequency},#{startdate},#{enddate},#{content},now(),#{createBy},#{ddmj},#{checkname},#{projectId},
         <choose>
             <when test="userName != null">
                 <foreach item="userName" collection="userName" separator="," open="'{" close="}'" index="">
