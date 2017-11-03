@@ -55,5 +55,9 @@
     <select id="getIdByOrderId" parameterType="int" resultType="int">
     	select id from xacx_disassemble_report_v2 where order_id=#{order_id}
     </select>
- 
+ 	
+ 	<!-- 根据id删除拆解报告(更改状态) -->
+ 	<update id="deleteDisassembleReport" parameterType="map">
+ 		UPDATE xacx_disassemble_report_v2 SET delete_date=now(),delete_status=2,delete_by=#{delete_by} WHERE id=#{id}
+ 	</update>
 </mapper>

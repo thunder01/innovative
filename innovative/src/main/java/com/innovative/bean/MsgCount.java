@@ -47,7 +47,7 @@ public class MsgCount implements Serializable{
 		this.userid = userid;
 	}
 	public int getMessage_count() {
-		return message_count;
+		return notice_count+finish_count+unfinish_count;
 	}
 	public void setMessage_count(int message_count) {
 		this.message_count = message_count;
@@ -71,7 +71,7 @@ public class MsgCount implements Serializable{
 		this.unfinish_count = unfinish_count;
 	}
 	public int getOld_message_count() {
-		return old_message_count;
+		return old_notice_count+old_finish_count+old_unfinish_count;
 	}
 	public void setOld_message_count(int old_message_count) {
 		this.old_message_count = old_message_count;

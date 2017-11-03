@@ -60,8 +60,8 @@ public class OrderService {
 		Demand demand=demandDao.getDemand(demandid);//查询需求信息
 		if (orderid==null) {//若是订单不存在，则新产生一条订单信息；若订单已经存在，说明此需求已经被人接单了
 			orderDao.insertOrder(demandid,userid);
+			demand.setOrderid(orderid);
 		}		
-	
 		map.put("demand", demand);
 		map.put("userid", userid);				
 		return map;
