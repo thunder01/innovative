@@ -94,5 +94,17 @@ public interface OrderDao {
 	 * @return
 	 */
 	public Order getOrderById(Integer id);
+	/**
+	 * 删除订单(更改状态)
+	 * @param orderid
+	 * @return
+	 */
+	public int deleteOrder(Integer orderid);
+	/**
+	 * 通过需求id查询订单信息
+	 * @param demandid
+	 * @return
+	 */
+	public Order findOrderByDemandId(Integer demandid);
 
 }

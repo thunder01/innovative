@@ -3,9 +3,11 @@ package com.innovative.service;
 import com.innovative.bean.Demand;
 import com.innovative.bean.Message;
 import com.innovative.bean.MsgCount;
+import com.innovative.bean.Order;
 import com.innovative.dao.DemandDao;
 import com.innovative.dao.MessageDao;
 import com.innovative.dao.MsgCountDao;
+import com.innovative.dao.OrderDao;
 import com.innovative.utils.PageInfo;
 
 import org.apache.ibatis.annotations.Param;
@@ -25,6 +27,8 @@ public class MessageService {
 	private MsgCountDao msgCountDao;
 	@Autowired
 	private DemandDao demandDao;
+	@Autowired
+	private OrderDao orderDao;
 	/**
 	 * 添加容
 	 */
@@ -74,6 +78,7 @@ public class MessageService {
 		Map<String,Object> map = new HashMap<>();
 		PageInfo pageInfo = new PageInfo();
 		pageInfo.setCurrentPageNum(pageNum);
+		map.put("limit", pageInfo.getPageSize());
 		//消息的集合
 		List<Message> list = messageDao.showNoticeMessage
 				(message.getUserid(), message.getNotice(), pageInfo.getStartIndex(), pageInfo.getPageSize());
@@ -124,6 +129,8 @@ public class MessageService {
 					}
 					if("1".equals(m.getType())){
 						Demand demand = demandDao.getDemand(Integer.parseInt(m.getProid()));
+						Order order = orderDao.findOrderByDemandId(demand.getId());
+						demand.setOrder(order);
 						m.setObject(demand);					
 					}
 					if("2".equals(m.getType())){

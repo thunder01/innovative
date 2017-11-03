@@ -31,13 +31,12 @@
 	
 	<!--查询我的订单-->
 	<select id="selectOrderListByUserId" parameterType="map" resultMap="OrderMap">
-		select * from xacx_order_v2 where create_by_id=#{userid} order by create_date desc limit #{pageSize} offset #{startIndex}
+		select * from xacx_order_v2 where create_by_id=#{userid} and confirm_status=1 or confirm_status=0 order by create_date desc limit #{pageSize} offset #{startIndex}
 	</select>
 	
 	<!-- 根据订单id删除订单信息 -->
 	<delete id="deleteByOrderId" parameterType="string">
 		delete from xacx_order_v2 where id=#{orderid}
-		<!-- UPDATE xacx_order_v2 SET confirm_status=2 WHERE id=#{orderid} -->
 	</delete>
 	
 	<!-- 根据订单id查询详情 -->
@@ -47,7 +46,7 @@
 	
 	<!-- 我的订单总条数 -->
 	<select id="getTotalCOuntMyorder" parameterType="string" resultType="int">
-		select count(*) from xacx_order_v2 where create_by_id=#{userid}
+		select count(*) from xacx_order_v2 where create_by_id=#{userid} and confirm_status=1 or confirm_status=0
 	</select>
 	
 	<!-- 根据订单id查询需求id -->
@@ -94,4 +93,13 @@
 		select * from xacx_order_v2 where id=#{id}
 	</select>
 	
+	<!-- 删除订单（更改状态） -->
+	<update id="deleteOrder" parameterType="int">
+		UPDATE xacx_order_v2 SET confirm_status=2 WHERE id=#{orderid}
+	</update>
+	
+	<!-- 通过需求id查询订单信息 -->
+	<select id="findOrderByDemandId" parameterType="int" resultMap="OrderMap">
+		SELECT * FROM xacx_order_v2 WHERE demandid=#{demandid}
+	</select>
 </mapper>

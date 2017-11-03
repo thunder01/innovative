@@ -1,6 +1,9 @@
 package com.innovative.controller;
 
 import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -10,6 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.innovative.bean.Demand;
 import com.innovative.bean.DisassembleReport;
+import com.innovative.bean.Message;
+import com.innovative.bean.User;
 import com.innovative.service.DisassembleReportService;
 import com.innovative.service.MessageService;
 import com.innovative.utils.JsonResult;
@@ -122,9 +127,9 @@ public class DisassembleReportController {
 	 * @return
 	 */
 	@RequestMapping(value="/confirm",method=RequestMethod.POST)
-	public JsonResult confirmDisassembleStatus(@RequestBody DisassembleReport disassembleReport){
-		Map<String,Object> map=disassembleService.confirmDisassembleStatus(disassembleReport);
-		
+	public JsonResult confirmDisassembleStatus(@RequestBody DisassembleReport disassembleReport,HttpServletRequest req){
+		User user = (User) req.getSession().getAttribute("userId");
+		Map<String,Object> map=disassembleService.confirmDisassembleStatus(disassembleReport,user.getUserId());
 		return new JsonResult(true, map);
 	}
 	
