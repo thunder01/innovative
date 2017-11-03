@@ -37,6 +37,7 @@
 	<!-- 根据订单id删除订单信息 -->
 	<delete id="deleteByOrderId" parameterType="string">
 		delete from xacx_order_v2 where id=#{orderid}
+		<!-- UPDATE xacx_order_v2 SET confirm_status=2 WHERE id=#{orderid} -->
 	</delete>
 	
 	<!-- 根据订单id查询详情 -->

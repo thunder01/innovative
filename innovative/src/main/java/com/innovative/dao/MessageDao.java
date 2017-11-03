@@ -32,7 +32,7 @@ public interface MessageDao {
     int upStatus(int id);
     
     
-    /*       分界线                */
+    /*       分界线    **************************************************************            */
     
     /**
      * 添加消息
@@ -52,6 +52,17 @@ public interface MessageDao {
      * @return
      */
     public int totalNoticeMessage(@Param("userid") String userid,@Param("notice") Integer notice);
-    
-    
+    /**
+     * 待办变成已办
+     * @param id
+     * @return
+     */
+    public int updateNotice(@Param("id")int id,@Param("userid")String userid);
+    /**
+     * 通过消息的类型和资源的id来找消息
+     * @param type 消息的类型
+     * @param proid 资源id
+     * @return
+     */
+    public Message getMessageByTypeAndProid(@Param("type")String type,@Param("proid")String proid);
 }
