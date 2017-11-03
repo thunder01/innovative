@@ -31,15 +31,19 @@ public class Informationpush implements Serializable {
 	List<FileBean> filelist ;//文件
 	List<Informationpush> commentlist ;//评论
 	
+	List<CollectionPush> collectionPushlist ;//收藏记录
+	List<Approuver> approuverlist ;//点赞记录
+	List<InformationPushPartager> informationPushPartagerlist ;//分享记录
+	
 	public Informationpush(){
 		
 	}
-	
 
 	public Informationpush(String id, String pid, Timestamp comentAt, String comentBy, String comentByC, String cotent,
 			String title, int approuverNum, int todayIsAprouver, int transmettreNum, int todayIsTransmettre,
 			int colletionNum, int todayIsColletion, int commenterNum, String path, String type, int depth,
-			List<FileBean> filelist, List<Informationpush> commentlist) {
+			List<FileBean> filelist, List<Informationpush> commentlist, List<CollectionPush> collectionPushlist,
+			List<Approuver> approuverlist, List<InformationPushPartager> informationPushPartagerlist) {
 		this.id = id;
 		this.pid = pid;
 		this.comentAt = comentAt;
@@ -59,8 +63,10 @@ public class Informationpush implements Serializable {
 		this.depth = depth;
 		this.filelist = filelist;
 		this.commentlist = commentlist;
+		this.collectionPushlist = collectionPushlist;
+		this.approuverlist = approuverlist;
+		this.informationPushPartagerlist = informationPushPartagerlist;
 	}
-
 
 	public String getId() {
 		return id;
@@ -212,6 +218,30 @@ public class Informationpush implements Serializable {
 
 	public void setCommentlist(List<Informationpush> commentlist) {
 		this.commentlist = commentlist;
+	}
+
+	public List<CollectionPush> getCollectionPushlist() {
+		return collectionPushlist;
+	}
+
+	public void setCollectionPushlist(List<CollectionPush> collectionPushlist) {
+		this.collectionPushlist = collectionPushlist;
+	}
+
+	public List<Approuver> getApprouverlist() {
+		return approuverlist;
+	}
+
+	public void setApprouverlist(List<Approuver> approuverlist) {
+		this.approuverlist = approuverlist;
+	}
+
+	public List<InformationPushPartager> getInformationPushPartagerlist() {
+		return informationPushPartagerlist;
+	}
+
+	public void setInformationPushPartagerlist(List<InformationPushPartager> informationPushPartagerlist) {
+		this.informationPushPartagerlist = informationPushPartagerlist;
 	}
 
 

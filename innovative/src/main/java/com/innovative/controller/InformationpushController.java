@@ -164,10 +164,23 @@ public class InformationpushController extends BaseController {
     public JsonResult addApprouver(@RequestBody Approuver approuver,HttpServletRequest req) {
 
     	approuver.setApprouverBy(CookiesUtil.getCookieValue(req,"user_name"));
+    	//生成主键
+    	approuver.setId(Misc.uuid());
         if (!informationpushService.addApprouver(approuver)) {
             return new JsonResult(false, "今天已点赞，一天只能点赞一次!");
         }
         return new JsonResult(true, informationpushService.getCommenterNum(approuver.getComentId()));
+    }
+    
+    /**
+	 * 根据点赞id获取点赞得推特信息
+	 * @param informationpush 信息点赞
+	 * @return
+	 */
+    @RequestMapping(value = "/getApprouverByIdForMessage/{id}", method = RequestMethod.GET,produces="application/json;charset=UTF-8")
+    @ResponseBody
+    public JsonResult getApprouverByIdForMessage(@PathVariable(name ="id" ,required = true) String id ,HttpServletRequest req) {
+        return new JsonResult(true, informationpushService.getApprouverByIdForMessage(id,CookiesUtil.getCookieValue(req, "user_name")));
     }
     
     
@@ -201,6 +214,18 @@ public class InformationpushController extends BaseController {
     	//此用户收藏记录分页查找
         return new JsonResult(true,informationpushService.getCollects(userid,page));
     }
+    
+    /**
+     *根据收藏id获取收藏信息（用户消息那查询）
+     * @param id 收藏的id
+     * @param req
+     * @return
+     */
+     @RequestMapping(value = "/getCollectInformationForMessage/{id}", method = RequestMethod.GET,produces="application/json;charset=UTF-8")
+     public JsonResult getCollectInformationForMessage(@PathVariable(name = "id") String id ,HttpServletRequest req) {
+     	//根据收藏id获取收藏信息
+         return new JsonResult(true,informationpushService.getCollectInformationForMessage(id,CookiesUtil.getCookieValue(req, "user_name")));
+     }
     
     /**
      * 获取前5条收藏

@@ -15,6 +15,7 @@
 	  <result property="createBy" column="createBy"/>
 	  <result property="updateAt" column="updateAt"/>
 	  <result property="updateBy" column="updateBy"/>
+	   <result property="updateByC" column="updateByC"/>
 	  <result property="tags" column="tags" typeHandler="com.innovative.mybatisHandler.ArrayTypeHandler"/>
 	  <result property="sectors" column="sectors" typeHandler="com.innovative.mybatisHandler.ArrayTypeHandler"/>
 	  <result property="state" column="state"/>
@@ -156,17 +157,20 @@
 	 <!--根据id获取科技专栏-->
 	<select id="getSectionByIdAndUserid" resultMap="sectionsMap">
 
-      SELECT "id", "resource", "title", "time", "resume", "sectors", "tags", "cotent", "createAt", 
-		  "createBy", "updateAt", "updateBy", "state" ,"approuverNum" ,e.todayIsApprouver,co.isCollection
+     
+ 		SELECT "id", "resource", "title", "time", "resume", "sectors", "tags", "cotent", "createAt", 
+		  "createBy", "updateAt", "updateBy", "state" ,"approuverNum" ,us.username updateByC,e.todayIsApprouver,co.isCollection
 		FROM "xacx_tech_sections" info
 		 left join 
-		(SELECT count(*) todayIsApprouver,"sectionId" FROM "xacx_tech_section_approuver" where "approuverBy" = #{userid} 
+		(SELECT count(*) todayIsApprouver,"sectionId" FROM "xacx_tech_section_approuver" where "approuverBy" = #{userid}
 		
 		and to_date(cast("approuverAt" as TEXT),'yyyy-mm-dd') = current_date group by "sectionId"	) e on e."sectionId" = info."id"
 
-       left join (SELECT count(*) isCollection,"sectionId" FROM "xacx_tech_sections_collection" where "collectBy" =  #{userid} 
+       left join (SELECT count(*) isCollection,"sectionId" FROM "xacx_tech_sections_collection" where "collectBy" =  #{userid}
 		
 		group by "sectionId"	) co on co."sectionId" = info."id"
+
+ 	left join xacx_user us on us.pernr = info."updateBy"
 
 		where info."id" = #{id}
 	</select>

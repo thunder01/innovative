@@ -100,6 +100,18 @@ public List<InformationPushPartager> getInformationpushPartagersByPushid(String 
 }
 
 
+/**
+ * 根据收藏id获取用户收藏的推特信息
+ * @param id 收藏id
+ * @param userid 当前登录人
+ * @return
+ */
+public Informationpush getInformationpushPartagersByIdForMessage(String id, String userid) {
+	// TODO Auto-generated method stub
+	return informationPushPartagerDao.getInformationpushPartagersByIdForMessage(id,userid);
+}
+
+
 
 
 

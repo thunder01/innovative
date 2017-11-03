@@ -385,4 +385,30 @@ public Integer getCollectNum(String comentId) {
 }
 
 
+
+/**
+ * 根据收藏id获取收藏的推特信息与收藏人()用于消息那块
+ * @param id  收藏id
+ * @param userid
+ * @return
+ */
+public Informationpush getCollectInformationForMessage(String id, String userid) {
+	
+	return collectionDao.getCollectInformationForMessage(id,userid);
+}
+
+
+
+/**
+ * 根据点赞id获取点赞的推特信息与点赞人信息（用于消息那块）
+ * @param id 点赞ID
+ * @param cookieValue
+ * @return 推特信息id
+ */
+public Informationpush getApprouverByIdForMessage(String id, String cookieValue) {
+	// TODO Auto-generated method stub
+	return approuverDao.getApprouverByIdForMessage(id,cookieValue);
+}
+
+
 }

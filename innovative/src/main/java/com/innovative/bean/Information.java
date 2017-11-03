@@ -25,6 +25,7 @@ public class Information implements Serializable {
 	private String createBy;//创建人
 	private Timestamp updateAt;//更新时间
 	private String updateBy;//更新人
+	private String updateByC;//更新人
 	private String state;//科技资讯的审批状态 0 未审批 1 已审批approuverNum
 	private String approuverNum; //点赞数量
 	private int todayIsApprouver; //今天是否点赞
@@ -32,11 +33,10 @@ public class Information implements Serializable {
 	
     public Information() {
     }
-    
 
 	public Information(String id, String resource, String title, String time, String resume, String[] sectors,
 			String[] tags, String cotent, Timestamp createAt, String createBy, Timestamp updateAt, String updateBy,
-			String state, String approuverNum, int todayIsApprouver, int isCollection) {
+			String updateByC, String state, String approuverNum, int todayIsApprouver, int isCollection) {
 		this.id = id;
 		this.resource = resource;
 		this.title = title;
@@ -49,12 +49,12 @@ public class Information implements Serializable {
 		this.createBy = createBy;
 		this.updateAt = updateAt;
 		this.updateBy = updateBy;
+		this.updateByC = updateByC;
 		this.state = state;
 		this.approuverNum = approuverNum;
 		this.todayIsApprouver = todayIsApprouver;
 		this.isCollection = isCollection;
 	}
-
 
 	public String getId() {
 		return id;
@@ -152,6 +152,14 @@ public class Information implements Serializable {
 		this.updateBy = updateBy;
 	}
 
+	public String getUpdateByC() {
+		return updateByC;
+	}
+
+	public void setUpdateByC(String updateByC) {
+		this.updateByC = updateByC;
+	}
+
 	public String getState() {
 		return state;
 	}
@@ -183,6 +191,7 @@ public class Information implements Serializable {
 	public void setIsCollection(int isCollection) {
 		this.isCollection = isCollection;
 	}
+    
 
 	@Override
 	public String toString() {

@@ -2,7 +2,11 @@ package com.innovative.bean;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
-
+/**
+ * 推特信息收藏
+ * @author cj
+ *
+ */
 public class CollectionPush implements Serializable {
 	
 	/**
@@ -12,16 +16,18 @@ public class CollectionPush implements Serializable {
 	private String id;//主键
 	private String comentId; //推特信息id
 	private String collectBy; //收藏人
+	private String collectByC; //收藏人
 	private Timestamp collectAt; //收藏时间
 	
 	public CollectionPush(){
 		
 	}
 
-	public CollectionPush(String id, String comentId, String collectBy, Timestamp collectAt) {
+	public CollectionPush(String id, String comentId, String collectBy, String collectByC, Timestamp collectAt) {
 		this.id = id;
 		this.comentId = comentId;
 		this.collectBy = collectBy;
+		this.collectByC = collectByC;
 		this.collectAt = collectAt;
 	}
 
@@ -49,6 +55,14 @@ public class CollectionPush implements Serializable {
 		this.collectBy = collectBy;
 	}
 
+	public String getCollectByC() {
+		return collectByC;
+	}
+
+	public void setCollectByC(String collectByC) {
+		this.collectByC = collectByC;
+	}
+
 	public Timestamp getCollectAt() {
 		return collectAt;
 	}
@@ -56,8 +70,9 @@ public class CollectionPush implements Serializable {
 	public void setCollectAt(Timestamp collectAt) {
 		this.collectAt = collectAt;
 	}
+
 	
-	
+
 	
 
 }

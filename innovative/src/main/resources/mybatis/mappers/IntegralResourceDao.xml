@@ -9,20 +9,18 @@
         <result property="type" column="type"/>
         <result property="resource_id" column="resource"/>
         <result property="count" column="count"/>
+        <result property="userid" column="userid"/>
+        <result property="create_date" column="create_date"/>
      </resultMap>
      
-     <!-- 添加一个创新资源详情页进入次数（第一次进来为1） -->
+     <!-- 插入一个创新资源详情页查看信息 -->
      <insert id="addIntegralResource" parameterType="IntegralResource">
-     	INSERT INTO xacx_integral_resource (type,resource_id,count)VALUES(#{type},#{resource_id},1)
+     	INSERT INTO xacx_integral_resource (type,resource_id,userid,create_date)VALUES(#{type},#{resource_id},#{userid},now())
      </insert>
      
-     <!-- 更新一个创新资源详情页进入次数 -->
-     <update id="updateIntegralResource" parameterType="IntegralResource">
-     	UPDATE xacx_integral_resource SET count=#{count}  WHERE id = #{id}
-     </update>
-     
-     <!--查询资源的访问数量，先查询，访问数量为4则增加20积分，其访问数量置0  -->
-     <select id="getIntegralResource" parameterType="map" resultMap="integralResourceMap">
-     	SELECT id,type,resource_id,count FROM xacx_integral_resource WHERE type=#{type} AND resource_id=#{resource_id}
+     <!-- 通过类型和资源uuid来定位资源信息 来查询当前资源被查看的次数 -->
+     <select id="getCountByResourceId" parameterType="string" resultType="int">
+     	SELECT COUNT(resource_id) FROM xacx_integral_resource WHERE resource_id=#{resource_id} 
+     	AND create_date&lt;CURRENT_DATE+1 AND create_date>CURRENT_DATE
      </select>
 </mapper>        

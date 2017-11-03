@@ -14,10 +14,10 @@
     <!-- 批量上传文档 -->
       <insert id="addFileList" parameterType="map">
         INSERT INTO "xacx_file"
-        ("refType", "refId", "url","filename", "createAt", "sign","createBy","introductions")
+        ("refType", "refId", "url","filename", "createAt", "sign","createBy","fileType")
         VALUES
         <foreach collection="urllist" item="item" open="(" separator="),(" close=")">
-            #{reftype}, #{refid}, #{item.url},#{item.name}, now(), 'confim','',#{introductions}
+            #{reftype}, #{refid}, #{item.url},#{item.name}, now(), 'confim','',#{type}
         </foreach>
     </insert> 
     

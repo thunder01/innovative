@@ -20,6 +20,7 @@ public class Sections implements Serializable {
 	private String createBy;//创建人
 	private Timestamp updateAt;//更新时间
 	private String updateBy;//更新人
+	private String updateByC;//更新人
 	private String state;//审批状态，0 未审批 1 审批完成 2审核不通过
 	private Integer approuverNum;//今天是否点赞
 	private int todayIsApprouver;//今天是否点赞
@@ -30,7 +31,7 @@ public class Sections implements Serializable {
 
 	public Sections(String id, String resource, String title, String time, String resume, String[] sectors,
 			String[] tags, String cotent, Timestamp createAt, String createBy, Timestamp updateAt, String updateBy,
-			String state, Integer approuverNum, int todayIsApprouver, int isCollection) {
+			String updateByC, String state, Integer approuverNum, int todayIsApprouver, int isCollection) {
 		this.id = id;
 		this.resource = resource;
 		this.title = title;
@@ -43,6 +44,7 @@ public class Sections implements Serializable {
 		this.createBy = createBy;
 		this.updateAt = updateAt;
 		this.updateBy = updateBy;
+		this.updateByC = updateByC;
 		this.state = state;
 		this.approuverNum = approuverNum;
 		this.todayIsApprouver = todayIsApprouver;
@@ -145,6 +147,14 @@ public class Sections implements Serializable {
 		this.updateBy = updateBy;
 	}
 
+	public String getUpdateByC() {
+		return updateByC;
+	}
+
+	public void setUpdateByC(String updateByC) {
+		this.updateByC = updateByC;
+	}
+
 	public String getState() {
 		return state;
 	}
@@ -176,8 +186,8 @@ public class Sections implements Serializable {
 	public void setIsCollection(int isCollection) {
 		this.isCollection = isCollection;
 	}
-    
 
+	
     
 	
 

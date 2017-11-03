@@ -47,7 +47,7 @@ public class FileController extends BaseController {
     public void fileUpload(@RequestParam("FileData") MultipartFile [] FileData ,
 				    		@RequestParam(name="modname",required=true) String modname,
 				    		@RequestParam(name="userid",required=true) String userid,
-				    		@RequestParam(name="introductions",required=false) String introductions,
+				    		@RequestParam(name="type",required=false) String type,
 				    		HttpServletResponse res,HttpServletRequest request) {
     	 res.setContentType("application/json;charset=UTF-8");
     	 res.setCharacterEncoding("utf-8");
@@ -57,7 +57,7 @@ public class FileController extends BaseController {
     		modname="file";
     	PrintWriter print ;
        try {
-    	   boolean flag = fileservice.uploadFile(FileData,modname,userid,introductions,request);
+    	   boolean flag = fileservice.uploadFile(FileData,modname,userid,type,request);
     	   print  = res.getWriter();
     	   print.write(flag+"");
     	   print.flush();
@@ -89,7 +89,7 @@ public class FileController extends BaseController {
     	String userid = technicalReport.getCreatedBy();
     	User user = userService.getUser(userid);
     	if(user!=null){
-    		integralService.managerIntegral(7, userid, "8", id.toString());
+    		integralService.managerIntegral(7, userid, id.toString());
     	}
 		return new JsonResult(true, technicalReport);
     }

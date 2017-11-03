@@ -5,47 +5,49 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.innovative.dao.IntegralDao">
 	<resultMap id="integralMap" type="Integral">
-        <id property="userid" column="userid" />
+        <id property="id" column="id" />
+        <result property="userid" column="userid"/>
         <result property="integral" column="integral"/>
-        <result property="label" column="label" typeHandler="com.innovative.mybatisHandler.ArrayTypeHandler"/>
-        <result property="login_count" column="login_count"/>
-        <result property="times" column="times"/>
-        <result property="count" column="count"/>
+        <result property="type" column="type"/>
+        <result property="create_date" column="create_date"/>
+        <result property="content" column="content"/>
+        <result property="resource_id" column="resource_id"/>
     </resultMap>
+
 	<!-- 添加一个用户积分信息 -->
 	<insert id="addIntegral" parameterType="Integral">
-		INSERT INTO xacx_integral(userid,integral,login_count) VALUES(#{userid},110,1)
+		INSERT INTO xacx_integral(userid,integral,type,create_date,content
+		<if test="resource_id != null">
+			,resource_id
+		</if>
+		)
+		VALUES(#{userid},#{integral},#{type},now(),#{content}
+		<if test="resource_id != null">
+			,#{resource_id}
+		</if>
+		)
 	</insert>  
-	<!-- 更新用户积分信息 -->
-	<update id="updateIntegral" parameterType="Integral">
-		UPDATE xacx_integral 
-		<set>
-			<if test="integral != null">
-				integral=integral+#{integral},
-			</if>
-			<choose>
-	            <when test="label != null">
-	                <foreach item="label" collection="label" separator="," open="'{" close="}'," index="">
-	                    ${label}
-	                </foreach>
-	            </when>
-	            <otherwise>'{},'</otherwise>
-	        </choose>
-        	<if test="login_count != null">
-        		login_count=#{login_count}
-        	</if>
-        	<if test="times != null">
-        		times=#{times}
-        	</if>
-        	<if test="count != null">
-        		count=#{count}
-        	</if>
-		</set>
-		 WHERE userid=#{userid}
-	</update> 
 	
 	<!-- 根据用户id查询积分信息 -->
-	<select id="getIntegral" parameterType="string" resultMap="integralMap">
-		SELECT userid,integral,label,login_count,times,count FROM xacx_integral WHERE userid=#{userid}
+	<select id="getIntegralByUserid" parameterType="string" resultType="int">
+		SELECT SUM(integral) FROM xacx_integral WHERE userid=#{userid}
 	</select> 
+	
+	<!-- 判断用户是否是首次登入 -->
+	<select id="isFirstLogin" parameterType="string" resultType="int">
+		SELECT COUNT(userid) FROM xacx_integral WHERE userid=#{userid} AND type=1
+	</select>
+	
+	<!-- 判断当天的登入次数 -->
+	<select id="todayLoginCount" parameterType="string" resultType="int">
+		SELECT COUNT(userid) FROM xacx_integral WHERE create_date&lt;CURRENT_DATE+1 AND create_date>CURRENT_DATE
+		AND userid=#{userid} AND type=1
+	</select>
+	
+	<!-- 查询信息推特的收藏、转发、评论、点赞的总数 -->
+	<select id="getCountBySzpd" parameterType="map" resultType="int">
+		SELECT COUNT(resource_id) FROM xacx_integral WHERE type=#{type} AND resource_id=#{resource_id}
+	</select>
+	
+	
 </mapper>

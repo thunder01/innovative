@@ -1,5 +1,6 @@
 package com.innovative.dao;
 
+import com.innovative.bean.Informationpush;
 import com.innovative.bean.Informationpushcomenter;
 
 import org.apache.ibatis.annotations.Param;
@@ -33,7 +34,7 @@ public interface InformationpushcomenterDao {
 	 */
 	boolean addInformationpushcomenter(Informationpushcomenter informationpushcomenter);
 	/**
-	 * 根据评论id获取评论
+	 * 根据评论id获取评论（）
 	 * @param id
 	 * @return
 	 */
@@ -58,6 +59,13 @@ public interface InformationpushcomenterDao {
 	 * @return
 	 */
 	Integer getTotalCountByUserId(@Param("comentBy") String comentBy);
+	/**
+	 * 根据评论id获取评论与推特信息
+	 * @param id 评论id
+	 * @param userid 
+	 * @return
+	 */
+	Informationpush getInformationpushcomenterForMessage(@Param("id")String id,@Param("userid") String userid);
 
 
 
