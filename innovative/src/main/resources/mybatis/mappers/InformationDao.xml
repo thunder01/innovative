@@ -44,7 +44,7 @@
 			</when>
 			<otherwise>'{}',</otherwise>
 		</choose>
-         #{cotent}, now(), #{createBy}, now(), #{updateBy},#{state} );
+         #{cotent}, now(), #{createBy}, now(), #{updateBy},'0' );
 
     </insert>
     

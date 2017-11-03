@@ -2,6 +2,7 @@ package com.innovative.bean;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.Arrays;
 
 /**
  * 科技资讯
@@ -183,10 +184,12 @@ public class Information implements Serializable {
 		this.isCollection = isCollection;
 	}
 
-	
-    
-
-
-	
-
+	@Override
+	public String toString() {
+		return "Information [id=" + id + ", resource=" + resource + ", title=" + title + ", time=" + time + ", resume="
+				+ resume + ", sectors=" + Arrays.toString(sectors) + ", tags=" + Arrays.toString(tags) + ", cotent="
+				+ cotent + ", createAt=" + createAt + ", createBy=" + createBy + ", updateAt=" + updateAt
+				+ ", updateBy=" + updateBy + ", state=" + state + ", approuverNum=" + approuverNum
+				+ ", todayIsApprouver=" + todayIsApprouver + ", isCollection=" + isCollection + "]";
+	}
 }
