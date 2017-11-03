@@ -65,6 +65,7 @@ public class InformationController {
     @RequestMapping(value = "/updateInformation", method = RequestMethod.POST)
     @ResponseBody 
     public JsonResult updateInformation(@RequestBody Information information) {
+    	LOGGER.info("修改科技资讯："+information);
     	if(information.getId() ==  null ||  information.getId().length() <= 0)
     		 return new JsonResult(false, "没有要修改的科技资讯!");
     	boolean flag = informationService.updateInformation(information);
@@ -103,7 +104,7 @@ public class InformationController {
     @RequestMapping(value = "/deleteInformation", method = RequestMethod.POST)
     @ResponseBody 
     public JsonResult deleteInformation(@RequestBody Information information) {
-
+       LOGGER.info("删除"+information);
        boolean flag = informationService.deleteInformation(information.getId());
         if (flag) {
             return new JsonResult(true, "已删除");

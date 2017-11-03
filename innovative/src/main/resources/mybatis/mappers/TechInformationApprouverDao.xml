@@ -30,5 +30,10 @@
 		SELECT count(*) FROM "xacx_tech_information_approuver" where "approuverBy" =  #{approuverBy} and "informationId" =  #{informationId} and to_date(cast("approuverAt" as TEXT),'yyyy-mm-dd') = current_date
 	</select>
 
-
+	<!-- 科技资讯总的点赞数 -->
+	<select id="getTotalApprouver" parameterType="string" resultType="Integer">
+		SELECT COUNT("id") FROM "xacx_tech_information_approuver" WHERE "informationId"=#{id} GROUP BY "informationId"
+	</select>
+	
+	
 </mapper>

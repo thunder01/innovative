@@ -40,7 +40,6 @@ public class HttpAspect {
     	ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = attributes.getRequest();
         String userid = request.getParameter("userId");
-        System.out.println(userid);
         //URL
         LOGGER.warn("userid={}", userid);
 //        LOGGER.info

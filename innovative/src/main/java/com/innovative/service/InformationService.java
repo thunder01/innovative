@@ -52,12 +52,15 @@ public class InformationService {
 
     @Autowired
     private InformationDao informationDao;
+    //Elasticsearch客户端
     @Autowired
     private TransportClient client;
     @Autowired
     private MessageService messageService;
+    //科技资讯点赞
     @Autowired
     private TechInformationApprouverDao techInformationApprouverDao;
+    //科技资讯收藏
     @Autowired
     private TechInformationCollectionDao techInformationCollectiondao;
 /**
@@ -127,8 +130,7 @@ public class InformationService {
 						.field("createBy",info.getCreateBy())
 						.field("updateAt",sdf.format(info.getUpdateAt()))
 						.field("updateBy",info.getUpdateBy())
-						//tips 这里要修改为info.getState()
-						.field("state","0")
+						.field("state",info.getState())
 						.endObject()).get();
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -156,8 +158,17 @@ public class InformationService {
 	 * @return
 	 */
 	public Information getInformationById(String id,String userid) {
-		// TODO Auto-generated method stub
-		return informationDao.getInformationById(id,userid);
+		// 先查询科技资讯详情
+		Information information=informationDao.getInformationById(id,userid);
+		if (information!=null) {
+			//再查其点赞数
+			Integer approuverNum=techInformationApprouverDao.getTotalApprouver(id);
+			if (approuverNum==null) {
+				approuverNum=0;
+			}
+			information.setApprouverNum(String.valueOf(approuverNum));
+		}
+		return information;
 	}
 	/**
 	 * 查询科技资讯列表
@@ -166,7 +177,8 @@ public class InformationService {
 	 * @return
 	 */
 	public  Map<String, Object> getInformationLists(Integer page, String state) {
-		 PageInfo pageInfo = new PageInfo();
+		   //PageInfo中的显示条数设的是10
+		   PageInfo pageInfo = new PageInfo();
 	       pageInfo.setCurrentPageNum(page);
 	       List<Information> informations = informationDao.getInformationLists( pageInfo.getStartIndex(), pageInfo.getPageSize(),state);
 	       int totalCount = informationDao.getTotalCountNum(state);

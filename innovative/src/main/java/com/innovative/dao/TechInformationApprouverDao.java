@@ -35,5 +35,10 @@ public interface TechInformationApprouverDao {
 	 */
 	Integer isTodayApprouverTechInfornaion(@Param("approuverBy")String approuverBy, @Param("informationId")String informationId);
 
-
+	/**
+	 * 查询指定的科技资讯总点赞数
+	 * @param id 科技资讯的id
+	 * @return 总点赞数
+	 */
+	Integer getTotalApprouver(@Param("id")String id);
 }
