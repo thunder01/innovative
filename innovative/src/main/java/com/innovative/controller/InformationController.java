@@ -65,6 +65,7 @@ public class InformationController {
     @RequestMapping(value = "/updateInformation", method = RequestMethod.POST)
     @ResponseBody 
     public JsonResult updateInformation(@RequestBody Information information) {
+    	LOGGER.info("修改科技资讯："+information);
     	if(information.getId() ==  null ||  information.getId().length() <= 0)
     		 return new JsonResult(false, "没有要修改的科技资讯!");
     	boolean flag = informationService.updateInformation(information);
@@ -103,7 +104,7 @@ public class InformationController {
     @RequestMapping(value = "/deleteInformation", method = RequestMethod.POST)
     @ResponseBody 
     public JsonResult deleteInformation(@RequestBody Information information) {
-
+       LOGGER.info("删除"+information);
        boolean flag = informationService.deleteInformation(information.getId());
         if (flag) {
             return new JsonResult(true, "已删除");
@@ -158,5 +159,16 @@ public class InformationController {
     	return flag ? new JsonResult(true,"已收藏") : new JsonResult(false, "此科技资讯您之前收藏过！") ;
     }
     
-    
+    /**
+     * 科技资讯、科技专栏的综合查询，每个查10条数据
+     * @param state
+     * @return
+     */
+    @RequestMapping(value = "/getInformationAndSectionList", method = RequestMethod.GET)
+    public JsonResult getInformationAndSectionList(@RequestParam(name="state",required=false) String state){
+    	//以为只查10条，所以设offset为0
+    	int offset=0;
+    	Integer page = offset/(new PageInfo().getPageSize()) +1;
+        return informationService.getInformationAndSectionLists(page, state);
+    }
 }

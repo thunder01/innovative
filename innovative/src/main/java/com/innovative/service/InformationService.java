@@ -3,9 +3,11 @@ package com.innovative.service;
 
 import com.google.common.collect.Lists;
 import com.innovative.bean.Information;
+import com.innovative.bean.Sections;
 import com.innovative.bean.TechInformationApprouver;
 import com.innovative.bean.TechInformationCollection;
 import com.innovative.dao.InformationDao;
+import com.innovative.dao.SectionsDao;
 import com.innovative.dao.TechInformationApprouverDao;
 import com.innovative.dao.TechInformationCollectionDao;
 import com.innovative.utils.Config;
@@ -53,11 +55,16 @@ public class InformationService {
     @Autowired
     private InformationDao informationDao;
     @Autowired
+    private SectionsDao sectionsDao;
+    //Elasticsearch客户端
+    @Autowired
     private TransportClient client;
     @Autowired
     private MessageService messageService;
+    //科技资讯点赞
     @Autowired
     private TechInformationApprouverDao techInformationApprouverDao;
+    //科技资讯收藏
     @Autowired
     private TechInformationCollectionDao techInformationCollectiondao;
 /**
@@ -127,8 +134,7 @@ public class InformationService {
 						.field("createBy",info.getCreateBy())
 						.field("updateAt",sdf.format(info.getUpdateAt()))
 						.field("updateBy",info.getUpdateBy())
-						//tips 这里要修改为info.getState()
-						.field("state","0")
+						.field("state",info.getState())
 						.endObject()).get();
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -156,8 +162,17 @@ public class InformationService {
 	 * @return
 	 */
 	public Information getInformationById(String id,String userid) {
-		// TODO Auto-generated method stub
-		return informationDao.getInformationById(id,userid);
+		// 先查询科技资讯详情
+		Information information=informationDao.getInformationById(id,userid);
+		if (information!=null) {
+			//再查其点赞数
+			Integer approuverNum=techInformationApprouverDao.getTotalApprouver(id);
+			if (approuverNum==null) {
+				approuverNum=0;
+			}
+			information.setApprouverNum(String.valueOf(approuverNum));
+		}
+		return information;
 	}
 	/**
 	 * 查询科技资讯列表
@@ -166,7 +181,8 @@ public class InformationService {
 	 * @return
 	 */
 	public  Map<String, Object> getInformationLists(Integer page, String state) {
-		 PageInfo pageInfo = new PageInfo();
+		   //PageInfo中的显示条数设的是10
+		   PageInfo pageInfo = new PageInfo();
 	       pageInfo.setCurrentPageNum(page);
 	       List<Information> informations = informationDao.getInformationLists( pageInfo.getStartIndex(), pageInfo.getPageSize(),state);
 	       int totalCount = informationDao.getTotalCountNum(state);
@@ -376,5 +392,25 @@ public class InformationService {
 		return false;
 	}
 		
+	}
+	
+	/**
+	 * 科技资讯、科技专栏的综合查询，每个查10条数据
+	 * @param page
+	 * @param state
+	 * @return
+	 */
+	public JsonResult getInformationAndSectionLists(Integer page, String state){
+		//PageInfo中的显示条数设的是10
+		   PageInfo pageInfo = new PageInfo();
+	       pageInfo.setCurrentPageNum(page);
+	       //科技资讯列表
+	       List<Information> informations = informationDao.getInformationLists( pageInfo.getStartIndex(), pageInfo.getPageSize(),state);
+	       //科技专栏列表
+	       List<Sections> sections = sectionsDao.getSectionsLists(pageInfo.getStartIndex(), pageInfo.getPageSize(), state);
+	       Map<String, Object> map = new HashMap<>();
+	       map.put("information", informations);
+	       map.put("section", sections);
+	       return new JsonResult(true, map);
 	}
 }

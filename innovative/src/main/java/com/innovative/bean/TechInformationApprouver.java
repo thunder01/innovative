@@ -10,7 +10,7 @@ public class TechInformationApprouver implements Serializable {
 	 */
 	private static final long serialVersionUID = 855095553561895179L;
 	private String id;//主键
-	private String informationId; //推特信息id
+	private String informationId; //科技资讯id
 	private String approuverBy; //谁赞的
 	private Timestamp approuverAt; //赞的时间
 	public TechInformationApprouver(){
