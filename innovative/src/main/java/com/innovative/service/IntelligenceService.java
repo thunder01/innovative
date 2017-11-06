@@ -20,10 +20,11 @@ public class IntelligenceService {
     /**
      * 情报池列表页
      */
-    public Map<String,Object> getList(Integer pageNum){
+    public Map<String,Object> getList(Integer pageNum,String userName){
         PageInfo pageInfo = new PageInfo();
         pageInfo.setCurrentPageNum(pageNum);
-        List<Intelligence>Intelligence=dao.getList(pageInfo.getStartIndex(),pageInfo.getPageSize());
+        userName = "{" + userName + "}".trim();
+        List<Intelligence>Intelligence=dao.getList(pageInfo.getStartIndex(),pageInfo.getPageSize(),userName);
         int totalCount=dao.getTotalCounts();
         Map<String,Object> map=new HashMap<String,Object>();
         map.put("items", Intelligence);
