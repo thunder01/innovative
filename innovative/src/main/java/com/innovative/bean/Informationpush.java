@@ -244,6 +244,18 @@ public class Informationpush implements Serializable {
 		this.informationPushPartagerlist = informationPushPartagerlist;
 	}
 
+	@Override
+	public String toString() {
+		return "Informationpush [id=" + id + ", pid=" + pid + ", comentAt=" + comentAt + ", comentBy=" + comentBy
+				+ ", comentByC=" + comentByC + ", cotent=" + cotent + ", title=" + title + ", approuverNum="
+				+ approuverNum + ", todayIsAprouver=" + todayIsAprouver + ", transmettreNum=" + transmettreNum
+				+ ", todayIsTransmettre=" + todayIsTransmettre + ", colletionNum=" + colletionNum
+				+ ", todayIsColletion=" + todayIsColletion + ", commenterNum=" + commenterNum + ", path=" + path
+				+ ", type=" + type + ", depth=" + depth + ", filelist=" + filelist + ", commentlist=" + commentlist
+				+ ", collectionPushlist=" + collectionPushlist + ", approuverlist=" + approuverlist
+				+ ", informationPushPartagerlist=" + informationPushPartagerlist + "]";
+	}
+
 
 
 

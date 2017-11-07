@@ -18,6 +18,9 @@ public class Approuver implements Serializable {
 	private String approuverBy; //谁赞的
 	private String approuverByC; //谁赞的(姓名)
 	private Timestamp approuverAt; //赞的时间
+	
+	private Informationpush informationpush;
+	
 	public Approuver(){
 		
 	}
@@ -57,6 +60,12 @@ public class Approuver implements Serializable {
 	}
 	public void setApprouverAt(Timestamp approuverAt) {
 		this.approuverAt = approuverAt;
+	}
+	public Informationpush getInformationpush() {
+		return informationpush;
+	}
+	public void setInformationpush(Informationpush informationpush) {
+		this.informationpush = informationpush;
 	}
 	
 	
