@@ -14,7 +14,7 @@
      </resultMap>
      
      <!-- 插入一个创新资源详情页查看信息 -->
-     <insert id="addIntegralResource" parameterType="IntegralResource">
+     <insert id="addIntegralResource" useGeneratedKeys="true" keyProperty="id" parameterType="IntegralResource">
      	INSERT INTO xacx_integral_resource (type,resource_id,userid,create_date)VALUES(#{type},#{resource_id},#{userid},now())
      </insert>
      

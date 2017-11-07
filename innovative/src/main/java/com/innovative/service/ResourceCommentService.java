@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.innovative.bean.Association;
 import com.innovative.bean.Equipment;
@@ -44,15 +45,19 @@ public class ResourceCommentService {
 	private SolutionDao solutionDao;
 	@Resource
 	private EquipmentDao equipmentDao;
+	@Resource
+	private IntegralService integralService;
 	
 	/**
 	 * 添加一个评论
 	 * @param resourceComment
 	 * @return
 	 */
+	@Transactional
 	public Map<String, Object> addResourceComment(ResourceComment resourceComment){
 		Map<String, Object> map = new HashMap<>();
 		resourceCommentDao.addResourceComment(resourceComment);
+		integralService.managerIntegral(2, resourceComment.getComment_by(), resourceComment.getId()+"");
 		//类型type:1专家、2合作机构、3行业协会、4技术报告、5方案、6一起设备
 		if(resourceComment.getType()==1){
 			Expert expert = expertDao.getExpert(resourceComment.getResource_id());

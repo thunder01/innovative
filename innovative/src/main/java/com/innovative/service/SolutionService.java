@@ -21,7 +21,8 @@ public class SolutionService {
     private SolutionDao solutionDao;
     @Autowired
     FileDao fileDao;
-
+    @Autowired
+    IntegralService integralService;
 
     /**
      * 根据id获取方案
@@ -95,10 +96,11 @@ public class SolutionService {
     @Transactional
     public boolean insertSolution(Solution solution) {
 
-        solutionDao.insertSolution(solution);
-
+        int result = solutionDao.insertSolution(solution);
         //增加成功
-    		  
+        if(result>0){
+        	integralService.managerIntegral(11, solution.getCreatedBy(), solution.getId());
+        }
 		 return fileDao.updateFile(solution.getId());
     }
 

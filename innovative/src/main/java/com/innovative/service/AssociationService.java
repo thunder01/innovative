@@ -25,7 +25,8 @@ public class AssociationService {
     CodeItemUtil codeItemUtil;
     @Autowired
     FileDao fileDao;
-
+    @Autowired
+    IntegralService integralService;
     /**
      * 根据id获取行业协会详情
      * @param id 协会id
@@ -94,7 +95,10 @@ public class AssociationService {
     public boolean addAssociation(Association association) {
 
         //增加成功
-    	  associationDao.addAssociation(association);
+    	  int result = associationDao.addAssociation(association);
+    	  if(result>0){
+    		  integralService.managerIntegral(9, association.getCreatedBy(), association.getId());
+    	  }
     		  
 		 return fileDao.updateFile(association.getId());
     }
