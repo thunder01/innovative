@@ -64,14 +64,15 @@ public class InformationpushService {
      * 获取信息推特信息列表
      * @param sectors 行业领域（多个用逗号隔开）
      * @param pageNum 页数（默认为1）
+     * @param userid 
      * @return
      */
-    public Map<String, Object> getInformationpushList( Integer pageNum){
+    public Map<String, Object> getInformationpushList( Integer pageNum, String userid){
 
         PageInfo pageInfo = new PageInfo();
         pageInfo.setCurrentPageNum(pageNum);
 
-        List<Informationpush> informationpushs = informationpushDao.getInformationpushList(pageInfo.getStartIndex(), pageInfo.getPageSize());
+        List<Informationpush> informationpushs = informationpushDao.getInformationpushList(pageInfo.getStartIndex(), pageInfo.getPageSize(),userid);
         for(Informationpush e: informationpushs){
         	if(e==null || "".equals(e.getId()))
         		continue;
@@ -317,7 +318,7 @@ public Map<String,Object> getAllinformation(String userid) {
 	//获取前一页的推特信息
 	PageInfo pageInfo = new PageInfo();
     pageInfo.setCurrentPageNum(1);
-	 List<Informationpush> informationpushs = informationpushDao.getInformationpushList(pageInfo.getStartIndex(), pageInfo.getPageSize());
+	 List<Informationpush> informationpushs = informationpushDao.getInformationpushList(pageInfo.getStartIndex(), pageInfo.getPageSize(),userid);
      for(Informationpush e: informationpushs){
      	if(e==null || "".equals(e.getId()))
      		continue;

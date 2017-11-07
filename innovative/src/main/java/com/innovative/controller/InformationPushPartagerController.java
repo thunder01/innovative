@@ -8,6 +8,7 @@ import com.innovative.service.InformationpushcomenterService;
 import com.innovative.utils.BaseController;
 import com.innovative.utils.CookiesUtil;
 import com.innovative.utils.JsonResult;
+import com.innovative.utils.Misc;
 import com.innovative.utils.PageInfo;
 
 import java.util.List;
@@ -16,6 +17,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,6 +32,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author cj
  *
  */
+@CrossOrigin
 @RestController
 @RequestMapping("/informationpushpartager")
 public class InformationPushPartagerController extends BaseController {
@@ -70,7 +73,7 @@ public class InformationPushPartagerController extends BaseController {
     @RequestMapping(value = "/addInformationPushPartager", method = RequestMethod.POST,produces="application/json;charset=UTF-8")
     @ResponseBody
     public JsonResult addInformationPushPartager(@RequestBody InformationPushPartager informationPushPartager,HttpServletRequest req) {
-
+    	informationPushPartager.setId(Misc.uuid());
     	informationPushPartager.setPartagerBy(CookiesUtil.getCookieValue(req,"user_name"));
         if (!informationpushPartagerService.addInformationPushPartager(informationPushPartager)) {
             return new JsonResult(false, "新增失败，请重试！");
