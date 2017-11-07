@@ -53,6 +53,7 @@ public boolean addInformationPushPartager(InformationPushPartager informationPus
 		Informationpush informationpush = informationpushDao.getInformationpushById(informationPushPartager.getPushId());
 		//增加消息推送（这条推特信息的主人推送消息）
 	    messageService.insertMessage(informationpush.getComentBy(), informationPushPartager.getId(), Config.TT_ZF, 1);
+	    messageService.updateMsgCount(informationpush.getComentBy());
 		informationPushPartagerDao.addInformationPushPartager(informationPushPartager);
 	}
 	else{
