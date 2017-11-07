@@ -78,8 +78,8 @@
 		SELECT count(*) FROM "xacx_information_push_partager" where "partagerBy" = #{partagerBy}
 	</select> 
 
- <!--根据收藏id获取收藏的推特信息详情-->
-	<select id="getInformationpushPartagersByIdForMessage" resultMap="informationpushMapsforpartner">
+ 	<!--根据分享id获取分享的推特信息详情-->
+	<select id="getInformationpushPartagersByIdForMessage" resultType="map" resultMap="informationpushMapsforpartner">
 		select pu."comentBy",pu.title,pu.cotent,co."id" cid,co."partagerBy" ,us.username partagerByC,co."partagerAt"  from xacx_information_push pu left join 
 		 xacx_information_push_partager co on pu."id" = co."pushId"
 		left join xacx_user  us on us.pernr =co."partagerBy"

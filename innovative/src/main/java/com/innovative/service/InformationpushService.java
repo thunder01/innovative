@@ -216,6 +216,7 @@ public class InformationpushService {
 			Informationpush informationpush = informationpushDao.getInformationpushById(approuver.getComentId());
 			//增加消息推送（这条推特信息的主人推送消息）
 			 messageService.insertMessage(informationpush.getComentBy(), approuver.getId(), Config.TT_DZ, 1);
+			 messageService.updateMsgCount(informationpush.getComentBy());
 			//增加一条点赞信息(这个没什么用,但是我不记录怎么判断他今天有没有点赞呢)
 			return approuverDao.insertApprouver(approuver);
 		}
@@ -256,6 +257,7 @@ public class InformationpushService {
 			Informationpush informationpush = informationpushDao.getInformationpushById(collection.getComentId());
 			//增加消息推送（这条推特信息的主人推送消息）
 		    messageService.insertMessage(informationpush.getComentBy(), collection.getId(), Config.TT_SC, 1);
+		    messageService.updateMsgCount(informationpush.getComentBy());
 			collectionDao.insertCollection(collection);
 			return true;
 		}else{

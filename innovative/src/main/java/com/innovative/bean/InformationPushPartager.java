@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.List;
 /**
- * 信息推特点赞
+ * 信息推特分享
  * @author cj
  *
  */

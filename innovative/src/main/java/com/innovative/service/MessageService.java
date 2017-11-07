@@ -10,6 +10,7 @@ import com.innovative.bean.Order;
 import com.innovative.dao.ApprouverDao;
 import com.innovative.dao.CollectionDao;
 import com.innovative.dao.DemandDao;
+import com.innovative.dao.InformationPushPartagerDao;
 import com.innovative.dao.InformationpushcomenterDao;
 import com.innovative.dao.IntelligenceDao;
 import com.innovative.dao.MessageDao;
@@ -43,6 +44,8 @@ public class MessageService {
 	private InformationpushcomenterDao informationpushcomenterDao;
 	@Autowired
 	private CollectionDao collectionDao;
+	@Autowired
+	private InformationPushPartagerDao informationPushPartagerDao;
 	/**
 	 * 添加容
 	 */
@@ -85,7 +88,7 @@ public class MessageService {
 	 * 获取信息列表(0需求下单、1拆解报告、2项目评价、3情报、4推特信息点赞、5 推特信息转发、6 推特信息收藏、7推特信息评论、8科技专栏审核、9科技资讯审核、10科技专栏修改)
 	 * @param message 消息Bean  需要userid和notice值
 	 * @param pageNum 页数
-	 * @return
+	 * @return		
 	 */
 	@Transactional
 	public Map<String,Object> getMessage(Message message,Integer pageNum){
@@ -135,7 +138,8 @@ public class MessageService {
 						m.setObject(informationpush);
 					}
 					if("5".equals(m.getType())){//5 推特信息转发
-						
+						Informationpush informationpush = informationPushPartagerDao.getInformationpushPartagersByIdForMessage(m.getProid(), m.getUserid());
+						m.setObject(informationpush);
 					}
 					if("6".equals(m.getType())){//6 推特信息收藏
 						Informationpush informationpush = collectionDao.getCollectInformationForMessage(m.getProid(), message.getUserid());
