@@ -24,8 +24,8 @@ public class InformationpushcomenterService {
     MessageService messageService;
     @Autowired
     InformationpushDao informationpushDao;
-  
-  
+    @Autowired
+    IntegralService integralService;
     
 
 
@@ -62,6 +62,7 @@ public boolean addInformationpushcomenter(Informationpushcomenter informationpus
     	//增加消息推送（这条推特信息的主人推送消息）
         messageService.insertMessage(informationpush.getComentBy(), informationpushcomenter.getId(), Config.TT_PL, 1);
         messageService.updateMsgCount(informationpush.getComentBy());
+        integralService.managerIntegral(4, informationpush.getComentBy(), informationpush.getId());
     }
 	
 	return informationpushcomenterDao.addInformationpushcomenter(informationpushcomenter);

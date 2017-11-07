@@ -132,9 +132,11 @@ public class SectionsService {
 				if(sections.getState()!=null &&(!sections.getState().endsWith(sectionOld.getState()))){
 					//增加消息推送（科技专栏审核）
 					 messageService.insertMessage(sectionOld.getCreateBy(), sectionOld.getId(), Config.KJ_ZL_SH, 1);
+					 messageService.updateMsgCount(sectionOld.getCreateBy());
 				}else{
 					//增加消息推送(科技专栏修改)
 					 messageService.insertMessage(sectionOld.getCreateBy(), sectionOld.getId(), Config.KJ_ZL_XG, 1);
+					 messageService.updateMsgCount(sectionOld.getCreateBy());
 				}
 					
 				

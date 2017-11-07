@@ -7,8 +7,16 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.innovative.bean.Integral;
 import com.innovative.bean.IntegralResource;
+import com.innovative.bean.ResourceComment;
+import com.innovative.dao.AssociationDao;
+import com.innovative.dao.EquipmentDao;
+import com.innovative.dao.ExpertDao;
 import com.innovative.dao.IntegralDao;
 import com.innovative.dao.IntegralResourceDao;
+import com.innovative.dao.OrganizationDao;
+import com.innovative.dao.ResourceCommentDao;
+import com.innovative.dao.SolutionDao;
+import com.innovative.dao.TechnicalReportDao;
 
 @Service
 public class IntegralService {
@@ -17,13 +25,27 @@ public class IntegralService {
 	private IntegralDao integralDao;
 	@Resource
 	private IntegralResourceDao integralResourceDao;
+	@Resource
+	private ResourceCommentDao resourceCommentDao;
+	@Resource
+	private ExpertDao expertDao;
+	@Resource
+	private OrganizationDao organizationDao;
+	@Resource
+	private AssociationDao associationDao;
+	@Resource
+	private TechnicalReportDao technicalReportDao;
+	@Resource
+	private SolutionDao solutionDao;
+	@Resource
+	private EquipmentDao equipmentDao;
 	/**
 	 * 积分功能 
-	 * @param type 积分类型(1登录、2是资源库详情页若留言、3上传科技信息推特、4科技信息推特中信息的收藏+转发+评论+点赞、5创新资源详情页进入次数
-	 * 、6技术报告的方案下载、7创新资源上传专家、8创新资源上传合作机构、9创新资源上传行业协会、10创新资源上传技术报告、11创新资源上传方案、12创新资源上传仪器设备、
-	 * 13资源库详情页若留言者提供有用信息，寻源工程师可任意打赏50积分)
-	 * @param userid 用户id
-	 * @param resource_id 资源的id(登入的时候把登入的userid发来)
+	 * @param type 积分类型(1登录OK、2是资源库详情页若留言OK、3上传科技信息推特OK、4科技信息推特中信息的收藏+转发OK+评论OK+点赞、5创新资源详情页进入次数、
+	 * 6技术报告的方案下载、7创新资源上传专家OK、8创新资源上传合作机构OK、9创新资源上传行业协会OK、10创新资源上传技术报告OK、11创新资源上传方案OK、
+	 * 12创新资源上传仪器设备OK、13资源库详情页若留言者提供有用信息，寻源工程师可任意打赏50积分OK)
+	 * @param userid 用户id(登入的时候把登入的userid发来)
+	 * @param resource_id 资源的id
 	 * @return
 	 */
 	@Transactional
@@ -116,10 +138,17 @@ public class IntegralService {
 			result = integralDao.addIntegral(integral);
 			break;
 		case 13://资源库详情页若留言者提供有用信息，寻源工程师可任意打赏50积分，（点击一次弹框确认后可以给50分，固定按钮。只能点击一次）
+			ResourceComment resourceComment = resourceCommentDao.getResourceComment(Integer.parseInt(resource_id));
+			System.out.println(">>>>>>>>>>>>>>>>>"+resourceComment+"");
+			integral.setUserid(resourceComment.getComment_by());
 			integral.setContent("您的评论被打赏了50分");
 			integral.setIntegral(50);
+			result = integralDao.addIntegral(integral);
 			//**************************************作者同时也应该减少50分
 			/*通过resourc找到上传人，减去50分*/
+			integral.setContent("您打赏了他人50分");
+			integral.setIntegral(-50);
+			integral.setUserid(resourceComment.getEnjoy_by());
 			result = integralDao.addIntegral(integral);
 			break;
 		default:

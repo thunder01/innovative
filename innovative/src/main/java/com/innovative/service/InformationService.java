@@ -145,9 +145,11 @@ public class InformationService {
 				if(information.getState()!=null &&(!information.getState().endsWith(informationOld.getState()))){
 					//增加消息推送（科技资讯审核）
 					 messageService.insertMessage(informationOld.getCreateBy(), informationOld.getId(), Config.KJ_ZX_SH, 1);
+					 messageService.updateMsgCount(informationOld.getCreateBy());
 				}else{
 					//增加消息推送(科技资讯修改)
 					 messageService.insertMessage(informationOld.getCreateBy(), informationOld.getId(), Config.KJ_ZX_XG, 1);
+					 messageService.updateMsgCount(informationOld.getCreateBy());
 				}
 					
 				

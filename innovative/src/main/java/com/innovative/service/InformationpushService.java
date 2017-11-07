@@ -37,7 +37,8 @@ public class InformationpushService {
     FileDao fileDao;
     @Autowired
     MessageService messageService;
-  
+    @Autowired
+    IntegralService integralService;
     
 
     /**
@@ -135,8 +136,8 @@ public class InformationpushService {
     	int num = informationpushDao.addInformationpush(informationpush);
     	//看这条是评论还是发布信息
     	fileDao.updateFile(informationpush.getId());
-    	
-		 return num>0 ? true  : false;
+    	integralService.managerIntegral(3, informationpush.getComentBy(), informationpush.getId());
+		return num>0 ? true  : false;
 	}
 
 

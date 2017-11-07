@@ -30,7 +30,8 @@ public class InformationPushPartagerService {
     MessageService messageService;
     @Autowired
     InformationpushDao informationpushDao;
-    
+    @Autowired
+    IntegralService integralService;
 
 
 
@@ -55,6 +56,7 @@ public boolean addInformationPushPartager(InformationPushPartager informationPus
 	    messageService.insertMessage(informationpush.getComentBy(), informationPushPartager.getId(), Config.TT_ZF, 1);
 	    messageService.updateMsgCount(informationpush.getComentBy());
 		informationPushPartagerDao.addInformationPushPartager(informationPushPartager);
+		integralService.managerIntegral(4, informationpush.getComentBy(), informationpush.getId());
 	}
 	else{
 		return false;
