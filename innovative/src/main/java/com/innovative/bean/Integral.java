@@ -1,10 +1,11 @@
 package com.innovative.bean;
 
 import java.io.Serializable;
-import java.util.Arrays;
+import java.sql.Timestamp;
 
 /**
  * 积分模块
+ * 
  * @author huang
  *
  */
@@ -14,26 +15,34 @@ public class Integral implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private String userid;
-	private Integer integral;
-	private String[] label;
-	private Integer login_count;
-	private Integer times;
-	private Integer type;
-	private Integer count;
-	
+	private Integer id;
+	private String userid;// 用户id
+	private Integer integral;// 积分
+	private Integer type;//积分类型
+	private Timestamp create_date;//创建时间
+	private String content;//积分内容
+	private String resource_id;//触发积分的动作id
+
 	public Integral() {}
 
-	public Integral(String userid, Integer integral, String[] label, Integer login_count, Integer times, Integer type,
-			Integer count) {
+	public Integral(Integer id, String userid, Integer integral, Integer type, Timestamp create_date, String content,
+			String resource_id) {
 		super();
+		this.id = id;
 		this.userid = userid;
 		this.integral = integral;
-		this.label = label;
-		this.login_count = login_count;
-		this.times = times;
 		this.type = type;
-		this.count = count;
+		this.create_date = create_date;
+		this.content = content;
+		this.resource_id = resource_id;
+	}
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
 	}
 
 	public String getUserid() {
@@ -52,30 +61,6 @@ public class Integral implements Serializable {
 		this.integral = integral;
 	}
 
-	public String[] getlabel() {
-		return label;
-	}
-
-	public void setlabel(String[] label) {
-		this.label = label;
-	}
-
-	public Integer getLogin_count() {
-		return login_count;
-	}
-
-	public void setLogin_count(Integer login_count) {
-		this.login_count = login_count;
-	}
-
-	public Integer getTimes() {
-		return times;
-	}
-
-	public void setTimes(Integer times) {
-		this.times = times;
-	}
-
 	public Integer getType() {
 		return type;
 	}
@@ -84,20 +69,35 @@ public class Integral implements Serializable {
 		this.type = type;
 	}
 
-	public Integer getCount() {
-		return count;
+	public Timestamp getCreate_date() {
+		return create_date;
 	}
 
-	public void setCount(Integer count) {
-		this.count = count;
+	public void setCreate_date(Timestamp create_date) {
+		this.create_date = create_date;
+	}
+
+	public String getContent() {
+		return content;
+	}
+
+	public void setContent(String content) {
+		this.content = content;
+	}
+
+	public String getResource_id() {
+		return resource_id;
+	}
+
+	public void setResource_id(String resource_id) {
+		this.resource_id = resource_id;
 	}
 
 	@Override
 	public String toString() {
-		return "Integral [userid=" + userid + ", integral=" + integral + ", label=" + Arrays.toString(label)
-				+ ", login_count=" + login_count + ", times=" + times + ", type=" + type + ", count=" + count + "]";
+		return "Integral [id=" + id + ", userid=" + userid + ", integral=" + integral + ", type=" + type
+				+ ", create_date=" + create_date + ", content=" + content + ", resource_id=" + resource_id + "]";
 	}
 
-	
 	
 }

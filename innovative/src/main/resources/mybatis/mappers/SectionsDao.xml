@@ -145,7 +145,7 @@
 	
 	<!-- 审批 ，通过则把state置为1 -->
 	<update id="approvalSections" parameterType="String">
-		update "xacx_tech_sections" set "state"="1" where "id"=#{id}
+		update "xacx_tech_sections" set "state"='1' where "id"=#{id}
 	</update>
 	
 	<!-- 修改科技专栏点击次数 -->

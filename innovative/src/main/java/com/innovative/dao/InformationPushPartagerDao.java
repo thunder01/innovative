@@ -88,8 +88,8 @@ public interface InformationPushPartagerDao {
 	 */
 	List<InformationPushPartager> getInformationpushPartagersByPushid(String pushId);
 	/**
-	 * 根据收藏id获得收藏的推特id
-	 * @param id 收藏的推特信息的id
+	 * 根据分享id获得分享的推特id
+	 * @param id 分享的推特信息的id
 	 * @param userid  推特信息的发布者
 	 * @return
 	 */

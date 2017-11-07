@@ -2,10 +2,14 @@ package com.innovative.controller;
 
 import com.innovative.bean.Expert;
 import com.innovative.service.ExpertService;
+import com.innovative.service.IntegralService;
+import com.innovative.service.ResourceCommentService;
 import com.innovative.utils.BaseController;
 import com.innovative.utils.CookiesUtil;
 import com.innovative.utils.JsonResult;
 import com.innovative.utils.PageInfo;
+
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -24,11 +28,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/expert")
 public class ExpertController extends BaseController {
 
-
-
-
     @Autowired
     ExpertService expertService;
+    @Autowired
+    ResourceCommentService resourceCommentService;
+    @Autowired
+    IntegralService integralService;
   
     /**
      * 根据id获取专家详情
@@ -125,9 +130,18 @@ public class ExpertController extends BaseController {
         return newexpert != null ? new JsonResult(true, newexpert):new JsonResult(false, "获取新对象失败");
     }
 
+    //****************************增加评论********************************************
 
-
-
+    @RequestMapping(value = "/get/{id}", method = RequestMethod.GET)
+    public JsonResult getExpertById(@PathVariable(name = "id") String id) {
+        Expert expert = expertService.getExpert(id);
+        if(expert!=null){
+        	Map<String, Object> map = resourceCommentService.getResourceComment(expert.getId(), 1);
+            map.put("expert", expert);
+            return new JsonResult(true, map);
+        }
+        return new JsonResult(false, "没有数据");
+    }
 
 
 

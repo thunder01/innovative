@@ -23,6 +23,8 @@ public class ExpertService {
     CodeItemUtil codeItemUtil;
     @Autowired
     FileDao fileDao;
+    @Autowired
+    IntegralService integralService;
   
     
 
@@ -123,6 +125,9 @@ public class ExpertService {
     @Transactional
 	public boolean addForExpert(Expert expert) {
     	int num = expertDao.addForExpert(expert);
+    	if(num>0){
+    		integralService.managerIntegral(7, expert.getCreatedBy(), expert.getId());
+    	}
     	fileDao.updateFile(expert.getId());
 		 return num>0 ? true  : false;
 	}

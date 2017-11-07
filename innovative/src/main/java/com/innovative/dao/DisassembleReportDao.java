@@ -1,5 +1,7 @@
 package com.innovative.dao;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.innovative.bean.DisassembleReport;
 
 /**
@@ -57,4 +59,11 @@ public interface DisassembleReportDao {
 	 * @return
 	 */
 	public Integer deleteDisassembleReportByIdReal(Integer id);
+	/**
+	 * 根据id删除拆解报告(更改状态)
+	 * @param id
+	 * @param delete_by
+	 * @return
+	 */
+	public Integer deleteDisassembleReport(@Param("id")Integer id,@Param("delete_by")String delete_by);
 }

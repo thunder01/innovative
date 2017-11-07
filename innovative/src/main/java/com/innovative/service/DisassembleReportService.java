@@ -39,7 +39,8 @@ public class DisassembleReportService {
 	private DemandDao demandDao;
 	@Autowired 
 	private FileDao fileDao;
-	
+	@Autowired
+	private MessageService messageService;
 	/**
 	 * 拆解报告上传之后，将上传记录添加到数据库，并向消息表添加一条记录
 	 * @param repor 拆解报告信息
@@ -72,7 +73,7 @@ public class DisassembleReportService {
 			
 			/*发送消息*/
 			messageDao.addMessage(message);
-			
+			map.put("proid", projectId);
 			map.put("result",result);
 			map.put("orderid", orderid);
 		}
@@ -176,22 +177,25 @@ public class DisassembleReportService {
 	 * @return
 	 */
 	@Transactional
-	public Map<String, Object> confirmDisassembleStatus(DisassembleReport dReport){
+	public Map<String, Object> confirmDisassembleStatus(DisassembleReport dReport,String userid){
 		Map<String, Object> map=new HashMap<>();
 		System.out.println("参数:"+dReport);
 		Integer dReportID=dReport.getId();
 		/*根据id查出拆解报告信息*/
 		DisassembleReport report=reportDao.getDisassembleReportById(dReportID);
 		Integer order_id=report.getOrder_id();
+		Order order = orderDao.getOrderById(order_id);
 		/*未通过*/
 		if ("0".equals(dReport.getStatus2())) {
 			/*先判断拆解报告是否已经通过*/
-			Order order = orderDao.getOrderById(order_id);
 			if (order.getPass_status()==0) {//判断这个订单是否已经进行过拆解报告确认操作，若已经确认过则不能再次确认
 				/*1、将订单信息删除*/
-				orderDao.deleteByOrderId(order_id);
+//				orderDao.deleteByOrderId(order_id);
+				orderDao.deleteOrder(order_id);
 				/*2、删除拆解报告*/
-				reportDao.deleteDisassembleReportByIdReal(dReportID);
+//				reportDao.deleteDisassembleReportByIdReal(dReportID);
+				reportDao.deleteDisassembleReport(dReportID, userid);
+				
 			}
 			map.put("message", "拆解报告未通过");
 		}		
@@ -213,6 +217,13 @@ public class DisassembleReportService {
 		map.put("item", report);
 		map.put("user", user);
 		map.put("contact", demand.getIphone());
+		map.put("demandname", demand.getName());
+		Message message = messageService.getMessageByTypeAndProid("1", demand.getId()+"");
+    	messageService.updateMessage(user.getUserId(),message.getId());
+    	messageService.updateMsgCount(user.getUserId());
+        //messageService.upStatus(demand.getId());
+        messageService.insertMessage(order.getCreate_byId(), demand.getId()+"", "1", 2);
+        messageService.updateMsgCount(order.getCreate_byId());
 		return map;
 	}
 	
@@ -231,5 +242,39 @@ public class DisassembleReportService {
 		
 		map.put("orderid", orderid);
 		return map;
+	}
+	
+	
+	//********************************************************************************
+	/**
+	 * 拆解报告上传之后，将上传记录添加到数据库，并向消息表添加一条记录
+	 * @param repor 拆解报告信息
+	 * @param orderid 订单id
+     * @return
+	 * */
+	@Transactional
+	public Map<String, Object> saveDisassemble(DisassembleReport report,Integer orderid){
+		Map<String, Object> map=new HashMap<>();
+		fileDao.updateFile(report.getFileid());
+		
+		if ("1".equals(report.getMessage())) {
+			map.put("orderid", orderid);
+		}else{
+			/*先将次订单的所有拆解报告删除*/
+			Integer disassembleID=reportDao.getIdByOrderId(orderid);
+			if (disassembleID!=null) {
+				reportDao.deleteDisassembleReportByIdReal(disassembleID);
+			}
+			
+			/*保存拆解报告*/
+			int result = reportDao.saveDisassembleReport(report);	
+			/*根据订单id查询需求id*/
+			int projectId=orderDao.getDemandIdByOrderId(orderid);
+			Demand demand = demandDao.getDemand(projectId);
+			map.put("demand", demand);
+			map.put("result",result);
+			map.put("orderid", orderid);
+		}
+		return map;	 
 	}
 }

@@ -17,11 +17,14 @@ public class Intelligence{
     private  String createBy;//创建人
     private  String []userName;//自定用户名
     private  String userid;//接单人ID
+    private  String ddmj;//订单密集
+    private  String checkname;//审核人
+    private  String projectId;//项目编号
 
     public Intelligence() {
     }
 
-    public Intelligence(int id, String name, String demand, String tell, String status, String number, String frequency, String startdate, String enddate, String content, String createDate, String createBy, String[] userName, String userid) {
+    public Intelligence(int id, String name, String demand, String tell, String status, String number, String frequency, String startdate, String enddate, String content, String createDate, String createBy, String[] userName, String userid, String ddmj, String checkname,String projectId) {
         this.id = id;
         this.name = name;
         this.demand = demand;
@@ -36,6 +39,9 @@ public class Intelligence{
         this.createBy = createBy;
         this.userName = userName;
         this.userid = userid;
+        this.ddmj = ddmj;
+        this.checkname = checkname;
+        this.projectId=projectId;
     }
 
     public int getId() {
@@ -148,5 +154,29 @@ public class Intelligence{
 
     public void setUserid(String userid) {
         this.userid = userid;
+    }
+
+    public String getDdmj() {
+        return ddmj;
+    }
+
+    public void setDdmj(String ddmj) {
+        this.ddmj = ddmj;
+    }
+
+    public String getCheckname() {
+        return checkname;
+    }
+
+    public void setCheckname(String checkname) {
+        this.checkname = checkname;
+    }
+
+    public String getProjectId() {
+        return projectId;
+    }
+
+    public void setProjectId(String projectId) {
+        this.projectId = projectId;
     }
 }

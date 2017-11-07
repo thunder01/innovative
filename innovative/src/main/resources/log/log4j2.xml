@@ -1,21 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration status="warn" name="MyApp" packages="">
     <Appenders>
-        <Console name="Console" target="SYSTEM_OUT" ignoreExceptions="false">
-            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} [%t] (%F:%L)  - %m%n" />
+    	<Console name="Console" target="SYSTEM_OUT" ignoreExceptions="false">
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss}(%F:%L)  - %m%n" />
         </Console>
-        <!-- <GELF name="gelfAppender" server="10.39.6.36" port="12201" hostName="10.39.6.36" protocol="UDP">
-            <KeyValuePair key="environment" value="DEV"/>
-            <KeyValuePair key="application" value="demo"/>
-        </GELF> -->
-    </Appenders>
-    <Loggers>
-        <Root level="warn">
-            <AppenderRef ref="Console" />
-            <AppenderRef ref="gelfAppender"/>
-        </Root>
-        <Root level="info">
-            <AppenderRef ref="Console" />
-        </Root>
-    </Loggers>
+    	<Syslog name="RFC 5424" format="RFC 5424" host="10.39.6.36" port="514"
+            protocol="UDP" appName="MyApp" includeMDC="true"
+            facility="local2" enterpriseNumber="18060" newLine="true"
+            messageId="Audit" id="App">
+        </Syslog>
+  	</Appenders>
+  	<Loggers>
+    	<Logger name="com.mycorp" level="error">
+      		<AppenderRef ref="RFC 5424"/>
+    	</Logger>
+	    <Root level="error">
+	      	<AppenderRef ref="RFC 5424"/>
+	      	<AppenderRef ref="Console"/>
+	    </Root>
+ 	</Loggers>
 </Configuration>

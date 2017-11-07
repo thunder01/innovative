@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.innovative.dao.ResourceCommentDao">
+    <resultMap id="resourceCommentMap" type="ResourceComment">
+        <id property="id" column="id" />
+        <result property="type" column="type"/>
+        <result property="resource_id" column="resource_id"/>
+        <result property="comment" column="comment"/>
+        <result property="comment_date" column="comment_date"/>
+        <result property="comment_by" column="comment_by"/>
+        <result property="comment_username" column="comment_username"/>
+        <result property="status" column="status"/>
+        <result property="enjoy_date" column="enjoy_date"/>
+        <result property="enjoy_by" column="enjoy_by"/>
+        <result property="enjoy_username" column="enjoy_username"/>
+        <result property="deleted" column="deleted"/>
+        <result property="delete_by" column="delete_by"/>
+        <result property="delete_date" column="delete_date"/>
+    </resultMap>
+	
+	<!-- 添加一个评论 -->
+	<insert id="addResourceComment" useGeneratedKeys="true" keyProperty="id" parameterType="ResourceComment">
+		INSERT INTO xacx_resource_comment(type,resource_id,comment,comment_date,comment_by,comment_username,status,deleted)
+		VALUES(#{type},#{resource_id},#{comment},now(),#{comment_by},#{comment_username},0,0)
+	</insert>
+	
+	<!-- 打赏一个评论 -->
+	<update id="updateResourceComment" parameterType="ResourceComment">
+		UPDATE xacx_resource_comment SET status=1,enjoy_date=now(),enjoy_by=#{enjoy_by},enjoy_username=#{enjoy_username}
+		WHERE id=#{id}
+	</update>
+	
+	<!-- 获得当前资源的前5条评论 -->
+	<select id="getComment" parameterType="map" resultMap="resourceCommentMap">
+		SELECT * FROM xacx_resource_comment WHERE type=#{type} AND resource_id=#{resource_id} ORDER BY comment_date DESC limit 5 offset 0
+	</select>
+	
+	<!-- 通过类型和资源id来查询评论 -->
+	<select id="getResourceCommentByResourcd_idAndType" parameterType="map" resultMap="resourceCommentMap">
+		SELECT * FROM xacx_resource_comment WHERE type=#{type} AND resource_id=#{resource_id} ORDER BY comment_date DESC 
+		LIMIT #{pageSize} OFFSET #{startIndex}
+	</select>
+	
+	<!-- 查询资源的总数 -->
+	<select id="getCountResourceCommentByResourcd_idAndType" parameterType="map" resultType="int">
+		SELECT COUNT(*) FROM xacx_resource_comment WHERE type=#{type} AND resource_id=#{resource_id}
+	</select>
+	
+	<!-- 通过id查询评论信息 -->
+	<select id="getResourceComment" parameterType="int" resultMap="resourceCommentMap">
+		SELECT * FROM xacx_resource_comment WHERE id= #{id}
+	</select>
+</mapper>

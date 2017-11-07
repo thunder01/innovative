@@ -10,7 +10,7 @@ public interface IntelligenceDao {
     /**
      * 列表页
      */
-    List<Intelligence> getList(@Param("startIndex") int startIndex, @Param("pageSize") int pageSize);
+    List<Intelligence> getList(@Param("startIndex") int startIndex, @Param("pageSize") int pageSize,@Param("userName") String userName);
 
     /**
      * 根据ID查找信息

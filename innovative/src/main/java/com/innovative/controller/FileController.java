@@ -16,7 +16,12 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.innovative.bean.FileBean;
+import com.innovative.bean.TechnicalReport;
+import com.innovative.bean.User;
 import com.innovative.service.FileService;
+import com.innovative.service.IntegralService;
+import com.innovative.service.TechnicalReportService;
+import com.innovative.service.UserService;
 import com.innovative.utils.BaseController;
 import com.innovative.utils.JsonResult;
 
@@ -27,6 +32,12 @@ public class FileController extends BaseController {
 
 	@Autowired
 	FileService fileservice;
+	@Autowired
+	private TechnicalReportService technicalReportService;
+	@Autowired
+	private UserService userService;
+	@Autowired
+	private IntegralService integralService;
 
     /**
      * 根据id获取行业协会详情
@@ -67,9 +78,21 @@ public class FileController extends BaseController {
     	return new JsonResult(true, list);
     }
 
-
-  
-
+    /**
+     * 当有人下载技术报告的时候给技术报告上传人20积分
+     * @param id 技术报告id
+     * @return
+     */
+    @RequestMapping(value = "/download", method = RequestMethod.GET )
+    public JsonResult download(@RequestParam("id")String id){
+    	TechnicalReport technicalReport = technicalReportService.getTechnicalReportById(id);
+    	String userid = technicalReport.getCreatedBy();
+    	User user = userService.getUser(userid);
+    	if(user!=null){
+    		integralService.managerIntegral(7, userid, id.toString());
+    	}
+		return new JsonResult(true, technicalReport);
+    }
 
 
 

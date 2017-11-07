@@ -24,6 +24,8 @@ public class EquipmentService {
     FileDao fileDao;
     @Autowired
     CodeItemUtil codeItemUtil;
+    @Autowired
+    IntegralService integralService;
 
     /**
      * 根据id获取设备信息
@@ -99,7 +101,10 @@ public class EquipmentService {
     public boolean insertEquipment(Equipment equipment) {
 
         //增加成功
-         equipmentDao.insertEquipment(equipment);
+         int result = equipmentDao.insertEquipment(equipment);
+         if(result>0){
+        	 integralService.managerIntegral(12, equipment.getCreatedBy(), equipment.getId());
+         }
 		 return fileDao.updateFile(equipment.getId());
 
     }

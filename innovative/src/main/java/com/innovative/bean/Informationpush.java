@@ -247,12 +247,16 @@ public class Informationpush implements Serializable {
 		this.informationPushPartagerlist = informationPushPartagerlist;
 	}
 
-	public String getFileType() {
-		return fileType;
-	}
-
-	public void setFileType(String fileType) {
-		this.fileType = fileType;
+	@Override
+	public String toString() {
+		return "Informationpush [id=" + id + ", pid=" + pid + ", comentAt=" + comentAt + ", comentBy=" + comentBy
+				+ ", comentByC=" + comentByC + ", cotent=" + cotent + ", title=" + title + ", approuverNum="
+				+ approuverNum + ", todayIsAprouver=" + todayIsAprouver + ", transmettreNum=" + transmettreNum
+				+ ", todayIsTransmettre=" + todayIsTransmettre + ", colletionNum=" + colletionNum
+				+ ", todayIsColletion=" + todayIsColletion + ", commenterNum=" + commenterNum + ", path=" + path
+				+ ", type=" + type + ", depth=" + depth + ", filelist=" + filelist + ", commentlist=" + commentlist
+				+ ", collectionPushlist=" + collectionPushlist + ", approuverlist=" + approuverlist
+				+ ", informationPushPartagerlist=" + informationPushPartagerlist + "]";
 	}
 
 

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.innovative.dao.IntegralResourceDao">
+    <resultMap id="integralResourceMap" type="IntegralResource">
+        <id property="id" column="id" />
+        <result property="type" column="type"/>
+        <result property="resource_id" column="resource"/>
+        <result property="count" column="count"/>
+        <result property="userid" column="userid"/>
+        <result property="create_date" column="create_date"/>
+     </resultMap>
+     
+     <!-- 插入一个创新资源详情页查看信息 -->
+     <insert id="addIntegralResource" useGeneratedKeys="true" keyProperty="id" parameterType="IntegralResource">
+     	INSERT INTO xacx_integral_resource (type,resource_id,userid,create_date)VALUES(#{type},#{resource_id},#{userid},now())
+     </insert>
+     
+     <!-- 通过类型和资源uuid来定位资源信息 来查询当前资源被查看的次数 -->
+     <select id="getCountByResourceId" parameterType="string" resultType="int">
+     	SELECT COUNT(resource_id) FROM xacx_integral_resource WHERE resource_id=#{resource_id} 
+     	AND create_date&lt;CURRENT_DATE+1 AND create_date>CURRENT_DATE
+     </select>
+</mapper>        

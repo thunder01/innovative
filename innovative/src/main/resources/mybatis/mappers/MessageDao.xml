@@ -56,7 +56,7 @@
     <select id="getTotalCount" resultType="int">
         SELECT count(1) FROM "xacx_messge"
     </select>
-    <!-- 分界线   下面是消息新版 -->
+    <!-- 分界线*************************************************************8***   下面是消息新版 -->
     
     
     <!-- 添加通知消息 -->
@@ -69,8 +69,19 @@
 	<select id="totalNoticeMessage" parameterType="map" resultType="int">
 		SELECT COUNT(id) FROM xacx_messge WHERE userid=#{userid} AND notice=#{notice}
 	</select>
+	
 	<!-- 查询消息总数 -->
 	<select id="showNoticeMessage" parameterType="map" resultMap="messageMap">
 		SELECT * FROM xacx_messge WHERE userid=#{userid} AND notice=#{notice} ORDER BY create_date DESC limit #{pageSize} offset #{startIndex}
+	</select>
+	
+	<!-- 待办变成已办 -->
+	<update id="updateNotice" parameterType="map">
+		UPDATE xacx_messge SET notice=2,last_date=now(),last_by=#{userid} WHERE id=#{id} AND notice=3
+	</update>
+	
+	<!-- 通过消息的类型和资源的id来找消息 -->
+	<select id="getMessageByTypeAndProid" parameterType="map" resultMap="messageMap">
+		SELECT * FROM xacx_messge WHERE type=#{type} AND proid=#{proid}
 	</select>
 </mapper>
