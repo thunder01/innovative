@@ -22,7 +22,7 @@
     </resultMap>
 	
 	<!-- 添加一个评论 -->
-	<insert id="addResourceComment" parameterType="ResourceComment">
+	<insert id="addResourceComment" useGeneratedKeys="true" keyProperty="id" parameterType="ResourceComment">
 		INSERT INTO xacx_resource_comment(type,resource_id,comment,comment_date,comment_by,comment_username,status,deleted)
 		VALUES(#{type},#{resource_id},#{comment},now(),#{comment_by},#{comment_username},0,0)
 	</insert>
@@ -49,7 +49,7 @@
 		SELECT COUNT(*) FROM xacx_resource_comment WHERE type=#{type} AND resource_id=#{resource_id}
 	</select>
 	
-	
+	<!-- 通过id查询评论信息 -->
 	<select id="getResourceComment" parameterType="int" resultMap="resourceCommentMap">
 		SELECT * FROM xacx_resource_comment WHERE id= #{id}
 	</select>

@@ -93,10 +93,12 @@ public class ResourceCommentService {
 	 * @param resourceComment
 	 * @return
 	 */
+	@Transactional
 	public Map<String, Object> updateResourceComment(ResourceComment resourceComment){
 		Map<String, Object> map = new HashMap<>();
 		resourceCommentDao.updateResourceComment(resourceComment);
 		resourceComment = resourceCommentDao.getResourceComment(resourceComment.getId());
+		integralService.managerIntegral(13, resourceComment.getComment_by(), resourceComment.getResource_id());
 		//类型type:1专家、2合作机构、3行业协会、4技术报告、5方案、6一起设备
 		if(resourceComment.getType()==1){
 			Expert expert = expertDao.getExpert(resourceComment.getResource_id());
@@ -132,9 +134,13 @@ public class ResourceCommentService {
 	 * @return
 	 */
 	public ResourceComment update(ResourceComment resourceComment){
-		int result = resourceCommentDao.updateResourceComment(resourceComment);
-		resourceComment=resourceCommentDao.getResourceComment(resourceComment.getId());
-		return resourceComment;
+		ResourceComment comment=resourceCommentDao.getResourceComment(resourceComment.getId());
+		if(comment.getEnjoy_by()!=null){
+			resourceCommentDao.updateResourceComment(resourceComment);
+			comment =resourceCommentDao.getResourceComment(resourceComment.getId());
+			integralService.managerIntegral(13, comment.getComment_by(), comment.getId()+"");
+		}
+		return comment;
 	}
 	/**
 	 * 评论详情页分页查询
