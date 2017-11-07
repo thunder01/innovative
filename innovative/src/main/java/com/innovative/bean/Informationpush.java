@@ -34,6 +34,7 @@ public class Informationpush implements Serializable {
 	List<CollectionPush> collectionPushlist ;//收藏记录
 	List<Approuver> approuverlist ;//点赞记录
 	List<InformationPushPartager> informationPushPartagerlist ;//分享记录
+	private String fileType;    //内容
 	
 	public Informationpush(){
 		
@@ -43,7 +44,8 @@ public class Informationpush implements Serializable {
 			String title, int approuverNum, int todayIsAprouver, int transmettreNum, int todayIsTransmettre,
 			int colletionNum, int todayIsColletion, int commenterNum, String path, String type, int depth,
 			List<FileBean> filelist, List<Informationpush> commentlist, List<CollectionPush> collectionPushlist,
-			List<Approuver> approuverlist, List<InformationPushPartager> informationPushPartagerlist) {
+			List<Approuver> approuverlist, List<InformationPushPartager> informationPushPartagerlist, String fileType) {
+		super();
 		this.id = id;
 		this.pid = pid;
 		this.comentAt = comentAt;
@@ -66,6 +68,7 @@ public class Informationpush implements Serializable {
 		this.collectionPushlist = collectionPushlist;
 		this.approuverlist = approuverlist;
 		this.informationPushPartagerlist = informationPushPartagerlist;
+		this.fileType = fileType;
 	}
 
 	public String getId() {

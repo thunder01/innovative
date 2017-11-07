@@ -1,5 +1,7 @@
 package com.innovative.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.innovative.bean.Approuver;
 import com.innovative.bean.CollectionPush;
 import com.innovative.bean.Informationpush;
@@ -10,11 +12,14 @@ import com.innovative.utils.JsonResult;
 import com.innovative.utils.Misc;
 import com.innovative.utils.PageInfo;
 
+import java.io.IOException;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,6 +34,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author cj
  *
  */
+@CrossOrigin
 @RestController
 @RequestMapping("/informationpush")
 public class InformationpushController extends BaseController {
@@ -61,11 +67,11 @@ public class InformationpushController extends BaseController {
      */
     @RequestMapping(value = "/deleteInformationpush", method = RequestMethod.POST)
     @ResponseBody
-    public JsonResult deleteInformationpush(@RequestBody Informationpush informationpush) {
+    public JsonResult deleteInformationpush(@RequestBody Informationpush informationpush,HttpServletRequest req) {
 
        boolean flag = informationpushService.deleteInformationpush(informationpush.getId());
         if (flag) {
-            return new JsonResult(true, informationpushService.getInformationpushList(1));
+            return new JsonResult(true, informationpushService.getInformationpushList(1,CookiesUtil.getCookieValue(req, "user_name")));
         }
         return new JsonResult(false, "参数不合法");
     }
@@ -81,9 +87,9 @@ public class InformationpushController extends BaseController {
      * @return
      */
     @RequestMapping(value = "/getInformationpushList", method = RequestMethod.GET)
-    public JsonResult getInformationpushList(@RequestParam(name="offset",defaultValue="0" ) Integer offset) {
+    public JsonResult getInformationpushList(@RequestParam(name="offset",defaultValue="0" ) Integer offset,HttpServletRequest req) {
     	Integer page = offset/(new PageInfo().getPageSize()) +1;
-        return new JsonResult(true, informationpushService.getInformationpushList(page));
+        return new JsonResult(true, informationpushService.getInformationpushList(page,CookiesUtil.getCookieValue(req, "user_name")));
     }
     
     /**
@@ -116,14 +122,21 @@ public class InformationpushController extends BaseController {
  * @param informationpush 推特信息对象
  * @return
  */
-    @RequestMapping(value = "/addInformationpush", method = RequestMethod.POST,produces="application/json;charset=UTF-8")
+    @CrossOrigin(allowCredentials="true", allowedHeaders="*", methods={RequestMethod.GET,  
+            RequestMethod.POST, RequestMethod.DELETE, RequestMethod.OPTIONS,  
+            RequestMethod.HEAD, RequestMethod.PUT, RequestMethod.PATCH}, origins="*")  
+    @RequestMapping(value = "/addInformationpush", method = RequestMethod.POST,consumes="application/json",produces="application/json;charset=UTF-8")
     @ResponseBody
-    public JsonResult addInformationpush(@RequestBody Informationpush informationpush,HttpServletRequest req) {
-
+    public JsonResult addInformationpush(@RequestBody Informationpush informationpush,HttpServletRequest req,HttpServletResponse response) {
+    	//解决跨域问题
+    	/*response.setHeader("Access-Control-Allow-Origin","*");*/
     	informationpush.setComentBy(CookiesUtil.getCookieValue(req,"user_name"));
         if (!informationpushService.addInformationpush(informationpush)) {
             return new JsonResult(false, "新增失败，请重试！");
+        
+				//response.getWriter().print(JSON.toJSONString(new JsonResult(false, "新增失败，请重试！"),SerializerFeature.DisableCircularReferenceDetect,SerializerFeature.WriteMapNullValue));
         }
+        //response.getWriter().print(JSON.toJSONString(informationpushService.getInformationpush(informationpush.getId(),informationpush.getComentBy()),SerializerFeature.DisableCircularReferenceDetect,SerializerFeature.WriteMapNullValue));
         return new JsonResult(true, informationpushService.getInformationpush(informationpush.getId(),informationpush.getComentBy()));
     }
 
