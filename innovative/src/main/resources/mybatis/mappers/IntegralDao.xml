@@ -40,7 +40,7 @@
 	
 	<!-- 判断当天的登入次数 -->
 	<select id="todayLoginCount" parameterType="string" resultType="int">
-		SELECT COUNT(userid) FROM xacx_integral WHERE create_date&lt;CURRENT_DATE+1 AND create_date>CURRENT_DATE
+		SELECT COUNT(userid) FROM xacx_integral WHERE create_date BETWEEN CURRENT_DATE AND CURRENT_DATE+1
 		AND userid=#{userid} AND type=1
 	</select>
 	
@@ -49,5 +49,38 @@
 		SELECT COUNT(resource_id) FROM xacx_integral WHERE type=#{type} AND resource_id=#{resource_id}
 	</select>
 	
+	<!-- 获取当前角色的总积分 -->
+	<select id="getTotalCountMyIntegral" parameterType="string" resultType="int">
+		SELECT SUM(integral) FROM xacx_integral WHERE userid=#{userid}
+	</select>
 	
+	<!-- 获取用户当天的积分明细 -->
+	<select id="getThisDayIntegralDetail" parameterType="map" resultMap="integralMap">
+		SELECT * FROM xacx_integral WHERE create_date BETWEEN CURRENT_DATE AND CURRENT_DATE+1 
+		AND userid=#{userid} AND integral!=0 ORDER BY create_date DESC LIMIT #{pageSize} OFFSET #{startIndex}
+	</select>
+	<select id="getCountThisDay" parameterType="string" resultType="int">
+		SELECT COUNT(userid) FROM xacx_integral WHERE create_date BETWEEN CURRENT_DATE AND CURRENT_DATE+1 
+		AND userid=#{userid} AND integral!=0
+	</select>
+	
+	<!-- 获取用户7天内的积分明细 -->
+	<select id="getThisWeekIntegralDetail" parameterType="map" resultMap="integralMap">
+		SELECT * FROM xacx_integral WHERE create_date BETWEEN CURRENT_DATE-6 AND CURRENT_DATE+1
+		AND userid=#{userid} AND integral!=0 ORDER BY create_date DESC LIMIT #{pageSize} OFFSET #{startIndex}
+	</select>
+	<select id="getCountThisWeek" parameterType="string" resultType="int">
+		SELECT COUNT(userid) FROM xacx_integral WHERE create_date BETWEEN CURRENT_DATE-6 AND CURRENT_DATE+1
+		AND userid=#{userid} AND integral!=0
+	</select>
+	
+	<!-- 获取用户本月的积分明细 -->
+	<select id="getThisMonthIntegralDetail" parameterType="map" resultMap="integralMap">
+		SELECT * FROM xacx_integral WHERE create_date BETWEEN CURRENT_DATE+1 AND TO_DATE(TO_CHAR(now(),'YYYY-MM') ,'YYYY-MM') 
+		AND userid=#{userid} AND integral!=0 ORDER BY create_date DESC LIMIT #{pageSize} OFFSET #{startIndex}
+	</select>
+	<select id="getCountThisMonth" parameterType="string" resultType="int">
+		SELECT count(userid) FROM xacx_integral WHERE create_date BETWEEN CURRENT_DATE+1 AND TO_DATE(TO_CHAR(now(),'YYYY-MM') ,'YYYY-MM') 
+		AND userid=#{userid} AND integral!=0
+	</select>
 </mapper>

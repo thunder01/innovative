@@ -1,5 +1,9 @@
 package com.innovative.service;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
@@ -17,6 +21,7 @@ import com.innovative.dao.OrganizationDao;
 import com.innovative.dao.ResourceCommentDao;
 import com.innovative.dao.SolutionDao;
 import com.innovative.dao.TechnicalReportDao;
+import com.innovative.utils.PageInfo;
 
 @Service
 public class IntegralService {
@@ -41,7 +46,7 @@ public class IntegralService {
 	private EquipmentDao equipmentDao;
 	/**
 	 * 积分功能 
-	 * @param type 积分类型(1登录OK、2是资源库详情页若留言OK、3上传科技信息推特OK、4科技信息推特中信息的收藏+转发OK+评论OK+点赞、5创新资源详情页进入次数、
+	 * @param type 积分类型(1登录OK、2是资源库详情页若留言OK、3上传科技信息推特OK、4科技信息推特中信息的收藏OK+转发OK+评论OK+点赞OK、5创新资源详情页进入次数、
 	 * 6技术报告的方案下载、7创新资源上传专家OK、8创新资源上传合作机构OK、9创新资源上传行业协会OK、10创新资源上传技术报告OK、11创新资源上传方案OK、
 	 * 12创新资源上传仪器设备OK、13资源库详情页若留言者提供有用信息，寻源工程师可任意打赏50积分OK)
 	 * @param userid 用户id(登入的时候把登入的userid发来)
@@ -65,7 +70,8 @@ public class IntegralService {
 					integral.setContent("登入获得10分");
 					integral.setIntegral(10);
 				}else {
-					integral.setContent("今天第"+integralDao.todayLoginCount(userid)+1+"次登入，不再获得积分");
+					int count = integralDao.todayLoginCount(userid)+1;
+					integral.setContent("今天第"+count+"次登入，不再获得积分");
 					integral.setIntegral(0);
 				}
 			}
@@ -156,4 +162,46 @@ public class IntegralService {
 		}
 		return result;
 	}
+	
+	
+	/**
+	 * 根据类型来判断点击的是哪个按钮：1当天、2七天内、3本月内
+	 * @param userid
+	 * @param type
+	 * @return
+	 */
+	public Map<String, Object> getIntegral(String userid,int type,Integer pageNum){
+		PageInfo pageInfo=new PageInfo();
+        pageInfo.setCurrentPageNum(pageNum);
+		Map<String, Object> map = new HashMap<>();
+		if(type==1){//1当天
+			List<Integral> list = integralDao.getThisDayIntegralDetail(userid, pageInfo.getStartIndex(), pageInfo.getPageSize());
+			int totalCount = integralDao.getCountThisDay(userid);
+			map.put("totalCount",totalCount);
+			map.put("items", list);
+		}
+		if(type==1){//2七天内
+			List<Integral> list = integralDao.getThisWeekIntegralDetail(userid, pageInfo.getStartIndex(), pageInfo.getPageSize());
+			int totalCount = integralDao.getCountThisWeek(userid);
+			map.put("totalCount",totalCount);
+			map.put("items", list);
+		}
+		if(type==1){//3本月内
+			List<Integral> list = integralDao.getThisMonthIntegralDetail(userid, pageInfo.getStartIndex(), pageInfo.getPageSize());
+			int totalCount = integralDao.getCountThisMonth(userid);
+			map.put("totalCount",totalCount);
+			map.put("items", list);
+		}
+        map.put("Count", pageInfo.getPageSize());
+        map.put("itemCount", pageInfo.getPageSize());
+        map.put("offset", pageInfo.getStartIndex());
+        map.put("limit", pageInfo.getPageSize());
+		return map;
+	}
+	
+	
+	
+	
+	
+	
 }
