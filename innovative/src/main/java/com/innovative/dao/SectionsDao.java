@@ -69,5 +69,11 @@ public interface SectionsDao {
 	 * @return
 	 */
 	Sections getSectionByIdAndUserid(@Param("id")String id,@Param("userid") String userid);
+	/**
+	 * 更新阅读量
+	 * @param sections
+	 * @return
+	 */
+	boolean countUpdate(Sections sections);
 
 }

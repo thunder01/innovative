@@ -20,13 +20,16 @@
 	  <result property="sectors" column="sectors" typeHandler="com.innovative.mybatisHandler.ArrayTypeHandler"/>
 	  <result property="state" column="state"/>
 	  <result property="todayIsApprouver" column="todayIsApprouver"/>
-	   <result property="isCollection" column="isCollection"/>
+	  <result property="isCollection" column="isCollection"/>
+	  <result property="imgid" column="imgid"/>
+	  <result property="count" column="count"/>
+	  <result property="imgUrl" column="imgurl"/>
 	</resultMap> 
 	
     <!--将图片保存到服务器，将记录保存到数据库-->
     <insert id="addInformation" parameterType="map">
        INSERT INTO "xacx_tech_information" 
-       ("id", "resource", "title", "time", "resume", "sectors", "tags", "cotent", "createAt", "createBy", "updateAt", "updateBy","state") 
+       ("id", "resource", "title", "time", "resume", "sectors", "tags", "cotent", "createAt", "createBy", "updateAt", "updateBy","state","imgid","count","imgurl") 
        VALUES
        (#{id}, #{resource}, #{title}, #{time}, #{resume},
         <choose>
@@ -45,7 +48,7 @@
 			</when>
 			<otherwise>'{}',</otherwise>
 		</choose>
-         #{cotent}, now(), #{createBy}, now(), #{updateBy},'0' );
+         #{cotent}, now(), #{createBy}, now(), #{updateBy},'0',#{imgid},0,#{imgUrl});
 
     </insert>
     
@@ -96,6 +99,12 @@
 			<if test="updateBy!=null and updateBy!=''">
 				"updateBy"=#{updateBy},
 			</if>
+			<if test="imgid!=null and imgid!=''">
+				"imgid"=#{imgid},
+			</if>
+			<if test="imgUrl!=null and imgUrl!=''">
+				"imgurl"=#{imgUrl},
+			</if>
 				"updateAt"=now()
 		</set>
 		where "id"=#{id}
@@ -112,7 +121,7 @@
 	<select id="getInformationById" resultMap="informationMap">
 	
 		SELECT "id", "resource", "title", "time", "resume", "sectors", "tags", "cotent", "createAt", 
-		  "createBy", "updateAt", "updateBy", "state" ,"approuverNum",us.username updateByC ,e.todayIsApprouver,co.isCollection
+		  "createBy", "updateAt", "updateBy", "state" ,"approuverNum","imgid","count","imgurl" ,us.username updateByC ,e.todayIsApprouver,co.isCollection
 		FROM "xacx_tech_information" info
 		 left join 
 		(SELECT count(*) todayIsApprouver,"informationId" FROM "xacx_tech_information_approuver" where "approuverBy" = #{userid}
@@ -128,7 +137,7 @@
 	
 		<!--根据查询条件获取列表-->
 	<select id="getInformationLists" resultMap="informationMap">
-		SELECT "id", "resource", "title", "time", "resume", "sectors", "tags", "cotent", "createAt", "createBy", "updateAt", "updateBy", "state" FROM "xacx_tech_information" 
+		SELECT "id", "resource", "title", "time", "resume", "sectors", "tags", "cotent", "createAt", "createBy", "updateAt", "updateBy", "state" ,"imgid" ,"count","imgurl" FROM "xacx_tech_information" 
 		<where>
 			<if test="state!=null and state!=''">
 				"state" = #{state}
@@ -140,7 +149,7 @@
 	
 		<!--根据查询条件获取剩余评论-->
 	<select id="getInformationpushSurplus" resultMap="informationMap">
-		SELECT "id", "resource", "title", "time", "resume", "sectors", "tags", "cotent", "createAt", "createBy", "updateAt", "updateBy", "state" FROM "xacx_tech_information" 
+		SELECT "id", "resource", "title", "time", "resume", "sectors", "tags", "cotent", "createAt", "createBy", "updateAt", "updateBy", "state","imgid","count","imgurl" FROM "xacx_tech_information" 
 		offset #{startIndex}
 	</select>
 	
@@ -170,6 +179,11 @@
 	<!-- 审批功能，即把state置为1 -->
 	<update id="approvalInformation" parameterType="String">
 		update "xacx_tech_information" set "state"='1' where "id"=#{id}
+	</update>
+	
+	<!-- 点击量变更，每访问一次详情页面，则数量加1 -->
+	<update id="countUpdate" parameterType="Information">
+		update "xacx_tech_information" set "count"=#{count} where "id"=#{id}
 	</update>
 
 </mapper>

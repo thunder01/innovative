@@ -64,7 +64,7 @@ public class SectionsController {
     	if(sections.getId() ==  null ||  sections.getId().length() <= 0)
     		 return new JsonResult(false, "没有要修改的科技资讯!");
     	boolean flag = sectionsService.updateSection(sections);
-    	return flag ? new JsonResult(true,"修改成功") : new JsonResult(false, "修改科技资讯失败！");
+    	return flag ? new JsonResult(true,sections.getId()) : new JsonResult(false, "修改科技资讯失败！");
     }
     /**
      * 查询科技资讯
@@ -114,9 +114,10 @@ public class SectionsController {
      * @param key 搜索的关键字
      * @return
      */
-    @RequestMapping(value = "/queryByKey/{key}", method = RequestMethod.GET)
-    public JsonResult queryByKey(@PathVariable("key")String key){
-    	JsonResult result=sectionsService.queryByKey(key);
+    @RequestMapping(value = "/queryByKey", method = RequestMethod.GET)
+    public JsonResult queryByKey(@RequestParam(name="sectors")String key,@RequestParam(name="offset",defaultValue="0" )Integer offset){
+    	Integer page = offset/(new PageInfo().getPageSize()) +1;
+    	JsonResult result=sectionsService.queryByKey(key,page);
     	return result;
     }
     

@@ -18,8 +18,6 @@ import java.util.Map;
 
 @Service
 public class OrganizationService {
-
-
     @Autowired
     OrganizationDao organizationDao;
     @Autowired

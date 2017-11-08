@@ -19,7 +19,7 @@ public interface TechInformationCollectionDao {
 
 
     /**
-     * 增加点赞次数
+     * 收藏
      * @return
      */
 	boolean insertTechInformationCollection(TechInformationCollection collection);

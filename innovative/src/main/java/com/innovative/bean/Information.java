@@ -30,31 +30,12 @@ public class Information implements Serializable {
 	private String approuverNum; //点赞数量
 	private int todayIsApprouver; //今天是否点赞
 	private int isCollection; //则个科技资讯是否已经收藏
+	private String imgid;//图片id
+	private int count;//阅读量
+	private String imgUrl;//图片的URL
 	
     public Information() {
     }
-
-	public Information(String id, String resource, String title, String time, String resume, String[] sectors,
-			String[] tags, String cotent, Timestamp createAt, String createBy, Timestamp updateAt, String updateBy,
-			String updateByC, String state, String approuverNum, int todayIsApprouver, int isCollection) {
-		this.id = id;
-		this.resource = resource;
-		this.title = title;
-		this.time = time;
-		this.resume = resume;
-		this.sectors = sectors;
-		this.tags = tags;
-		this.cotent = cotent;
-		this.createAt = createAt;
-		this.createBy = createBy;
-		this.updateAt = updateAt;
-		this.updateBy = updateBy;
-		this.updateByC = updateByC;
-		this.state = state;
-		this.approuverNum = approuverNum;
-		this.todayIsApprouver = todayIsApprouver;
-		this.isCollection = isCollection;
-	}
 
 	public String getId() {
 		return id;
@@ -191,14 +172,41 @@ public class Information implements Serializable {
 	public void setIsCollection(int isCollection) {
 		this.isCollection = isCollection;
 	}
-    
+
+	public String getImgid() {
+		return imgid;
+	}
+
+	public void setImgid(String imgid) {
+		this.imgid = imgid;
+	}
+
+	public int getCount() {
+		return count;
+	}
+
+	public void setCount(int count) {
+		this.count = count;
+	}
+
+	
+	public String getImgUrl() {
+		return imgUrl;
+	}
+
+	public void setImgUrl(String imgUrl) {
+		this.imgUrl = imgUrl;
+	}
 
 	@Override
 	public String toString() {
 		return "Information [id=" + id + ", resource=" + resource + ", title=" + title + ", time=" + time + ", resume="
 				+ resume + ", sectors=" + Arrays.toString(sectors) + ", tags=" + Arrays.toString(tags) + ", cotent="
 				+ cotent + ", createAt=" + createAt + ", createBy=" + createBy + ", updateAt=" + updateAt
-				+ ", updateBy=" + updateBy + ", state=" + state + ", approuverNum=" + approuverNum
-				+ ", todayIsApprouver=" + todayIsApprouver + ", isCollection=" + isCollection + "]";
+				+ ", updateBy=" + updateBy + ", updateByC=" + updateByC + ", state=" + state + ", approuverNum="
+				+ approuverNum + ", todayIsApprouver=" + todayIsApprouver + ", isCollection=" + isCollection
+				+ ", imgid=" + imgid + ", count=" + count + ", imgUrl=" + imgUrl + "]";
 	}
+
+	
 }

@@ -2,10 +2,12 @@ package com.innovative.service;
 
 
 import com.google.common.collect.Lists;
+import com.innovative.bean.FileBean;
 import com.innovative.bean.Information;
 import com.innovative.bean.Sections;
 import com.innovative.bean.TechInformationApprouver;
 import com.innovative.bean.TechInformationCollection;
+import com.innovative.dao.FileDao;
 import com.innovative.dao.InformationDao;
 import com.innovative.dao.SectionsDao;
 import com.innovative.dao.TechInformationApprouverDao;
@@ -27,17 +29,15 @@ import org.elasticsearch.action.delete.DeleteResponse;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.action.update.UpdateResponse;
 import org.elasticsearch.client.Requests;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.common.xcontent.XContentFactory;
 import org.elasticsearch.index.query.BoolQueryBuilder;
-import org.elasticsearch.index.query.DisMaxQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
-import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
-import org.elasticsearch.xpack.ml.job.process.autodetect.state.Quantiles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -67,12 +67,24 @@ public class InformationService {
     //科技资讯收藏
     @Autowired
     private TechInformationCollectionDao techInformationCollectiondao;
+    @Autowired
+    private FileDao fileDao;
 /**
  * 添加科技资讯
  * @param sections
  * @return
  */
 	public boolean addInformation(Information information) {
+		//根据图片的id查出图片的URL
+		String imgId=information.getImgid();
+		//更新图片状态为add
+		fileDao.updateFile(imgId);
+		List<FileBean> listFile=fileDao.getFileById(imgId, "information");
+		System.out.println(listFile);
+		if (!listFile.isEmpty()) {			
+			information.setImgUrl(listFile.get(0).getUrl());
+		}
+		
 		// 先添加到数据库
 		information.setId(Misc.base58Uuid());
 		boolean flag=informationDao.addInformation(information);
@@ -116,7 +128,7 @@ public class InformationService {
 			//根据id从索引库删除科技资讯
 			client.prepareDelete("information_index","information",id).get();
 			//从数据库中查出更新后的数据
-			Information info=getInformationById(id,information.getUpdateBy());
+			Information info=informationDao.getInformationById(id, information.getUpdateBy());
 			//再次添加到索引库
 			try {
 				SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -135,6 +147,8 @@ public class InformationService {
 						.field("updateAt",sdf.format(info.getUpdateAt()))
 						.field("updateBy",info.getUpdateBy())
 						.field("state",info.getState())
+						.field("imgUrl",info.getImgUrl())
+						.field("count",info.getCount())
 						.endObject()).get();
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -167,12 +181,27 @@ public class InformationService {
 		// 先查询科技资讯详情
 		Information information=informationDao.getInformationById(id,userid);
 		if (information!=null) {
+			//阅读量+1
+			int count=information.getCount();
+			information.setCount(count+1);
+			informationDao.countUpdate(information);
+			
+			try {
+			UpdateResponse response = client.prepareUpdate("information_index","information",id)
+					.setDoc(XContentFactory.jsonBuilder()
+							.startObject()
+								.field("count",count+1)
+							.endObject()).get();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
 			//再查其点赞数
 			Integer approuverNum=techInformationApprouverDao.getTotalApprouver(id);
 			if (approuverNum==null) {
 				approuverNum=0;
 			}
-			information.setApprouverNum(String.valueOf(approuverNum));
+			information.setApprouverNum(String.valueOf(approuverNum));			
 		}
 		return information;
 	}
@@ -219,7 +248,10 @@ public class InformationService {
 	 * @param key
 	 * @return
 	 */
-	public JsonResult queryByKey(String key){
+	public JsonResult queryByKey(String key,Integer page){
+		PageInfo pageInfo = new PageInfo();
+	    pageInfo.setCurrentPageNum(page);
+	    
 		List<Map> listInformation = Lists.newArrayList();
 		SearchRequestBuilder qBuilder=client.prepareSearch("information_index").setTypes("information");
 		BoolQueryBuilder builder=QueryBuilders.boolQuery()
@@ -227,21 +259,36 @@ public class InformationService {
 				.should(QueryBuilders.matchQuery("sectors",key))
 				.should(QueryBuilders.matchQuery("tags",key))
 				.should(QueryBuilders.matchQuery("resume",key))
-				.should(QueryBuilders.matchQuery("cotent",key));
+				.should(QueryBuilders.matchQuery("cotent",key))
+				//通配符再查
+				.should(QueryBuilders.wildcardQuery("title","*"+key+"*"))
+				.should(QueryBuilders.wildcardQuery("sectors","*"+key+"*"))
+				.should(QueryBuilders.wildcardQuery("tags","*"+key+"*"))
+				.should(QueryBuilders.wildcardQuery("resume","*"+key+"*"))
+				.should(QueryBuilders.wildcardQuery("cotent","*"+key+"*"));
 		//结果分页
-		qBuilder.setQuery(builder).setFrom(0).setSize(10);
+		qBuilder.setQuery(builder).setFrom(pageInfo.getStartIndex()).setSize(pageInfo.getPageSize());
 		//发出查询请求
-		SearchResponse response = qBuilder.execute().actionGet();
-		
+		SearchResponse response = qBuilder.execute().actionGet();	
 		SearchHits hits = response.getHits();
 		for(SearchHit hit:hits){
 			listInformation.add(hit.getSource());
 		}
-		System.out.println(hits);
-		if (listInformation.size()==0) {
-			return new JsonResult(false, "没有结果");
-		}
-		return new JsonResult(true, listInformation);
+
+		//不分页再查一次
+		qBuilder.setQuery(builder);
+		SearchResponse response2 = qBuilder.execute().actionGet();
+		SearchHits hits2 = response.getHits();
+		
+		Map<String, Object> map = new HashMap<>();
+        map.put("items", listInformation);
+        map.put("totalCount", hits2.totalHits);
+        map.put("Count", pageInfo.getPageSize());
+        map.put("itemCount", pageInfo.getPageSize());
+        map.put("offset", pageInfo.getStartIndex());
+        map.put("limit", pageInfo.getPageSize());
+        
+		return new JsonResult(true, map);
 	}
 	/**
      * 指定科技资讯的索引库映射
@@ -318,6 +365,14 @@ public class InformationService {
     						.startObject("state")
     							.field("type","text")
     						.endObject()
+    						//图片地址
+    						.startObject("imgUrl")
+    							.field("type","text")
+    						.endObject()
+    						//阅读量
+    						.startObject("count")
+    							.field("type","text")
+    						.endObject()
     					.endObject()
     				.endObject()
     			.endObject();
@@ -350,6 +405,8 @@ public class InformationService {
 					.field("updateAt",nowTime)
 					.field("updateBy",information.getUpdateBy())
 					.field("state","0")
+					.field("imgUrl",information.getImgUrl())
+					.field("count",0)
 					.endObject();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -403,7 +460,7 @@ public class InformationService {
 	 * @return
 	 */
 	public JsonResult getInformationAndSectionLists(Integer page, String state){
-		//PageInfo中的显示条数设的是10
+		   //PageInfo中的显示条数设的是10
 		   PageInfo pageInfo = new PageInfo();
 	       pageInfo.setCurrentPageNum(page);
 	       //科技资讯列表
