@@ -2,6 +2,7 @@ package com.innovative.bean;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.Arrays;
 
 /**
  * 科技专栏
@@ -22,34 +23,15 @@ public class Sections implements Serializable {
 	private String updateBy;//更新人
 	private String updateByC;//更新人
 	private String state;//审批状态，0 未审批 1 审批完成 2审核不通过
-	private Integer approuverNum;//今天是否点赞
+	private String approuverNum;//今天是否点赞
 	private int todayIsApprouver;//今天是否点赞
 	private int isCollection;//是否收藏
+	private String imgid;//图片id
+	private int count;//阅读量
+	private String imgUrl;//图片的URL
 	
     public Sections() {
     }
-
-	public Sections(String id, String resource, String title, String time, String resume, String[] sectors,
-			String[] tags, String cotent, Timestamp createAt, String createBy, Timestamp updateAt, String updateBy,
-			String updateByC, String state, Integer approuverNum, int todayIsApprouver, int isCollection) {
-		this.id = id;
-		this.resource = resource;
-		this.title = title;
-		this.time = time;
-		this.resume = resume;
-		this.sectors = sectors;
-		this.tags = tags;
-		this.cotent = cotent;
-		this.createAt = createAt;
-		this.createBy = createBy;
-		this.updateAt = updateAt;
-		this.updateBy = updateBy;
-		this.updateByC = updateByC;
-		this.state = state;
-		this.approuverNum = approuverNum;
-		this.todayIsApprouver = todayIsApprouver;
-		this.isCollection = isCollection;
-	}
 
 	public String getId() {
 		return id;
@@ -163,11 +145,11 @@ public class Sections implements Serializable {
 		this.state = state;
 	}
 
-	public Integer getApprouverNum() {
+	public String getApprouverNum() {
 		return approuverNum;
 	}
 
-	public void setApprouverNum(Integer approuverNum) {
+	public void setApprouverNum(String approuverNum) {
 		this.approuverNum = approuverNum;
 	}
 
@@ -187,8 +169,37 @@ public class Sections implements Serializable {
 		this.isCollection = isCollection;
 	}
 
-	
-    
-	
+	public String getImgid() {
+		return imgid;
+	}
 
+	public void setImgid(String imgid) {
+		this.imgid = imgid;
+	}
+
+	public int getCount() {
+		return count;
+	}
+
+	public void setCount(int count) {
+		this.count = count;
+	}
+
+	public String getImgUrl() {
+		return imgUrl;
+	}
+
+	public void setImgUrl(String imgUrl) {
+		this.imgUrl = imgUrl;
+	}
+
+	@Override
+	public String toString() {
+		return "Sections [id=" + id + ", resource=" + resource + ", title=" + title + ", time=" + time + ", resume="
+				+ resume + ", sectors=" + Arrays.toString(sectors) + ", tags=" + Arrays.toString(tags) + ", cotent="
+				+ cotent + ", createAt=" + createAt + ", createBy=" + createBy + ", updateAt=" + updateAt
+				+ ", updateBy=" + updateBy + ", updateByC=" + updateByC + ", state=" + state + ", approuverNum="
+				+ approuverNum + ", todayIsApprouver=" + todayIsApprouver + ", isCollection=" + isCollection
+				+ ", imgid=" + imgid + ", count=" + count + ", imgUrl=" + imgUrl + "]";
+	}
 }

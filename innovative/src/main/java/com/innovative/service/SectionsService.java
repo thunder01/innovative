@@ -1,10 +1,11 @@
 package com.innovative.service;
 
 import com.google.common.collect.Lists;
-import com.innovative.bean.Information;
+import com.innovative.bean.FileBean;
 import com.innovative.bean.Sections;
 import com.innovative.bean.TechSectionsApprouver;
 import com.innovative.bean.TechSectionsCollection;
+import com.innovative.dao.FileDao;
 import com.innovative.dao.SectionsDao;
 import com.innovative.dao.TechSectionsApprouverDao;
 import com.innovative.dao.TechSectionsCollectionDao;
@@ -54,12 +55,23 @@ public class SectionsService {
     TechSectionsApprouverDao techSectionsApprouverDao;
     @Autowired
     TechSectionsCollectionDao techSectionsCollectionDao;
+    @Autowired
+    FileDao fileDao;
 /**
  * 添加科技专栏
  * @param sections
  * @return
  */
 	public boolean addSection(Sections sections) {
+		//根据图片的id查出图片的URL
+		String imgId=sections.getImgid();
+		//更新图片状态为add
+		fileDao.updateFile(imgId);
+		List<FileBean> listFile=fileDao.getFileById(imgId, "sections");
+		if (!listFile.isEmpty()) {			
+			sections.setImgUrl(listFile.get(0).getUrl());
+		}
+		
 		// 先往数据库中添加科技专栏信息
 		sections.setId(Misc.base58Uuid());
 		boolean flag=sectionsDao.addSection(sections);
@@ -102,7 +114,7 @@ public class SectionsService {
 			//根据id从索引库删除科技专栏
 			client.prepareDelete("sections_index","sections",id).get();
 			//从数据库中查出更新后的数据
-			Sections section2=getSectionById(id);
+			Sections section2=sectionsDao.getSectionById(id);
 			//再次添加到索引库
 			try {
 				SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -120,7 +132,9 @@ public class SectionsService {
 						.field("createBy",section2.getCreateBy())
 						.field("updateAt",sdf.format(section2.getUpdateAt()))
 						.field("updateBy",section2.getUpdateBy())
-						.field("state","0")//tips 这里要修改为section2.getState()
+						.field("state",section2.getState())
+						.field("imgUrl",section2.getImgUrl())
+						.field("count",section2.getCount())
 						.endObject())
 						.get();
 			} catch (IOException e) {
@@ -135,11 +149,8 @@ public class SectionsService {
 				}else{
 					//增加消息推送(科技专栏修改)
 					 messageService.insertMessage(sectionOld.getCreateBy(), sectionOld.getId(), Config.KJ_ZL_XG, 1);
-				}
-					
-				
-			}
-			
+				}	
+			}		
 		}
 		return flag;
 	}
@@ -149,7 +160,30 @@ public class SectionsService {
 	 * @return
 	 */
 	public Sections getSectionById(String id) {
-		// TODO Auto-generated method stub
+		Sections sections=sectionsDao.getSectionById(id);
+		if (sections!=null) {
+			//阅读量+1
+			int count=sections.getCount();
+			sections.setCount(count+1);
+			sectionsDao.countUpdate(sections);
+			
+			try {
+				client.prepareUpdate().setDoc(XContentFactory.jsonBuilder()
+						.startObject()
+							.field("count",count+1)
+						.endObject()
+						).get();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
+			//再查其点赞数
+			Integer approuverNum=techSectionsApprouverDao.getTotalApprouver(id);
+			if (approuverNum==null) {
+				approuverNum=0;
+			}
+			sections.setApprouverNum(String.valueOf(approuverNum));
+		}
 		return sectionsDao.getSectionById(id);
 	}
 	/**
@@ -202,7 +236,10 @@ public class SectionsService {
 	 * @param key
 	 * @return
 	 */
-	public JsonResult queryByKey(String key){
+	public JsonResult queryByKey(String key,Integer page){
+		PageInfo pageInfo = new PageInfo();
+	    pageInfo.setCurrentPageNum(page);
+		
 		List<Map> listSections = Lists.newArrayList();
 		SearchRequestBuilder qBuilder=client.prepareSearch("sections_index").setTypes("sections");
 		BoolQueryBuilder builder=QueryBuilders.boolQuery()
@@ -210,7 +247,13 @@ public class SectionsService {
 				.should(QueryBuilders.matchQuery("sectors",key))
 				.should(QueryBuilders.matchQuery("tags",key))
 				.should(QueryBuilders.matchQuery("resume",key))
-				.should(QueryBuilders.matchQuery("cotent",key));
+				.should(QueryBuilders.matchQuery("cotent",key))
+				//通配符再查
+				.should(QueryBuilders.wildcardQuery("title","*"+key+"*"))
+				.should(QueryBuilders.wildcardQuery("sectors","*"+key+"*"))
+				.should(QueryBuilders.wildcardQuery("tags","*"+key+"*"))
+				.should(QueryBuilders.wildcardQuery("resume","*"+key+"*"))
+				.should(QueryBuilders.wildcardQuery("cotent","*"+key+"*"));
 		//结果分页
 		qBuilder.setQuery(builder).setFrom(0).setSize(10);
 		//发出查询请求
@@ -220,11 +263,20 @@ public class SectionsService {
 		for(SearchHit hit:hits){
 			listSections.add(hit.getSource());
 		}
-		System.out.println(hits);
-		if (listSections.size()==0) {
-			return new JsonResult(false, "没有结果");
-		}
-		return new JsonResult(true, listSections);
+		
+		//不分页再查一次
+		qBuilder.setQuery(builder);
+		SearchResponse response2 = qBuilder.execute().actionGet();
+		SearchHits hits2 = response.getHits();
+		
+		Map<String, Object> map = new HashMap<>();
+        map.put("items", listSections);
+        map.put("totalCount", hits2.totalHits);
+        map.put("Count", pageInfo.getPageSize());
+        map.put("itemCount", pageInfo.getPageSize());
+        map.put("offset", pageInfo.getStartIndex());
+        map.put("limit", pageInfo.getPageSize());
+		return new JsonResult(true, map);
 	}
 	
 	/**
@@ -302,6 +354,14 @@ public class SectionsService {
     						.startObject("state")
     							.field("type","text")
     						.endObject()
+    						//图片地址
+    						.startObject("imgUrl")
+    							.field("type","text")
+    						.endObject()
+    						//阅读量
+    						.startObject()
+    							.field("count","text")
+    						.endObject()
     					.endObject()
     				.endObject()
     			.endObject();
@@ -334,6 +394,8 @@ public class SectionsService {
 					.field("updateAt",nowTime)
 					.field("updateBy",sections.getUpdateBy())
 					.field("state","0")
+					.field("imgUrl",sections.getImgUrl())
+					.field("count",sections.getCount())
 					.endObject();
 		} catch (IOException e) {
 			e.printStackTrace();

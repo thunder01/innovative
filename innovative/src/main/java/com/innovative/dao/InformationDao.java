@@ -62,5 +62,11 @@ public interface InformationDao {
 	 * @param informationId
 	 */
 	boolean  updateInformationApprouverNum(@Param("id") String id);
+	/**
+	 * 更新阅读量
+	 * @param information
+	 * @return
+	 */
+	boolean countUpdate(Information information);
 
 }
