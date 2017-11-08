@@ -9,6 +9,7 @@
 	  <result property="pid" column="pid"/>
 	  <result property="comentAt" column="comentAt"/>
 	  <result property="comentBy" column="comentBy"/>
+	  <result property="comentByC" column="comentByC"/>
 	  <result property="cotent" column="cotent"/>
 	  <result property="title" column="title"/>
 	  <result property="approuverNum" column="approuverNum"/>
@@ -21,13 +22,6 @@
 	  <result property="path" column="path"/>
 	  <result property="type" column="type"/>
 	  <result property="depth" column="depth"/>
-	   <collection property="filelist" ofType="FileBean">  
-           <result property="refId" column="refId"/>
-           <result property="refType" column="refType"/>
-	  	   <result property="url" column="url"/>
-	  	   <result property="fileName" column="filename"/>
-	  	   <result property="fileType" column="fileType"/>
-       </collection> 
         <collection property="commentlist" ofType="Informationpush">  
            <result property="id" column="sid"/>
            <result property="pid" column="spid"/>
@@ -35,11 +29,18 @@
 		  <result property="comentBy" column="scomentBy"/>
 		  <result property="cotent" column="scotent"/>
        </collection> 
+        <collection property="filelist" ofType="FileBean" >  
+           <result property="refType" column="refType"/>
+	  	   <result property="url" column="url"/>
+	  	   <result property="fileName" column="filename"/>
+	  	   <result property="fileType" column="fileType"/>  
+       </collection> 
+       
 	</resultMap> 
 
     <!--根据id获取专家详情-->
 	<select id="getInformationpush" resultMap="informationpushMap">
-		SELECT e."id", e."pid", e."comentAt", e."comentBy", e."cotent", e."approuverNum", partager.transmettreNum, collec.colletionNum,commenter.commenterNum, e."title",
+		SELECT e."id", e."pid", e."comentAt", e."comentBy",ue.username comentByC, e."cotent", e."approuverNum", partager.transmettreNum, collec.colletionNum,commenter.commenterNum, e."title",
 		f."refId",f."refType",f.filename,f.url,isPartaager.todayIsTransmettre,IsColletion.todayIsColletion,isAprouver.todayIsAprouver
 		 FROM "xacx_information_push"  e
 		  LEFT JOIN "xacx_file" f on f."refId" = e."id" and f."refType" = 'informationpushFile' and f."sign" = 'add'
@@ -52,6 +53,8 @@
 			       left join (select count(*) as todayIsAprouver,"approuverBy","comentId"  from   "xacx_information_push_approuver" where to_date(cast("approuverAt" as TEXT),'yyyy-mm-dd') = current_date and "approuverBy" = #{userid} group by "approuverBy","comentId" 
 			
 			) isAprouver on e.id = isAprouver."comentId"
+
+      left join xacx_user ue on ue.pernr = e."comentBy"
 		 WHERE e."id" =  #{id} ;
 	</select>
 
@@ -65,9 +68,8 @@
 	<!--根据查询条件获取列表-->
 	<select id="getInformationpushList" resultMap="informationpushMap">
 	
-			
-		SELECT e."id", e."pid", e."comentAt", e."comentBy", e."cotent", e."approuverNum", partager.transmettreNum, collec.colletionNum,commenter.commenterNum, e."title",
-		f."refId",f."refType",f.filename,f.url,isPartaager.todayIsTransmettre,IsColletion.todayIsColletion,isAprouver.todayIsAprouver
+	 SELECT e."id", e."pid", e."comentAt", e."comentBy",eu.username comentByC,  e."cotent", e."approuverNum", partager.transmettreNum, collec.colletionNum,commenter.commenterNum, e."title",
+		f."refId",f."refType",f.filename,f.url,f."fileType",isPartaager.todayIsTransmettre,IsColletion.todayIsColletion,isAprouver.todayIsAprouver
 		 FROM "xacx_information_push"  e
 		  LEFT JOIN "xacx_file" f on f."refId" = e."id" and f."refType" = 'informationpushFile' and f."sign" = 'add'
 			left join (select count(*) as transmettreNum ,"pushId" from xacx_information_push_partager group by "pushId") partager on e.id = partager."pushId" 
@@ -79,7 +81,11 @@
 			       left join (select count(*) as todayIsAprouver,"approuverBy","comentId"  from   "xacx_information_push_approuver" where to_date(cast("approuverAt" as TEXT),'yyyy-mm-dd') = current_date and "approuverBy" = #{userid} group by "approuverBy","comentId" 
 			
 			) isAprouver on e.id = isAprouver."comentId"
-		 limit #{pageSize} offset #{startIndex}
+          left join xacx_user eu on eu.pernr = e."comentBy" 
+          
+          order by e."comentAt" desc
+          
+		 <!-- limit #{pageSize} offset #{startIndex} -->
 	</select>
 	
 	
@@ -149,7 +155,7 @@
 	<update id="updateApprouverNum" parameterType="Informationpush">
 		UPDATE "xacx_information_push"
 		<set>
-			"commenterNum" = "commenterNum" +1
+			"approuverNum" = "approuverNum" +1
 		</set>
 		where "id"=#{id}
 	</update>

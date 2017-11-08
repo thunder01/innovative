@@ -1,16 +1,27 @@
 package com.innovative.service;
 
+import com.innovative.bean.CollectionPush;
 import com.innovative.bean.Demand;
+import com.innovative.bean.Information;
+import com.innovative.bean.Informationpush;
+import com.innovative.bean.Intelligence;
 import com.innovative.bean.Message;
 import com.innovative.bean.MsgCount;
 import com.innovative.bean.Order;
+import com.innovative.bean.Sections;
+import com.innovative.dao.ApprouverDao;
+import com.innovative.dao.CollectionDao;
 import com.innovative.dao.DemandDao;
+import com.innovative.dao.InformationDao;
+import com.innovative.dao.InformationPushPartagerDao;
+import com.innovative.dao.InformationpushcomenterDao;
+import com.innovative.dao.IntelligenceDao;
 import com.innovative.dao.MessageDao;
 import com.innovative.dao.MsgCountDao;
 import com.innovative.dao.OrderDao;
+import com.innovative.dao.SectionsDao;
 import com.innovative.utils.PageInfo;
 
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,6 +40,20 @@ public class MessageService {
 	private DemandDao demandDao;
 	@Autowired
 	private OrderDao orderDao;
+	@Autowired
+	private IntelligenceDao intelligenceDao;
+	@Autowired
+	private ApprouverDao approuverDao;
+	@Autowired
+	private InformationpushcomenterDao informationpushcomenterDao;
+	@Autowired
+	private CollectionDao collectionDao;
+	@Autowired
+	private InformationPushPartagerDao informationPushPartagerDao;
+	@Autowired
+	private SectionsDao sectionsDao;
+	@Autowired
+	private InformationDao informationDao;
 	/**
 	 * 添加容
 	 */
@@ -64,14 +89,15 @@ public class MessageService {
 	public boolean upStatus(int id) {
 		return (messageDao.upStatus(id) > 0 ? true : false);
 	}
-	/*           消息表更新分割线                      */
+	/*  ***********************************消息表更新分割线 ***************************/
 	
 	
 	/**
-	 * 获取信息列表(0需求下单、1拆解报告、2项目评价、3情报、4推特信息点赞、5 推特信息转发、6 推特信息收藏、7推特信息评论、8科技专栏审核、9科技资讯审核、10科技专栏修改)
+	 * 获取信息列表(0需求下单、1拆解报告、2项目评价、3情报、4推特信息点赞、5 推特信息转发、6 推特信息收藏、7推特信息评论、8科技专栏审核、9科技资讯审核、10科技专栏修改、
+	 *     11科技资讯修改 、12科技资讯收藏 、13科技专栏收藏  )
 	 * @param message 消息Bean  需要userid和notice值
 	 * @param pageNum 页数
-	 * @return
+	 * @return		
 	 */
 	@Transactional
 	public Map<String,Object> getMessage(Message message,Integer pageNum){
@@ -100,17 +126,59 @@ public class MessageService {
 			if(msgCount!=null){
 				//需要判断消息的类型  0是下单审批，1是拆解报告确认，2是团队评价
 				for (Message m : list) {
-					if("0".equals(m.getType())){
+					if("0".equals(m.getType())){//0是下单审批
 						Demand demand = demandDao.getDemand(Integer.parseInt(m.getProid()));
 						m.setObject(demand);
 					}
-					if("1".equals(m.getType())){
+					if("1".equals(m.getType())){//1是拆解报告确认
 						Demand demand = demandDao.getDemand(Integer.parseInt(m.getProid()));
 						m.setObject(demand);					
 					}
-					if("2".equals(m.getType())){
+					if("2".equals(m.getType())){//2是团队评价
 						Demand demand = demandDao.getDemand(Integer.parseInt(m.getProid()));
 						m.setObject(demand);
+					}
+					if("3".equals(m.getType())){//3情报
+						Intelligence intelligence = intelligenceDao.getIntelligence(Integer.parseInt(m.getProid()));
+						m.setObject(intelligence);
+					}
+					if("4".equals(m.getType())){//4推特信息点赞
+						Informationpush informationpush = approuverDao.getApprouverByIdForMessage(m.getProid(), message.getUserid());
+						m.setObject(informationpush);
+					}
+					if("5".equals(m.getType())){//5 推特信息转发
+						Informationpush informationpush = informationPushPartagerDao.getInformationpushPartagersByIdForMessage(m.getProid(), m.getUserid());
+						m.setObject(informationpush);
+					}
+					if("6".equals(m.getType())){//6 推特信息收藏
+						Informationpush informationpush = collectionDao.getCollectInformationForMessage(m.getProid(), message.getUserid());
+						m.setObject(informationpush);
+					}
+					if("7".equals(m.getType())){//7推特信息评论
+						Informationpush informationpush = informationpushcomenterDao.getInformationpushcomenterForMessage(m.getProid(), message.getUserid());
+						m.setObject(informationpush);
+					}
+					if("8".equals(m.getType())){//8科技专栏审核
+						Sections sections = sectionsDao.getSectionById(m.getProid());
+						m.setObject(sections);
+					}
+					if("9".equals(m.getType())){//9科技资讯审核
+						Information information = informationDao.getInformationById(m.getProid(), m.getUserid());
+						m.setObject(information);
+					}
+					if("10".equals(m.getType())){//10科技专栏修改
+						Sections sections = sectionsDao.getSectionById(m.getProid());
+						m.setObject(sections);
+					}
+					if("11".equals(m.getType())){//11科技资讯修改
+						Information information = informationDao.getInformationById(m.getProid(), m.getUserid());
+						m.setObject(information);
+					}
+					if("12".equals(m.getType())){//12科技资讯收藏 
+						
+					}
+					if("13".equals(m.getType())){//13科技专栏收藏 
+						
 					}
 				}
 				map.put("items", list);
@@ -123,19 +191,23 @@ public class MessageService {
 			if(msgCount!=null){
 				//需要判断消息的类型  0是下单审批，1是拆解报告确认，2是团队评价
 				for (Message m : list) {
-					if("0".equals(m.getType())){
+					if("0".equals(m.getType())){//0是下单审批
 						Demand demand = demandDao.getDemand(Integer.parseInt(m.getProid()));
 						m.setObject(demand);
 					}
-					if("1".equals(m.getType())){
+					if("1".equals(m.getType())){//1是拆解报告确认
 						Demand demand = demandDao.getDemand(Integer.parseInt(m.getProid()));
 						Order order = orderDao.findOrderByDemandId(demand.getId());
 						demand.setOrder(order);
 						m.setObject(demand);					
 					}
-					if("2".equals(m.getType())){
+					if("2".equals(m.getType())){//2是团队评价
 						Demand demand = demandDao.getDemand(Integer.parseInt(m.getProid()));
 						m.setObject(demand);
+					}
+					if("3".equals(m.getType())){//3情报
+						Intelligence intelligence = intelligenceDao.getIntelligence(Integer.parseInt(m.getProid()));
+						m.setObject(intelligence);
 					}
 				}
 				map.put("items", list);
@@ -147,18 +219,22 @@ public class MessageService {
 		if(message.getNotice()==3){//消息里面的待办
 			if(msgCount!=null&&list.size()>0){
 				//需要判断消息的类型  0是下单审批，1是拆解报告确认，2是团队评价
-				for (Message m : list) {
+				for (Message m : list) {//0是下单审批
 					if("0".equals(m.getType())){
 						Demand demand = demandDao.getDemand(Integer.parseInt(m.getProid()));
 						m.setObject(demand);
 					}
-					if("1".equals(m.getType())){
+					if("1".equals(m.getType())){//1是拆解报告确认
 						Demand demand = demandDao.getDemand(Integer.parseInt(m.getProid()));
 						m.setObject(demand);					
 					}
-					if("2".equals(m.getType())){
+					if("2".equals(m.getType())){//2是团队评价
 						Demand demand = demandDao.getDemand(Integer.parseInt(m.getProid()));
 						m.setObject(demand);
+					}
+					if("3".equals(m.getType())){//3情报
+						Intelligence intelligence = intelligenceDao.getIntelligence(Integer.parseInt(m.getProid()));
+						m.setObject(intelligence);
 					}
 				}
 				map.put("items", list);

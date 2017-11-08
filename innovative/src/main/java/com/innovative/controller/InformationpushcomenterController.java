@@ -6,6 +6,7 @@ import com.innovative.service.InformationpushcomenterService;
 import com.innovative.utils.BaseController;
 import com.innovative.utils.CookiesUtil;
 import com.innovative.utils.JsonResult;
+import com.innovative.utils.Misc;
 import com.innovative.utils.PageInfo;
 
 import java.util.List;
@@ -13,6 +14,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,6 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author cj
  *
  */
+@CrossOrigin
 @RestController
 @RequestMapping("/informationpushcomenter")
 public class InformationpushcomenterController extends BaseController {
@@ -85,7 +88,7 @@ public class InformationpushcomenterController extends BaseController {
     @RequestMapping(value = "/addInformationpushcomenter", method = RequestMethod.POST,produces="application/json;charset=UTF-8")
     @ResponseBody
     public JsonResult addInformationpushcomenter(@RequestBody Informationpushcomenter informationpushcomenter,HttpServletRequest req) {
-
+    	informationpushcomenter.setId(Misc.uuid());
     	informationpushcomenter.setComentBy(CookiesUtil.getCookieValue(req,"user_name"));
         if (!informationpushcomenterService.addInformationpushcomenter(informationpushcomenter)) {
             return new JsonResult(false, "新增失败，请重试！");

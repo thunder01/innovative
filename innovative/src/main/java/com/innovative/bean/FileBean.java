@@ -2,7 +2,6 @@ package com.innovative.bean;
 
 import java.io.Serializable;
 
-import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 
@@ -40,7 +39,7 @@ public class FileBean implements Serializable {
 		this.sign = sign;
 		this.deleteBy = deleteBy;
 		this.fileName = fileName;
-		this.fileType = fileType;
+		this.fileType= fileType;
 	}
 
 	public String getRefId() {
@@ -114,4 +113,7 @@ public class FileBean implements Serializable {
 	public void setFileType(String fileType) {
 		this.fileType = fileType;
 	}
+
+	
+
 }

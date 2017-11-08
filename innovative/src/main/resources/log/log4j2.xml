@@ -2,7 +2,7 @@
 <Configuration status="warn" name="MyApp" packages="">
     <Appenders>
     	<Console name="Console" target="SYSTEM_OUT" ignoreExceptions="false">
-            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} [%p] (%F:%L)  - %m%n" />
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss}(%F:%L)  - %m%n" />
         </Console>
     	<Syslog name="RFC 5424" format="RFC 5424" host="10.39.6.36" port="514"
             protocol="UDP" appName="MyApp" includeMDC="true"

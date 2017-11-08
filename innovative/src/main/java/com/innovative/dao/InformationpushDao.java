@@ -32,10 +32,11 @@ public interface InformationpushDao {
 
     /**
      * 专家列表页
+     * @param userid 
      * @param sectors 行业领域（多个用逗号隔开）
      * @return
      */
-    List<Informationpush> getInformationpushList(@Param("startIndex") int startIndex, @Param("pageSize") int pageSize);
+    List<Informationpush> getInformationpushList(@Param("startIndex") int startIndex, @Param("pageSize") int pageSize, @Param("userid") String userid);
 
 
 

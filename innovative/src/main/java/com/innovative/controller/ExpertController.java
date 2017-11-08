@@ -2,6 +2,7 @@ package com.innovative.controller;
 
 import com.innovative.bean.Expert;
 import com.innovative.service.ExpertService;
+import com.innovative.service.IntegralService;
 import com.innovative.service.ResourceCommentService;
 import com.innovative.utils.BaseController;
 import com.innovative.utils.CookiesUtil;
@@ -31,6 +32,8 @@ public class ExpertController extends BaseController {
     ExpertService expertService;
     @Autowired
     ResourceCommentService resourceCommentService;
+    @Autowired
+    IntegralService integralService;
   
     /**
      * 根据id获取专家详情

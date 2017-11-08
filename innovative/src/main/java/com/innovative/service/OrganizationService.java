@@ -24,6 +24,8 @@ public class OrganizationService {
     CodeItemUtil codeItemUtil;
     @Autowired
     FileDao fileDao;
+    @Autowired
+    IntegralService integralService;
 
     /**
      * 根据id获取机构详情
@@ -90,8 +92,10 @@ public class OrganizationService {
     @Transactional
     public boolean addOrganization(Organization organization) {
         //增加成功
-        organizationDao.addOrganization(organization);
-    		  
+        int result = organizationDao.addOrganization(organization);
+        if(result>0){
+        	integralService.managerIntegral(8, organization.getCreatedBy(), organization.getId());
+        }
 		 return fileDao.updateFile(organization.getId());
     }
 

@@ -41,6 +41,8 @@ public class Fileter implements Filter {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest request= (HttpServletRequest) servletRequest;
         HttpServletResponse response= (HttpServletResponse) servletResponse;
+        //解决跨域问题
+        /*response.setHeader("Access-Control-Allow-Origin","*");*/
         BeanFactory factory = WebApplicationContextUtils.getRequiredWebApplicationContext(request.getServletContext());
         UserService service;
         LoggerService loggerService;
