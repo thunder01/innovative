@@ -1,5 +1,7 @@
 package com.innovative.dao;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Param;
 
 import com.innovative.bean.Integral;
@@ -42,4 +44,32 @@ public interface IntegralDao {
 	 */
 	public int getCountBySzpd(@Param("type")int type,@Param("resource_id")String resource_id);
 	
+	
+	/**
+	 * 获取当前角色的总积分
+	 * @param userid
+	 * @return
+	 */
+	public int getTotalCountMyIntegral(String userid);
+	/**
+	 * 获取用户当天的积分明细
+	 * @param userid
+	 * @return
+	 */
+	public List<Integral> getThisDayIntegralDetail(@Param("userid")String userid,@Param("startIndex") Integer startIndex, @Param("pageSize") Integer pageSize);
+	public int getCountThisDay(String userid);
+	/**
+	 * 获取用户7天内的积分明细
+	 * @param userid
+	 * @return
+	 */
+	public List<Integral> getThisWeekIntegralDetail(@Param("userid")String userid,@Param("startIndex") Integer startIndex, @Param("pageSize") Integer pageSize);
+	public int getCountThisWeek(String userid);
+	/**
+	 * 获取用户本月的积分明细
+	 * @param userid
+	 * @return
+	 */
+	public List<Integral> getThisMonthIntegralDetail(@Param("userid")String userid,@Param("startIndex") Integer startIndex, @Param("pageSize") Integer pageSize);
+	public int getCountThisMonth(String userid);
 }

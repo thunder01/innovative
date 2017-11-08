@@ -121,7 +121,7 @@ public class Message implements Serializable{
 	}
 
 	public String getCreate_date() {
-		return create_date;
+		return create_date.substring(0, 16);
 	}
 
 	public void setCreate_date(String create_date) {
