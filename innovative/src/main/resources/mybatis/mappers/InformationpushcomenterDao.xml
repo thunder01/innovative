@@ -48,10 +48,12 @@
 				hf."id" hid,hf."pid" hpid, hf."comentAt" hcomentAt,hf."comentBy" hcomentBy, hf.comentByC hcomentByC, hf."cotent" hcotent, hf."type" htype, hf."pushId"  hpushId
 		FROM "xacx_information_push_commenter"  comenter 
 		 left join 
-		(select h."id",h."pid", h."comentAt",h."comentBy", u.username comentByC, h."cotent", h."type", h."pushId"  from xacx_information_push_commenter h left join  xacx_user u on u."pernr" = h."comentBy" order by h."comentAt")hf   on hf."pid" = comenter."id"
+		(select h."id",h."pid", h."comentAt",h."comentBy", u.username comentByC, h."cotent", h."type", h."pushId"  
+		from xacx_information_push_commenter h 
+		left join  xacx_user u on u."pernr" = h."comentBy" order by h."comentAt" DESC)hf   on hf."pid" = comenter."id"
 		 left join xacx_user us on us."pernr" = comenter."comentBy"
-		 WHERE comenter."pid" is null or comenter."pid" = '' and comenter."pushId" = #{pushId} 
- 		order by comenter."comentAt"
+		 WHERE (comenter."pid" is null or comenter."pid" = '') and comenter."pushId" = #{pushId} 
+ 		order by comenter."comentAt" desc 
 	</select>
 	  <!--用户评论推特信息，分页查找-->
 	<select id="getInformationPushComentersByUserid" resultMap="informationpushMaps">
@@ -88,7 +90,8 @@
 	
 	 <!--根据评论id获取评论 -->
 	<select id="getformationpushcomenter" resultMap="informationpushcomentMap">
-		SELECT "id", "pid", "comentAt", "comentBy", "cotent", "type", "pushId" FROM "xacx_information_push_commenter" 
+		SELECT "id", "pid", "comentAt",us.username comentByC, "comentBy", "cotent", "type", "pushId" FROM "xacx_information_push_commenter"  comerter
+		left join xacx_user us on us.pernr = comerter."comentBy"
 		 WHERE "id" =  #{id} ;
 	</select>
 	

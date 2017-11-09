@@ -73,7 +73,7 @@
 		 FROM "xacx_information_push"  e
 		  LEFT JOIN "xacx_file" f on f."refId" = e."id" and f."refType" = 'informationpushFile' and f."sign" = 'add'
 			left join (select count(*) as transmettreNum ,"pushId" from xacx_information_push_partager group by "pushId") partager on e.id = partager."pushId" 
-			left join (select count(*) as commenterNum ,"pushId" from xacx_information_push_commenter group by "pushId") commenter on e.id = commenter."pushId"
+			left join (select count(*) as commenterNum ,"pushId" from xacx_information_push_commenter where (pid is null or pid ='') group by "pushId" ) commenter on e.id = commenter."pushId"
 			left join (select count(*) as colletionNum ,"comentId" from xacx_information_push_collection group by "comentId") collec on e.id = collec."comentId"
 			left join (select count(*) as todayIsTransmettre,"partagerBy","pushId"  from   "xacx_information_push_partager" where to_date(cast("partagerAt" as TEXT),'yyyy-mm-dd') = current_date and "partagerBy" = #{userid} group by "partagerBy","pushId" ) isPartaager on  isPartaager."pushId" = e.id 
 		  left join (select count(*) as todayIsColletion,"collectBy","comentId"  from   "xacx_information_push_collection" where to_date(cast("collectAt" as TEXT),'yyyy-mm-dd') = current_date and "collectBy" = #{userid} group by "collectBy","comentId" 
