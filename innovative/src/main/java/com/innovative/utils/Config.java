@@ -70,28 +70,32 @@ public class Config {
   
     public static final Map<String,String> smxmap = new HashMap<String,String>();
     static{
-    	////研发项目管理系统（成员公司）
+    	////研发项目管理系统（石墨烯）
     	smxmap.put("lxsq", smx_lxsq);
     	smxmap.put("yssq", smx_yssq);
     	smxmap.put("fxdj", smx_fxdj);
     	smxmap.put("yxcy", smx_yxcy);
+    	smxmap.put("type", "E");
     	
     	//健康研究院
     	jkyjymap.put("lxsq", jkyjy_lxsq);
     	jkyjymap.put("yssq", jkyjy_yssq);
     	jkyjymap.put("fxdj", jkyjy_fxdj);
     	jkyjymap.put("yxcy", jkyjy_yxcy);
+    	jkyjymap.put("type", "D");
     	
     	 //研发项目管理系统（产业层）
     	cycmap.put("lxsq", cyc_lxsq);
     	cycmap.put("yssq", cyc_yssq);
     	cycmap.put("fxdj", cyc_fxdj);
     	cycmap.put("yxcy", cyc_yxcy);
+    	cycmap.put("type", "B");
     	//研发项目管理系统（成员公司）
     	cygsmap.put("lxsq", cygs_lxsq);
     	cygsmap.put("yssq", cygs_yssq);
     	cygsmap.put("fxdj", cygs_fxdj);
     	cygsmap.put("yxcy", cygs_yxcy);
+    	cygsmap.put("type", "C");
      }
     //关于收藏数量的配置 分享,评论的数量
     public static final  int COLLCT_NUM = 5;

@@ -46,16 +46,14 @@ public class InformationpushcomenterController extends BaseController {
      * 根据推特id获取所有评论
      *
      * @param id 推特id
-     * @return
+     * @return@PathVariable
      */
     @RequestMapping(value = "/getInformationpushcoment/{pushId}", method = RequestMethod.GET)
     public JsonResult getInformationpushcoment(@PathVariable(name = "pushId") String pushId) {
     	
     	List<Informationpushcomenter> informationpushcomenters = informationpushcomenterService.getInformationpushcomenterByPushId(pushId);
-        if (informationpushcomenters.size()>0) {
-            return new JsonResult(true, informationpushcomenters);
-        }
-        return new JsonResult(false, "参数不合法");
+         return new JsonResult(true, informationpushcomenters);
+        //return new JsonResult(false, "还没有评论");
     }
 
     /**
