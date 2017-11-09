@@ -26,7 +26,7 @@ public class Information implements Serializable {
 	private Timestamp updateAt;//更新时间
 	private String updateBy;//更新人
 	private String updateByC;//更新人
-	private String state;//科技资讯的审批状态 0 未审批 1 已审批approuverNum
+	private String state;//科技资讯的审批状态 0 未通过 1 通过  2 待审批
 	private String approuverNum; //点赞数量
 	private int todayIsApprouver; //今天是否点赞
 	private int isCollection; //则个科技资讯是否已经收藏

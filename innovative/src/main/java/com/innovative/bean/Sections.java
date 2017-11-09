@@ -22,7 +22,7 @@ public class Sections implements Serializable {
 	private Timestamp updateAt;//更新时间
 	private String updateBy;//更新人
 	private String updateByC;//更新人
-	private String state;//审批状态，0 未审批 1 审批完成 2审核不通过
+	private String state;//审批状态，0 未通过 1 通过  2 待审批
 	private String approuverNum;//今天是否点赞
 	private int todayIsApprouver;//今天是否点赞
 	private int isCollection;//是否收藏
