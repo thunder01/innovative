@@ -1,8 +1,10 @@
 package com.innovative.controller;
 
 import com.innovative.bean.Association;
+import com.innovative.bean.User;
 import com.innovative.service.AssociationService;
 import com.innovative.service.ResourceCommentService;
+import com.innovative.service.UserService;
 import com.innovative.utils.BaseController;
 import com.innovative.utils.CookiesUtil;
 import com.innovative.utils.JsonResult;
@@ -32,6 +34,8 @@ public class AssociationController extends BaseController {
     AssociationService associationService;
     @Autowired
     ResourceCommentService resourceCommentService;
+    @Autowired
+    UserService userService;
     /**
      * 根据id获取行业协会详情
      * @param id 协会id
@@ -148,6 +152,10 @@ public class AssociationController extends BaseController {
         if (association != null) {
         	Map<String, Object> map = resourceCommentService.getResourceComment(association.getId(), 3);
             map.put("association", association);
+            User user = userService.getUser(association.getCreatedBy());
+            if(user!=null){
+            	map.put("user", user);
+            }
             return new JsonResult(true, map);
         }
         return new JsonResult(false, "参数不合法");

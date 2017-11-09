@@ -145,7 +145,7 @@ public class ResourceCommentService {
 			resourceComment.setComment_username(user.getUserName());
 		}
 		ResourceComment comment=resourceCommentDao.getResourceComment(resourceComment.getId());
-		if(comment.getEnjoy_by()!=null){
+		if(comment.getEnjoy_by()==null){
 			resourceCommentDao.updateResourceComment(resourceComment);
 			comment =resourceCommentDao.getResourceComment(resourceComment.getId());
 			integralService.managerIntegral(13, comment.getComment_by(), comment.getId()+"");

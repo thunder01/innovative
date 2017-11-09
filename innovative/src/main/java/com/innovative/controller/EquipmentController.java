@@ -2,8 +2,10 @@ package com.innovative.controller;
 
 
 import com.innovative.bean.Equipment;
+import com.innovative.bean.User;
 import com.innovative.service.EquipmentService;
 import com.innovative.service.ResourceCommentService;
+import com.innovative.service.UserService;
 import com.innovative.utils.CookiesUtil;
 import com.innovative.utils.JsonResult;
 import com.innovative.utils.PageInfo;
@@ -32,6 +34,8 @@ public class EquipmentController {
     private EquipmentService equipmentService;
     @Autowired
     ResourceCommentService resourceCommentService;
+    @Autowired
+    UserService userService;
 
     /**
      * 根据id获取设备
@@ -94,8 +98,8 @@ public class EquipmentController {
     @RequestMapping(value = "/insertEquipment", method = RequestMethod.POST)
     @ResponseBody
     public JsonResult insertEquipment(@RequestBody Equipment equipment,HttpServletRequest req) {
-
-    	equipment.setCreatedBy(CookiesUtil.getCookieValue(req,"user_name"));
+    	System.out.println(">>>>>>>>>>>>>>>"+equipment);
+//    	equipment.setCreatedBy(CookiesUtil.getCookieValue(req,"user_name"));
         //新增
         boolean result = equipmentService.insertEquipment(equipment);
 
@@ -150,6 +154,11 @@ public class EquipmentController {
         }
         Map<String, Object> map = resourceCommentService.getResourceComment(equipment.getId(), 6);
         map.put("equipment", equipment);
+        System.err.println(equipment.getCreatedBy());
+        User user = userService.getUser(equipment.getCreatedBy());
+        if(user!=null){
+        	map.put("user", user);
+        }
         return new JsonResult(true, map);
 
     }

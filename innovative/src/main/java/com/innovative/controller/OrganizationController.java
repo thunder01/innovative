@@ -1,8 +1,10 @@
 package com.innovative.controller;
 
 import com.innovative.bean.Organization;
+import com.innovative.bean.User;
 import com.innovative.service.OrganizationService;
 import com.innovative.service.ResourceCommentService;
+import com.innovative.service.UserService;
 import com.innovative.utils.BaseController;
 import com.innovative.utils.CookiesUtil;
 import com.innovative.utils.JsonResult;
@@ -32,6 +34,8 @@ public class OrganizationController extends BaseController {
     OrganizationService organizationService;
     @Autowired
     ResourceCommentService resourceCommentService;
+    @Autowired
+    UserService userService;
 
     /**
      * 根据id获取机构详情
@@ -147,6 +151,10 @@ public class OrganizationController extends BaseController {
         if(organization != null){
         	Map<String, Object> map = resourceCommentService.getResourceComment(organization.getId(), 2);
             map.put("organization", organization);
+            User user = userService.getUser(organization.getCreatedBy());
+            if(user!=null){
+            	map.put("user", user);
+            }
             return new JsonResult(true, map);
         }
         return new JsonResult(false, "参数不合法");
