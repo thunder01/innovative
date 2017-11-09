@@ -18,6 +18,7 @@
 		<result property="pass_date" column="pass_date"/>
 		<result property="pass_by" column="pass_by"/>
 		<result property="pass_status" column="pass_status"/>
+		<result property="process" column="process"/>
 		<!-- <collection property="approvalList" column="id" ofType="ProjectApproval"
 			select="com.innovative.dao.ProjectApprovalDao.getApprovalListByOrderid">
 		</collection> -->
@@ -25,8 +26,8 @@
 
 	<!-- 添加订单信息 -->
 	<insert id="insertOrder" parameterType="Order">
-		insert into xacx_order_v2(demandid,create_by_id,create_date,confirm_status,pass_status) 
-		values(#{demandId},#{create_byId},now(),0,0)
+		insert into xacx_order_v2(demandid,create_by_id,create_date,confirm_status,pass_status,process) 
+		values(#{demandId},#{create_byId},now(),0,0,0)
 	</insert>
 	
 	<!--查询我的订单-->
@@ -102,4 +103,10 @@
 	<select id="findOrderByDemandId" parameterType="int" resultMap="OrderMap">
 		SELECT * FROM xacx_order_v2 WHERE demandid=#{demandid}
 	</select>
+	
+	
+	<!-- 更改订单的进程状态    默认是0，12345 -->
+	<update id="updateOrderProcess" parameterType="Order">
+		UPDATE xacx_order_v2 SET process=#{process} WHERE id=#{id}
+	</update>
 </mapper>

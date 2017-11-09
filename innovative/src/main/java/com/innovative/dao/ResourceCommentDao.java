@@ -47,4 +47,5 @@ public interface ResourceCommentDao {
 	
 	public ResourceComment getResourceComment(Integer id);
 	
+	
 }

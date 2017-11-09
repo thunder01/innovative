@@ -16,6 +16,7 @@ import com.innovative.bean.Organization;
 import com.innovative.bean.ResourceComment;
 import com.innovative.bean.Solution;
 import com.innovative.bean.TechnicalReport;
+import com.innovative.bean.User;
 import com.innovative.dao.AssociationDao;
 import com.innovative.dao.EquipmentDao;
 import com.innovative.dao.ExpertDao;
@@ -47,6 +48,8 @@ public class ResourceCommentService {
 	private EquipmentDao equipmentDao;
 	@Resource
 	private IntegralService integralService;
+	@Resource
+	private UserService userService;
 	
 	/**
 	 * 添加一个评论
@@ -55,36 +58,39 @@ public class ResourceCommentService {
 	 */
 	@Transactional
 	public Map<String, Object> addResourceComment(ResourceComment resourceComment){
+		User user = userService.getUser(resourceComment.getComment_by());
+		resourceComment.setComment_username(user.getUserName());
 		Map<String, Object> map = new HashMap<>();
 		resourceCommentDao.addResourceComment(resourceComment);
 		integralService.managerIntegral(2, resourceComment.getComment_by(), resourceComment.getId()+"");
-		//类型type:1专家、2合作机构、3行业协会、4技术报告、5方案、6一起设备
-		if(resourceComment.getType()==1){
-			Expert expert = expertDao.getExpert(resourceComment.getResource_id());
-			map.put("expert", expert);
-		}
-		if(resourceComment.getType()==2){
-			Organization organization = organizationDao.getOrganization(resourceComment.getResource_id());
-			map.put("organization", organization);
-		}
-		if(resourceComment.getType()==3){
-			Association association = associationDao.getAssociation(resourceComment.getResource_id());
-			map.put("association", association);
-		}
-		if(resourceComment.getType()==4){
-			TechnicalReport technicalReport = technicalReportDao.getTechnicalReportById(resourceComment.getResource_id());
-			map.put("technicalReport", technicalReport);
-		}
-		if(resourceComment.getType()==5){
-			Solution solution = solutionDao.getSolutionById(resourceComment.getResource_id());
-			map.put("solution", solution);
-		}
-		if(resourceComment.getType()==6){
-			Equipment equipment = equipmentDao.getEquipmentById(resourceComment.getResource_id());
-			map.put("equipment", equipment);
-		}
-		List<ResourceComment> resourceComments = resourceCommentDao.getComment(resourceComment.getType(), resourceComment.getResource_id());
-		map.put("comments", resourceComments);
+//		//类型type:1专家、2合作机构、3行业协会、4技术报告、5方案、6一起设备
+//		if(resourceComment.getType()==1){
+//			Expert expert = expertDao.getExpert(resourceComment.getResource_id());
+//			map.put("expert", expert);
+//		}
+//		if(resourceComment.getType()==2){
+//			Organization organization = organizationDao.getOrganization(resourceComment.getResource_id());
+//			map.put("organization", organization);
+//		}
+//		if(resourceComment.getType()==3){
+//			Association association = associationDao.getAssociation(resourceComment.getResource_id());
+//			map.put("association", association);
+//		}
+//		if(resourceComment.getType()==4){
+//			TechnicalReport technicalReport = technicalReportDao.getTechnicalReportById(resourceComment.getResource_id());
+//			map.put("technicalReport", technicalReport);
+//		}
+//		if(resourceComment.getType()==5){
+//			Solution solution = solutionDao.getSolutionById(resourceComment.getResource_id());
+//			map.put("solution", solution);
+//		}
+//		if(resourceComment.getType()==6){
+//			Equipment equipment = equipmentDao.getEquipmentById(resourceComment.getResource_id());
+//			map.put("equipment", equipment);
+//		}
+//		List<ResourceComment> resourceComments = resourceCommentDao.getComment(resourceComment.getType(), resourceComment.getResource_id());
+		ResourceComment resourceComment2 = resourceCommentDao.getResourceComment(resourceComment.getId());
+		map.put("comment", resourceComment2);
 		return map;
 	} 
 	
@@ -134,6 +140,10 @@ public class ResourceCommentService {
 	 * @return
 	 */
 	public ResourceComment update(ResourceComment resourceComment){
+		User user = userService.getUser(resourceComment.getComment_by());
+		if(user!=null){
+			resourceComment.setComment_username(user.getUserName());
+		}
 		ResourceComment comment=resourceCommentDao.getResourceComment(resourceComment.getId());
 		if(comment.getEnjoy_by()!=null){
 			resourceCommentDao.updateResourceComment(resourceComment);
@@ -153,6 +163,7 @@ public class ResourceCommentService {
 		Map<String, Object> map = new HashMap<>();
 		PageInfo pageInfo = new PageInfo();
         pageInfo.setCurrentPageNum(pageNum);
+        pageInfo.setPageSize(5);
 		int totalCount = resourceCommentDao.getCountResourceCommentByResourcd_idAndType(type, resource_id);
 		List<ResourceComment> resourceComments = resourceCommentDao.getResourceCommentByResourcd_idAndType(type, resource_id,pageInfo.getStartIndex(), pageInfo.getPageSize());
 		map.put("items", resourceComments);

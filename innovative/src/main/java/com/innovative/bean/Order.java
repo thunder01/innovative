@@ -22,6 +22,7 @@ public class Order implements Serializable{
 	private String pass_date;//拆解报告确认时间
 	private String pass_by;//拆解报告确认人
 	private Integer pass_status;//拆解报告确认状态
+	private int process;
 	private Demand demand;//需求信息
 	private List<ProjectApproval> approvalList;//立项表单集合
 	
@@ -173,6 +174,14 @@ public class Order implements Serializable{
 	public void setApprovalList(List<ProjectApproval> approvalList) {
 		this.approvalList = approvalList;
 	}
+	
+	public int getProcess() {
+		return process;
+	}
+
+	public void setProcess(int process) {
+		this.process = process;
+	}
 
 	@Override
 	public String toString() {
@@ -180,8 +189,10 @@ public class Order implements Serializable{
 				+ create_date + ", workpoint=" + workpoint + ", eoms_service_score=" + eoms_service_score
 				+ ", eoms_service_appraise=" + eoms_service_appraise + ", source_service_score=" + source_service_score
 				+ ", source_service_appraise=" + source_service_appraise + ", confirm_status=" + confirm_status
-				+ ", pass_date=" + pass_date + ", pass_by=" + pass_by + ", pass_status=" + pass_status + ", demand="
-				+ demand + ", approvalList=" + approvalList + "]";
+				+ ", pass_date=" + pass_date + ", pass_by=" + pass_by + ", pass_status=" + pass_status + ", process="
+				+ process + ", demand=" + demand + ", approvalList=" + approvalList + "]";
 	}
+
+	
 	
 }
