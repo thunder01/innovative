@@ -4,8 +4,10 @@ package com.innovative.controller;
 import com.innovative.utils.JsonResult;
 import com.innovative.utils.PageInfo;
 import com.innovative.bean.Solution;
+import com.innovative.bean.User;
 import com.innovative.service.ResourceCommentService;
 import com.innovative.service.SolutionService;
+import com.innovative.service.UserService;
 import com.innovative.utils.CookiesUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -30,6 +32,8 @@ public class SolutionController {
     private SolutionService solutionService;
     @Autowired
     ResourceCommentService resourceCommentService;
+    @Autowired
+    UserService userService;
 
     /**
      * 根据id获取方案
@@ -148,6 +152,10 @@ public class SolutionController {
         }
         Map<String, Object> map = resourceCommentService.getResourceComment(solution.getId(), 3);
         map.put("solution", solution);
+        User user = userService.getUser(solution.getCreatedBy());
+        if(user!=null){
+        	map.put("user", user);
+        }
         return new JsonResult(true, map);
 
     }

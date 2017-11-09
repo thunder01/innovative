@@ -1,9 +1,11 @@
 package com.innovative.controller;
 
 import com.innovative.bean.Expert;
+import com.innovative.bean.User;
 import com.innovative.service.ExpertService;
 import com.innovative.service.IntegralService;
 import com.innovative.service.ResourceCommentService;
+import com.innovative.service.UserService;
 import com.innovative.utils.BaseController;
 import com.innovative.utils.CookiesUtil;
 import com.innovative.utils.JsonResult;
@@ -35,6 +37,8 @@ public class ExpertController extends BaseController {
     ResourceCommentService resourceCommentService;
     @Autowired
     IntegralService integralService;
+    @Autowired
+    UserService userService;
   
     /**
      * 根据id获取专家详情
@@ -139,6 +143,10 @@ public class ExpertController extends BaseController {
         if(expert!=null){
         	Map<String, Object> map = resourceCommentService.getResourceComment(expert.getId(), 1);
             map.put("expert", expert);
+            User user = userService.getUser(expert.getCreatedBy());
+            if(user!=null){
+            	map.put("user", user);
+            }
             return new JsonResult(true, map);
         }
         return new JsonResult(false, "没有数据");

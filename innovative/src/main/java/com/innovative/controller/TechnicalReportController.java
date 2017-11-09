@@ -12,8 +12,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.innovative.bean.TechnicalReport;
+import com.innovative.bean.User;
 import com.innovative.service.ResourceCommentService;
 import com.innovative.service.TechnicalReportService;
+import com.innovative.service.UserService;
 import com.innovative.utils.CookiesUtil;
 import com.innovative.utils.JsonResult;
 import com.innovative.utils.PageInfo;
@@ -31,6 +33,8 @@ public class TechnicalReportController {
     private TechnicalReportService technicalReportService;
     @Autowired
     ResourceCommentService resourceCommentService;
+    @Autowired
+    UserService userService;
 
     /**
      * 根据id获取技术报告
@@ -148,6 +152,10 @@ public class TechnicalReportController {
         }
         Map<String, Object> map = resourceCommentService.getResourceComment(technicalReport.getId(), 3);
         map.put("technicalReport", technicalReport);
+        User user = userService.getUser(technicalReport.getCreatedBy());
+        if(user!=null){
+        	map.put("user", user);
+        }
         return new JsonResult(true, map);
 
     }
