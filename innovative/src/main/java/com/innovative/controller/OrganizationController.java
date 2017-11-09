@@ -2,12 +2,14 @@ package com.innovative.controller;
 
 import com.innovative.bean.Organization;
 import com.innovative.service.OrganizationService;
+import com.innovative.service.ResourceCommentService;
 import com.innovative.utils.BaseController;
 import com.innovative.utils.CookiesUtil;
 import com.innovative.utils.JsonResult;
 import com.innovative.utils.PageInfo;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,9 +17,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 
-
+@CrossOrigin
 @RestController
 @RequestMapping("/organization")
 public class OrganizationController extends BaseController {
@@ -25,6 +30,8 @@ public class OrganizationController extends BaseController {
 
     @Autowired
     OrganizationService organizationService;
+    @Autowired
+    ResourceCommentService resourceCommentService;
 
     /**
      * 根据id获取机构详情
@@ -128,7 +135,22 @@ public class OrganizationController extends BaseController {
 
 
 
+    /**
+     * 根据id获取机构详情
+     * @param id 机构id
+     * @return
+     */
+    @RequestMapping(value = "/get/{id}", method = RequestMethod.GET)
+    public JsonResult getOrganizationByid(@PathVariable(name = "id") String id){
 
+        Organization organization = organizationService.getOrganization(id);
+        if(organization != null){
+        	Map<String, Object> map = resourceCommentService.getResourceComment(organization.getId(), 2);
+            map.put("organization", organization);
+            return new JsonResult(true, map);
+        }
+        return new JsonResult(false, "参数不合法");
+    }
 
 
 

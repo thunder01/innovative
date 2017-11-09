@@ -2,6 +2,7 @@ package com.innovative.controller;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,13 +12,16 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.innovative.bean.TechnicalReport;
+import com.innovative.service.ResourceCommentService;
 import com.innovative.service.TechnicalReportService;
 import com.innovative.utils.CookiesUtil;
 import com.innovative.utils.JsonResult;
 import com.innovative.utils.PageInfo;
 
-import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+@CrossOrigin
 @RestController
 @RequestMapping("/technicalReport")
 public class TechnicalReportController {
@@ -25,7 +29,8 @@ public class TechnicalReportController {
 
     @Autowired
     private TechnicalReportService technicalReportService;
-
+    @Autowired
+    ResourceCommentService resourceCommentService;
 
     /**
      * 根据id获取技术报告
@@ -126,5 +131,27 @@ public class TechnicalReportController {
         TechnicalReport tech =  technicalReportService.getTechnicalReportById(technicalReport.getId());
         return tech != null ? new JsonResult(true, tech) : new JsonResult(true, "获取技术报告失败!") ;
     }
+    
+    
+    /**
+     * 根据id获取技术报告
+     *
+     * @param id 技术报告id
+     * @return
+     */
+    @RequestMapping(value = "/get/{id}", method = RequestMethod.GET)
+    public JsonResult getTechnicalReport(@PathVariable(name = "id", required = true) String id) {
+
+        TechnicalReport technicalReport = technicalReportService.getTechnicalReportById(id);
+        if (technicalReport == null) {
+            return new JsonResult(false, "无此技术报告信息");
+        }
+        Map<String, Object> map = resourceCommentService.getResourceComment(technicalReport.getId(), 3);
+        map.put("technicalReport", technicalReport);
+        return new JsonResult(true, map);
+
+    }
+    
+    
 
 }

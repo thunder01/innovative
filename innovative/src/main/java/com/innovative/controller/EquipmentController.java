@@ -3,11 +3,13 @@ package com.innovative.controller;
 
 import com.innovative.bean.Equipment;
 import com.innovative.service.EquipmentService;
+import com.innovative.service.ResourceCommentService;
 import com.innovative.utils.CookiesUtil;
 import com.innovative.utils.JsonResult;
 import com.innovative.utils.PageInfo;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,9 +17,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import com.alibaba.druid.util.StringUtils;
-
+@CrossOrigin
 @RestController
 @RequestMapping("/equipment")
 public class EquipmentController {
@@ -25,7 +30,8 @@ public class EquipmentController {
 
     @Autowired
     private EquipmentService equipmentService;
-
+    @Autowired
+    ResourceCommentService resourceCommentService;
 
     /**
      * 根据id获取设备
@@ -128,5 +134,26 @@ public class EquipmentController {
         
         return equi != null ? new JsonResult(true,equi) : new JsonResult(false, "获取设备信息失败！");
     }
+    
+    /**
+     * 根据id获取设备
+     *
+     * @param id 设备id
+     * @return
+     */
+    @RequestMapping(value = "/get/{id}", method = RequestMethod.GET)
+    public JsonResult getEquipment(@PathVariable String id) {
+
+        Equipment equipment = equipmentService.getEquipmentById(id);
+        if (equipment == null) {
+            return new JsonResult(false, "无此设备信息");
+        }
+        Map<String, Object> map = resourceCommentService.getResourceComment(equipment.getId(), 6);
+        map.put("equipment", equipment);
+        return new JsonResult(true, map);
+
+    }
+    
+    
 
 }

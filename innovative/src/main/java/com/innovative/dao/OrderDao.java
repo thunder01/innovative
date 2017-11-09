@@ -106,5 +106,12 @@ public interface OrderDao {
 	 * @return
 	 */
 	public Order findOrderByDemandId(Integer demandid);
+	
+	/**
+	 * 更改订单的进程状态
+	 * @param order
+	 * @return
+	 */
+	public int updateOrderProcess(Order order);
 
 }

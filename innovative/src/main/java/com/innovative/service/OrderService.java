@@ -137,17 +137,17 @@ public class OrderService {
 	 * */
 	public Map<String, Object> selectOrderByOrderId(Integer orderid){
 		Map<String, Object> map=new HashMap<>();
-		int demandid=orderDao.getDemandIdByOrderId(orderid);//根据需求id查出对应的订单id
-		Demand demand=demandDao.getDemand(demandid);//根据需求id查询需求的信息
+		Order order = orderDao.getOrderById(orderid);
+		Demand demand=demandDao.getDemand(order.getDemandId());//根据需求id查询需求的信息
 		User user=null;
 		if (demand!=null) {
 			user=userDao.getUser(demand.getCteateBy());//查询需求下单人的详细
 		}
-		
-		map.put("id", demandid);
+		map.put("id", order.getDemandId());
 		map.put("item", demand);
 		map.put("user", user);
-		map.put("orderid", orderid);			
+		map.put("orderid", orderid);
+		map.put("order", order);
 		return map;
 	}
 	
@@ -251,4 +251,21 @@ public class OrderService {
 		map.put("orderid", order.getId());
 		return map;
 	}
+	
+	
+	/**
+	 * 更改订单的状态
+	 * @param order
+	 * @return
+	 */
+	public Map<String, Object> updateOrderProcess(Order order){
+		Map<String, Object> map = new HashMap<>();
+		int result = orderDao.updateOrderProcess(order);
+		if(result>0){
+			order = orderDao.getOrderById(order.getId());
+		}
+		map.put("order", order);
+		return map;
+	}
+	
 }

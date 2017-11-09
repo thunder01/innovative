@@ -84,7 +84,10 @@ public class ResourceComment {
 	}
 
 	public String getComment_date() {
-		return comment_date;
+		if(comment_date==null){
+			return comment_date;
+		}
+		return comment_date.substring(0, 16);
 	}
 
 	public void setComment_date(String comment_date) {

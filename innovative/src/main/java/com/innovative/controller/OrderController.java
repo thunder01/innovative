@@ -2,6 +2,7 @@ package com.innovative.controller;
 
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,6 +19,7 @@ import com.innovative.utils.PageInfo;
 /**
  * 订单模块 web层
  * */
+@CrossOrigin
 @RestController
 @RequestMapping("/order")
 public class OrderController {
@@ -183,5 +185,16 @@ public class OrderController {
 		
 		return new JsonResult(true, map);
 	}
+	/**
+	 * 更新订单的进程状态
+	 * @param order
+	 * @return
+	 */
+	@RequestMapping(value="/updateProcess",method=RequestMethod.POST)
+	public JsonResult updateOrderProcess(@RequestBody Order order){
+		Map<String, Object> map = orderService.updateOrderProcess(order);
+		return new JsonResult(true, map);
+	}	
+	
 	
 }
