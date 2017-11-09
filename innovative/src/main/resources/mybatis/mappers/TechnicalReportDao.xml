@@ -31,7 +31,7 @@
 	</resultMap> 
     <!--根据id获取技术报告-->
     <select id="getTechnicalReportById" resultMap="technicalReportMap">
-		SELECT "Name","Summary","Content","Pictures","Sectors","Tags","Rank","Id","File","CreatedAt","UpdatedAt",f."url",f."refId",f."refType",f."filename"
+		SELECT "Name","CreatedBy","Summary","Content","Pictures","Sectors","Tags","Rank","Id","File","CreatedAt","UpdatedAt",f."url",f."refId",f."refType",f."filename"
 		FROM "TechnicalReports"  e LEFT JOIN "xacx_file" f on f."refId" = e."Id" and f."refType" = 'reportFile' and f."sign" = 'add'
 		WHERE "Id" =  #{id}
 	</select>
@@ -83,7 +83,7 @@
 			</choose> 
         #{rank}, true, '${file}', 
         #{pictures},
-         '', 0, now())
+         #{createdBy}, 0, now())
     </insert>
 
     <!--修改技术报告-->

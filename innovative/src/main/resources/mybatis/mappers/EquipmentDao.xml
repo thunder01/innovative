@@ -37,7 +37,7 @@
 
     <!--根据id获取设备信息-->
     <select id="getEquipmentById" resultMap="equipmentMap">
-		SELECT "Name","Picture","Unit","State","Manufacturer","Introduction","Sharing","Contact","Sectors","Tags","Rank","RowVersion","IsActive","Id","File","Deleted","CreatedAt","UpdatedAt","PurchasedAt",f."url",f."refId",f."refType",f."filename"
+		SELECT "Name","CreatedBy","Picture","Unit","State","Manufacturer","Introduction","Sharing","Contact","Sectors","Tags","Rank","RowVersion","IsActive","Id","File","Deleted","CreatedAt","UpdatedAt","PurchasedAt",f."url",f."refId",f."refType",f."filename"
 		FROM "Equipments" e LEFT JOIN "xacx_file" f on f."refId" = e."Id" and f."refType" = 'equipmentFile' and f."sign" = 'add'
 		WHERE "Id" =  #{id}
 	</select>
@@ -88,7 +88,7 @@
 				</when>
 			<otherwise>'{}',</otherwise>
 		</choose>
-        #{rank}, true, #{file}, '', 0, now())
+        #{rank}, true, #{file}, #{createdBy}, 0, now())
     </insert>
 
     <!--修改设备-->

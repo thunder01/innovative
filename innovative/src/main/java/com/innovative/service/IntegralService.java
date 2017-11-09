@@ -22,7 +22,11 @@ import com.innovative.dao.ResourceCommentDao;
 import com.innovative.dao.SolutionDao;
 import com.innovative.dao.TechnicalReportDao;
 import com.innovative.utils.PageInfo;
-
+/**
+ * 积分逻辑层
+ * @author huang
+ *
+ */
 @Service
 public class IntegralService {
 	

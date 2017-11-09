@@ -98,8 +98,8 @@ public class EquipmentController {
     @RequestMapping(value = "/insertEquipment", method = RequestMethod.POST)
     @ResponseBody
     public JsonResult insertEquipment(@RequestBody Equipment equipment,HttpServletRequest req) {
-
-    	equipment.setCreatedBy(CookiesUtil.getCookieValue(req,"user_name"));
+    	System.out.println(">>>>>>>>>>>>>>>"+equipment);
+//    	equipment.setCreatedBy(CookiesUtil.getCookieValue(req,"user_name"));
         //新增
         boolean result = equipmentService.insertEquipment(equipment);
 
@@ -154,6 +154,7 @@ public class EquipmentController {
         }
         Map<String, Object> map = resourceCommentService.getResourceComment(equipment.getId(), 6);
         map.put("equipment", equipment);
+        System.err.println(equipment.getCreatedBy());
         User user = userService.getUser(equipment.getCreatedBy());
         if(user!=null){
         	map.put("user", user);
