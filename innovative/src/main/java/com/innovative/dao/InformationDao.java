@@ -68,5 +68,8 @@ public interface InformationDao {
 	 * @return
 	 */
 	boolean countUpdate(Information information);
+	
+	
+	Information getById(String id);
 
 }

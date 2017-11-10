@@ -18,6 +18,9 @@ public class TechInformationCollection implements Serializable {
 	private String collectBy; //收藏人
 	private Timestamp collectAt; //收藏时间
 	
+	private Information information;
+	private User user;
+	
 	public TechInformationCollection(){
 		
 	}
@@ -61,7 +64,23 @@ public class TechInformationCollection implements Serializable {
 		this.collectAt = collectAt;
 	}
 
+	public Information getInformation() {
+		return information;
+	}
 
+	public void setInformation(Information information) {
+		this.information = information;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	
 	
 
 }

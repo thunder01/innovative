@@ -444,7 +444,9 @@ public class InformationService {
 	int iscollect =	techInformationCollectiondao.isCollectionTechInformation(techInformationCollection.getCollectBy(), techInformationCollection.getInformationId());
 	if(iscollect == 0){
 		//增加科技资讯收藏消息
-		messageService.insertMessage(techInformationCollection.getCollectBy(), techInformationCollection.getId(), Config.KJ_ZX_SSH, 1);
+		Information information = informationDao.getById(techInformationCollection.getInformationId());
+		messageService.insertMessage(information.getCreateBy(), techInformationCollection.getId(), Config.KJ_ZX_SSH, 1);
+		messageService.updateMsgCount(information.getCreateBy());
 		//增加收藏记录
 		return techInformationCollectiondao.insertTechInformationCollection(techInformationCollection);
 	}else{

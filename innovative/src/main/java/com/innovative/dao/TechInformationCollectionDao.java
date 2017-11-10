@@ -32,6 +32,6 @@ public interface TechInformationCollectionDao {
 	 */
 	Integer isCollectionTechInformation(@Param("collectBy")String collectBy, @Param("informationId")String informationId);
 	
-
-
+	
+	TechInformationCollection getById(String id);
 }

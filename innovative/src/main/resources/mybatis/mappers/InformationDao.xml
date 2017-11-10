@@ -186,4 +186,8 @@
 		update "xacx_tech_information" set "count"=#{count} where "id"=#{id}
 	</update>
 
+	<select id="getById" parameterType="string" resultMap="informationMap">
+		SELECT * FROM xacx_tech_information WHERE id = #{id}
+	</select>
+
 </mapper>

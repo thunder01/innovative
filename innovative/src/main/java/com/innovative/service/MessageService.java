@@ -9,6 +9,9 @@ import com.innovative.bean.Message;
 import com.innovative.bean.MsgCount;
 import com.innovative.bean.Order;
 import com.innovative.bean.Sections;
+import com.innovative.bean.TechInformationCollection;
+import com.innovative.bean.TechSectionsCollection;
+import com.innovative.bean.User;
 import com.innovative.dao.ApprouverDao;
 import com.innovative.dao.CollectionDao;
 import com.innovative.dao.DemandDao;
@@ -20,6 +23,9 @@ import com.innovative.dao.MessageDao;
 import com.innovative.dao.MsgCountDao;
 import com.innovative.dao.OrderDao;
 import com.innovative.dao.SectionsDao;
+import com.innovative.dao.TechInformationCollectionDao;
+import com.innovative.dao.TechSectionsCollectionDao;
+import com.innovative.dao.UserDao;
 import com.innovative.utils.PageInfo;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,6 +60,12 @@ public class MessageService {
 	private SectionsDao sectionsDao;
 	@Autowired
 	private InformationDao informationDao;
+	@Autowired
+	private TechSectionsCollectionDao techSectionsCollectionDao;
+	@Autowired
+	private UserDao userDao;
+	@Autowired
+	private TechInformationCollectionDao techInformationCollectionDao;
 	/**
 	 * 添加容
 	 */
@@ -175,10 +187,20 @@ public class MessageService {
 						m.setObject(information);
 					}
 					if("12".equals(m.getType())){//12科技资讯收藏 
-						
+						TechInformationCollection techInformationCollection = techInformationCollectionDao.getById(m.getProid());
+						Information information = informationDao.getInformationById(techInformationCollection.getId(), m.getUserid());
+						User user = userDao.getUser(techInformationCollection.getCollectBy());
+						techInformationCollection.setUser(user);
+						techInformationCollection.setInformation(information);
+						m.setObject(techInformationCollection);
 					}
 					if("13".equals(m.getType())){//13科技专栏收藏 
-						
+						TechSectionsCollection techSectionsCollection = techSectionsCollectionDao.getById(m.getProid());
+						Sections sections = sectionsDao.getSectionById(techSectionsCollection.getSectionId());
+						techSectionsCollection.setSections(sections);
+						User user = userDao.getUser(techSectionsCollection.getCollectBy());
+						techSectionsCollection.setUser(user);
+						m.setObject(techSectionsCollection);
 					}
 				}
 				map.put("items", list);
