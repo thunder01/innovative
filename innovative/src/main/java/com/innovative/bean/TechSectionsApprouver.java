@@ -52,7 +52,13 @@ public class TechSectionsApprouver implements Serializable {
 	public void setApprouverAt(Timestamp approuverAt) {
 		this.approuverAt = approuverAt;
 	}
-	
 
+	@Override
+	public String toString() {
+		return "TechSectionsApprouver [id=" + id + ", sectionId=" + sectionId + ", approuverBy=" + approuverBy
+				+ ", approuverAt=" + approuverAt + "]";
+	}
+	
+	
 
 }

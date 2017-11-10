@@ -61,7 +61,7 @@ public interface SectionsDao {
 	 * 更新科技专栏的点击次数
 	 * @param id 科技专栏id 
 	 */
-	void updateSectionApprouverNum(String id);
+	void updateSectionApprouverNum(@Param("id")String id);
 	/**
 	 * 查询科技专栏
 	 * @param id 科技专栏id

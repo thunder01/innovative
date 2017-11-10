@@ -244,6 +244,7 @@ public class SectionsService {
 		List<Map> listSections = Lists.newArrayList();
 		SearchRequestBuilder qBuilder=client.prepareSearch("sections_index").setTypes("sections");
 		BoolQueryBuilder builder=QueryBuilders.boolQuery()
+				.must(QueryBuilders.matchQuery("state","1"))
 				.should(QueryBuilders.matchQuery("title",key))
 				.should(QueryBuilders.matchQuery("sectors",key))
 				.should(QueryBuilders.matchQuery("tags",key))

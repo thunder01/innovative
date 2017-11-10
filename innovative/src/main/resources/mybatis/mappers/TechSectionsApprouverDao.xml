@@ -30,7 +30,7 @@
 		SELECT count(*) FROM "xacx_tech_section_approuver" where "approuverBy" =  #{approuverBy} and "sectionId" =  #{sectionId} and to_date(cast("approuverAt" as TEXT),'yyyy-mm-dd') = current_date
 	</select>
 
-	<!-- 科技资讯总的点赞数 -->
+	<!-- 科技专栏总的点赞数 -->
 	<select id="getTotalApprouver" parameterType="string" resultType="Integer">
 		SELECT COUNT("id") FROM "xacx_tech_section_approuver" WHERE "sectionId"=#{id} GROUP BY "sectionId"
 	</select>
