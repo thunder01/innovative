@@ -15,7 +15,7 @@
 	  <result property="createBy" column="createBy"/>
 	  <result property="updateAt" column="updateAt"/>
 	  <result property="updateBy" column="updateBy"/>
-	   <result property="updateByC" column="updateByC"/>
+	  <result property="updateByC" column="updateByC"/>
 	  <result property="tags" column="tags" typeHandler="com.innovative.mybatisHandler.ArrayTypeHandler"/>
 	  <result property="sectors" column="sectors" typeHandler="com.innovative.mybatisHandler.ArrayTypeHandler"/>
 	  <result property="state" column="state"/>
@@ -164,7 +164,7 @@
 	</update>
 	
 	 <!--根据id获取科技专栏-->
-	<select id="getSectionByIdAndUserid" resultMap="sectionsMap">
+	<select id="getSectionByIdAndUserid" parameterType="map" resultMap="sectionsMap">
 
      
  		SELECT "id", "resource", "title", "time", "resume", "sectors", "tags", "cotent", "createAt", 

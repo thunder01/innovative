@@ -255,6 +255,7 @@ public class InformationService {
 		List<Map> listInformation = Lists.newArrayList();
 		SearchRequestBuilder qBuilder=client.prepareSearch("information_index").setTypes("information");
 		BoolQueryBuilder builder=QueryBuilders.boolQuery()
+				.must(QueryBuilders.matchQuery("state", "1"))
 				.should(QueryBuilders.matchQuery("title",key))
 				.should(QueryBuilders.matchQuery("sectors",key))
 				.should(QueryBuilders.matchQuery("tags",key))

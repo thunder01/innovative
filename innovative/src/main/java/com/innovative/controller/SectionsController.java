@@ -124,16 +124,16 @@ public class SectionsController {
     }
     
     /**
-     * 增加科技资讯点赞记录
+     * 增加科技专栏点赞记录
      *
-     * @param information 科技资讯实体
+     * @param techSectionsApprouver 科技专栏实体
      * @return
      */
     @RequestMapping(value = "/addApprouver", method = RequestMethod.POST)
     @ResponseBody 
     public JsonResult addApprouver(@RequestBody TechSectionsApprouver techSectionsApprouver,HttpServletRequest req) {
     	if(techSectionsApprouver ==  null || techSectionsApprouver.getSectionId() == null || techSectionsApprouver.getSectionId().trim().equals("") )
-    		 return new JsonResult(false, "没有获取到实体，添加科技资讯失败！");
+    		 return new JsonResult(false, "没有获取到实体，添加科技专栏失败！");
     	techSectionsApprouver.setId(Misc.uuid());
     	//设置创建人，修改人
     	techSectionsApprouver.setApprouverBy(CookiesUtil.getCookieValue(req,"user_name"));
