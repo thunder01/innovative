@@ -31,6 +31,8 @@ public interface TechSectionsCollectionDao {
 	 * @return
 	 */
 	Integer isCollectionSections(@Param("collectBy")String collectBy, @Param("sectionId")String sectionId);
-
+	
+	
+	TechSectionsCollection getById(String id);
 
 }

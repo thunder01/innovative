@@ -430,7 +430,9 @@ public class SectionsService {
 	public boolean collectionTechSection(TechSectionsCollection techSectionsCollection) {
 		int isCollection = techSectionsCollectionDao.isCollectionSections(techSectionsCollection.getCollectBy(), techSectionsCollection.getSectionId());
 		if(isCollection == 0){
-			messageService.insertMessage(techSectionsCollection.getCollectBy(), techSectionsCollection.getId(), Config.KJ_ZL_SSH, 1);
+			Sections sections = sectionsDao.getSectionById(techSectionsCollection.getSectionId());
+			messageService.insertMessage(sections.getCreateBy(), techSectionsCollection.getId(), Config.KJ_ZL_SSH, 1);
+			messageService.updateMsgCount(sections.getCreateBy());
 			return techSectionsCollectionDao.insertTechSectionsCollection(techSectionsCollection);
 		}else{
 			return false;

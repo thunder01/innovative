@@ -25,6 +25,8 @@
 	</select>
 	
 	
-
+	<select id="getById" parameterType="string" resultMap="techInformationCollectionMap">
+		SELECT * FROM xacx_tech_information_collection WHERE id= #{id}
+	</select>
 
 </mapper>

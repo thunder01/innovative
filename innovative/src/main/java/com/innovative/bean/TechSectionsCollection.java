@@ -18,6 +18,8 @@ public class TechSectionsCollection implements Serializable {
 	private String collectBy; //收藏人
 	private Timestamp collectAt; //收藏时间
 	
+	private Sections sections;
+	private User user;
 	public TechSectionsCollection(){
 		
 	}
@@ -59,6 +61,22 @@ public class TechSectionsCollection implements Serializable {
 
 	public void setCollectAt(Timestamp collectAt) {
 		this.collectAt = collectAt;
+	}
+
+	public Sections getSections() {
+		return sections;
+	}
+
+	public void setSections(Sections sections) {
+		this.sections = sections;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 	
