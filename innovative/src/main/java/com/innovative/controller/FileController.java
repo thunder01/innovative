@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -25,7 +27,7 @@ import com.innovative.service.UserService;
 import com.innovative.utils.BaseController;
 import com.innovative.utils.JsonResult;
 
-
+@CrossOrigin
 @RestController
 @RequestMapping("/file")
 public class FileController extends BaseController {
@@ -83,13 +85,13 @@ public class FileController extends BaseController {
      * @param id 技术报告id
      * @return
      */
-    @RequestMapping(value = "/download", method = RequestMethod.GET )
-    public JsonResult download(@RequestParam("id")String id){
+    @RequestMapping(value = "/download/{id}", method = RequestMethod.GET )
+    public JsonResult download(@PathVariable(name = "id")String id){
     	TechnicalReport technicalReport = technicalReportService.getTechnicalReportById(id);
     	String userid = technicalReport.getCreatedBy();
     	User user = userService.getUser(userid);
     	if(user!=null){
-    		integralService.managerIntegral(7, userid, id.toString());
+    		integralService.managerIntegral(6, userid, id);
     	}
 		return new JsonResult(true, technicalReport);
     }

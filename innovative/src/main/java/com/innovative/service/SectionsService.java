@@ -141,7 +141,7 @@ public class SectionsService {
 				e.printStackTrace();
 			}
 			//如果 科技专栏的发布者与修改人不同则  给创建人发消息
-			if(null!=sections.getUpdateBy() &&  sections.getUpdateBy().equals(sectionOld.getCreateBy())){
+			if(null!=sections.getUpdateBy() &&  !sections.getUpdateBy().equals(sectionOld.getCreateBy())){
 				//审核状态被修改
 				if(sections.getState()!=null &&(!sections.getState().endsWith(sectionOld.getState()))){
 					//增加消息推送（科技专栏审核）
@@ -150,6 +150,7 @@ public class SectionsService {
 				}else{
 					//增加消息推送(科技专栏修改)
 					 messageService.insertMessage(sectionOld.getCreateBy(), sectionOld.getId(), Config.KJ_ZL_XG, 1);
+					 messageService.updateMsgCount(sectionOld.getCreateBy());
 				}	
 			}		
 		}

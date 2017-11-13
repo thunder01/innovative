@@ -16,6 +16,7 @@ public class MsgCount implements Serializable{
 	private int old_notice_count;//上一次通知消息数
 	private int old_finish_count;//上一次已办数
 	private int old_unfinish_count;//上一次代办数
+	private String[] label;
 	
 	public MsgCount() {
 		super();
@@ -94,4 +95,11 @@ public class MsgCount implements Serializable{
 	public void setOld_unfinish_count(int old_unfinish_count) {
 		this.old_unfinish_count = old_unfinish_count;
 	}
+	public String[] getLabel() {
+		return label;
+	}
+	public void setLabel(String[] label) {
+		this.label = label;
+	}
+	
 }

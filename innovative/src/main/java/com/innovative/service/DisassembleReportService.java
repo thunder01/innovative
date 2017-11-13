@@ -218,11 +218,11 @@ public class DisassembleReportService {
 		map.put("user", user);
 		map.put("contact", demand.getIphone());
 		map.put("demandname", demand.getName());
-		Message message = messageService.getMessageByTypeAndProid("1", demand.getId()+"");
+		Message message = messageService.getMessageByTypeAndProid("1", report.getOrder_id()+"");
     	messageService.updateMessage(user.getUserId(),message.getId());
     	messageService.updateMsgCount(user.getUserId());
         //messageService.upStatus(demand.getId());
-        messageService.insertMessage(order.getCreate_byId(), demand.getId()+"", "1", 2);
+        messageService.insertMessage(order.getCreate_byId(), report.getOrder_id()+"", "1", 1);
         messageService.updateMsgCount(order.getCreate_byId());
 		return map;
 	}

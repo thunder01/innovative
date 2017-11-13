@@ -13,7 +13,8 @@
     	<result property="old_message_count" column="old_message_count"/>  
     	<result property="old_notice_count" column="old_notice_count"/>  
     	<result property="old_finish_count" column="old_finish_count"/>  
-    	<result property="old_unfinish_count" column="old_unfinish_count"/>  
+    	<result property="old_unfinish_count" column="old_unfinish_count"/> 
+    	<result property="label" column="label" typeHandler="com.innovative.mybatisHandler.ArrayTypeHandler"/> 
 	</resultMap>
 	
 	<!-- 增加一个用户消息，增加前先判断这个用户是否在这个表中存在 -->
@@ -37,4 +38,18 @@
 	<select id="existMsgCount" parameterType="string" resultType="int">
 		SELECT COUNT(userid) FROM xacx_user_msgcount WHERE userid = #{userid}
 	</select>
+	<!-- 更新用户的标签 -->
+	<update id="updateLabel" parameterType="MsgCount">
+		UPDATE xacx_user_msgcount SET label=
+		<choose>
+            <when test="label != null">
+                <foreach item="label" collection="label" separator="," open="'{" close="}'" index="">
+                    ${label}
+                </foreach>
+            </when>
+            <otherwise>'{}'</otherwise>
+        </choose>
+        WHERE userid = #{userid}
+	</update>
+	
 </mapper>

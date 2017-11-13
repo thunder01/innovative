@@ -147,7 +147,7 @@ public class DisassembleReportController {
         if (map!=null) {
         	Demand demand = (Demand) map.get("demand");
         	//需要确认是谁来审批，是下需求的人还是需求的审批人
-        	messageService.insertMessage(demand.getCteateBy(), demand.getId()+"", "1", 3);
+        	messageService.insertMessage(demand.getCteateBy(), report.getOrder_id()+"", "1", 3);
         	messageService.updateMsgCount(demand.getCteateBy());
             return new JsonResult(true, map);
         }

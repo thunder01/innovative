@@ -154,7 +154,7 @@ public class InformationService {
 				e.printStackTrace();
 			}
 			//如果 科技专栏的发布者与修改人不同则  给创建人发消息
-			if(null!=information.getUpdateBy() &&  information.getUpdateBy().equals(informationOld.getCreateBy())){
+			if(null!=information.getUpdateBy() &&  !information.getUpdateBy().equals(informationOld.getCreateBy())){
 				//审核状态被修改
 				if(information.getState()!=null &&(!information.getState().endsWith(informationOld.getState()))){
 					//增加消息推送（科技资讯审核）
