@@ -90,4 +90,6 @@ public interface DemandDao {
      * @return
      */
     List<Demand> findAllDemand(String userid);
+    
+    Demand getDemandByOrderid(Integer orderid);
 }
