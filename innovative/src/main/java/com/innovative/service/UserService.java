@@ -132,7 +132,7 @@ public class UserService {
 	 */
 	public boolean addUserRole(User user) {
 		// TODO Auto-generated method stub
-		return userdao.insertUserRole(user.getUserId(),user.getRoleId(),user.getCreateBy());
+		return userdao.insertUserRole(user.getUserId(),user.getRoleId(),user.getCreateBy(),user.getSfqy());
 	}
 	/**
 	 * 获取一个用户的的莫个角色
