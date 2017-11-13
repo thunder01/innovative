@@ -6,13 +6,17 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.innovative.bean.Message;
+import com.innovative.bean.MsgCount;
 import com.innovative.bean.User;
+import com.innovative.dao.MsgCountDao;
 import com.innovative.service.DemandService;
 import com.innovative.service.MessageService;
 import com.innovative.service.MyMessageService;
@@ -39,6 +43,8 @@ public class MyMessageController {
 	private OrderService orderService;
 	@Resource
 	private MyMessageService myMessageService;
+	@Resource
+	private MsgCountDao msgCountDao;
 	
 	/**
 	 * 个人信息里的消息
@@ -76,8 +82,26 @@ public class MyMessageController {
 	 */
 	@RequestMapping(value = "/getPerson/{userid}",method = RequestMethod.GET)
 	public JsonResult getPerson(@PathVariable(name="userid") String userid){
+		Map<String, Object> map =new HashMap<>();
 		User user = userService.getUser(userid);
-		return new JsonResult(true, user);
+		map.put("user", user);
+		MsgCount msgCount = msgCountDao.showMsgCount(userid);
+		map.put("label", msgCount.getLabel());
+		return new JsonResult(true, map);
+	}
+	/**
+	 * 更新用户标签
+	 * @param msgCount
+	 * @return
+	 */
+	@RequestMapping(value = "/updatePerson",method = RequestMethod.POST)
+	@ResponseBody
+	public JsonResult updatePerson(@RequestBody MsgCount msgCount){
+		int result = msgCountDao.updateLabel(msgCount);
+		if(result>0){
+			return new JsonResult(true, msgCount);
+		}	
+		return new JsonResult(false, "更新用户标签失败");
 	}
 	
 }

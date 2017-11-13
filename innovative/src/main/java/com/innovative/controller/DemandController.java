@@ -189,7 +189,7 @@ public class DemandController{
         	messageService.updateMessage(user.getUserId(),message.getId());
         	messageService.updateMsgCount(user.getUserId());
             //messageService.upStatus(demand.getId());
-            messageService.insertMessage(demandList.getCteateBy(), demandList.getId()+"", "0", 2);
+            messageService.insertMessage(demandList.getCteateBy(), demandList.getId()+"", "0", 1);
             messageService.updateMsgCount(demandList.getCteateBy());
         }else{
             code=false;

@@ -32,4 +32,10 @@ public interface MsgCountDao {
 	 * @return
 	 */
 	public int existMsgCount(String userid);
+	/**
+	 * 更新用户的标签
+	 * @param msgCount
+	 * @return
+	 */
+	public int updateLabel(MsgCount msgCount);
 }

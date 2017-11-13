@@ -59,7 +59,9 @@ public class DemandService {
         List<Demand> demands = demandDao.getDemandList(pageInfo.getStartIndex(), pageInfo.getPageSize(),userName);
         for (Demand d :demands){
             Integer orderId = orderDao.getOrderIdByDemandId(d.getId());
-            d.setOrderid(orderId);
+            if(orderId!=null){
+            	d.setOrderid(orderId);
+            }
         }
         int totalCount = demandDao.getTotalCount(userName);
 

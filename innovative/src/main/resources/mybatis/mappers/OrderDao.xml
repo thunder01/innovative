@@ -32,7 +32,7 @@
 	
 	<!--查询我的订单-->
 	<select id="selectOrderListByUserId" parameterType="map" resultMap="OrderMap">
-		select * from xacx_order_v2 where create_by_id=#{userid} and confirm_status=1 or confirm_status=0 order by create_date desc limit #{pageSize} offset #{startIndex}
+		select * from xacx_order_v2 where create_by_id=#{userid} and confirm_status IN (0,1) order by create_date desc limit #{pageSize} offset #{startIndex}
 	</select>
 	
 	<!-- 根据订单id删除订单信息 -->
@@ -42,22 +42,22 @@
 	
 	<!-- 根据订单id查询详情 -->
 	<select id="selectOrderByOrderId" parameterType="int" resultMap="OrderMap">
-		select * from xacx_order_v2 where id=#{orderid}
+		select * from xacx_order_v2 where id=#{orderid} AND confirm_status IN (0,1)
 	</select>
 	
 	<!-- 我的订单总条数 -->
 	<select id="getTotalCOuntMyorder" parameterType="string" resultType="int">
-		select count(*) from xacx_order_v2 where create_by_id=#{userid} and confirm_status=1 or confirm_status=0
+		select count(*) from xacx_order_v2 where create_by_id=#{userid} and confirm_status IN (0,1)
 	</select>
 	
 	<!-- 根据订单id查询需求id -->
 	<select id="getDemandIdByOrderId" parameterType="int" resultType="int">
-		select demandid from xacx_order_v2 where id=#{order_id}
+		select demandid from xacx_order_v2 where id=#{order_id} 
 	</select>
 	
 	<!-- 根据需求id查出订单id -->
 	<select id="getOrderIdByDemandId" parameterType="int" resultType="int">
-    	select id from xacx_order_v2 where demandid=#{demandid}
+    	select id from xacx_order_v2 where demandid=#{demandid} AND confirm_status IN (0,1)
     </select>
     
     <!-- 拆解报告已确认 -->
@@ -101,7 +101,7 @@
 	
 	<!-- 通过需求id查询订单信息 -->
 	<select id="findOrderByDemandId" parameterType="int" resultMap="OrderMap">
-		SELECT * FROM xacx_order_v2 WHERE demandid=#{demandid}
+		SELECT * FROM xacx_order_v2 WHERE demandid=#{demandid} AND confirm_status IN (0,1)
 	</select>
 	
 	

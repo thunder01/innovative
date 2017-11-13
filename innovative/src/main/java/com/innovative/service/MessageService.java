@@ -1,6 +1,5 @@
 package com.innovative.service;
 
-import com.innovative.bean.CollectionPush;
 import com.innovative.bean.Demand;
 import com.innovative.bean.Information;
 import com.innovative.bean.Informationpush;
@@ -120,6 +119,7 @@ public class MessageService {
 		//消息的集合
 		List<Message> list = messageDao.showNoticeMessage
 				(message.getUserid(), message.getNotice(), pageInfo.getStartIndex(), pageInfo.getPageSize());
+		System.err.println(list);
 		MsgCount msgCount = msgCountDao.showMsgCount(message.getUserid());
 		MsgCount msg = new MsgCount();
 		msg.setUserid(message.getUserid());
@@ -143,8 +143,11 @@ public class MessageService {
 						m.setObject(demand);
 					}
 					if("1".equals(m.getType())){//1是拆解报告确认
-						Demand demand = demandDao.getDemand(Integer.parseInt(m.getProid()));
-						m.setObject(demand);					
+//						Demand demand = demandDao.getDemand(Integer.parseInt(m.getProid()));
+						Order order = orderDao.getOrderById(Integer.parseInt(m.getProid()));
+						Demand demand = demandDao.getDemand(order.getDemandId());
+						demand.setOrder(order);
+						m.setObject(demand);				
 					}
 					if("2".equals(m.getType())){//2是团队评价
 						Demand demand = demandDao.getDemand(Integer.parseInt(m.getProid()));
@@ -188,7 +191,7 @@ public class MessageService {
 					}
 					if("12".equals(m.getType())){//12科技资讯收藏 
 						TechInformationCollection techInformationCollection = techInformationCollectionDao.getById(m.getProid());
-						Information information = informationDao.getInformationById(techInformationCollection.getId(), m.getUserid());
+						Information information = informationDao.getInformationById(techInformationCollection.getInformationId(), m.getUserid());
 						User user = userDao.getUser(techInformationCollection.getCollectBy());
 						techInformationCollection.setUser(user);
 						techInformationCollection.setInformation(information);
@@ -218,10 +221,18 @@ public class MessageService {
 						m.setObject(demand);
 					}
 					if("1".equals(m.getType())){//1是拆解报告确认
-						Demand demand = demandDao.getDemand(Integer.parseInt(m.getProid()));
-						Order order = orderDao.findOrderByDemandId(demand.getId());
+						Order order = orderDao.getOrderById(Integer.parseInt(m.getProid()));
+						System.out.println("--------------"+order);
+						System.err.println("yyyyyyyyyyyyyyyy"+order.getId());
+						Demand demand = demandDao.getDemand(order.getDemandId());
+						System.err.println("=========="+demand);
+						System.err.println("hhhhhhhhhhhhhhh"+order.getId());
+						
+						demand.setOrderid(order.getId());
+						System.err.println("jjjjjjjjjjjj"+demand.getOrderid());
 						demand.setOrder(order);
-						m.setObject(demand);					
+						m.setObject(demand);
+						System.err.println("。。。。。。。。。。。。。。。。。。。。"+demand);
 					}
 					if("2".equals(m.getType())){//2是团队评价
 						Demand demand = demandDao.getDemand(Integer.parseInt(m.getProid()));
@@ -232,11 +243,12 @@ public class MessageService {
 						m.setObject(intelligence);
 					}
 				}
-				map.put("items", list);
-				map.put("msgCount", msg);
-				msgCount.setOld_finish_count(messageDao.totalNoticeMessage(message.getUserid(), 2));
-				msgCountDao.updateMsgCount(msgCount);
 			}
+			System.out.println("<>><>><>><>+list"+list);
+			map.put("items", list);
+			map.put("msgCount", msg);
+			msgCount.setOld_finish_count(messageDao.totalNoticeMessage(message.getUserid(), 2));
+			msgCountDao.updateMsgCount(msgCount);
 		}
 		if(message.getNotice()==3){//消息里面的待办
 			if(msgCount!=null&&list.size()>0){
@@ -247,7 +259,9 @@ public class MessageService {
 						m.setObject(demand);
 					}
 					if("1".equals(m.getType())){//1是拆解报告确认
-						Demand demand = demandDao.getDemand(Integer.parseInt(m.getProid()));
+						Order order = orderDao.getOrderById(Integer.parseInt(m.getProid()));
+						Demand demand = demandDao.getDemand(order.getDemandId());
+						demand.setOrder(order);
 						m.setObject(demand);					
 					}
 					if("2".equals(m.getType())){//2是团队评价
