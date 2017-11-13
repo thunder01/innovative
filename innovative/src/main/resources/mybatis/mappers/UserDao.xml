@@ -121,8 +121,8 @@
 	
  	<!--添加用户角色-->
 	<insert id="insertUserRole" parameterType="map">
-		INSERT INTO "app_userrole" ("UserId", "RoleId", "CreateAt", "CreateBy") VALUES 
-		(#{userId}, #{roleId}, now(),#{createBy})
+		INSERT INTO "app_userrole" ("UserId", "RoleId", "CreateAt", "CreateBy","sfqy") VALUES 
+		(#{userId}, #{roleId}, now(),#{createBy},#{sfqy})
 	</insert>
 	
 		

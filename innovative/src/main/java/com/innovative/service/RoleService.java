@@ -46,10 +46,11 @@ public class RoleService {
         map.put("limit", pageInfo.getPageSize());
 		return roleDao.getRoleList();
 	}
-
+@Transactional
 	public boolean addRole(Role role) {
 		// TODO Auto-generated method stub
 		role.setRoleId(Misc.uuid());
+		roleRightDao.addRoleRight(role);
 		return roleDao.addRole(role);
 	}
 	//给角色增加权限时先删除角色对应的权限
