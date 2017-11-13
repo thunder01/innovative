@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 /**
  * 下订单的需求
  */
+@CrossOrigin
 @RestController
 @RequestMapping("/message")
 public class MessageController {
