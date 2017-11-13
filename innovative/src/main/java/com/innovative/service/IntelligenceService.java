@@ -106,4 +106,13 @@ public class IntelligenceService {
     public  List<FeedBack> getfeedBacks(int id){
         return  dao.getfeedBacks(id);
     }
+    
+    public  Map<String, Object> getMyIntelligence(String createBy,Integer pageNum){
+    	Map<String, Object> map = new HashMap<>();
+    	PageInfo pageInfo=new PageInfo();
+        pageInfo.setCurrentPageNum(pageNum);
+    	List<Intelligence> list = dao.getMyIntelligence(pageInfo.getStartIndex(), pageInfo.getPageSize(), createBy);
+    	map.put("item", list);
+        return  map;
+    }
 }

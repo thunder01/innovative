@@ -42,7 +42,7 @@
 	<update id="updateLabel" parameterType="MsgCount">
 		UPDATE xacx_user_msgcount SET label=
 		<choose>
-            <when test="label != null">
+            <when test="label != null and label.length>0">
                 <foreach item="label" collection="label" separator="," open="'{" close="}'" index="">
                     ${label}
                 </foreach>

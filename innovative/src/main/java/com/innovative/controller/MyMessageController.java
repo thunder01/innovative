@@ -5,6 +5,7 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,8 +17,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.innovative.bean.Message;
 import com.innovative.bean.MsgCount;
 import com.innovative.bean.User;
+import com.innovative.dao.IntegralDao;
+import com.innovative.dao.IntelligenceDao;
 import com.innovative.dao.MsgCountDao;
 import com.innovative.service.DemandService;
+import com.innovative.service.IntelligenceService;
 import com.innovative.service.MessageService;
 import com.innovative.service.MyMessageService;
 import com.innovative.service.OrderService;
@@ -29,6 +33,7 @@ import com.innovative.utils.PageInfo;
  * @author huang
  *
  */
+@CrossOrigin
 @RestController
 @RequestMapping("/myMessage")
 public class MyMessageController {
@@ -45,6 +50,10 @@ public class MyMessageController {
 	private MyMessageService myMessageService;
 	@Resource
 	private MsgCountDao msgCountDao;
+	@Resource
+	private IntegralDao integralDao;
+	@Resource
+	private IntelligenceService intelligenceService;
 	
 	/**
 	 * 个人信息里的消息
@@ -87,6 +96,8 @@ public class MyMessageController {
 		map.put("user", user);
 		MsgCount msgCount = msgCountDao.showMsgCount(userid);
 		map.put("label", msgCount.getLabel());
+		int integral = integralDao.getTotalCountMyIntegral(userid);
+		map.put("integral", integral);
 		return new JsonResult(true, map);
 	}
 	/**
@@ -97,11 +108,25 @@ public class MyMessageController {
 	@RequestMapping(value = "/updatePerson",method = RequestMethod.POST)
 	@ResponseBody
 	public JsonResult updatePerson(@RequestBody MsgCount msgCount){
-		int result = msgCountDao.updateLabel(msgCount);
-		if(result>0){
-			return new JsonResult(true, msgCount);
-		}	
+//		if(msgCount.getLabel().length>0){
+			int result = msgCountDao.updateLabel(msgCount);
+			if(result>0){
+				return new JsonResult(true, msgCount);
+			}	
+//		}
 		return new JsonResult(false, "更新用户标签失败");
+	}
+	/**
+	 * 我的情报
+	 * @param userid
+	 * @return
+	 */
+	@RequestMapping(value = "/myIntelligence/{userid}",method = RequestMethod.GET)
+	@ResponseBody
+	public JsonResult myIntelligence(@RequestParam(name="offset",defaultValue="0") Integer offset,@PathVariable(name="userid") String userid){
+		Integer pageNum = offset/10+1;
+		Map<String, Object> map = intelligenceService.getMyIntelligence(userid, pageNum);
+		return new JsonResult(true, map);
 	}
 	
 }
