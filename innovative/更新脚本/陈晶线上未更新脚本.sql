@@ -6,7 +6,14 @@ alter table "Experts" alter  COLUMN  "HFactor"  type VARCHAR(64);
 
 --专家增加排序字段 为了有20位专家总是显示在前20位
 ALTER TABLE "Experts" ADD "Px" INT;
+-- 冯晓琳pernr
+10064152
 
+orgeh
+改成
+--50252046  
+原本
+50261009
 --增加一个视图，方便查询sid
 CREATE MATERIALIZED VIEW v_xacx_user_org AS
 select * from (WITH RECURSIVE T ("orgeh","stext", PATH, DEPTH)  AS (
