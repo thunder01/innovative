@@ -137,6 +137,8 @@ public class SectionsService {
 						.field("state",section2.getState())
 						.field("imgUrl",section2.getImgUrl())
 						.field("count",section2.getCount())
+						.field("firstid",section2.getFirstid())
+						.field("type",section2.getType())
 						.endObject())
 						.get();
 			} catch (IOException e) {
@@ -367,6 +369,14 @@ public class SectionsService {
     						.startObject()
     							.field("count","text")
     						.endObject()
+							//firstid
+							.startObject()
+								.field("firstid","text")
+							.endObject()
+							//type 1 技术报告 2 方案
+							.startObject()
+								.field("type","text")
+							.endObject()
     					.endObject()
     				.endObject()
     			.endObject();
@@ -378,7 +388,7 @@ public class SectionsService {
     
     /**
      * 添加科技资讯信息到索引库
-     * @param information
+     * @param sections
      * @return
      */
     private XContentBuilder addSections2(Sections sections){
@@ -401,6 +411,8 @@ public class SectionsService {
 					.field("state","0")
 					.field("imgUrl",sections.getImgUrl())
 					.field("count",sections.getCount())
+					.field("firstid",sections.getFirstid())
+					.field("type",sections.getType())
 					.endObject();
 		} catch (IOException e) {
 			e.printStackTrace();
