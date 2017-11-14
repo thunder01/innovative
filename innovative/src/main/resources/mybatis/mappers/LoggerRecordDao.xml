@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.innovative.dao.LoggerRecordDao">
+
+	<insert id="addLoggerRecord" parameterType="LoggerRecord">
+		INSERT INTO xacx_logger_record (userid,method,url,ip,args,class_method,status,currend_time) 
+		VALUES(#{userid},#{method},#{url},#{ip},#{args},#{class_method},#{status},now())
+	</insert>
+
+</mapper>
