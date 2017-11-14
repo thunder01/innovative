@@ -46,7 +46,7 @@ public class InformationController {
      * @return
      */
     @RequestMapping(value = "/addInformation", method = RequestMethod.POST)
-    @ResponseBody 
+    @ResponseBody
     public JsonResult addInformation(@RequestBody Information information,HttpServletRequest req) {
     	LOGGER.info("收到的信息"+information);
     	if(information ==  null )

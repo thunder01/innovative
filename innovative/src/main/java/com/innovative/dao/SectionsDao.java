@@ -76,4 +76,11 @@ public interface SectionsDao {
 	 */
 	boolean countUpdate(Sections sections);
 
+	/**
+	 * 根据技术报告方案（一期）的id查询科技专栏的id
+	 * @param firstid
+	 * @return
+	 */
+	String getIdByFirstId(@Param("firstid")String firstid,@Param("type")String type);
+
 }

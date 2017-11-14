@@ -29,6 +29,8 @@ public class Sections implements Serializable {
 	private String imgid;//图片id
 	private int count;//阅读量
 	private String imgUrl;//图片的URL
+	private String firstid;//一期技术报告、方案的id
+	private String type;//1 技术报告 2 方案
 	
     public Sections() {
     }
@@ -191,6 +193,22 @@ public class Sections implements Serializable {
 
 	public void setImgUrl(String imgUrl) {
 		this.imgUrl = imgUrl;
+	}
+
+	public String getFirstid() {
+		return firstid;
+	}
+
+	public void setFirstid(String firstid) {
+		this.firstid = firstid;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
 	}
 
 	@Override

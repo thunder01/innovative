@@ -25,12 +25,14 @@
 	  <result property="imgid" column="imgid"/>
 	  <result property="count" column="count"/>
 	  <result property="imgUrl" column="imgurl"/>
+	  <result property="firstid" column="firstid"/>
+      <result property="type" column="type"/>
 	</resultMap> 
 	
     <!--添加科技专栏信息-->
     <insert id="addSection" parameterType="map">
        INSERT INTO "xacx_tech_sections" 
-       ("id", "resource", "title", "time", "resume", "sectors", "tags", "cotent", "createAt", "createBy", "updateAt", "updateBy", "state","imgid","count","imgurl") 
+       ("id", "resource", "title", "time", "resume", "sectors", "tags", "cotent", "createAt", "createBy", "updateAt", "updateBy", "state","imgid","count","imgurl","firstid","type")
        VALUES
        (#{id}, #{resource}, #{title}, #{time}, #{resume},
         <choose>
@@ -49,7 +51,7 @@
 			</when>
 			<otherwise>'{}',</otherwise>
 		</choose>
-         #{cotent}, now(), #{createBy}, now(), #{updateBy},'2',#{imgid},0,#{imgUrl});
+         #{cotent}, now(), #{createBy}, now(), #{updateBy},'2',#{imgid},0,#{imgUrl},#{firstid},#{type});
 
     </insert>
     
@@ -188,4 +190,9 @@
 	<update id="countUpdate" parameterType="Sections">
 		update "xacx_tech_sections" set "count"=#{count} where "id"=#{id}
 	</update>
+
+	<!--根据firstid获取id -->
+	<select id="getIdByFirstId" parameterType="map" resultType="string">
+		SELECT id FROM xacx_tech_sections WHERE firstid=#{firstid} and type=#{type}
+	</select>
 </mapper>

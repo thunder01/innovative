@@ -2,14 +2,20 @@ package com.innovative.service;
 
 
 import com.alibaba.druid.util.StringUtils;
+import com.innovative.bean.Sections;
 import com.innovative.bean.Solution;
 import com.innovative.dao.FileDao;
+import com.innovative.dao.SectionsDao;
 import com.innovative.dao.SolutionDao;
+import com.innovative.utils.Misc;
 import com.innovative.utils.PageInfo;
+import org.apache.poi.ss.formula.functions.Now;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,6 +29,8 @@ public class SolutionService {
     FileDao fileDao;
     @Autowired
     IntegralService integralService;
+    @Autowired
+    private SectionsService sectionsService;
 
     /**
      * 根据id获取方案
@@ -88,7 +96,7 @@ public class SolutionService {
     }
 
     /**
-     * 新增技术报告
+     * 新增技术报告,同时将信息添加到科技专栏
      *
      * @param solution 参数集合
      * @return
@@ -97,6 +105,25 @@ public class SolutionService {
     public boolean insertSolution(Solution solution) {
 
         int result = solutionDao.insertSolution(solution);
+        //添加到科技专栏
+        Sections sections=new Sections();
+        sections.setTitle(solution.getName());
+        sections.setResource("内部资源/方案");
+        sections.setTime(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+        sections.setSectors(solution.getSectors());
+        sections.setTags(solution.getTags());
+        sections.setResume(solution.getSummary());
+        sections.setCotent(solution.getContent());
+        sections.setCreateBy(solution.getCreatedBy());
+        sections.setImgid(solution.getPictures());
+        sections.setFirstid(solution.getId());
+        sections.setType("2");
+        sectionsService.addSection(sections);
+        //设置为审批通过
+        String sectionId=sectionsService.getIdByFirstId(solution.getId(),"2");
+        sections.setState("1");
+        sections.setId(sectionId);
+        sectionsService.updateSection(sections);
         //增加成功
         if(result>0){
         	integralService.managerIntegral(11, solution.getCreatedBy(), solution.getId());
@@ -110,6 +137,7 @@ public class SolutionService {
      * @param solution 参数集合
      * @return
      */
+    @Transactional
     public boolean updateSolution(Solution solution) {
     	 //删除之前的文件
         fileDao.deleteFiles(solution.getId(),"programFile");
@@ -117,15 +145,38 @@ public class SolutionService {
     	fileDao.updateFile(solution.getId());
         int result = solutionDao.updateSolution(solution);
 
+        //查询修改后的方案信息
+        Solution solution1=solutionDao.getSolutionById(solution.getId());
+        //查询对应的科技专栏id
+        String sectionId=sectionsService.getIdByFirstId(solution.getId(),"2");
+        //修改科技专栏
+        System.err.print("xiugai"+solution1);
+        Sections sections=new Sections();
+        sections.setId(sectionId);
+        sections.setTitle(solution1.getName());
+        sections.setSectors(solution1.getSectors());
+        sections.setTags(solution1.getTags());
+        sections.setResume(solution1.getSummary());
+        sections.setCotent(solution1.getContent());
+        sections.setUpdateBy(solution1.getUpdatedBy());
+        sections.setImgid(solution1.getPictures());
+        sectionsService.updateSection(sections);
+
         return result > 0 ;
     }
 
+    @Transactional
 	public boolean deleteSolution(String id) {
 		if(null == id || "".equals(id)){
 			return false;
 		}
 		//删除上传的附件
 		fileDao.deleteFile(id);
+
+		//删除科技专栏
+        String sectionId=sectionsService.getIdByFirstId(id,"2");
+        sectionsService.deleteSection(sectionId);
+
 		return solutionDao.deleteSolution(id);
 	}
 }
