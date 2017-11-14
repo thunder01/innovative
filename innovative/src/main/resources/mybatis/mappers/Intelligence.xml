@@ -115,4 +115,8 @@
             status='1'
         </where>
     </select>
+    
+    <select id="getMyIntelligence" parameterType="map" resultMap="intelligenceMap">
+    	SELECT * FROM xacx_intelligence WHERE create_by=#{createBy} limit #{pageSize} offset #{startIndex}
+    </select>
 </mapper>

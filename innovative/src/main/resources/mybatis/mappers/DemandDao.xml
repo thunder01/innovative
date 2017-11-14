@@ -33,8 +33,8 @@
     </resultMap>
 
     <!--根据id获取内容详情-->
-    <select id="getDemand" resultMap="demandMap"  flushCache="true">
-        SELECT * FROM "xacx_demand" WHERE "id" =  #{id};
+    <select id="getDemand" resultMap="demandMap" flushCache="true">
+        SELECT * FROM "xacx_demand" WHERE "id" =  #{id}
     </select>
     <!--根据ID修改内容-->
     <update id="updateDemand" parameterType="Demand">
@@ -112,7 +112,7 @@
     	select a."id",a."name",a."number",a."iphone",a."create_date",a."create_by",a."late_date",a."late_by",a."bgd",a."demandd",a."interestpg",a."ninterestpg",
         a."hzms",a."hzrequest",a."productm",a."product_date",a."bz",a."check_name" as checkName,a."ddmj",a."option",a."file",a."xqf",a."gjc",a."username" as userName,b.id as orderid
         from xacx_demand a,xacx_order_v2 b 
-    	where a.id=b.demandid and a.create_by=#{userid} 
+    	where a.id=b.demandid and a.create_by=#{userid} and b.confirm_status IN (0,1)
     	order by a.create_date desc limit #{pageSize} offset #{startIndex}
     </select>
     <!-- 查询用户接单总条数 -->
@@ -151,4 +151,10 @@
     	where a.id=b.demandid and a.create_by=#{userid} 
     	order by a.create_date desc
 	</select>
+	
+	<select id="getDemandByOrderid" parameterType="int" resultMap="demandMap">
+		SELECT * FROM xacx_demand WHERE id=(
+		SELECT demandid FROM xacx_order_v2 WHERE id=#{orderid})
+	</select>
+	
 </mapper>

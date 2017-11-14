@@ -55,4 +55,10 @@ public interface IntelligenceDao {
      * 总数
      */
     int getTotalCounts();
+    /**
+     * 我的情报
+     * @param userid
+     * @return
+     */
+    List<Intelligence> getMyIntelligence(@Param("startIndex") int startIndex, @Param("pageSize") int pageSize,@Param("createBy") String createBy);
 }

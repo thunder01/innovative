@@ -122,5 +122,9 @@ public class Config {
     public static final  String KJ_ZL_SSH = "13";
     //信息推特文件标志 
     public static final  String INFORMATIONPUSHFILE = "informationpushFile";
+    //首页轮播图 
+    public static final  String INDEX_LUNBO = "lunbophoto";
+    //首页轮播图id
+    public static final  String INDEX_LUNBOID = "1231231233";
     
 }

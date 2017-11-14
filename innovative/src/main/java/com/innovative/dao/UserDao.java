@@ -61,7 +61,7 @@ public interface  UserDao {
 		 * @param string 
 		 * @return
 		 */
-		Boolean insertUserRole(@Param("userId")String userId, @Param("roleId")String roleId, @Param("createBy") String createBy);
+		Boolean insertUserRole(@Param("userId")String userId, @Param("roleId")String roleId, @Param("createBy") String createBy,@Param("sfqy") int sfqy);
 		/**
 		 * 检查是否有权限
 		 * @param right  权限id

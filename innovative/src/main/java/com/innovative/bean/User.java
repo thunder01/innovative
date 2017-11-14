@@ -51,15 +51,15 @@ public class User implements Serializable {
 	private String roleId ;//更新时间
 	private String sys_pass_flag ;//目前没用
 	private List<String> roleIds;//状态
+	private int sfqy ;//更新时间
 	public User() {
 			
 		}
-	
 	public User(String userId, String userName, String pernr, String itcode, String usrid_u, String nachn, String vorna,
 			String gesch, String teleno, String mobile, String mail, String werks, String pbtxt, String plans,
 			String stext, String orgeh, String dstext, String stat2, String createAt, String operaction, String glstdm,
 			String glst, String lzrq, String updateAt, String createBy, String updateBy, String roleId,
-			String sys_pass_flag, List<String> roleIds) {
+			String sys_pass_flag, List<String> roleIds, int sfqy) {
 		this.userId = userId;
 		this.userName = userName;
 		this.pernr = pernr;
@@ -89,23 +89,19 @@ public class User implements Serializable {
 		this.roleId = roleId;
 		this.sys_pass_flag = sys_pass_flag;
 		this.roleIds = roleIds;
+		this.sfqy = sfqy;
 	}
-
-	
-	
-	public String getUserName() {
-		return userName;
-	}
-
-	public void setUserName(String userName) {
-		this.userName = userName;
-	}
-
 	public String getUserId() {
 		return userId;
 	}
 	public void setUserId(String userId) {
 		this.userId = userId;
+	}
+	public String getUserName() {
+		return userName;
+	}
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 	public String getPernr() {
 		return pernr;
@@ -269,6 +265,14 @@ public class User implements Serializable {
 	public void setRoleIds(List<String> roleIds) {
 		this.roleIds = roleIds;
 	}
+	public int getSfqy() {
+		return sfqy;
+	}
+	public void setSfqy(int sfqy) {
+		this.sfqy = sfqy;
+	}
+	
+	
 	
 	
 	
