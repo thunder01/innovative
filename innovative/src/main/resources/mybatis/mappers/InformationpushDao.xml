@@ -177,7 +177,7 @@
 	
 	
 		  <!--根据用户id一次获取5条分享记录-->
-	<select id="getInformationpushByUserId" resultMap="informationpushMap">
+	<select id="getInformationpushPartagersByUserid" resultType="map">
 	
 		SELECT  push."id" pushid,push."cotent",push."title",push."comentAt",push."comentBy" ,coment."id" comentId ,coment."partagerAt"
 		FROM "xacx_information_push"  push  
@@ -198,7 +198,7 @@
 			
 	</select>
 	<!-- 此用户评论的推特信息总数 -->
-	<select id="getInformationpushComentersNumByUserid" resultType="Integer">
+	<select id="getInformationpushComentNumByUserid" resultType="Integer">
 		select count(e.*) from (SELECT  push."id"
 		FROM "xacx_information_push"  push  
 		 left join xacx_information_push_commenter commenter on push."id" = commenter."pushId" 
@@ -208,11 +208,11 @@
 		  <!--根据用户评论的5条推特信息记录-->
 	<select id="getInformationpushByComenterByUserId" resultMap="informationpushMap">
 		
-	SELECT  push."id" pushid,push."cotent",push."title",push."comentAt",push."comentBy" ,commenter."id" comentId ,commenter."comentAt"
+	SELECT  push."id" ,push."cotent",push."title",push."comentAt",push."comentBy" ,commenter."id" sid  ,commenter."comentAt" scomentAt,commenter.cotent scotent
 		FROM "xacx_information_push"  push  
 		 left join xacx_information_push_commenter commenter 
 		 	on push."id" = commenter."pushId" 
-		 	where commenter."comentBy" = #{comentBy} ORDER by commenter."comentAt" DESC,push."comentAt" DESC
+		 	where (commenter."comentBy" = #{comentBy} or push."comentBy" = #{comentBy}) ORDER by commenter."comentAt" DESC,push."comentAt" DESC
 		
 		limit #{limit} OFFSET #{startIndex}
 			
@@ -225,6 +225,29 @@
 		  join xacx_information_push_collection collection on push."id" = collection."comentId" 
 		 where collection."collectBy" = #{userid}  )e
 	</select>
+	
+	
+	
+		<!-- 此用户收藏的推特信息总数 -->
+	<select id="getInformationCollectNumByUserid" resultType="Integer">
+		select count(1) from COLLECT_LIST
+		 where "collectBy" = #{userid}  
+	</select>
+	
+		  <!--获得用户收藏的所有信息-->
+	<select id="getInformationByCollectByUserId" resultType="map">
+		
+		select * from COLLECT_LIST
+
+	 	where "collectBy" = #{userid} and "collectAt" is not Null   ORDER by "collectAt" DESC
+		
+		limit #{limit} OFFSET #{startIndex}
+			
+	</select>
+	
+	
+	
+	
 	
 		  <!--获得用户收藏的推特信息-->
 	<select id="getInformationpushByCollectByUserId" resultMap="informationpushMap">

@@ -27,6 +27,9 @@
 	  <result property="glstdm" column="glstdm"/><!-- 管理实体代码 -->
 	  <result property="glst" column="glst"/><!-- 管理实体-->
 	  <result property="lzrq" column="lzrq"/><!-- 离职日期 -->
+	  <result property="sfqy" column="sfqy"/><!--是否启用 -->
+	  <result property="roleName" column="RoleName"/><!--角色名字 -->
+	   <result property="roleId" column="RoleId"/><!--角色名字 -->
 	</resultMap> 
 
  <!--添加用户信息-->
@@ -104,13 +107,61 @@
 	
 		<!--根据查询条件获取列表-->
 	<select id="getUserList" resultMap="userMap">
-		SELECT * FROM "xacx_user"
+		SELECT u.pernr,u.username,u.itcode,u.gesch,u.dstext,u.lzrq,ur.sfqy,r."RoleName" FROM "xacx_user" u
+			  left join app_userrole ur on u.pernr = ur."UserId"
+			 left join app_role r on r."RoleId" = ur."RoleId"
+	   <where>
+	     1=1
+		<if test="roleName!=null and roleName!=''">
+			and  r."RoleName"  =  #{roleName}  
+		</if>
+		 	<if test="keyword!='%%' and keyword!='%null%'">
+               and ( 
+                 	 u.pernr LIKE #{keyword}
+                  	 OR u.username LIKE #{keyword}
+                  	  OR u.itcode LIKE #{keyword}
+                  	  OR u.gesch LIKE #{keyword}
+                  	  OR u.dstext LIKE #{keyword}
+                  	   OR u.lzrq LIKE #{keyword}
+                  	    <if test="keyword=='启用'">
+                  	    	OR ur.sfqy = '1'
+                  	    </if>
+                  	     <if test="keyword=='禁用'">
+                  	    	OR ur.sfqy = '0'
+                  	    </if>
+                   )
+            </if>
+		</where>
 		limit #{pageSize} offset #{startIndex}
 	</select>
 
 	<!--查询行业领域搜索条件的总条数-->
 	<select id="getTotalCount" resultType="int">
-		SELECT count(1) FROM "xacx_user"
+		SELECT count(1) FROM "xacx_user" u
+			 left join app_userrole ur on u.pernr = ur."UserId"
+			 left join app_role r on r."RoleId" = ur."RoleId"
+		<where>
+		 1=1
+		<if test="roleName!=null and roleName!=''">
+			and r."RoleName"  =  #{roleName}  
+		</if>
+		 	<if test="keyword!='%%' and keyword!='%null%'">
+               and ( 
+                 	 u.pernr LIKE #{keyword}
+                  	 OR u.username LIKE #{keyword}
+                  	  OR u.itcode LIKE #{keyword}
+                  	  OR u.gesch LIKE #{keyword}
+                  	  OR u.dstext LIKE #{keyword}
+                  	   OR u.lzrq LIKE #{keyword}
+                  	    <if test="keyword=='启用'">
+                  	    	OR ur.sfqy = '1'
+                  	    </if>
+                  	     <if test="keyword=='禁用'">
+                  	    	OR ur.sfqy = '0'
+                  	    </if>
+                   )
+            </if>
+		</where>
 	</select>
 
  <!-- 根据用户id与角色id获取用户角色信息是否存在 -->

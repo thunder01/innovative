@@ -49,6 +49,7 @@ public class User implements Serializable {
 	private String createBy ;//更新时间
 	private String updateBy ;//更新时间
 	private String roleId ;//更新时间
+	private String roleName ;//更新时间
 	private String sys_pass_flag ;//目前没用
 	private List<String> roleIds;//状态
 	private int sfqy ;//更新时间
@@ -58,7 +59,7 @@ public class User implements Serializable {
 	public User(String userId, String userName, String pernr, String itcode, String usrid_u, String nachn, String vorna,
 			String gesch, String teleno, String mobile, String mail, String werks, String pbtxt, String plans,
 			String stext, String orgeh, String dstext, String stat2, String createAt, String operaction, String glstdm,
-			String glst, String lzrq, String updateAt, String createBy, String updateBy, String roleId,
+			String glst, String lzrq, String updateAt, String createBy, String updateBy, String roleId, String roleName,
 			String sys_pass_flag, List<String> roleIds, int sfqy) {
 		this.userId = userId;
 		this.userName = userName;
@@ -87,6 +88,7 @@ public class User implements Serializable {
 		this.createBy = createBy;
 		this.updateBy = updateBy;
 		this.roleId = roleId;
+		this.roleName = roleName;
 		this.sys_pass_flag = sys_pass_flag;
 		this.roleIds = roleIds;
 		this.sfqy = sfqy;
@@ -253,6 +255,12 @@ public class User implements Serializable {
 	public void setRoleId(String roleId) {
 		this.roleId = roleId;
 	}
+	public String getRoleName() {
+		return roleName;
+	}
+	public void setRoleName(String roleName) {
+		this.roleName = roleName;
+	}
 	public String getSys_pass_flag() {
 		return sys_pass_flag;
 	}
@@ -271,6 +279,8 @@ public class User implements Serializable {
 	public void setSfqy(int sfqy) {
 		this.sfqy = sfqy;
 	}
+   
+	
 	
 	
 	

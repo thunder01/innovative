@@ -370,11 +370,11 @@ public Map<String,Object> getInformationpushsMessageByUserid(String userid, int 
       map.put("comenters", informationPushcoments);
       //收藏信息
       //用户收藏数量
-      Integer collectNum = informationpushDao.getInformationpushCollectNumByUserid(userid);
+      Integer collectNum = informationpushDao.getInformationCollectNumByUserid(userid);
       map.put("collectNum", collectNum);
-      //用户收藏的推特信息
-      List<Informationpush> informationPushCollect = informationpushDao.getInformationpushByCollectByUserId(userid,pageInfo.getPageSize(),pageInfo.getStartIndex());
-      
+      //用户收藏的推特信息,科技资讯，科技专栏信息
+      List<Informationpush> informationPushCollect = informationpushDao.getInformationByCollectByUserId(userid,pageInfo.getPageSize(),pageInfo.getStartIndex());
+      map.put("collectInformation", informationPushCollect);
       return map;
 }
 

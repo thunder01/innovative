@@ -141,7 +141,7 @@ public interface InformationpushDao {
 	 * @param startIndex
 	 * @return
 	 */
-	List<Informationpush> getInformationpushPartagersByUserid(@Param("partagerBy")String partagerBy,@Param("limit") int limit, int startIndex);
+	List<Informationpush> getInformationpushPartagersByUserid(@Param("partagerBy")String partagerBy,@Param("limit") int limit,@Param("startIndex") int startIndex);
 
 
 
@@ -170,7 +170,7 @@ public interface InformationpushDao {
 	 * @param startIndex
 	 * @return 
 	 */
-	List<Informationpush> getInformationpushByComenterByUserId(@Param("comentBy")String comentBy, @Param("pageSize")int pageSize, @Param("startIndex")int startIndex);
+	List<Informationpush> getInformationpushByComenterByUserId(@Param("comentBy")String comentBy, @Param("limit")int limit, @Param("startIndex")int startIndex);
 
 
 
@@ -191,6 +191,22 @@ public interface InformationpushDao {
 	 * @return
 	 */
 	List<Informationpush> getInformationpushByCollectByUserId(@Param("collectBy")String collectBy, @Param("pageSize")int pageSize, @Param("startIndex")int startIndex);
+
+	/**
+	 * 获取所有的收藏信息  包括 信息推特 科技资讯 科技专栏 （此方法应该抽取出来的 ，太懒了先这样吧）
+	 * @param userid
+	 * @return
+	 */
+	Integer getInformationCollectNumByUserid(@Param("userid")String userid);
+
+	/**
+	 * 获取所有的收藏信息包括 信息推特 科技资讯 科技专栏 （此方法应该抽取出来的 ，太懒了先这样吧）
+	 * @param userid
+	 * @param pageSize
+	 * @param startIndex
+	 * @return
+	 */
+	List<Informationpush> getInformationByCollectByUserId(@Param("userid")String userid, @Param("limit")int limit, @Param("startIndex")int startIndex);
 
 
 	

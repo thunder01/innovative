@@ -40,6 +40,16 @@ public class RoleController {
         return new JsonResult(true, roleService.getRoleLists(page));
     }
     /**
+     * 获取所有角色
+     *
+     * @return
+     */
+    @RequestMapping(value = "/getRoleNameList", method = RequestMethod.GET)
+    @ResponseBody
+    public JsonResult getRoleNameList() {
+        return new JsonResult(true, roleService.getRoleNameList());
+    }
+    /**
      * 增加角色
      * @param role
      * @param req

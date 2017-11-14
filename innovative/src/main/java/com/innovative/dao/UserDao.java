@@ -39,14 +39,18 @@ public interface  UserDao {
 		 * 获取列表用户信息
 		 * @param startIndex
 		 * @param pageSize
+		 * @param keyword 
+		 * @param roleName 
 		 * @return
 		 */
-		List<User> getUserList(@Param("startIndex")int startIndex, @Param("pageSize")int pageSize);
+		List<User> getUserList(@Param("startIndex")int startIndex, @Param("pageSize")int pageSize,  @Param("roleName")String roleName,  @Param("keyword")String keyword);
 		/**
 		 * 获取用户总条数
+		 * @param keyword 
+		 * @param roleName 
 		 * @return 用户总条数
 		 */
-		int getTotalCount();
+		int getTotalCount(@Param("roleName")String roleName, @Param("keyword")String keyword);
 		/**
 		 * 查看用户是否有用户角色记录
 		 * @param userId

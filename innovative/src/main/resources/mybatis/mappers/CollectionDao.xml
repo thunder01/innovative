@@ -43,16 +43,17 @@
 	
 	  <!--获取用户的所有收藏-->
 	<select id="getCollectionlist" resultType="map">
-		SELECT coll."collectAt",coll."collectBy",coll."comentId",pu."title",pu."cotent",us."username" FROM "xacx_information_push_collection" coll 
-		join xacx_information_push pu on pu."id" = coll."comentId"
-		join xacx_user us on us."pernr" = coll."collectBy"
-		WHERE "collectBy" =  #{collectBy}
-		order by "collectAt" DESC
-		 LIMIT #{pageSize} offset #{startIndex}
+		select * from COLLECT_LIST
+
+	 	where "collectBy" = #{collectBy} and "collectAt" is not Null   ORDER by "collectAt" DESC
+		
+		limit #{pageSize} OFFSET #{startIndex}
+		
 	</select>
 	<!-- 获取该用户总条数 -->
 	<select id="getTotalCountByUser" resultType="Integer">
-		SELECT count(*) FROM "xacx_information_push_collection" where "collectBy" =  #{collectBy}
+		select count(1) from COLLECT_LIST
+		 where "collectBy" = #{collectBy}  
 	</select>
 	
 	<!-- 该用户今天是否对此信息已收藏 -->
