@@ -33,7 +33,7 @@
     </resultMap>
 
     <!--根据id获取内容详情-->
-    <select id="getDemand" resultMap="demandMap">
+    <select id="getDemand" resultMap="demandMap"  flushCache="true">
         SELECT * FROM "xacx_demand" WHERE "id" =  #{id};
     </select>
     <!--根据ID修改内容-->

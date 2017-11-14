@@ -19,6 +19,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.apache.ibatis.annotations.Param;
 import org.elasticsearch.action.admin.indices.exists.indices.IndicesExistsRequest;
 import org.elasticsearch.action.admin.indices.exists.indices.IndicesExistsResponse;
 import org.elasticsearch.action.admin.indices.mapping.put.PutMappingRequest;
@@ -438,6 +440,15 @@ public class SectionsService {
 		}else{
 			return false;
 		}
+	}
+
+	/**
+	 * 根据技术报告方案（一期）的id查询科技专栏的id
+	 * @param firstid
+	 * @return
+	 */
+	String getIdByFirstId(String firstid,String type){
+		return sectionsDao.getIdByFirstId(firstid,type);
 	}
 
 }

@@ -222,7 +222,7 @@ public class MessageService {
 					}
 					if("1".equals(m.getType())){//1是拆解报告确认
 						Order order = orderDao.getOrderById(Integer.parseInt(m.getProid()));
-						System.out.println("--------------"+order);
+					System.out.println("--------------"+order);
 						System.err.println("yyyyyyyyyyyyyyyy"+order.getId());
 						Demand demand = demandDao.getDemand(order.getDemandId());
 						System.err.println("=========="+demand);

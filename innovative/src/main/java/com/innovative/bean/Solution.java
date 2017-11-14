@@ -2,6 +2,7 @@ package com.innovative.bean;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -283,5 +284,31 @@ public class Solution implements Serializable {
 
     public void setFile(String file) {
         this.file = file;
+    }
+
+    @Override
+    public String toString() {
+        return "Solution{" +
+                "id='" + id + '\'' +
+                ", content='" + content + '\'' +
+                ", createdAt=" + createdAt +
+                ", createdBy='" + createdBy + '\'' +
+                ", deleted=" + deleted +
+                ", deletedAt=" + deletedAt +
+                ", deletedBy='" + deletedBy + '\'' +
+                ", isActive=" + isActive +
+                ", name='" + name + '\'' +
+                ", pictures='" + pictures + '\'' +
+                ", rank=" + rank +
+                ", rowVersion=" + rowVersion +
+                ", sectors=" + Arrays.toString(sectors) +
+                ", summary='" + summary + '\'' +
+                ", tags=" + Arrays.toString(tags) +
+                ", updatedAt=" + updatedAt +
+                ", updatedBy='" + updatedBy + '\'' +
+                ", file='" + file + '\'' +
+                ", fileSize=" + fileSize +
+                ", filelist=" + filelist +
+                '}';
     }
 }
