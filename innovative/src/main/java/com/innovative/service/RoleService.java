@@ -60,5 +60,13 @@ public class RoleService {
 		roleRightDao.deleteRoleRight(role.getRoleId());
 		return roleRightDao.addRoleRight(role);
 	}
+	/**
+	 * 获取所有的rolename
+	 * @return
+	 */
+	public List<String> getRoleNameList() {
+		// TODO Auto-generated method stub
+		return roleDao.getRoleNameList();
+	}
 
 }

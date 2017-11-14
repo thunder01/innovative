@@ -68,3 +68,27 @@ CREATE MATERIALIZED VIEW v_xacx_information_push AS
     )
     SELECT "cotent","comentBy","comentAt","approuverNum","title","id","pid", PATH,TYPE, DEPTH FROM T
 ORDER BY PATH,"comentAt" DESC)e)
+
+---创建收藏记录
+
+create or REPLACE VIEW COLLECT_LIST	 as
+
+SELECT  push."id" pushid,push."cotent",push."title",push."comentBy",u.username comentByC,collection."collectBy",collection."collectAt",'xxttsc' type1
+		FROM "xacx_information_push"  push  
+		  join xacx_information_push_collection collection 
+		 	on push."id" = collection."comentId" 
+			left join xacx_user u on push."comentBy" = u.pernr 
+		
+	 UNION
+    
+
+   select tech.id pushid,tech.cotent cotent,tech.title title,tech."createBy" comentBy,tu.username comentByC, techcoll."collectBy" collectBy,techcoll."collectAt" collectAt,'information' type1
+		from xacx_tech_information_collection techcoll 
+		 join xacx_tech_information tech on techcoll."informationId" = tech."id"
+     left join xacx_user tu on tu.pernr = tech."createBy" 
+
+  union 
+
+   select sec."id" pushid,sec.cotent cotent,sec.title title,sec."createBy" comentBy,su.username comentByC ,tesec."collectBy" collectBy,tesec."collectAt" collectAt,'sections' type1 from xacx_tech_sections_collection tesec
+    join xacx_tech_sections sec on sec."id" = tesec."sectionId"
+    left join xacx_user su on su.pernr = sec."createBy"

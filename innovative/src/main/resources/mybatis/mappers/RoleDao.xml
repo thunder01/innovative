@@ -12,6 +12,12 @@
         FROM "app_role"
        <!--  limit #{pageSize} offset #{startIndex} -->
     </select>
+     <!--获取所有的roleName-->
+    <select id="getRoleNameList" resultType="String">
+        SELECT DISTINCT "RoleName"
+        FROM "app_role"
+       <!--  limit #{pageSize} offset #{startIndex} -->
+    </select>
     <!-- 获取总数 -->
      <select id="getTotalCount" resultType="int">
         SELECT count(*)

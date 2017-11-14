@@ -112,9 +112,9 @@ public class UserController {
 	     * @return
 	     */
 	    @RequestMapping(value = "/getUserList", method = RequestMethod.GET)
-	    public JsonResult getUserList(@RequestParam(name="offset",defaultValue="0" ) Integer offset) {
+	    public JsonResult getUserList(@RequestParam(name="offset",defaultValue="0" ) Integer offset,@RequestParam(name="roleName",required=false )String roleName,@RequestParam(name="keyword",required=false )String keyword) {
 	    	Integer page = offset/(new PageInfo().getPageSize()) +1;
-	        return new JsonResult(true, userService.getUserLists(page));
+	        return new JsonResult(true, userService.getUserLists(page,roleName,keyword));
 	    }
 	    /**
 	     * 用户列表页
@@ -165,5 +165,16 @@ public class UserController {
 	    	}
 	        return new JsonResult(true, "新增成功!");
 	    }
+	    
+	   /**
+	    * 用户收藏的信息，用户评论的信息，转发的信息，点赞
+	    * @return
+	    */
+	   /* @RequestMapping(value = "/getUserInformation", method = RequestMethod.GET)
+	    public JsonResult getUserInformation(@RequestParam(name="offset",defaultValue="0" ) Integer offset) {
+	    	List<User> list = userService.getUserInformation();
+	    	System.out.println(list);
+	        return new JsonResult(true, list);
+	    }*/
 
 }

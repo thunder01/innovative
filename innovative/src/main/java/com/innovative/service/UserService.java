@@ -107,14 +107,16 @@ public class UserService {
 	/**
 	 * 用户分页查询
 	 * @param pageNum
+	 * @param keyword 
+	 * @param roleName 
 	 * @return
 	 */
-	public Map<String,Object> getUserLists(Integer pageNum) {
+	public Map<String,Object> getUserLists(Integer pageNum, String roleName, String keyword) {
 		  PageInfo pageInfo = new PageInfo();
 	        pageInfo.setCurrentPageNum(pageNum);
-
-	        List<User> users = userdao.getUserList( pageInfo.getStartIndex(), pageInfo.getPageSize());
-	        int totalCount = userdao.getTotalCount();
+	        keyword = "%"+keyword+"%";
+	        List<User> users = userdao.getUserList( pageInfo.getStartIndex(), pageInfo.getPageSize(),roleName,keyword);
+	        int totalCount = userdao.getTotalCount(roleName,keyword);
       
 	        Map<String, Object> map = new HashMap<>();
 	        map.put("items", users);

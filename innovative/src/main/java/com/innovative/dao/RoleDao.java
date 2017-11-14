@@ -26,6 +26,11 @@ public interface RoleDao {
 	 * @return
 	 */
 	int getTotalCount();
+	/**
+	 * 获取roleName
+	 * @return
+	 */
+	List<String> getRoleNameList();
 
 
 }

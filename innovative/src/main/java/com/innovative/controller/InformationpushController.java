@@ -1,7 +1,5 @@
 package com.innovative.controller;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.innovative.bean.Approuver;
 import com.innovative.bean.CollectionPush;
 import com.innovative.bean.Informationpush;
@@ -12,7 +10,6 @@ import com.innovative.utils.JsonResult;
 import com.innovative.utils.Misc;
 import com.innovative.utils.PageInfo;
 
-import java.io.IOException;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -221,8 +218,8 @@ public class InformationpushController extends BaseController {
     * @param req
     * @return
     */
-    @RequestMapping(value = "/getCollects", method = RequestMethod.GET,produces="application/json;charset=UTF-8")
-    public JsonResult getCollects(@RequestParam(name = "userid") String userid ,@RequestParam(name="offset",defaultValue="0" ) Integer offset,HttpServletRequest req) {
+    @RequestMapping(value = "/getCollects/{userid}", method = RequestMethod.GET,produces="application/json;charset=UTF-8")
+    public JsonResult getCollects(@PathVariable(name = "userid") String userid ,@RequestParam(name="offset",defaultValue="0" ) Integer offset,HttpServletRequest req) {
     	Integer page = offset/(new PageInfo().getPageSize()) +1;
     	//此用户收藏记录分页查找
         return new JsonResult(true,informationpushService.getCollects(userid,page));
