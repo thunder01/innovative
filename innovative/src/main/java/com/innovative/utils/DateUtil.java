@@ -20,6 +20,7 @@ public class DateUtil {
 
     private final static SimpleDateFormat sdfYear = new SimpleDateFormat("yyyy");
     private final static SimpleDateFormat sdfDay = new SimpleDateFormat("yyyy-MM-dd");
+    private final static SimpleDateFormat yearDay = new SimpleDateFormat("yyyy-MM");
     private final static SimpleDateFormat sdfDays = new SimpleDateFormat("yyyyMMdd");
     private final static SimpleDateFormat sdfTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     private final static SimpleDateFormat sdfTimes = new SimpleDateFormat("yyyyMMddHHmmss");
@@ -266,6 +267,19 @@ public class DateUtil {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String dateStr = sdf.format(date);
         return dateStr;
+    }
+
+    /**
+     * 年月份-1
+     *
+     */
+    public  static String getMouth(int month){
+        Date date = new Date();//获取当前时间
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.add(Calendar.MONTH,month);//当前时间前去一个月，即一个月前的时间
+        String dataStr=yearDay.format(calendar.getTime());
+        return dataStr;
     }
 
     public static void main(String[] args) {

@@ -5,26 +5,26 @@
 <mapper namespace="com.innovative.dao.FullTextQueryDao">
 
     <!--根据查询条件获取列表-->
-    <select id="getExpertList" resultType="Expert">
-        SELECT * FROM "Experts"
+    <select id="getExpertList" resultType="int">
+        SELECT COUNT(1) FROM "Experts"
         <where>
-            <if test="key1!='%%' and key1!='%null%'">
-                OR "Name" LIKE #{key1}
-            </if>
-            <if test="key1!='%%' and key1!='%null%'">
-                OR "Unit" LIKE #{key1}
-            </if>
-            <if test="key1!='%%' and key1!='%null%'">
-                OR "ResearchDirection" LIKE #{key1}
-            </if>
-            <if test="key1!='%%' and key1!='%null%'">
-                OR "Education" LIKE #{key1}
-            </if>
-            <if test="key1!='%%' and key1!='%null%'">
-                OR "JobTitle" LIKE #{key1}
-            </if>
+            <!--<if test="key1!='%%' and key1!='%null%'">-->
+                <!--OR "Name" LIKE #{key1}-->
+            <!--</if>-->
+            <!--<if test="key1!='%%' and key1!='%null%'">-->
+                <!--OR "Unit" LIKE #{key1}-->
+            <!--</if>-->
+            <!--<if test="key1!='%%' and key1!='%null%'">-->
+                <!--OR "ResearchDirection" LIKE #{key1}-->
+            <!--</if>-->
+            <!--<if test="key1!='%%' and key1!='%null%'">-->
+                <!--OR "Education" LIKE #{key1}-->
+            <!--</if>-->
+            <!--<if test="key1!='%%' and key1!='%null%'">-->
+                <!--OR "JobTitle" LIKE #{key1}-->
+            <!--</if>-->
             <if test="key2!='{}' and key2!='{null}'">
-                OR "Sectors" @> '${key2}'
+                 "Tags" @> '${key2}'
             </if>
         </where>
     </select>
@@ -55,14 +55,14 @@
 	</select>
 
 
-    <select id="getOrganizationList" resultType="Organization">
-        SELECT * FROM "Organizations"
+    <select id="getOrganizationList" resultType="int">
+        SELECT COUNT(1) FROM "Organizations"
         <where>
-            <if test="key1!='%%' and key1!='%null%'">
-                OR "Name" LIKE #{key1}
-            </if>
+            <!--<if test="key1!='%%' and key1!='%null%'">-->
+                <!--OR "Name" LIKE #{key1}-->
+            <!--</if>-->
             <if test="key2!='{}' and key2!='{null}'">
-                OR "Sectors" @> '${key2}'
+                 "Tags" @> '${key2}'
             </if>
         </where>
     </select>
@@ -93,17 +93,17 @@
 	</select>
 
 
-    <select id="getTechnicalReportList" resultType="TechnicalReport">
-        SELECT * FROM "TechnicalReports"
+    <select id="getTechnicalReportList" resultType="int">
+        SELECT COUNT(1) FROM "TechnicalReports"
         <where>
-            <if test="key1!='%%' and key1!='%null%'">
-                OR "Name" LIKE #{key1}
-            </if>
+            <!--<if test="key1!='%%' and key1!='%null%'">-->
+                <!--OR "Name" LIKE #{key1}-->
+            <!--</if>-->
+            <!--<if test="key2!='{}' and key2!='{null}'">-->
+                <!--OR "Sectors" @> '${key2}'-->
+            <!--</if>-->
             <if test="key2!='{}' and key2!='{null}'">
-                OR "Sectors" @> '${key2}'
-            </if>
-            <if test="key2!='{}' and key2!='{null}'">
-                OR "Tags" @> '${key2}'
+                 "Tags" @> '${key2}'
             </if>
         </where>
     </select>
@@ -124,45 +124,45 @@
 	</select>
 
 
-    <select id="getSolutionList" resultType="Solution">
-        SELECT * FROM "Solutions"
+    <select id="getSolutionList" resultType="int">
+        SELECT COUNT(1) FROM "Solutions"
         <where>
-            <if test="key1!='%%' and key1!='%null%'">
-                OR "Name" LIKE #{key1}
-            </if>
+            <!--<if test="key1!='%%' and key1!='%null%'">-->
+                <!--OR "Name" LIKE #{key1}-->
+            <!--</if>-->
+            <!--<if test="key2!='{}' and key2!='{null}'">-->
+                <!--OR "Sectors" @> '${key2}'-->
+            <!--</if>-->
             <if test="key2!='{}' and key2!='{null}'">
-                OR "Sectors" @> '${key2}'
-            </if>
-            <if test="key2!='{}' and key2!='{null}'">
-                OR "Tags" @> '${key2}'
+                 "Tags" @> '${key2}'
             </if>
         </where>
     </select>
     
 
 
-    <select id="getEquipmentList" resultType="Equipment">
-        SELECT * FROM "Equipments"
+    <select id="getEquipmentList" resultType="int">
+        SELECT COUNT(1) FROM "Equipments"
         <where>
-            <if test="key1!='%%' and key1!='%null%'">
-                OR "Unit" LIKE #{key1}
-            </if>
+            <!--<if test="key1!='%%' and key1!='%null%'">-->
+                <!--OR "Unit" LIKE #{key1}-->
+            <!--</if>-->
             <if test="key2!='{}' and key2!='{null}'">
-                OR "Sectors" @> '${key2}'
+                 "Tags" @> '${key2}'
             </if>
         </where>
     </select>
 
 
     <!--根据查询条件获取列表-->
-    <select id="getAssociationList" resultType="Association">
-        SELECT * FROM "Associations"
+    <select id="getAssociationList" resultType="int">
+        SELECT COUNT(1) FROM "Associations"
         <where>
-            <if test="key1!='%%' and key1!='%null%'">
-                OR "Name" LIKE #{key1}
-            </if>
+            <!--<if test="key1!='%%' and key1!='%null%'">-->
+                <!--OR "Name" LIKE #{key1}-->
+            <!--</if>-->
             <if test="key2!='{}' and key2!='{null}'">
-                OR "Sectors" @> '${key2}'
+                 "Tags" @> '${key2}'
             </if>
         </where>
     </select>
