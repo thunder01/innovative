@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.innovative.dao.FileLogDao">
+    <resultMap id="fileMap" type="com.innovative.bean.FileLog">
+        <id property="id" column="id"/>
+        <result property="fileName" column="fileName"/>
+        <result property="numbers" column="numbers"/>
+    </resultMap>
+	<insert id="addFileLog" parameterType="com.innovative.bean.FileLog">
+        INSERT INTO "xacx_filelog"("create_date","fileName","userid","numbers","type")
+        VALUES(now(),#{fileName},#{userid},#{numbers},#{type})
+    </insert>
+    <select id="queryList" resultMap="fileMap">
+        SELECT "id","fileName","numbers" FROM "xacx_filelog"
+        <where>
+            "fileName"=#{fileName}
+        </where>
+    </select>
+    <update id="update" parameterType="com.innovative.bean.FileLog">
+        UPDATE "xacx_filelog" SET numbers=#{numbers}
+    </update>
+
+</mapper>

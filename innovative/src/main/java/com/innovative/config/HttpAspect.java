@@ -19,6 +19,10 @@ import org.slf4j.MDC;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.context.support.WebApplicationContextUtils;
+
+import com.innovative.bean.LoggerRecord;
+import com.innovative.service.LoggerRecordService;
 /**
  * 记录用户行为
  * @author huang
@@ -42,6 +46,7 @@ public class HttpAspect {
     public void doBefore(JoinPoint joinPoint){
     	ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = attributes.getRequest();
+        HttpServletResponse response = attributes.getResponse();
         String userid = request.getParameter("userId");
 
         MDC.put("userid",userid);

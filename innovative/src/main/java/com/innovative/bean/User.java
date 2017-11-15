@@ -53,6 +53,7 @@ public class User implements Serializable {
 	private String sys_pass_flag ;//目前没用
 	private List<String> roleIds;//状态
 	private int sfqy ;//更新时间
+	private List<FileBean> files;
 	public User() {
 			
 		}
@@ -278,6 +279,12 @@ public class User implements Serializable {
 	}
 	public void setSfqy(int sfqy) {
 		this.sfqy = sfqy;
+	}
+	public List<FileBean> getFiles() {
+		return files;
+	}
+	public void setFiles(List<FileBean> files) {
+		this.files = files;
 	}
    
 	

@@ -1,6 +1,8 @@
 package com.innovative.controller;
 
 import java.util.Map;
+
+import org.elasticsearch.xpack.notification.email.Attachment.XContent.Json;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.innovative.bean.Order;
 import com.innovative.bean.ProjectApproval;
+import com.innovative.dao.OrderDao;
 import com.innovative.service.OrderService;
 import com.innovative.service.ProjectApprovalService;
 import com.innovative.utils.JsonResult;
@@ -27,6 +30,8 @@ public class OrderController {
 	private OrderService orderService;//订单业务
 	@Autowired
 	private ProjectApprovalService projectApprovalService;//立项报告业务
+	@Autowired
+	private OrderDao orderDao;
 	
 	/**
 	 * 我的订单，展示用户的订单列表
@@ -157,7 +162,6 @@ public class OrderController {
 	@RequestMapping(value="/summary/{order_id}",method=RequestMethod.GET)
 	public JsonResult rankReport(@PathVariable(name="order_id") Integer order_id){
 		Map<String, Object> map=orderService.rankReport(order_id);
-		
 		return new JsonResult(true, map);
 	}
 	
@@ -186,6 +190,16 @@ public class OrderController {
 		return new JsonResult(true, map);
 	}
 	/**
+	 * 评价展示
+	 * @param order_id
+	 * @return
+	 */
+	@RequestMapping(value="/showGrade/{order_id}",method=RequestMethod.GET)
+	public JsonResult showGrade(@PathVariable(name="order_id") Integer order_id){
+		Order order = orderDao.getOrderById(order_id);
+		return new JsonResult(true, order);
+	}
+	/**
 	 * 更新订单的进程状态
 	 * @param order
 	 * @return
@@ -195,6 +209,11 @@ public class OrderController {
 		Map<String, Object> map = orderService.updateOrderProcess(order);
 		return new JsonResult(true, map);
 	}	
+	@RequestMapping(value="/getSourceFiles/{userid}/{orderid}",method=RequestMethod.GET)
+	public JsonResult getSourceFiles(@PathVariable(name="userid") String userid,@PathVariable(name="orderid") Integer orderid){
+		Map<String, Object> map = orderService.getSourceFiles(userid, orderid);
+		return new JsonResult(true, map);
+	}
 	
 	
 }
