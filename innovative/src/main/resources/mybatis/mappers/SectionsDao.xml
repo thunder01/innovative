@@ -128,7 +128,7 @@
 				"state" = #{state}
 			</if>
 		</where>
-		 
+		order by "createAt" DESC
 		limit #{pageSize} offset #{startIndex}
 	</select>
 
