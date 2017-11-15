@@ -197,16 +197,57 @@ public class OrderService {
 		/*3、获取用户信息*/
 		User demandMaster = userDao.getUser(demandMasterId);//需求工程师		
 		List<User> list = new ArrayList<User>();//寻源工程师
+		List<Report> reportList = reportDao.rankReport(order_id);
 		for(int i=0;i<sourceMasterId.length;i++){
 			User source=userDao.getUser(sourceMasterId[i]);
 			if (sourceMasterId[i]!=null) {
 				list.add(source);
 			}	
 		}
-		
+		if(list.size()>0&&reportList.size()>0){
+			for (int i = 0; i < list.size(); i++) {
+				List<FileBean> list2 = new ArrayList<>();
+				for (int j = 0; j < reportList.size(); j++) {
+					if(list.get(i).getUserId().equals(reportList.get(j).getCreate_by())){
+						List<FileBean> list3 = fileDao.getFileById(reportList.get(j).getFileid(), "orderReport");
+						if(list3.size()>0){
+							for (int k = 0; k < list3.size(); k++) {
+								list2.add(list3.get(k));
+							}
+						}
+					}
+				}
+				list.get(i).setFiles(list2);
+			}
+		}
+		DisassembleReport disassembleReport = disassembleReportDao.getDisassembleByOrderid(order_id);
+		List<FileBean> listFiles = null;
+		if(disassembleReport!=null){
+			listFiles=fileDao.getFileById(disassembleReport.getFileid(), "disassemble");
+		}
+		demandMaster.setFiles(listFiles);
 		map.put("demandMaster", demandMaster);
 		map.put("source", list);
 		map.put("orderid", order_id);
+		return map;
+	}
+	
+	
+	public Map<String,Object> getSourceFiles(String userid,Integer orderid){
+		Map<String, Object> map=new HashMap<>();
+		List<Report> reportList = reportDao.rankReport(orderid);
+		List<FileBean> list2 = new ArrayList<>();
+		for (int i = 0; i < reportList.size(); i++) {
+			if(userid.equals(reportList.get(i).getCreate_by())){
+				List<FileBean> list3 = fileDao.getFileById(reportList.get(i).getFileid(), "orderReport");
+				if(list3.size()>0){
+					for (int k = 0; k < list3.size(); k++) {
+						list2.add(list3.get(k));
+					}
+				}
+			}
+		}
+		map.put("files", list2);
 		return map;
 	}
 	
@@ -247,8 +288,10 @@ public class OrderService {
 	 */
 	public Map<String, Object> projectGrade(Order order){
 		Map<String, Object> map=new HashMap<>();	
-		orderDao.proEvaluate(order);//添加评分信息		
+		orderDao.proEvaluate(order);//添加评分信息
+		Order order2 = orderDao.getOrderById(order.getId());
 		map.put("orderid", order.getId());
+		map.put("order", order2);
 		return map;
 	}
 	

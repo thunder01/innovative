@@ -76,7 +76,7 @@
     <!--根据id判断有无此图片-->
     <select id="getFileById" resultType="FileBean">
     
-        SELECT "refType","refId","url","filename","fileType" FROM  "xacx_file"
+        SELECT "refType","refId","url","filename","fileType","createAt" FROM  "xacx_file"
             where  "refId" = #{refid}  AND  "refType" = #{reftype}  AND  "sign" = 'add' 
         
     </select>

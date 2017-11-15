@@ -67,6 +67,9 @@ public class FileBean implements Serializable {
 	}
 
 	public String getCreateAt() {
+		if(createAt!=null){
+			return createAt.substring(0, 16);
+		}
 		return createAt;
 	}
 
