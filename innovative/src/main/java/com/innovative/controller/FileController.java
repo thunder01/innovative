@@ -7,23 +7,17 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
+import com.innovative.bean.FileLog;
+import com.innovative.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.innovative.bean.FileBean;
 import com.innovative.bean.TechnicalReport;
 import com.innovative.bean.User;
-import com.innovative.service.FileService;
-import com.innovative.service.IntegralService;
-import com.innovative.service.TechnicalReportService;
-import com.innovative.service.UserService;
 import com.innovative.utils.BaseController;
 import com.innovative.utils.JsonResult;
 
@@ -40,11 +34,18 @@ public class FileController extends BaseController {
 	private UserService userService;
 	@Autowired
 	private IntegralService integralService;
+	@Autowired
+	private FileLogService fileLogService;
 
-    /**
-     * 根据id获取行业协会详情
-     * @param id 协会id
-     */
+	/**
+	 *
+	 * @param FileData
+	 * @param modname
+	 * @param userid
+	 * @param type
+	 * @param res
+	 * @param request
+	 */
     @RequestMapping(value = "/upload", method = RequestMethod.POST  )
     public void fileUpload(@RequestParam("FileData") MultipartFile [] FileData ,
 				    		@RequestParam(name="modname",required=true) String modname,
@@ -95,6 +96,29 @@ public class FileController extends BaseController {
     	}
 		return new JsonResult(true, technicalReport);
     }
+
+	/**
+	 *
+	 * @param fileLog
+	 * @param request
+	 * @return
+	 */
+
+    @RequestMapping(value = "/downfile",method =RequestMethod.POST)
+	public JsonResult downFile(@RequestBody FileLog fileLog,HttpServletRequest request){
+		HttpSession session=request.getSession();
+		User user= (User) session.getAttribute("userId");
+		fileLog.setUserid(user.getUserId());
+		fileLog.setNumbers(1);
+		FileLog fileLog1=fileLogService.queryList(fileLog.getFileName());
+		if (fileLog1!=null&&fileLog1.getFileName().equals(fileLog.getFileName())){
+           fileLog1.setNumbers(fileLog1.getNumbers()+1);
+           fileLogService.update(fileLog1);
+		}else {
+			fileLogService.addFileLog(fileLog);
+		}
+		return new JsonResult(true,"成功");
+	}
 
 
 
