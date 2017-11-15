@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.http.HttpResponse;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.Aspect;
@@ -14,6 +15,7 @@ import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -46,31 +48,19 @@ public class HttpAspect {
         HttpServletRequest request = attributes.getRequest();
         HttpServletResponse response = attributes.getResponse();
         String userid = request.getParameter("userId");
-        //URL
-        LOGGER.warn("userid={}", userid);
-        LoggerRecord loggerRecord= new LoggerRecord();
-        loggerRecord.setUserid(userid);
-        loggerRecord.setMethod(request.getMethod());
-        loggerRecord.setUrl(request.getRequestURL().toString());
-        loggerRecord.setIp(request.getRemoteAddr());
-        loggerRecord.setArgs(joinPoint.getArgs().toString());
-        loggerRecord.setClass_method(joinPoint.getSignature().getDeclaringTypeName()+"."+joinPoint.getSignature().getName()+"()");
-        loggerRecord.setStatus(response.getStatus()+"");
-        LoggerRecordService loggerRecordService = WebApplicationContextUtils.getRequiredWebApplicationContext
-        		(request.getServletContext()).getBean(LoggerRecordService.class);
-        loggerRecordService.addLoggerRecord(loggerRecord);
-        Map<String, Object> map = new HashMap<>();
-        map.put("userid", userid);
-        map.put("url", request.getRequestURL());
-        map.put("method", request.getMethod());
-        map.put("ip", request.getRemoteAddr());
-        map.put("class.Method", joinPoint.getSignature().getDeclaringTypeName()+"."+joinPoint.getSignature().getName()+"()");
-        LOGGER.warn("action={}", map);
+
+        MDC.put("userid",userid);
+        MDC.put("ip",request.getRemoteAddr());
+        MDC.put("url",request.getRequestURL().toString());
+        MDC.put("method",request.getMethod());
+        MDC.put("class_method",joinPoint.getSignature().getDeclaringTypeName()+"."+joinPoint.getSignature().getName()+"()");
     }
- 
+
     @After("p()")
     public void doAfter(){
-        LOGGER.warn("HttpAspect doAfter Running : "+new Date());
+        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        HttpServletResponse response = attributes.getResponse();
+        MDC.put("status",""+response.getStatus());
+
     }
- 
 }

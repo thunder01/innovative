@@ -120,7 +120,7 @@
 	 <!--根据id获取科技资讯-->
 	<select id="getInformationById" resultMap="informationMap">
 	
-		SELECT "id", "resource", "title", "time", "resume", "sectors", "tags", "cotent", info."createAt", 
+		SELECT "id", "resource", "title", "time", "resume", "sectors", "tags", "cotent", info."createAt",
 		  "createBy", "updateAt", "updateBy", "state" ,"approuverNum","imgid","count","imgurl" ,us.username updateByC ,e.todayIsApprouver,co.isCollection
 		FROM "xacx_tech_information" info
 		 left join 
@@ -143,6 +143,7 @@
 				"state" = #{state}
 			</if>
 		</where>
+		order by "createAt" DESC
 		limit #{pageSize} offset #{startIndex}
 	</select>
 	
