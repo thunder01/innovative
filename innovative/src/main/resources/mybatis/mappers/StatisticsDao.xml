@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.innovative.dao.StatisticsDao">
+    <resultMap id="associationsMap" type="com.innovative.bean.Association">
+        <result  property="tags"  column="Tags"  typeHandler="com.innovative.mybatisHandler.ArrayTypeHandler"/>
+    </resultMap>
+    <resultMap id="expertMap" type="com.innovative.bean.Expert">
+        <result  property="tags"  column="Tags"  typeHandler="com.innovative.mybatisHandler.ArrayTypeHandler"/>
+    </resultMap>
+    <resultMap id="organizationMap" type="com.innovative.bean.Organization">
+        <result  property="tags"  column="Tags"  typeHandler="com.innovative.mybatisHandler.ArrayTypeHandler"/>
+    </resultMap>
+    <resultMap id="technicalMap" type="com.innovative.bean.TechnicalReport">
+        <result  property="tags"  column="Tags"  typeHandler="com.innovative.mybatisHandler.ArrayTypeHandler"/>
+    </resultMap>
+    <resultMap id="solutionMap" type="com.innovative.bean.Solution">
+        <result  property="tags"  column="Tags"  typeHandler="com.innovative.mybatisHandler.ArrayTypeHandler"/>
+    </resultMap>
+    <resultMap id="equipMap" type="com.innovative.bean.Equipment">
+        <result  property="tags"  column="Tags"  typeHandler="com.innovative.mybatisHandler.ArrayTypeHandler"/>
+    </resultMap>
+    <!--资源数量-->
+    <select id="queryAssociations" resultType="int">
+        SELECT COUNT(1) FROM "Associations"
+    </select>
+    <select id="queryExperts" resultType="int">
+        SELECT COUNT(1) FROM "Experts"
+    </select>
+    <select id="queryOrganizations" resultType="int">
+        SELECT COUNT(1) FROM "Organizations"
+    </select>
+    <select id="queryTechnicalReports" resultType="int">
+        SELECT COUNT(1) FROM "TechnicalReports"
+    </select>
+    <select id="querySolutions" resultType="int">
+        SELECT COUNT(1) FROM "Solutions"
+    </select>
+    <select id="queryEquipments" resultType="int">
+        SELECT COUNT(1) FROM "Equipments"
+    </select>
+    <!--需求数量-->
+    <select id="queryDemand" resultType="int">
+         SELECT COUNT(1) FROM "xacx_demand"
+    </select>
+    <!--方案数量-->
+    <select id="queryReport" resultType="int">
+        SELECT COUNT(1) FROM "xacx_report_v2"
+    </select>
+    <!--情报数量-->
+    <select id="queryIntelligence" resultType="int">
+        SELECT COUNT(1)FROM "xacx_intelligence"
+    </select>
+    <!--需求下单数量-->
+    <select id="queryDemandNumber" resultType="int">
+        SELECT COUNT(1) FROM "xacx_demand"
+        <where>
+            create_date like '${date}%'
+        </where>
+    </select>
+    <!--需求已完成-->
+    <select id="queryOderV2" resultType="int">
+        SELECT COUNT(1) FROM "xacx_order_v2" t where t.pass_status='1'
+    </select>
+    <!--需求寻源中-->
+    <select id="queryProject" resultType="int">
+        SELECT COUNT(1) FROM "xacx_project_approval_v2"
+    </select>
+    <!--需求数量-->
+    <select id="queryCheckDemand" resultType="int">
+        SELECT COUNT(1) FROM "xacx_demand"
+        <where>
+            status='0'
+        </where>
+    </select>
+    <!--情报完成-->
+    <select id="queryInforScore" resultType="int">
+        SELECT COUNT(1) FROM "xacx_intelligence_score"
+    </select>
+    <!--情报寻源中-->
+    <select id="queryIntellxun" resultType="int">
+        SELECT COUNT(1) FROM "xacx_intelligence" where userid is not NULL
+    </select>
+    <!--情报审批中-->
+    <select id="queryIntellsp" resultType="int">
+        SELECT COUNT(1) FROM "xacx_intelligence" where status='1'
+    </select>
+    <!--情报下单-->
+    <select id="queryIntell" resultType="int">
+        SELECT COUNT(1) FROM "xacx_intelligence"
+    </select>
+    <!--情报下单数量-->
+    <select id="queryIntellNumber" resultType="int">
+        SELECT COUNT(1) FROM "xacx_intelligence"
+        <where>
+            create_date like '${date}%'
+        </where>
+    </select>
+    <!--活跃用户数-->
+    <select id="queryGetUserNumber" resultType="int">
+        SELECT COUNT(1) FROM "xacx_log"
+        <where>
+            to_char("time",'yyyy-MM') like '${date}}%'
+        </where>
+    </select>
+    <!--标签归类-->
+    <select id="selectAssociations" resultMap="associationsMap">
+        select "Tags" from "Associations" GROUP BY "Tags"
+    </select>
+    <select id="selectExperts" resultMap="expertMap">
+        select "Tags" from "Experts" GROUP BY "Tags"
+    </select>
+    <select id="selectOrganizations" resultMap="organizationMap">
+        select "Tags" from "Organizations" GROUP BY "Tags"
+    </select>
+    <select id="selectTechnicalReports" resultMap="technicalMap">
+        select "Tags" from "TechnicalReports" GROUP BY "Tags"
+    </select>
+    <select id="selectSolutions" resultMap="solutionMap">
+        select "Tags" from "Solutions" GROUP BY "Tags"
+    </select>
+    <select id="selectEquipments" resultMap="equipMap">
+        select "Tags" from "Equipments" GROUP BY "Tags"
+    </select>
+</mapper>
