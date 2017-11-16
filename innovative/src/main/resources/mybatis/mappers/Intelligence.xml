@@ -119,4 +119,8 @@
     <select id="getMyIntelligence" parameterType="map" resultMap="intelligenceMap">
     	SELECT * FROM xacx_intelligence WHERE create_by=#{createBy} limit #{pageSize} offset #{startIndex}
     </select>
+    <!--客户评价-->
+    <insert id="addScore" parameterType="Score">
+        INSERT INTO "xacx_intelligence_score" ("workpoints","score","contents","intellId") VALUES(#{workpoints},#{score},#{contents},#{intellId})
+    </insert>
 </mapper>

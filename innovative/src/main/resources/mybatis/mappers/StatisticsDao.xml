@@ -102,7 +102,7 @@
     <select id="queryGetUserNumber" resultType="int">
         SELECT COUNT(1) FROM "xacx_log"
         <where>
-            to_char("time",'yyyy-MM') like '${date}}%'
+            to_char("time",'yyyy-MM') like '${date}%'
         </where>
     </select>
     <!--标签归类-->
