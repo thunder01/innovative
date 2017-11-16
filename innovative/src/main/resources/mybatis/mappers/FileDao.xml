@@ -80,5 +80,13 @@
             where  "refId" = #{refid}  AND  "refType" = #{reftype}  AND  "sign" = 'add' 
         
     </select>
+    
+        <!--根据id判断有无此图片-->
+    <select id="getLunbophoto" resultType="FileBean">
+    
+      SELECT "refType","refId","url","filename","fileType","createAt" FROM  "xacx_file"
+            where    "refType" = #{reftype}  order by "createAt" DESC LIMIT #{limits}
+        
+    </select>
 
 </mapper>

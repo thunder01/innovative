@@ -139,6 +139,8 @@ public class Config {
     public static final  String INFORMATIONPUSHFILE = "informationpushFile";
     //首页轮播图 
     public static final  String INDEX_LUNBO = "lunbophoto";
+    //首页轮播图 图片展示数
+    public static final  int INDEX_LUNBO_NUM = 3;
     //首页轮播图id
     public static final  String INDEX_LUNBOID = "1231231233";
     

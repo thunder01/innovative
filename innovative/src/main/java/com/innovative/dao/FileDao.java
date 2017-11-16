@@ -38,5 +38,7 @@ public interface FileDao {
 	boolean deleteZdFile(@Param(value="refid")String refid,@Param(value="filename")String filename);
 	//删除之前的文件
 	void deleteFiles(@Param(value="refid")String refid, @Param(value="reftype")String reftype);
+	//获取轮播图片
+	List<FileBean> getLunbophoto(@Param(value="reftype")String indexLunbo, @Param(value="limits")int limits);
 
 }
