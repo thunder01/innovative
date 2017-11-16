@@ -1,8 +1,8 @@
 package com.innovative.controller;
 
 
-import javax.servlet.http.HttpServletRequest;
-import javax.websocket.server.PathParam;
+
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -40,6 +40,21 @@ public class RightController {
     		return new JsonResult(false, "请检查您的数据");
     	}
         return new JsonResult(true, "添加成功！");
+    }
+    
+    /**
+     * 增加模块权限
+     *
+     * @param sectors 行业领域（多个用逗号隔开）
+     * @param pageNum 页数（默认为1）
+     * @return
+     */
+    @RequestMapping(value = "/getRight", method = RequestMethod.GET)
+    @ResponseBody
+    public JsonResult getRight() {
+    	List<Right> rigthlist = rightService.getRightlist();
+    	
+        return new JsonResult(true, rigthlist);
     }
     
     /**

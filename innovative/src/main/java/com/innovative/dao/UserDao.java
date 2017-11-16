@@ -90,7 +90,13 @@ public interface  UserDao {
 		 * 删除用户角色
 		 * @param userId  用户id
 		 */
-		void deleteUserRoles(@Param("userId")String userId);
+		boolean deleteUserRoles(@Param("userId")String userId);
+		
+		/**
+		 * 引用该角色的用户解除角色用户关系
+		 * @param userId  用户id
+		 */
+		boolean deleteUserRolesByRoleId(@Param("roleId")String roleId);
 		//根据员工号获取员工所在组织全称
 		Map<String,String> getQcName(String pernr);
 		/**
@@ -98,6 +104,12 @@ public interface  UserDao {
 		 * @return
 		 */
 		List<User> getUsers();
+		/**
+		 * 根据用户信息获取用户角色信息
+		 * @param userid
+		 * @return
+		 */
+		User getUserroleMessessage(@Param("userId")String userid);
 }
 
 

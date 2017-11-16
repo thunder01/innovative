@@ -97,6 +97,21 @@ public class Config {
     	cygsmap.put("yxcy", cygs_yxcy);
     	cygsmap.put("type", "C");
      }
+    public static final Map<String,String> xpmobs_sidmap = new HashMap<String,String>();
+    static{
+    	xpmobs_sidmap.put("10001600", "1CCAB0B7-294E-4C1C-9783-E78D4B09C8FC");
+    	xpmobs_sidmap.put("50142933", "307C6DD4-BA5D-46FE-9563-4D5D95076A5A");
+    	xpmobs_sidmap.put("10000800", "43938EE5-6FE3-4EA6-938B-58DBDFFE40DF");
+    	xpmobs_sidmap.put("50252045", "44188D4A-D4A7-4C23-8473-37DAF6DB1128");
+    	xpmobs_sidmap.put("10003600", "53F6F36F-959E-4DAC-9AA2-0DE1368408CE");
+    	xpmobs_sidmap.put("50046836", "7056DE10-DACE-4B4C-B434-24AC171F00B6");
+    	xpmobs_sidmap.put("50181901", "7863B7C7-F630-4A91-80E2-CDB740D626AB");
+    	xpmobs_sidmap.put("50252101", "8369D1E7-8DA8-46FB-9FA5-D115A1E22F25");
+    	xpmobs_sidmap.put("50187386", "E999CB7C-C940-4648-A7D0-A3027ACA5942");
+    	xpmobs_sidmap.put("50252044", "EDDFB758-93C0-473A-A776-0490D7D396BB");
+    	xpmobs_sidmap.put("10000201", "F09C0AB4-6B60-4995-A314-E7266BE8F838");
+    	xpmobs_sidmap.put("10000000", "F36D9D50-E8FD-4FDE-B7A1-D87009DCC199");
+    }
     //关于收藏数量的配置 分享,评论的数量
     public static final  int COLLCT_NUM = 5;
     public static final  int COLLCT_STARTINDEX = 0;

@@ -41,6 +41,22 @@ public class UserController {
 		        }
 		       return new JsonResult(false, "参数不合法");
 	 }
+	 
+	 /**
+	  * 根据用户id获取用户信息
+	  * @param id
+	  * @return
+	  */
+	 @RequestMapping(value = "/getUserrole/{userid}", method = RequestMethod.GET)
+	    public JsonResult getUserrole(@PathVariable(name = "userid") String userid) {
+		 if(userid == null || "".equals(userid))
+			 return new JsonResult(false, "参数不合法");
+		 User usermap = userService.getUserroleMessessage(userid);
+		        if (usermap != null) {
+		            return new JsonResult(true, usermap);
+		        }
+		       return new JsonResult(false, "参数不合法");
+	 }
 	 /**
 	  * 根据用户id获取sid
 	  * @param id
@@ -148,6 +164,24 @@ public class UserController {
 	    	}
 	        return new JsonResult(true, "新增成功!");
 	    }
+	    
+	    /**
+	     * 给用户分角色
+	     * @param role
+	     * @param req
+	     * @return
+	     */
+	    @RequestMapping(value = "/updateUserRole", method = RequestMethod.POST)
+	    @ResponseBody
+	    public JsonResult updateUserRole(@RequestBody User user,HttpServletRequest req) {
+	    	user.setUpdateBy(CookiesUtil.getCookieValue(req,"user_name"));
+	    	//看这个用户是否有这个角色有的话返回false 
+	    	if(userService.getUser(user.getUserId())== null ){
+	    		return new JsonResult(false, "该用户不存在！");
+	    	}
+	    	User usernew = userService.updateUserRole(user);
+	        return new JsonResult(true, usernew);
+	    }
 
 	    /**
 	     * 给用户分多个角色
@@ -166,15 +200,22 @@ public class UserController {
 	        return new JsonResult(true, "新增成功!");
 	    }
 	    
-	   /**
-	    * 用户收藏的信息，用户评论的信息，转发的信息，点赞
-	    * @return
-	    */
-	   /* @RequestMapping(value = "/getUserInformation", method = RequestMethod.GET)
-	    public JsonResult getUserInformation(@RequestParam(name="offset",defaultValue="0" ) Integer offset) {
-	    	List<User> list = userService.getUserInformation();
-	    	System.out.println(list);
-	        return new JsonResult(true, list);
-	    }*/
+	    /**
+	     * 给用户分角色
+	     * @param role
+	     * @param req
+	     * @return
+	     */
+	    @RequestMapping(value = "/deleteUserRole", method = RequestMethod.POST)
+	    @ResponseBody
+	    public JsonResult deleteUserRole(@RequestBody User user,HttpServletRequest req) {
+	    	if( userService.deleteUserRole(user.getUserId())){
+	        return new JsonResult(true, userService.getUserroleMessessage(user.getUserId()));
+	    	}
+	    	else {
+	    		 return new JsonResult(false, "删除失败，请在尝试一次");
+	    	}
+	    }
+	    
 
 }

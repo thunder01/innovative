@@ -17,5 +17,10 @@
 			 "Id"=#{id}
 		</where>
 	</delete>
+	
+	    <!--权限列表-->
+    <select id="getRightlist" resultType="Right">
+       select * from app_right_list order by "Id"
+    </select>
 
 </mapper>

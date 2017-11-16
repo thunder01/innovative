@@ -28,13 +28,12 @@ public class Right implements Serializable {
 	private String createBy ;//性别
 	private Timestamp createAt ;//年龄
 	private String mode ;//模块
+	private String depth ;//模块
 	public Right() {
 			
 		}
-	
-
 	public Right(String id, String pid, String rightName, String description, String rightType, String createBy,
-			Timestamp createAt, String mode) {
+			Timestamp createAt, String mode, String depth) {
 		this.id = id;
 		this.pid = pid;
 		this.rightName = rightName;
@@ -43,19 +42,8 @@ public class Right implements Serializable {
 		this.createBy = createBy;
 		this.createAt = createAt;
 		this.mode = mode;
+		this.depth = depth;
 	}
-
-
-	public String getMode() {
-		return mode;
-	}
-
-
-	public void setMode(String mode) {
-		this.mode = mode;
-	}
-
-
 	public String getId() {
 		return id;
 	}
@@ -98,7 +86,21 @@ public class Right implements Serializable {
 	public void setCreateAt(Timestamp createAt) {
 		this.createAt = createAt;
 	}
+	public String getMode() {
+		return mode;
+	}
+	public void setMode(String mode) {
+		this.mode = mode;
+	}
+	public String getDepth() {
+		return depth;
+	}
+	public void setDepth(String depth) {
+		this.depth = depth;
+	}
+	
 
+	
 
 	
 	

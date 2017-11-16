@@ -3,18 +3,38 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.innovative.dao.RoleDao">
-	
+	<resultMap id="roleMap" type="Role">
+	  <id property="roleId" column="RoleId" />
+	  <result property="roleName" column="RoleName"/>
+	  <result property="p_RoleId" column="P_RoleId"/>
+	  <result property="description" column="Description"/>
+	  <result property="createAt" column="CreateAt"/>
+	  <result property="createBy" column="createBy"/>
+	  <result property="updateAt" column="updateAt"/>
+	  <result property="updateBy" column="updateBy"/>
+	   <collection property="rightlist" ofType="Right">
+           <result property="id" column="rightIds"/>
+       </collection> 
+	  
+	</resultMap> 
 
-
+<!--根据查询条件获取列表-->
+    <select id="getRoleRight" resultMap="roleMap">
+        SELECT r."RoleName",r."RoleId",r."P_RoleId",r."Description",r."CreateAt",ri."Id" rightIds
+        FROM "app_role" r left join 
+		    app_role_right rr on r."RoleId" = rr."RoleId"
+			left join app_right ri on ri."Id" =rr."RightId"
+			where r."RoleId" = #{roleId}
+    </select>
     <!--根据查询条件获取列表-->
     <select id="getRoleList" resultType="Role">
-        SELECT "RoleName","RoleId","P_RoleId","Description"
+       SELECT "RoleName","RoleId","P_RoleId","Description","CreateAt"
         FROM "app_role"
-       <!--  limit #{pageSize} offset #{startIndex} -->
+        limit #{pageSize} offset #{startIndex}
     </select>
      <!--获取所有的roleName-->
-    <select id="getRoleNameList" resultType="String">
-        SELECT DISTINCT "RoleName"
+    <select id="getRoleNameList" resultType="map">
+        SELECT DISTINCT "RoleName","RoleId"
         FROM "app_role"
        <!--  limit #{pageSize} offset #{startIndex} -->
     </select>
@@ -31,6 +51,26 @@
 		(#{roleName},#{roleId},#{p_RoleId},now(),#{description})
 	</insert>
 	
+		 <!--删除用户对应的角色-->
+	<delete id="deleteRole" parameterType="map">
+		delete from  app_role 
+		<where>
+			 "RoleId"=#{roleId}
+		</where>
+	</delete>
+	
+		<!--修改角色-->
+	<update id="updateRole" parameterType="Role">
+		UPDATE "app_role"
+		<set>
+			<if test="roleName!=null and roleName!=''">
+				"RoleName"=#{roleName},
+			</if>
+			
+				"UpdatedAt"=now()
+		</set>
+		where "RoleId"=#{roleId}
+	</update>
 	
 
 
