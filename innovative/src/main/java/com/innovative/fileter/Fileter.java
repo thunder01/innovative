@@ -11,6 +11,7 @@ import com.innovative.utils.Misc;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.support.WebApplicationContextUtils;
@@ -69,6 +70,7 @@ public class Fileter implements Filter {
             User userben=service.getUser(userId);
             if (userben!=null) {
                 session.setAttribute("userId",userben);
+                MDC.put("userid",userId);
                 isfile=true;
                
             }

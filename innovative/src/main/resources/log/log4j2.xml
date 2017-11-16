@@ -12,28 +12,22 @@
 		messageId="Audit" id="App">
 		</Syslog>
 		<!--输出到数据库-->
-		<JDBC name="databaseAppender" tableName="xacx_logger_record">
+		<JDBC name="databaseAppender" tableName="xacx_logger_user">
 			<ConnectionFactory class="com.innovative.config.ConnectionFactory" method="getDatabaseConnection" />
-			<Column name="eventdate" isEventTimestamp="true" />
-			<Column name="level" pattern="%level" isUnicode="false"/>
-			<Column name="logger" pattern="%logger" isUnicode="false"/>
-			<Column name="message" pattern="%message" isUnicode="false"/>
-			<Column name="exception" pattern="%ex{full}" isUnicode="false"/>
-			<Column name="userid" pattern="%X{userid}" isUnicode="false"/>
-			<Column name="ip" pattern="%X{ip}" isUnicode="false"/>
-			<Column name="url" pattern="%X{url}" isUnicode="false"/>
-			<Column name="method" pattern="%X{method}" isUnicode="false"/>
-			<Column name="class_method" pattern="%X{class_method}" isUnicode="false"/>
-			<Column name="status" pattern="%X{status}" isUnicode="false"/>
+            <Column name="userid" pattern="%X{userid}" isUnicode="false"/>
+            <Column name="time" isEventTimestamp="true"/>
+            <Column name="action" pattern="%X{action}" isUnicode="false"/>
+			<Column name="type" pattern="%X{type}" isUnicode="false"/>
+			<Column name="relateid" pattern="%X{relateid}" isUnicode="false"/>
+			<Column name="relatename" pattern="%X{relatename}" isUnicode="false"/>
 		</JDBC>
 	</Appenders>
 	<Loggers>
-    	<Logger name="com.innovative" level="DEBUG">
-			<AppenderRef ref="Console"/>
-    	</Logger>
-	    <Root level="WARN">
-	      	<AppenderRef ref="RFC 5424"/>
-			<AppenderRef ref="databaseAppender"/>
-	    </Root>
- 	</Loggers>
+        <Logger name="com.innovative" level="INFO">
+            <AppenderRef ref="Console"/>
+        </Logger>
+        <Root level="WARN">
+            <AppenderRef ref="RFC 5424"/>
+        </Root>
+    </Loggers>
 </Configuration>

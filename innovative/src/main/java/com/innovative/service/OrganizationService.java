@@ -2,11 +2,14 @@ package com.innovative.service;
 
 
 import com.alibaba.druid.util.StringUtils;
+import com.innovative.bean.LoggerUser;
 import com.innovative.bean.Organization;
 import com.innovative.dao.FileDao;
+import com.innovative.dao.LoggerUserDao;
 import com.innovative.dao.OrganizationDao;
 import com.innovative.utils.CodeItemUtil;
 import com.innovative.utils.PageInfo;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +29,8 @@ public class OrganizationService {
     FileDao fileDao;
     @Autowired
     IntegralService integralService;
+    @Autowired
+    LoggerUserDao loggerUserDao;
 
     /**
      * 根据id获取机构详情
@@ -95,6 +100,8 @@ public class OrganizationService {
         int result = organizationDao.addOrganization(organization);
         if(result>0){
         	integralService.managerIntegral(8, organization.getCreatedBy(), organization.getId());
+            LoggerUser loggerUser=new LoggerUser(MDC.get("userid"),"上传","合作机构",organization.getId(),organization.getName());
+            loggerUserDao.addLog(loggerUser);
         }
 		 return fileDao.updateFile(organization.getId());
     }
@@ -108,7 +115,14 @@ public class OrganizationService {
      */
     public boolean updateOrganization(Organization organization) {
     	fileDao.updateFile(organization.getId());
-        return (organizationDao.updateOrganization(organization) > 0 );
+    	boolean flag=organizationDao.updateOrganization(organization) > 0;
+
+    	if (flag){
+    	    LoggerUser loggerUser=new LoggerUser(MDC.get("userid"),"修改","合作机构",organization.getId(),organization.getName());
+    	    loggerUserDao.addLog(loggerUser);
+        }
+
+        return flag;
     }
 
 
@@ -119,6 +133,10 @@ public class OrganizationService {
 		}
 		//删除上传的附件
 		fileDao.deleteFile(id);
+
+        LoggerUser loggerUser=new LoggerUser(MDC.get("userid"),"删除","合作机构",id,organizationDao.getOrganization(id).getName());
+        loggerUserDao.addLog(loggerUser);
+
 		return organizationDao.deleteOrganization(id);
 	}
 

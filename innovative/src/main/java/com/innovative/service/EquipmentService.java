@@ -2,10 +2,13 @@ package com.innovative.service;
 
 
 import com.innovative.bean.Equipment;
+import com.innovative.bean.LoggerUser;
 import com.innovative.dao.EquipmentDao;
 import com.innovative.dao.FileDao;
+import com.innovative.dao.LoggerUserDao;
 import com.innovative.utils.CodeItemUtil;
 import com.innovative.utils.PageInfo;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +29,8 @@ public class EquipmentService {
     CodeItemUtil codeItemUtil;
     @Autowired
     IntegralService integralService;
+    @Autowired
+    LoggerUserDao loggerUserDao;
 
     /**
      * 根据id获取设备信息
@@ -104,6 +109,8 @@ public class EquipmentService {
          int result = equipmentDao.insertEquipment(equipment);
          if(result>0){
         	 integralService.managerIntegral(12, equipment.getCreatedBy(), equipment.getId());
+        	 LoggerUser loggerUser=new LoggerUser(MDC.get("userid"),"上传","仪器设备",equipment.getId(),equipment.getName());
+        	 loggerUserDao.addLog(loggerUser);
          }
 		 return fileDao.updateFile(equipment.getId());
 
@@ -118,7 +125,10 @@ public class EquipmentService {
     public boolean updateEquipment(Equipment equipment) {
     	fileDao.updateFile(equipment.getId());
         int result = equipmentDao.updateEquipment(equipment);
-
+        if (result>0){
+            LoggerUser loggerUser=new LoggerUser(MDC.get("userid"),"修改","仪器设备",equipment.getId(),equipment.getName());
+            loggerUserDao.addLog(loggerUser);
+        }
         return result > 0 ;
     }
 
@@ -129,6 +139,8 @@ public class EquipmentService {
 				}
 		//删除上传的附件
 		fileDao.deleteFile(id);
+        LoggerUser loggerUser=new LoggerUser(MDC.get("userid"),"删除","仪器设备",id,equipmentDao.getEquipmentById(id).getName());
+        loggerUserDao.addLog(loggerUser);
 		return equipmentDao.deleteEquipment(id);
 	}
 }
