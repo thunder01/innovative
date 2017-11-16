@@ -33,7 +33,6 @@
     	</Logger>
 	    <Root level="WARN">
 	      	<AppenderRef ref="RFC 5424"/>
-	      	<AppenderRef ref="Console"/>
 			<AppenderRef ref="databaseAppender"/>
 	    </Root>
  	</Loggers>
