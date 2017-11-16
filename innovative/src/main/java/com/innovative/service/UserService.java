@@ -12,6 +12,8 @@ import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.google.common.collect.Lists;
 import com.innovative.bean.User;
 import com.innovative.dao.UserDao;
@@ -163,24 +165,30 @@ public class UserService {
 			return sidmap;
 		}
 		String qc = (String)map.get("path");
+		//组织编号
+		String orgeh = (String)map.get("orgeh");
+		
+		sidmap.put("xpmobs_sid", Config.xpmobs_sidmap.get(orgeh));
 		if(null == qc || "".equals(qc)){
 			return sidmap;
 		//成员公司
 		}else if((qc.indexOf("石家庄燃气")>0 || qc.indexOf("青岛燃气")>0 || qc.indexOf("廊坊燃气")>0)){
-			return  Config.cygsmap;
+			 Config.cygsmap.put("xpmobs_sid", Config.xpmobs_sidmap.get(orgeh));
+			 return Config.cygsmap;
 		//健康研究院
 		}else if((qc.indexOf("健康研究院")>0)){
-			return Config.jkyjymap;
+			 Config.jkyjymap.put("xpmobs_sid", Config.xpmobs_sidmap.get(orgeh));
+			 return Config.jkyjymap;
 		//研发项目管理系统（产业层）
 		}else if(qc.indexOf("能源控股")>0 || qc.indexOf("新智云数据服务有限公司")>0 || qc.indexOf("技术工程")>0){
+			Config.cycmap.put("xpmobs_sid", Config.xpmobs_sidmap.get(orgeh));
 			return Config.cycmap;
 		//石墨烯
 		}else if((qc.indexOf("石墨烯")>0)){
+			Config.smxmap.put("xpmobs_sid", Config.xpmobs_sidmap.get(orgeh));
 			return Config.smxmap;
-		}else{
-			return null;
-		
 		}
+		return sidmap;
 			
 	}
 	
@@ -191,5 +199,38 @@ public class UserService {
 	public List<User> getUsers() {
 		List<User> listUser=userdao.getUsers();	
 		return listUser;
+	}
+/**
+ * 更新用户角色
+ * @param user
+ * @return
+ */
+	@Transactional
+	public User updateUserRole(User user) {
+		//删除之前的用户角色
+		userdao.deleteUserRoles(user.getUserId());
+		//给用户赋值新的角色
+		userdao.insertUserRole(user.getUserId(),user.getRoleId(),user.getUpdateBy(),user.getSfqy());
+		//从新获取新的用户
+		return userdao.getUser(user.getUserId());
+	}
+/**
+ * 获取用户角色信息(目前一个用户只有一个角色)
+ * @param id
+ * @return
+ */
+public User getUserroleMessessage(String userid) {
+	// TODO Auto-generated method stub
+	return userdao.getUserroleMessessage(userid);
+}
+	/**
+	 * 删除用户角色信息
+	 * @param userid
+	 * @return
+	 */
+	public boolean deleteUserRole(String userid) {
+		// TODO Auto-generated method stub
+		return userdao.deleteUserRoles(userid);
+		
 	}
 }

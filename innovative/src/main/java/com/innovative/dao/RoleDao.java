@@ -4,6 +4,7 @@ import com.innovative.bean.Role;
 
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 
@@ -30,7 +31,21 @@ public interface RoleDao {
 	 * 获取roleName
 	 * @return
 	 */
-	List<String> getRoleNameList();
+	List<Map<String, String>> getRoleNameList();
+	/**
+	 * 删除角色
+	 * @param roleId
+	 * @return
+	 */
+	boolean deleteRole(@Param("roleId")String roleId);
+	/**
+	 * 获取角色对应的权限信息
+	 * @param roleId
+	 * @return
+	 */
+	Role getRoleRight(@Param("roleId")String roleId);
+	//修改角色
+	boolean updateRole(Role role);
 
 
 }

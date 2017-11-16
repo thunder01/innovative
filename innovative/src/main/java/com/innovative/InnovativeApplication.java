@@ -32,6 +32,7 @@ public class InnovativeApplication {
 	     };
 	 }
 
+	 
   /*打war包时使用，然后将pom.xml中的jar改成war, 此类需要继承SpringBootServletInitializer*/
 //	@Override
 //	protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
