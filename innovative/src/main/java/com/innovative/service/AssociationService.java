@@ -5,6 +5,7 @@ import com.alibaba.druid.util.StringUtils;
 import com.innovative.bean.Association;
 import com.innovative.bean.Logger;
 import com.innovative.bean.LoggerUser;
+import com.innovative.bean.User;
 import com.innovative.dao.AssociationDao;
 import com.innovative.dao.FileDao;
 import com.innovative.dao.LoggerUserDao;
@@ -33,6 +34,8 @@ public class AssociationService {
     IntegralService integralService;
     @Autowired
     LoggerUserDao loggerUserDao;
+    @Autowired
+    UserService userService;
     /**
      * 根据id获取行业协会详情
      * @param id 协会id

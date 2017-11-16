@@ -4,6 +4,7 @@ import com.alibaba.druid.util.StringUtils;
 import com.innovative.bean.Expert;
 import com.innovative.bean.Logger;
 import com.innovative.bean.LoggerUser;
+import com.innovative.bean.User;
 import com.innovative.dao.ExpertDao;
 import com.innovative.dao.FileDao;
 import com.innovative.dao.LoggerDao;
@@ -32,6 +33,8 @@ public class ExpertService {
     IntegralService integralService;
     @Autowired
 	LoggerUserDao loggerUserDao;
+    @Autowired
+    UserService userService;
   
     
 

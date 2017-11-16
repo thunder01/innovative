@@ -3,6 +3,7 @@ package com.innovative.service;
 
 import com.innovative.bean.Equipment;
 import com.innovative.bean.LoggerUser;
+import com.innovative.bean.User;
 import com.innovative.dao.EquipmentDao;
 import com.innovative.dao.FileDao;
 import com.innovative.dao.LoggerUserDao;
@@ -31,6 +32,8 @@ public class EquipmentService {
     IntegralService integralService;
     @Autowired
     LoggerUserDao loggerUserDao;
+    @Autowired
+    UserService userService;
 
     /**
      * 根据id获取设备信息

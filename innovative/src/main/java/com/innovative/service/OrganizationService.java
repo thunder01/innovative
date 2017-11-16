@@ -32,6 +32,8 @@ public class OrganizationService {
     IntegralService integralService;
     @Autowired
     LoggerUserDao loggerUserDao;
+    @Autowired
+    UserService userService;
 
     /**
      * 根据id获取机构详情

@@ -37,6 +37,8 @@ public class TechnicalReportService {
     private SectionsService sectionsService;
     @Autowired
     private LoggerUserDao loggerUserDao;
+    @Autowired
+    UserService userService;
 
     /**
      * 根据id获取技术报告

@@ -5,6 +5,7 @@ import com.alibaba.druid.util.StringUtils;
 import com.innovative.bean.LoggerUser;
 import com.innovative.bean.Sections;
 import com.innovative.bean.Solution;
+import com.innovative.bean.User;
 import com.innovative.dao.*;
 import com.innovative.utils.PageInfo;
 import org.slf4j.MDC;
@@ -30,6 +31,8 @@ public class SolutionService {
     private SectionsService sectionsService;
     @Autowired
     private LoggerUserDao loggerUserDao;
+    @Autowired
+    UserService userService;
 
     /**
      * 根据id获取方案
