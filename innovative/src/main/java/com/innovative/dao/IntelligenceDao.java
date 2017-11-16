@@ -2,6 +2,7 @@ package com.innovative.dao;
 
 import com.innovative.bean.FeedBack;
 import com.innovative.bean.Intelligence;
+import com.innovative.bean.Score;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -56,8 +57,12 @@ public interface IntelligenceDao {
      */
     int getTotalCounts();
     /**
+     * 客户评分
+     */
+    int addScore (Score score);
+    /**
      * 我的情报
-     * @param userid
+     * @param
      * @return
      */
     List<Intelligence> getMyIntelligence(@Param("startIndex") int startIndex, @Param("pageSize") int pageSize,@Param("createBy") String createBy);

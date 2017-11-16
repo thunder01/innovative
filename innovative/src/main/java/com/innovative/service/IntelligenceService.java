@@ -3,6 +3,7 @@ package com.innovative.service;
 import com.innovative.bean.FeedBack;
 import com.innovative.bean.Intelligence;
 import com.innovative.bean.Order;
+import com.innovative.bean.Score;
 import com.innovative.dao.IntelligenceDao;
 import com.innovative.utils.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -114,5 +115,11 @@ public class IntelligenceService {
     	List<Intelligence> list = dao.getMyIntelligence(pageInfo.getStartIndex(), pageInfo.getPageSize(), createBy);
     	map.put("item", list);
         return  map;
+    }
+    /**
+     * 添加客户评分
+     */
+    public  boolean addScore(Score score){
+        return  dao.addScore(score)>0 ?true:false;
     }
 }
