@@ -4,6 +4,7 @@ package com.innovative.service;
 import com.alibaba.druid.util.StringUtils;
 import com.innovative.bean.LoggerUser;
 import com.innovative.bean.Organization;
+import com.innovative.bean.User;
 import com.innovative.dao.FileDao;
 import com.innovative.dao.LoggerUserDao;
 import com.innovative.dao.OrganizationDao;
@@ -47,6 +48,10 @@ public class OrganizationService {
         		List<Map<String,Object>> statusList = codeItemUtil.getCodeItemList("EXPERT_COOPERSTATUS",organization.getCooperationStatus());
         		if(statusList!=null&&statusList.size()>0)
         			organization.setCooperationStatusMap(statusList.get(0));
+        		User user = userService.getUser(organization.getCreatedBy());
+	       		  if(user!=null){
+	        			integralService.managerIntegral(5, organization.getCreatedBy(), organization.getId());
+	       		  }
     		}
     		return organization;
     }

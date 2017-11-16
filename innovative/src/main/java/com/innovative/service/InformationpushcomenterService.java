@@ -99,6 +99,7 @@ public Map<String,Object> getInformationPushComentersByUserid(String comentBy, I
     pageInfo.setCurrentPageNum(page);
     List<Map<String,Object>> collectlist =  informationpushcomenterDao.getInformationPushComentersByUserid(comentBy,pageInfo.getStartIndex(),pageInfo.getPageSize());
 	Integer collctNum = informationpushcomenterDao.getTotalCountByUserId(comentBy);
+	System.err.println(collctNum);
         map.put("items", collectlist);
         map.put("totalCount", collctNum);
         map.put("Count", pageInfo.getPageSize());

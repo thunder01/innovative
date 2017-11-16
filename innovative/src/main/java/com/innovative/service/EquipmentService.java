@@ -45,6 +45,10 @@ public class EquipmentService {
 			List<String> urllist = fileDao.getPhotoByMOdAndId(id, "equipmentPhoto");
  		   if(urllist != null && urllist.size() > 0 )
  			  equipment.setPicture( urllist.get(0));
+ 		  User user = userService.getUser(equipment.getCreatedBy());
+ 		  if(user!=null){
+  			integralService.managerIntegral(5, equipment.getCreatedBy(), equipment.getId());
+ 		  }
 		}
 		return equipment;
 

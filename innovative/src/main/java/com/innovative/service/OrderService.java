@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.innovative.bean.Demand;
 import com.innovative.bean.DisassembleReport;
 import com.innovative.bean.FileBean;
+import com.innovative.bean.Message;
 import com.innovative.bean.Order;
 import com.innovative.bean.ProjectApproval;
 import com.innovative.bean.Report;
@@ -45,6 +46,8 @@ public class OrderService {
 	private ReportDao reportDao;
 	@Autowired
 	private FileDao fileDao;
+	@Autowired
+	private MessageService messageService;
 	
 	/**
 	 * 新增订单信息 ，需求池接单
@@ -287,8 +290,17 @@ public class OrderService {
 	 * @return
 	 */
 	public Map<String, Object> projectGrade(Order order){
-		Map<String, Object> map=new HashMap<>();	
-		orderDao.proEvaluate(order);//添加评分信息
+		Map<String, Object> map=new HashMap<>();
+		Order o = orderDao.getOrderById(order.getId());
+		if(o.getWorkpoint()==null){
+			orderDao.proEvaluate(order);//添加评分信息
+//			Demand demand = demandDao.getDemand(o.getDemandId());
+			Message message = messageService.getMessageByTypeAndProid("2", order.getId()+"");
+			if(message!=null){
+				messageService.updateMessage(message.getUserid(),message.getId());
+				messageService.updateMsgCount(message.getUserid());
+			}
+		}
 		Order order2 = orderDao.getOrderById(order.getId());
 		map.put("orderid", order.getId());
 		map.put("order", order2);

@@ -82,6 +82,6 @@
 	
 	<!-- 通过消息的类型和资源的id来找消息 -->
 	<select id="getMessageByTypeAndProid" parameterType="map" resultMap="messageMap">
-		SELECT * FROM xacx_messge WHERE type=#{type} AND proid=#{proid}
+		SELECT * FROM xacx_messge WHERE type=#{type} AND proid=#{proid} AND notice=3
 	</select>
 </mapper>

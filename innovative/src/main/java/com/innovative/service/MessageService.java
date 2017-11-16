@@ -31,7 +31,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -120,8 +119,6 @@ public class MessageService {
 		//消息的集合
 		List<Message> list = messageDao.showNoticeMessage
 				(message.getUserid(), message.getNotice(), pageInfo.getStartIndex(), pageInfo.getPageSize());
-		List<Message> listMessage = new ArrayList<>();
-		System.err.println(list);
 		MsgCount msgCount = msgCountDao.showMsgCount(message.getUserid());
 		MsgCount msg = new MsgCount();
 		msg.setUserid(message.getUserid());
@@ -152,7 +149,9 @@ public class MessageService {
 						m.setObject(demand);				
 					}
 					if("2".equals(m.getType())){//2是团队评价
-						Demand demand = demandDao.getDemand(Integer.parseInt(m.getProid()));
+						Order order = orderDao.getOrderById(Integer.parseInt(m.getProid()));
+						Demand demand = demandDao.getDemand(order.getDemandId());
+						demand.setOrder(order);
 						m.setObject(demand);
 					}
 					if("3".equals(m.getType())){//3情报
@@ -224,23 +223,21 @@ public class MessageService {
 					}
 					if("1".equals(m.getType())){//1是拆解报告确认
 						Order order = orderDao.getOrderById(Integer.parseInt(m.getProid()));
-						System.err.println("yyyyyyyyyyyyyyyy"+order.getId());
 						Demand demand = demandDao.getDemandByOrderid(Integer.parseInt(m.getProid()));
-						System.err.println("=========="+demand);
 						demand.setOrderid(order.getId());
-						System.err.println("jjjjjjjjjjjj"+demand.getOrderid());
 						demand.setOrder(order);
 						m.setObject(demand);
 					}
 					if("2".equals(m.getType())){//2是团队评价
-						Demand demand = demandDao.getDemand(Integer.parseInt(m.getProid()));
+						Order order = orderDao.getOrderById(Integer.parseInt(m.getProid()));
+						Demand demand = demandDao.getDemand(order.getDemandId());
+						demand.setOrder(order);
 						m.setObject(demand);
 					}
 					if("3".equals(m.getType())){//3情报
 						Intelligence intelligence = intelligenceDao.getIntelligence(Integer.parseInt(m.getProid()));
 						m.setObject(intelligence);
 					}
-					System.err.println("111111111111111111111111"+m.getObject());
 				}
 				map.put("items", list);
 				map.put("msgCount", msg);
@@ -264,7 +261,9 @@ public class MessageService {
 						m.setObject(demand);					
 					}
 					if("2".equals(m.getType())){//2是团队评价
-						Demand demand = demandDao.getDemand(Integer.parseInt(m.getProid()));
+						Order order = orderDao.getOrderById(Integer.parseInt(m.getProid()));
+						Demand demand = demandDao.getDemand(order.getDemandId());
+						demand.setOrder(order);
 						m.setObject(demand);
 					}
 					if("3".equals(m.getType())){//3情报

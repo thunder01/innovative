@@ -4,6 +4,7 @@ package com.innovative.controller;
 import com.innovative.bean.Equipment;
 import com.innovative.bean.User;
 import com.innovative.service.EquipmentService;
+import com.innovative.service.IntegralService;
 import com.innovative.service.ResourceCommentService;
 import com.innovative.service.UserService;
 import com.innovative.utils.CookiesUtil;
@@ -33,6 +34,8 @@ public class EquipmentController {
     ResourceCommentService resourceCommentService;
     @Autowired
     UserService userService;
+    @Autowired
+    IntegralService integralService;
 
     /**
      * 根据id获取设备

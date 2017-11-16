@@ -50,6 +50,10 @@ public class AssociationService {
 				List<Map<String,Object>> statuslist = codeItemUtil.getCodeItemList("EXPERT_COOPERSTATUS",association.getCooperationStatus());
 				if(statuslist!=null&&statuslist.size()>0)
 					association.setCooperationStatusMap(statuslist.get(0));
+				User user = userService.getUser(association.getCreatedBy());
+        		if(user!=null){
+        			integralService.managerIntegral(5, association.getCreatedBy(), association.getId());
+        		}
 			}
 			return association;
     }

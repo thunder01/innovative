@@ -51,6 +51,10 @@ public class ExpertService {
 	        		List<Map<String,Object>> statusList = codeItemUtil.getCodeItemList("EXPERT_COOPERSTATUS",expert.getCooperationStatus());
 	        		if(statusList!=null&&statusList.size()>0)
 	        			expert.setCooperationStatusMap(statusList.get(0));
+	        		User user = userService.getUser(expert.getCreatedBy());
+	        		if(user!=null){
+	        			integralService.managerIntegral(5, expert.getCreatedBy(), expert.getId());
+	        		}
         		}
         		return expert;
     }

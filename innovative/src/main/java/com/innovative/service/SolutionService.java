@@ -45,6 +45,10 @@ public class SolutionService {
 		   List<String> urllist = fileDao.getPhotoByMOdAndId(id, "programPhoto");
 		   if(urllist != null && urllist.size() > 0 )
 			   solution.setPictures(urllist.get(0));
+		   User user = userService.getUser(solution.getCreatedBy());
+ 		  if(user!=null){
+  			integralService.managerIntegral(5, solution.getCreatedBy(), solution.getId());
+ 		  }
 		}
 		return solution;
 

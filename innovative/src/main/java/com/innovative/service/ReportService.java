@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.innovative.bean.Demand;
 import com.innovative.bean.FileBean;
+import com.innovative.bean.Message;
 import com.innovative.bean.Order;
 import com.innovative.bean.Report;
 import com.innovative.bean.User;
@@ -32,24 +33,38 @@ public class ReportService{
 	private FileDao fileDao;
 	@Resource
 	private UserService userService;
+	@Resource
+	private MessageService messageService;
 	
 	/**
 	 * 添加一个报告，一次add操作无需事务
 	 * @param report
 	 */
+	@Transactional
 	public Map<String, Object> addReport(Report report) {
 		Map<String, Object> map=new HashMap<>();
 		if(report!=null){
 			fileDao.updateFile(report.getFileid());		
 			/*查询报告对应的需求名称*/
 			Order order = orderDao.selectOrderByOrderId(report.getOrder_id());	
+			Demand demand = null;
 			if(order!=null){
-				Demand demand = demandDao.getDemand(order.getDemandId());
+				demand = demandDao.getDemand(order.getDemandId());
 				if(demand!=null){
 					report.setDemand_name(demand.getName());
 				}
 			}
 			int result=reportDao.addReport(report);//添加报告
+			if("6".equals(report.getType())){
+				if(order.getWorkpoint()==null){
+					System.out.println(",,,,,,,"+order);
+					Message msg = messageService.getMessageByTypeAndProid("2", report.getOrder_id()+"");
+					if(msg==null&&demand!=null){
+						messageService.insertMessage(demand.getCteateBy(), report.getOrder_id()+"", "2", 3);
+			            messageService.updateMsgCount(demand.getCteateBy());
+					}
+				}
+			}
 			map.put("orderid", report.getOrder_id());
 			map.put("type", report.getType());
 			map.put("report_id", report.getId());
