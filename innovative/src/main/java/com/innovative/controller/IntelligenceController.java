@@ -1,9 +1,6 @@
 package com.innovative.controller;
 
-import com.innovative.bean.FeedBack;
-import com.innovative.bean.Intelligence;
-import com.innovative.bean.Message;
-import com.innovative.bean.User;
+import com.innovative.bean.*;
 import com.innovative.service.IntelligenceService;
 import com.innovative.service.MessageService;
 import com.innovative.utils.JsonResult;
@@ -186,5 +183,20 @@ public class IntelligenceController {
     @RequestMapping(value = "/getfeedBacks/{id}",method = RequestMethod.GET)
     public  JsonResult getfeedBacks(@PathVariable("id") int id){
         return  new JsonResult(true,service.getfeedBacks(id));
+    }
+    /**
+     * 添加客户评价
+     * @param score
+     * @return
+     */
+    @RequestMapping(value = "/addScore",method = RequestMethod.POST)
+    public  JsonResult addScore(@RequestBody Score score){
+        boolean code=false;
+        String message="添加失败";
+        if (service.addScore(score)){
+            code=true;
+            message="添加成功";
+        }
+        return new JsonResult(code,message);
     }
 }

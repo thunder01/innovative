@@ -59,6 +59,14 @@
 		  WHERE "pernr" =  #{userId};
 	</select>
 	
+	 <!--根据id获取用户角色信息信息-->
+	<select id="getUserroleMessessage" resultMap="userMap">
+		SELECT u.pernr,u.username,u.orgeh,u.itcode,u.dstext,u.stext,ur.sfqy,r."RoleName",r."RoleId" FROM "xacx_user"   u
+		left join app_userrole ur on u.pernr = ur."UserId" 
+		left join app_role r on ur."RoleId" = r."RoleId"
+		  WHERE u."pernr" =  #{userId};
+	</select>
+	
 	 <!--根据id与角色id查用户是否拥有该角色-->
 	<select id="getUserRole" resultType="int">
 		SELECT count(*) FROM  "app_userrole"
@@ -193,6 +201,14 @@
 		delete from "app_userrole"
 		<where>
 			 "UserId"=#{userId}
+		</where>
+	</delete>
+	
+	 <!--删除用户对应的角色-->
+	<delete id="deleteUserRolesByRoleId" parameterType="map">
+		delete from "app_userrole"
+		<where>
+			 "RoleId"=#{roleId}
 		</where>
 	</delete>
 

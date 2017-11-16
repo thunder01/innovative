@@ -1,16 +1,19 @@
 package com.innovative.service;
 
 
+import com.innovative.bean.LoggerUser;
 import com.innovative.bean.Sections;
 import com.innovative.bean.TechnicalReport;
 import com.innovative.bean.User;
 import com.innovative.dao.FileDao;
+import com.innovative.dao.LoggerUserDao;
 import com.innovative.dao.SectionsDao;
 import com.innovative.dao.TechnicalReportDao;
 import com.innovative.utils.Misc;
 import com.innovative.utils.PageInfo;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,7 +36,7 @@ public class TechnicalReportService {
     @Autowired
     private SectionsService sectionsService;
     @Autowired
-    UserService userService;
+    private LoggerUserDao loggerUserDao;
 
     /**
      * 根据id获取技术报告
@@ -133,6 +136,8 @@ public class TechnicalReportService {
         //增加成功
         if(result>0){
         	integralService.managerIntegral(10, technicalReport.getCreatedBy(), technicalReport.getId());
+            LoggerUser loggerUser=new LoggerUser(MDC.get("userid"),"上传","技术报告",technicalReport.getId(),technicalReport.getName());
+            loggerUserDao.addLog(loggerUser);
         }
 		 return fileDao.updateFile(technicalReport.getId());
     }
@@ -168,6 +173,9 @@ public class TechnicalReportService {
         sections.setImgid(technicalReport1.getPictures());
         sectionsService.updateSection(sections);
 
+        LoggerUser loggerUser=new LoggerUser(MDC.get("userid"),"修改","技术报告",technicalReport.getId(),technicalReport.getName());
+        loggerUserDao.addLog(loggerUser);
+
         return result > 0 ;
     }
 
@@ -181,6 +189,9 @@ public class TechnicalReportService {
         //删除科技专栏
         String sectionId=sectionsService.getIdByFirstId(id,"1");
         sectionsService.deleteSection(sectionId);
+
+        LoggerUser loggerUser=new LoggerUser(MDC.get("userid"),"删除","技术报告",id,technicalReportDao.getTechnicalReportById(id).getName());
+        loggerUserDao.addLog(loggerUser);
 
 		return technicalReportDao.deleteTechnicalReport(id);
 	}

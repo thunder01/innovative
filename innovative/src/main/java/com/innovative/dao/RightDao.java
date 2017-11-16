@@ -1,6 +1,8 @@
 package com.innovative.dao;
 
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Param;
 
 import com.innovative.bean.Right;
@@ -18,6 +20,11 @@ public interface  RightDao {
 		 * @return
 		 */
 		boolean deleteRight(@Param("id")String id);
+		/**
+		 * 获取权限列表
+		 * @return
+		 */
+		List<Right> getRightlist();
 }
 
 

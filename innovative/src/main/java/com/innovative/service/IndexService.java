@@ -28,7 +28,7 @@ public class IndexService {
 		map.put("sid", userService.getSidById(id));
 		map.put("carousel",  carouselService.getCarouselList());
 		map.put("notice", noticeService.getNotices());
-		map.put("lunbophoto", fileDao.getFileById(null, Config.INDEX_LUNBO));
+		map.put("lunbophoto", fileDao.getLunbophoto(Config.INDEX_LUNBO,Config.INDEX_LUNBO_NUM));
 		return map;
 	}
 

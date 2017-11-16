@@ -38,6 +38,14 @@ public class RightService {
 		// TODO Auto-generated method stub
 		return rightDao.deleteRight(id);
 	}
+	/**
+	 * 获取权限列表
+	 * @return
+	 */
+	public List<Right> getRightlist() {
+		// TODO Auto-generated method stub
+		return rightDao.getRightlist();
+	}
 
 
 }

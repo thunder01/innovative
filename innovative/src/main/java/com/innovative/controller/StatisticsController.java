@@ -5,11 +5,9 @@ import com.innovative.service.FullTextQueryService;
 import com.innovative.service.StatisticsService;
 import com.innovative.utils.DateUtil;
 import com.innovative.utils.JsonResult;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.sql.Array;
 import java.util.*;
@@ -226,7 +224,6 @@ public class StatisticsController {
                 lists.add(entry.getKey());
             }
         }
-         System.out.println(lists);
          List<Tages> number = new LinkedList<>();
         for ( int i=0;i<lists.size();i++){
             Map<String, Object> fullTextQueryResults = fullTextQueryService.getFullTextQueryResults(lists.get(i).toString(),1);
@@ -235,14 +232,118 @@ public class StatisticsController {
          number.sort(Comparator.comparingInt(Tages::getNumber).reversed());
          return number;
      }
-
-//    public static void main(String[] args) {
-//        List<Tages> numbers = new LinkedList<>();
-//        numbers.add(new Tages("小明",1));
-//        numbers.add(new Tages("小张",3));
-//        numbers.add(new Tages("小王",6));
-//        numbers.add(new Tages("小红",10));
-//        numbers.add(new Tages("小李",4));
-//        numbers.sort(Comparator.comparingInt(Tages::getNumber).reversed());
-//    }
+    @RequestMapping(value = "/xdateStatis",method=RequestMethod.GET)
+    public  JsonResult  xdateStatis(@RequestParam(name = "startDate") String startDate,@RequestParam(name = "endDate") String endDate){
+           Map<String,Object> map=new HashMap<>();
+           String []start=startDate.split("-");
+           String []end=endDate.split("-");
+           int data=(Integer.parseInt(end[0])-Integer.parseInt(start[0]))*12+(Integer.parseInt(end[1])-Integer.parseInt(start[1]));
+           Map<String,Object> xudata=new LinkedHashMap<>();
+           List xulist=new LinkedList();
+           List xunumber=new LinkedList();
+           xulist.add(startDate);
+           xunumber.add(statisticsService.queryDemandNumber(startDate));
+           for (int i=1;i<data;i++){
+               String []start2=startDate.split("-");
+               String []end2=endDate.split("-");
+               int year=0;
+               int yue=0;
+               if (Integer.parseInt(start2[1])+1>12){
+                    year=Integer.parseInt(start2[0])+1;
+                    yue=0+1;
+               }else{
+                   year=Integer.parseInt(start2[0]);
+                   yue=Integer.parseInt(start2[1])+1;
+               }
+               startDate=year+"-"+getNumber(yue);
+               xulist.add(startDate);
+               xunumber.add(statisticsService.queryDemandNumber(startDate));
+           }
+           xulist.add(endDate);
+           xunumber.add(statisticsService.queryDemandNumber(endDate));
+           xudata.put("date",xulist);
+           xudata.put("value",xunumber);
+           map.put("orderN",xudata);
+           return  new JsonResult(true,map);
+     }
+    @RequestMapping(value = "/qdateStatis",method=RequestMethod.GET)
+    public  JsonResult  qdateStatis(@RequestParam(name = "startDate") String startDate,@RequestParam(name = "endDate") String endDate){
+        Map<String,Object> map=new HashMap<>();
+        String []start=startDate.split("-");
+        String []end=endDate.split("-");
+        int data=(Integer.parseInt(end[0])-Integer.parseInt(start[0]))*12+(Integer.parseInt(end[1])-Integer.parseInt(start[1]));
+        Map<String,Object> xudata=new LinkedHashMap<>();
+        List xulist=new LinkedList();
+        List xunumber=new LinkedList();
+        xulist.add(startDate);
+        xunumber.add(statisticsService.queryIntellNumber(startDate));
+        for (int i=1;i<data;i++){
+            String []start2=startDate.split("-");
+            String []end2=endDate.split("-");
+            int year=0;
+            int yue=0;
+            if (Integer.parseInt(start2[1])+1>12){
+                year=Integer.parseInt(start2[0])+1;
+                yue=0+1;
+            }else{
+                year=Integer.parseInt(start2[0]);
+                yue=Integer.parseInt(start2[1])+1;
+            }
+            startDate=year+"-"+getNumber(yue);
+            xulist.add(startDate);
+            xunumber.add(statisticsService.queryIntellNumber(startDate));
+        }
+        xulist.add(endDate);
+        xunumber.add(statisticsService.queryIntellNumber(endDate));
+        xudata.put("date",xulist);
+        xudata.put("value",xunumber);
+        map.put("orderN",xudata);
+        return  new JsonResult(true,map);
+    }
+    @RequestMapping(value = "/yhdateStatis",method=RequestMethod.GET)
+    public  JsonResult  yhdateStatis(@RequestParam(name = "startDate") String startDate,@RequestParam(name = "endDate") String endDate){
+        Map<String,Object> map=new HashMap<>();
+        String []start=startDate.split("-");
+        String []end=endDate.split("-");
+        int data=(Integer.parseInt(end[0])-Integer.parseInt(start[0]))*12+(Integer.parseInt(end[1])-Integer.parseInt(start[1]));
+        Map<String,Object> xudata=new LinkedHashMap<>();
+        List xulist=new LinkedList();
+        List xunumber=new LinkedList();
+        xulist.add(startDate);
+        xunumber.add(statisticsService.queryGetUserNumber(startDate));
+        for (int i=1;i<data;i++){
+            String []start2=startDate.split("-");
+            String []end2=endDate.split("-");
+            int year=0;
+            int yue=0;
+            if (Integer.parseInt(start2[1])+1>12){
+                year=Integer.parseInt(start2[0])+1;
+                yue=0+1;
+            }else{
+                year=Integer.parseInt(start2[0]);
+                yue=Integer.parseInt(start2[1])+1;
+            }
+            startDate=year+"-"+getNumber(yue);
+            xulist.add(startDate);
+            xunumber.add(statisticsService.queryGetUserNumber(startDate));
+        }
+        xulist.add(endDate);
+        xunumber.add(statisticsService.queryGetUserNumber(endDate));
+        xudata.put("date",xulist);
+        xudata.put("value",xunumber);
+        map.put("orderN",xudata);
+        return  new JsonResult(true,map);
+    }
+    /**
+     * 月份补0策略
+     */
+    public  String getNumber (int number){
+         String numbers="";
+         if (number<10){
+             numbers="0"+number;
+         }else {
+             numbers=number+"";
+         }
+         return  numbers;
+    }
 }

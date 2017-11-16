@@ -12,8 +12,11 @@ ALTER TABLE "Experts" ADD "Px" INT;
 orgeh
 改成
 --50252046  
-原本
+--原本
 50261009
+
+--健康研究院
+50142933
 --增加一个视图，方便查询sid
 CREATE MATERIALIZED VIEW v_xacx_user_org AS
 select * from (WITH RECURSIVE T ("orgeh","stext", PATH, DEPTH)  AS (
