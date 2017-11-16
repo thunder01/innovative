@@ -3,14 +3,18 @@ package com.innovative.service;
 
 import com.alibaba.druid.util.StringUtils;
 import com.innovative.bean.Association;
+import com.innovative.bean.Logger;
+import com.innovative.bean.LoggerUser;
 import com.innovative.dao.AssociationDao;
 import com.innovative.dao.FileDao;
+import com.innovative.dao.LoggerUserDao;
 import com.innovative.utils.CodeItemUtil;
 import com.innovative.utils.PageInfo;
+import net.sf.json.JSONObject;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,6 +31,8 @@ public class AssociationService {
     FileDao fileDao;
     @Autowired
     IntegralService integralService;
+    @Autowired
+    LoggerUserDao loggerUserDao;
     /**
      * 根据id获取行业协会详情
      * @param id 协会id
@@ -98,13 +104,13 @@ public class AssociationService {
     	  int result = associationDao.addAssociation(association);
     	  if(result>0){
     		  integralService.managerIntegral(9, association.getCreatedBy(), association.getId());
+              //日志记录
+    		  LoggerUser loggerUser=new LoggerUser(MDC.get("userid"),"上传","行业协会",association.getId(),association.getName());
+              loggerUserDao.addLog(loggerUser);
     	  }
     		  
 		 return fileDao.updateFile(association.getId());
     }
-
-
-
 
     /**
      * 修改行业协会
@@ -113,7 +119,12 @@ public class AssociationService {
      */
     public boolean updateAssociation(Association association) {
     	 fileDao.updateFile(association.getId());
-        return associationDao.updateAssociation(association) > 0 ;
+    	 int flag=associationDao.updateAssociation(association);
+    	 if (flag > 0){
+            LoggerUser loggerUser=new LoggerUser(MDC.get("userid"),"修改","行业协会",association.getId(),association.getName());
+            loggerUserDao.addLog(loggerUser);
+    	 }
+        return flag > 0;
     }
 
 
@@ -128,14 +139,9 @@ public class AssociationService {
 			return false;
 		}
 		//删除上传的附件
-		fileDao.deleteFile(id);
-		return associationDao.deleteAssociation(id);
+        fileDao.deleteFile(id);
+        LoggerUser loggerUser2=new LoggerUser(MDC.get("userid"),"删除","行业协会",id,associationDao.getAssociation(id).getName());
+        loggerUserDao.addLog(loggerUser2);
+        return associationDao.deleteAssociation(id);
 	}
-
-
-
-
-
-
-
 }

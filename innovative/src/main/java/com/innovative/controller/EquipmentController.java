@@ -9,7 +9,6 @@ import com.innovative.service.UserService;
 import com.innovative.utils.CookiesUtil;
 import com.innovative.utils.JsonResult;
 import com.innovative.utils.PageInfo;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,11 +18,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-
 import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
-import com.alibaba.druid.util.StringUtils;
+
 @CrossOrigin
 @RestController
 @RequestMapping("/equipment")
@@ -98,7 +95,6 @@ public class EquipmentController {
     @RequestMapping(value = "/insertEquipment", method = RequestMethod.POST)
     @ResponseBody
     public JsonResult insertEquipment(@RequestBody Equipment equipment,HttpServletRequest req) {
-    	System.out.println(">>>>>>>>>>>>>>>"+equipment);
 //    	equipment.setCreatedBy(CookiesUtil.getCookieValue(req,"user_name"));
         //新增
         boolean result = equipmentService.insertEquipment(equipment);
@@ -106,7 +102,6 @@ public class EquipmentController {
         if (!result) {
             return new JsonResult(false, "新增设备失败，请重试！");
         }
-
         return new JsonResult(true, "新增设备成功！");
     }
 

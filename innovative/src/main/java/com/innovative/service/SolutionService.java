@@ -2,18 +2,15 @@ package com.innovative.service;
 
 
 import com.alibaba.druid.util.StringUtils;
+import com.innovative.bean.LoggerUser;
 import com.innovative.bean.Sections;
 import com.innovative.bean.Solution;
-import com.innovative.dao.FileDao;
-import com.innovative.dao.SectionsDao;
-import com.innovative.dao.SolutionDao;
-import com.innovative.utils.Misc;
+import com.innovative.dao.*;
 import com.innovative.utils.PageInfo;
-import org.apache.poi.ss.formula.functions.Now;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -31,6 +28,8 @@ public class SolutionService {
     IntegralService integralService;
     @Autowired
     private SectionsService sectionsService;
+    @Autowired
+    private LoggerUserDao loggerUserDao;
 
     /**
      * 根据id获取方案
@@ -127,6 +126,8 @@ public class SolutionService {
         //增加成功
         if(result>0){
         	integralService.managerIntegral(11, solution.getCreatedBy(), solution.getId());
+        	LoggerUser loggerUser=new LoggerUser(MDC.get("userid"),"上传","方案",solution.getId(),solution.getName());
+        	loggerUserDao.addLog(loggerUser);
         }
 		 return fileDao.updateFile(solution.getId());
     }
@@ -162,6 +163,9 @@ public class SolutionService {
         sections.setImgid(solution1.getPictures());
         sectionsService.updateSection(sections);
 
+        LoggerUser loggerUser=new LoggerUser(MDC.get("userid"),"修改","方案",solution.getId(),solution.getName());
+        loggerUserDao.addLog(loggerUser);
+
         return result > 0 ;
     }
 
@@ -177,6 +181,8 @@ public class SolutionService {
         String sectionId=sectionsService.getIdByFirstId(id,"2");
         sectionsService.deleteSection(sectionId);
 
+        LoggerUser loggerUser=new LoggerUser(MDC.get("userid"),"删除","方案",id,solutionDao.getSolutionById(id).getName());
+        loggerUserDao.addLog(loggerUser);
 		return solutionDao.deleteSolution(id);
 	}
 }

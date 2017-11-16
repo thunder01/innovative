@@ -1,13 +1,7 @@
 package com.innovative.config;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import org.apache.http.HttpResponse;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.Aspect;
@@ -19,10 +13,6 @@ import org.slf4j.MDC;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-import org.springframework.web.context.support.WebApplicationContextUtils;
-
-import com.innovative.bean.LoggerRecord;
-import com.innovative.service.LoggerRecordService;
 /**
  * 记录用户行为
  * @author huang
@@ -49,18 +39,11 @@ public class HttpAspect {
         HttpServletResponse response = attributes.getResponse();
         String userid = request.getParameter("userId");
 
-        MDC.put("userid",userid);
-        MDC.put("ip",request.getRemoteAddr());
-        MDC.put("url",request.getRequestURL().toString());
-        MDC.put("method",request.getMethod());
-        MDC.put("class_method",joinPoint.getSignature().getDeclaringTypeName()+"."+joinPoint.getSignature().getName()+"()");
     }
 
     @After("p()")
     public void doAfter(){
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpServletResponse response = attributes.getResponse();
-        MDC.put("status",""+response.getStatus());
-
     }
 }

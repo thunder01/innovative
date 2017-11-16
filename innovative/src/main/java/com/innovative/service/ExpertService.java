@@ -2,10 +2,15 @@ package com.innovative.service;
 
 import com.alibaba.druid.util.StringUtils;
 import com.innovative.bean.Expert;
+import com.innovative.bean.Logger;
+import com.innovative.bean.LoggerUser;
 import com.innovative.dao.ExpertDao;
 import com.innovative.dao.FileDao;
+import com.innovative.dao.LoggerDao;
+import com.innovative.dao.LoggerUserDao;
 import com.innovative.utils.CodeItemUtil;
 import com.innovative.utils.PageInfo;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +30,8 @@ public class ExpertService {
     FileDao fileDao;
     @Autowired
     IntegralService integralService;
+    @Autowired
+	LoggerUserDao loggerUserDao;
   
     
 
@@ -100,9 +107,8 @@ public class ExpertService {
      * @return
      */
     public boolean addExpert(Map<String, Object> params) {
-    	
-    	
-        return (expertDao.addExpert(params) > 0);
+    	boolean flag=expertDao.addExpert(params) > 0;
+        return flag;
     }
 
 
@@ -117,7 +123,11 @@ public class ExpertService {
     public boolean updateExpert(Expert expert) {
     	fileDao.updateFile(expert.getId());
         boolean flag =	(expertDao.updateExpert(expert) > 0) ;
-         return flag ;
+        if (flag){
+        	LoggerUser loggerUser=new LoggerUser(MDC.get("userid"),"修改","专家",expert.getId(),expert.getName());
+			loggerUserDao.addLog(loggerUser);
+        }
+		return flag ;
     }
 
 
@@ -127,6 +137,9 @@ public class ExpertService {
     	int num = expertDao.addForExpert(expert);
     	if(num>0){
     		integralService.managerIntegral(7, expert.getCreatedBy(), expert.getId());
+			//添加日志
+			LoggerUser loggerUser=new LoggerUser(MDC.get("userid"),"上传","专家",expert.getId(),expert.getName());
+    		loggerUserDao.addLog(loggerUser);
     	}
     	fileDao.updateFile(expert.getId());
 		 return num>0 ? true  : false;
@@ -169,6 +182,9 @@ public class ExpertService {
 		}
 		//删除上传的附件
 		fileDao.deleteFile(id);
+
+		LoggerUser loggerUser=new LoggerUser(MDC.get("userid"),"删除","专家",id,expertDao.getExpert(id).getName());
+		loggerUserDao.addLog(loggerUser);
 		return expertDao.deleteExpert(id);
 	}
 
