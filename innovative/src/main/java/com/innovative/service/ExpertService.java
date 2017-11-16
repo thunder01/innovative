@@ -2,6 +2,7 @@ package com.innovative.service;
 
 import com.alibaba.druid.util.StringUtils;
 import com.innovative.bean.Expert;
+import com.innovative.bean.User;
 import com.innovative.dao.ExpertDao;
 import com.innovative.dao.FileDao;
 import com.innovative.utils.CodeItemUtil;
@@ -25,6 +26,8 @@ public class ExpertService {
     FileDao fileDao;
     @Autowired
     IntegralService integralService;
+    @Autowired
+    UserService userService;
   
     
 
@@ -44,6 +47,10 @@ public class ExpertService {
 	        		List<Map<String,Object>> statusList = codeItemUtil.getCodeItemList("EXPERT_COOPERSTATUS",expert.getCooperationStatus());
 	        		if(statusList!=null&&statusList.size()>0)
 	        			expert.setCooperationStatusMap(statusList.get(0));
+	        		User user = userService.getUser(expert.getCreatedBy());
+	        		if(user!=null){
+	        			integralService.managerIntegral(5, expert.getCreatedBy(), expert.getId());
+	        		}
         		}
         		return expert;
     }

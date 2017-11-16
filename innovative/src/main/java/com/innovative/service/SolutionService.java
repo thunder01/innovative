@@ -4,6 +4,7 @@ package com.innovative.service;
 import com.alibaba.druid.util.StringUtils;
 import com.innovative.bean.Sections;
 import com.innovative.bean.Solution;
+import com.innovative.bean.User;
 import com.innovative.dao.FileDao;
 import com.innovative.dao.SectionsDao;
 import com.innovative.dao.SolutionDao;
@@ -31,6 +32,8 @@ public class SolutionService {
     IntegralService integralService;
     @Autowired
     private SectionsService sectionsService;
+    @Autowired
+    UserService userService;
 
     /**
      * 根据id获取方案
@@ -46,6 +49,10 @@ public class SolutionService {
 		   List<String> urllist = fileDao.getPhotoByMOdAndId(id, "programPhoto");
 		   if(urllist != null && urllist.size() > 0 )
 			   solution.setPictures(urllist.get(0));
+		   User user = userService.getUser(solution.getCreatedBy());
+ 		  if(user!=null){
+  			integralService.managerIntegral(5, solution.getCreatedBy(), solution.getId());
+ 		  }
 		}
 		return solution;
 

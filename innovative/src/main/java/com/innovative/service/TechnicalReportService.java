@@ -3,6 +3,7 @@ package com.innovative.service;
 
 import com.innovative.bean.Sections;
 import com.innovative.bean.TechnicalReport;
+import com.innovative.bean.User;
 import com.innovative.dao.FileDao;
 import com.innovative.dao.SectionsDao;
 import com.innovative.dao.TechnicalReportDao;
@@ -31,6 +32,8 @@ public class TechnicalReportService {
     private IntegralService integralService;
     @Autowired
     private SectionsService sectionsService;
+    @Autowired
+    UserService userService;
 
     /**
      * 根据id获取技术报告
@@ -45,6 +48,10 @@ public class TechnicalReportService {
 		   List<String> url = fileDao.getPhotoByMOdAndId(id, "reportPhoto");
 		   if(url != null && url.size() > 0 )
 			   technicalReport.setPictures(url.get(0));
+		   User user = userService.getUser(technicalReport.getCreatedBy());
+ 		  if(user!=null){
+  			integralService.managerIntegral(5, technicalReport.getCreatedBy(), technicalReport.getId());
+ 		  }
 		}
 		return technicalReport;
     }

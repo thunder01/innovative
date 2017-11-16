@@ -28,11 +28,12 @@
 		</JDBC>
 	</Appenders>
 	<Loggers>
-    	<Logger name="com.innovative" level="DEBUG">
+    	<!-- <Logger name="com.innovative" level="DEBUG">
 			<AppenderRef ref="Console"/>
-    	</Logger>
+    	</Logger> -->
 	    <Root level="WARN">
 	      	<AppenderRef ref="RFC 5424"/>
+	      	<AppenderRef ref="Console"/>
 			<AppenderRef ref="databaseAppender"/>
 	    </Root>
  	</Loggers>

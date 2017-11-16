@@ -3,6 +3,7 @@ package com.innovative.service;
 
 import com.alibaba.druid.util.StringUtils;
 import com.innovative.bean.Association;
+import com.innovative.bean.User;
 import com.innovative.dao.AssociationDao;
 import com.innovative.dao.FileDao;
 import com.innovative.utils.CodeItemUtil;
@@ -27,6 +28,8 @@ public class AssociationService {
     FileDao fileDao;
     @Autowired
     IntegralService integralService;
+    @Autowired
+    UserService userService;
     /**
      * 根据id获取行业协会详情
      * @param id 协会id
@@ -44,6 +47,10 @@ public class AssociationService {
 				List<Map<String,Object>> statuslist = codeItemUtil.getCodeItemList("EXPERT_COOPERSTATUS",association.getCooperationStatus());
 				if(statuslist!=null&&statuslist.size()>0)
 					association.setCooperationStatusMap(statuslist.get(0));
+				User user = userService.getUser(association.getCreatedBy());
+        		if(user!=null){
+        			integralService.managerIntegral(5, association.getCreatedBy(), association.getId());
+        		}
 			}
 			return association;
     }

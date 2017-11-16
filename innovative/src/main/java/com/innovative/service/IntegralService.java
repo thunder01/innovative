@@ -149,7 +149,6 @@ public class IntegralService {
 			break;
 		case 13://资源库详情页若留言者提供有用信息，寻源工程师可任意打赏50积分，（点击一次弹框确认后可以给50分，固定按钮。只能点击一次）
 			ResourceComment resourceComment = resourceCommentDao.getResourceComment(Integer.parseInt(resource_id));
-			System.out.println(">>>>>>>>>>>>>>>>>"+resourceComment+"");
 			integral.setUserid(resourceComment.getComment_by());
 			integral.setContent("您的评论被打赏了50分");
 			integral.setIntegral(50);
