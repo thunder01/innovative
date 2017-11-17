@@ -14,7 +14,7 @@ import javax.servlet.http.HttpSession;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-
+@CrossOrigin
 @RestController
 @RequestMapping(value = "/intelligence")
 public class IntelligenceController {

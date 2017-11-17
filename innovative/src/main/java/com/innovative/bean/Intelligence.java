@@ -1,6 +1,7 @@
 package com.innovative.bean;
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 public class Intelligence implements Serializable{
     /**
@@ -105,6 +106,9 @@ public class Intelligence implements Serializable{
     }
 
     public String getStartdate() {
+    	if(startdate!=null){
+    		return startdate.substring(0,10);
+    	}
         return startdate;
     }
 
@@ -113,6 +117,9 @@ public class Intelligence implements Serializable{
     }
 
     public String getEnddate() {
+    	if(enddate!=null){
+    		return enddate.substring(0,10);
+    	}
         return enddate;
     }
 
@@ -129,6 +136,9 @@ public class Intelligence implements Serializable{
     }
 
     public String getCreateDate() {
+    	if(createDate!=null){
+    		return createDate.substring(0, 10);
+    	}
         return createDate;
     }
 
@@ -183,4 +193,14 @@ public class Intelligence implements Serializable{
     public void setProjectId(String projectId) {
         this.projectId = projectId;
     }
+
+	@Override
+	public String toString() {
+		return "Intelligence [id=" + id + ", name=" + name + ", demand=" + demand + ", tell=" + tell + ", status="
+				+ status + ", number=" + number + ", frequency=" + frequency + ", startdate=" + startdate + ", enddate="
+				+ enddate + ", content=" + content + ", createDate=" + createDate + ", createBy=" + createBy
+				+ ", userName=" + Arrays.toString(userName) + ", userid=" + userid + ", ddmj=" + ddmj + ", checkname="
+				+ checkname + ", projectId=" + projectId + "]";
+	}
+    
 }

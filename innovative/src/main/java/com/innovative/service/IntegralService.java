@@ -73,11 +73,11 @@ public class IntegralService {
 				if(integralDao.todayLoginCount(userid)<2){
 					integral.setContent("登入获得10分");
 					integral.setIntegral(10);
-				}else {
+				}/*else {
 					int count = integralDao.todayLoginCount(userid)+1;
 					integral.setContent("今天第"+count+"次登入，不再获得积分");
 					integral.setIntegral(0);
-				}
+				}*/
 			}
 			result = integralDao.addIntegral(integral);
 			break;
