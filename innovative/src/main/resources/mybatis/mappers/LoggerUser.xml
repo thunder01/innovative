@@ -12,8 +12,8 @@
 
     <!--查询用户日志-->
     <select id="findLog" parameterType="map" resultType="LoggerUser">
-        SELECT a.*,b.username,d."RoleName" FROM "xacx_logger_user" a,"xacx_user" b,"app_userrole" c,"app_role" d
-        WHERE a.userid=b.pernr and b.pernr=c."UserId" and c."RoleId"=d."RoleId"
+        SELECT a.*,b.username FROM "xacx_logger_user" a,"xacx_user" b
+        WHERE a.userid=b.pernr
         order by "time" DESC
         limit #{pageSize} offset #{startIndex}
     </select>
