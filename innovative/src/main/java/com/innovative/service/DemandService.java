@@ -1,11 +1,13 @@
 package com.innovative.service;
 
-import com.innovative.bean.Association;
 import com.innovative.bean.Demand;
-import com.innovative.bean.Order;
+import com.innovative.bean.LoggerUser;
 import com.innovative.dao.DemandDao;
+import com.innovative.dao.LoggerUserDao;
 import com.innovative.dao.OrderDao;
 import com.innovative.utils.PageInfo;
+
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +21,8 @@ public class DemandService {
     DemandDao demandDao;
     @Autowired
     OrderDao  orderDao;
+    @Autowired
+    LoggerUserDao loggerUserDao;
 
 
     /**
@@ -44,7 +48,12 @@ public class DemandService {
      * 添加内容
      */
     public  boolean addDemand(Demand demand){
-        return (demandDao.addDemand(demand)>0 ?true:false);
+    	int result = demandDao.addDemand(demand);
+    	if(result>0){
+    		LoggerUser loggerUser=new LoggerUser(MDC.get("userid"),"上传","需求下单",demand.getId()+"",demand.getName());
+            loggerUserDao.addLog(loggerUser);
+    	}
+        return (result>0 ?true:false);
     }
 
     /**

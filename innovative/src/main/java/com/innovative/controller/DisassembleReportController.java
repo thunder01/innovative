@@ -38,21 +38,21 @@ public class DisassembleReportController {
 		return new JsonResult(true,map);
 	}
 	
-	/**
-	 * 拆解报告上传之后，将上传记录添加到数据库，并向消息表添加一条记录
-	 * @param report 拆解报告表单提交
-	 * @param reportid 订单id
-	 * @return
-	 * */
-	@RequestMapping(value = "/upload", method = RequestMethod.POST)
-	public JsonResult saveDisassembleReport(@RequestBody DisassembleReport report){
-		System.out.println(report);
-		Map<String, Object> map= disassembleService.saveDisassembleReport(report,report.getOrder_id());
-        if (map!=null) {
-            return new JsonResult(true, map);
-        }
-        return new JsonResult(false, "报告上传失败！");        
-	}
+//	/**
+//	 * 拆解报告上传之后，将上传记录添加到数据库，并向消息表添加一条记录
+//	 * @param report 拆解报告表单提交
+//	 * @param reportid 订单id
+//	 * @return
+//	 * */
+//	@RequestMapping(value = "/upload", method = RequestMethod.POST)
+//	public JsonResult saveDisassembleReport(@RequestBody DisassembleReport report){
+//		System.out.println(report);
+//		Map<String, Object> map= disassembleService.saveDisassembleReport(report,report.getOrder_id());
+//        if (map!=null) {
+//            return new JsonResult(true, map);
+//        }
+//        return new JsonResult(false, "报告上传失败！");        
+//	}
 
 	/**
 	 * 删除拆解报告

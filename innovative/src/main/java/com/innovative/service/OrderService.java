@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.innovative.bean.Demand;
 import com.innovative.bean.DisassembleReport;
 import com.innovative.bean.FileBean;
+import com.innovative.bean.LoggerUser;
 import com.innovative.bean.Message;
 import com.innovative.bean.Order;
 import com.innovative.bean.ProjectApproval;
@@ -19,6 +22,7 @@ import com.innovative.bean.User;
 import com.innovative.dao.DemandDao;
 import com.innovative.dao.DisassembleReportDao;
 import com.innovative.dao.FileDao;
+import com.innovative.dao.LoggerUserDao;
 import com.innovative.dao.OrderDao;
 import com.innovative.dao.ProjectApprovalDao;
 import com.innovative.dao.ReportDao;
@@ -48,6 +52,8 @@ public class OrderService {
 	private FileDao fileDao;
 	@Autowired
 	private MessageService messageService;
+	@Autowired
+    LoggerUserDao loggerUserDao;
 	
 	/**
 	 * 新增订单信息 ，需求池接单
@@ -64,6 +70,8 @@ public class OrderService {
 		if (orderid==null) {//若是订单不存在，则新产生一条订单信息；若订单已经存在，说明此需求已经被人接单了
 			orderDao.insertOrder(demandid,userid);
 			demand.setOrderid(orderid);
+			LoggerUser loggerUser=new LoggerUser(MDC.get("userid"),"需求接单","需求接单",demand.getId()+"",demand.getName());
+            loggerUserDao.addLog(loggerUser);
 		}		
 		map.put("demand", demand);
 		map.put("userid", userid);				

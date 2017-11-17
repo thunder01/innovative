@@ -3,16 +3,20 @@ package com.innovative.service;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.innovative.bean.Demand;
 import com.innovative.bean.DisassembleReport;
+import com.innovative.bean.LoggerUser;
 import com.innovative.bean.Order;
 import com.innovative.bean.ProjectApproval;
 import com.innovative.bean.User;
 import com.innovative.dao.DemandDao;
 import com.innovative.dao.DisassembleReportDao;
+import com.innovative.dao.LoggerUserDao;
 import com.innovative.dao.OrderDao;
 import com.innovative.dao.ProjectApprovalDao;
 import com.innovative.dao.UserDao;
@@ -30,6 +34,8 @@ public class ProjectApprovalService {
 	private UserDao userDao;
 	@Autowired
 	private DisassembleReportDao disassembleReportDao;
+	@Autowired
+    LoggerUserDao loggerUserDao;
 	
 	/**
 	 * 判断拆解报告确认状态，并返给前端
@@ -79,6 +85,8 @@ public class ProjectApprovalService {
 				/*添加一条立项表单信息*/
 				projectApprovalDao.addProjectApproval(projectApproval);//添加立项表单
 				map.put("message", "1");//拆解报告已通过
+				LoggerUser loggerUser=new LoggerUser(MDC.get("userid"),"上传","立项表单",projectApproval.getId()+"",projectApproval.getProname());
+	            loggerUserDao.addLog(loggerUser);
 			}else if ("2".equals(messge)) {
 				map.put("message", "2");//拆解报告未通过
 			}else if ("3".equals(messge)) {
@@ -98,6 +106,7 @@ public class ProjectApprovalService {
 	 */
 	public Map<String, Object> postApproval(ProjectApproval pApproval){
 		Map<String, Object> map=new HashMap<>();
+		ProjectApproval projectApproval = projectApprovalDao.findApprovalById(pApproval.getId());
 		Integer order_id=pApproval.getOrder_id();//获取订单id
 		/*根据订单id查出拆解报告信息*/
 		DisassembleReport disassembleReport=disassembleReportDao.getDisassembleByOrderid(order_id);	
@@ -109,6 +118,8 @@ public class ProjectApprovalService {
 		map.put("orderid", order_id);
 		map.put("disassemble", disassembleReport);//node.js需要返回值，多余的查询
 		map.put("items", list);
+		LoggerUser loggerUser=new LoggerUser(MDC.get("userid"),"发布了","立项表单",projectApproval.getId()+"",projectApproval.getProname());
+        loggerUserDao.addLog(loggerUser);
 		return map;
 	}
 	
@@ -187,7 +198,8 @@ public class ProjectApprovalService {
 				projectApprovalDao.updateProjectApprovalReceive(app_id,projectApproval.getSource_id());//接单操作
 			}
 		}
-		
+		LoggerUser loggerUser=new LoggerUser(MDC.get("userid"),"立项表单接单","立项表单接单",pApproval.getId()+"",pApproval.getProname());
+        loggerUserDao.addLog(loggerUser);
 		return map;
 	}
 	

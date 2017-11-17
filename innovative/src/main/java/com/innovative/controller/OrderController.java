@@ -84,7 +84,6 @@ public class OrderController {
 	 * */
 	@RequestMapping(value="/approvalSave",method=RequestMethod.POST)
 	public JsonResult approvalSave(@RequestBody ProjectApproval projectApproval){
-		System.out.println(projectApproval);
 		/*保存立项表单*/
 		Map<String, Object> map = projectApprovalService.addProjectApproval(projectApproval);
 		return new JsonResult(true, map);

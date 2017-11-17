@@ -4,16 +4,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.Resource;
+
+import org.slf4j.MDC;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.innovative.bean.Demand;
 import com.innovative.bean.FileBean;
+import com.innovative.bean.LoggerUser;
 import com.innovative.bean.Message;
 import com.innovative.bean.Order;
 import com.innovative.bean.Report;
 import com.innovative.bean.User;
 import com.innovative.dao.DemandDao;
 import com.innovative.dao.FileDao;
+import com.innovative.dao.LoggerUserDao;
 import com.innovative.dao.OrderDao;
 import com.innovative.dao.ProjectApprovalDao;
 import com.innovative.dao.ReportDao;
@@ -35,6 +39,8 @@ public class ReportService{
 	private UserService userService;
 	@Resource
 	private MessageService messageService;
+	@Resource
+    LoggerUserDao loggerUserDao;
 	
 	/**
 	 * 添加一个报告，一次add操作无需事务
@@ -70,7 +76,31 @@ public class ReportService{
 			map.put("report_id", report.getId());
 			map.put("result", result);
 			map.put("item", result);
-			
+//			方案线索1、寻源报告2、会议记录3、出差报告4、问题记录5、项目总结6
+			if(report.getType().equals("1")){
+				LoggerUser loggerUser=new LoggerUser(MDC.get("userid"),"上传","方案线索",report.getId()+"",report.getTitle());
+	            loggerUserDao.addLog(loggerUser);
+			}
+			if(report.getType().equals("2")){
+				LoggerUser loggerUser=new LoggerUser(MDC.get("userid"),"上传","寻源报告",report.getId()+"",report.getTitle());
+	            loggerUserDao.addLog(loggerUser);
+			}
+			if(report.getType().equals("3")){
+				LoggerUser loggerUser=new LoggerUser(MDC.get("userid"),"上传","会议记录",report.getId()+"",report.getTitle());
+	            loggerUserDao.addLog(loggerUser);
+			}
+			if(report.getType().equals("4")){
+				LoggerUser loggerUser=new LoggerUser(MDC.get("userid"),"上传","出差报告",report.getId()+"",report.getTitle());
+	            loggerUserDao.addLog(loggerUser);
+			}
+			if(report.getType().equals("5")){
+				LoggerUser loggerUser=new LoggerUser(MDC.get("userid"),"上传","问题记录",report.getId()+"",report.getTitle());
+	            loggerUserDao.addLog(loggerUser);
+			}
+			if(report.getType().equals("6")){
+				LoggerUser loggerUser=new LoggerUser(MDC.get("userid"),"上传","项目总结",report.getId()+"",report.getTitle());
+	            loggerUserDao.addLog(loggerUser);
+			}
 		}
 		return map;	
 	}
@@ -85,7 +115,34 @@ public class ReportService{
 		Map<String, Object> map=new HashMap<>();
 		map.put("id", id);
 		map.put("userid", userid);
-		return reportDao.updateReportDeleted(map);
+		Report report = reportDao.findReportById(id);
+		Integer result = reportDao.updateReportDeleted(map);
+//		方案线索1、寻源报告2、会议记录3、出差报告4、问题记录5、项目总结6
+		if(report.getType().equals("1")){
+			LoggerUser loggerUser=new LoggerUser(MDC.get("userid"),"删除了","方案线索",report.getId()+"",report.getTitle());
+            loggerUserDao.addLog(loggerUser);
+		}
+		if(report.getType().equals("2")){
+			LoggerUser loggerUser=new LoggerUser(MDC.get("userid"),"删除了","寻源报告",report.getId()+"",report.getTitle());
+            loggerUserDao.addLog(loggerUser);
+		}
+		if(report.getType().equals("3")){
+			LoggerUser loggerUser=new LoggerUser(MDC.get("userid"),"删除了","会议记录",report.getId()+"",report.getTitle());
+            loggerUserDao.addLog(loggerUser);
+		}
+		if(report.getType().equals("4")){
+			LoggerUser loggerUser=new LoggerUser(MDC.get("userid"),"删除了","出差报告",report.getId()+"",report.getTitle());
+            loggerUserDao.addLog(loggerUser);
+		}
+		if(report.getType().equals("5")){
+			LoggerUser loggerUser=new LoggerUser(MDC.get("userid"),"删除了","问题记录",report.getId()+"",report.getTitle());
+            loggerUserDao.addLog(loggerUser);
+		}
+		if(report.getType().equals("6")){
+			LoggerUser loggerUser=new LoggerUser(MDC.get("userid"),"删除了","项目总结",report.getId()+"",report.getTitle());
+            loggerUserDao.addLog(loggerUser);
+		}
+		return result;
 	}
 	
 	/**
@@ -110,6 +167,31 @@ public class ReportService{
 		map.put("orderid", r.getOrder_id());
 		map.put("reportid", r.getId());
 		map.put("type", r.getType());
+//		方案线索1、寻源报告2、会议记录3、出差报告4、问题记录5、项目总结6
+		if(report.getType().equals("1")){
+			LoggerUser loggerUser=new LoggerUser(MDC.get("userid"),"修改了","方案线索",r.getId()+"",r.getTitle());
+            loggerUserDao.addLog(loggerUser);
+		}
+		if(report.getType().equals("2")){
+			LoggerUser loggerUser=new LoggerUser(MDC.get("userid"),"修改了","寻源报告",r.getId()+"",r.getTitle());
+            loggerUserDao.addLog(loggerUser);
+		}
+		if(report.getType().equals("3")){
+			LoggerUser loggerUser=new LoggerUser(MDC.get("userid"),"修改了","会议记录",r.getId()+"",r.getTitle());
+            loggerUserDao.addLog(loggerUser);
+		}
+		if(report.getType().equals("4")){
+			LoggerUser loggerUser=new LoggerUser(MDC.get("userid"),"修改了","出差报告",r.getId()+"",r.getTitle());
+            loggerUserDao.addLog(loggerUser);
+		}
+		if(report.getType().equals("5")){
+			LoggerUser loggerUser=new LoggerUser(MDC.get("userid"),"修改了","问题记录",r.getId()+"",r.getTitle());
+            loggerUserDao.addLog(loggerUser);
+		}
+		if(report.getType().equals("6")){
+			LoggerUser loggerUser=new LoggerUser(MDC.get("userid"),"修改了","项目总结",r.getId()+"",r.getTitle());
+            loggerUserDao.addLog(loggerUser);
+		}
 		return map;
 	}
 	
