@@ -85,4 +85,12 @@ public class FullTextQueryService {
 
         return sjmap;	
       }
+    public Map<String, Object> getFullTextQueryResults(String keyWords) {
+        String key2 = "{" + keyWords + "}".trim();
+        Map<String, Object> sjmap = new HashMap<>();
+        int totalCount =fullTextQueryDao.sumTages(key2);
+        // sjmap.put("items", map);
+        sjmap.put("totalCount", totalCount);
+        return sjmap;
+    }
 }

@@ -166,6 +166,49 @@
             </if>
         </where>
     </select>
-
+    <select id="sumTages" resultType="int">
+        select SUM(t."count") from (
+        SELECT
+        COUNT (1)
+        FROM
+        "Experts"
+        WHERE
+        "Tags" @> '${key2}'
+        UNION ALL
+        SELECT
+        COUNT (1)
+        FROM
+        "Organizations"
+        WHERE
+        "Tags" @> '${key2}'
+        UNION ALL
+        SELECT
+        COUNT (1)
+        FROM
+        "TechnicalReports"
+        WHERE
+        "Tags" @> '${key2}'
+        UNION ALL
+        SELECT
+        COUNT (1)
+        FROM
+        "Solutions"
+        WHERE
+        "Tags" @> '${key2}'
+        UNION ALL
+        SELECT
+        COUNT (1)
+        FROM
+        "Equipments"
+        WHERE
+        "Tags" @> '${key2}'
+        UNION ALL
+        SELECT
+        COUNT (1)
+        FROM
+        "Associations"
+        WHERE
+        "Tags" @> '${key2}') t
+    </select>
 
 </mapper>

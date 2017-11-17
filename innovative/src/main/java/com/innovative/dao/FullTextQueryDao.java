@@ -18,4 +18,5 @@ public interface FullTextQueryDao {
     int getSolutionList(@Param("key1") String key1, @Param("key2") String key2);
 
     int getEquipmentList(@Param("key1") String key1, @Param("key2") String key2);
+    int sumTages(@Param("key2") String key2);
 }

@@ -70,7 +70,7 @@
     </insert>
     <!--审批内容-->
      <update id="checkIntelligence" parameterType="Intelligence">
-         UPDATE xacx_intelligence SET status='1'
+         UPDATE xacx_intelligence SET status=#{status}
          <where>
              id=#{id}
          </where>
