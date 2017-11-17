@@ -13,7 +13,7 @@ public class LoggerUser implements Serializable{
     //用户id
     private String userid;
     //日志记录的时间
-    private Timestamp time;
+    private String time;
     //行为：上传 下载 编辑 删除 点赞 收藏
     private String action;
     //分类: {专家,技术报告,方案,合作机构,行业协会,仪器设备,科技资讯,科技专栏,
@@ -22,9 +22,16 @@ public class LoggerUser implements Serializable{
     private String relateid;
     //相关联的名称
     private String  relatename;
+    //用户姓名
+    private String username;
+    //用户角色
+    private String rolename;
+    //日期 年-月-日
+    private String riqi;
+    //时间 时：分：秒
+    private String shijian;
 
-    public Integer getId() {
-        return id;
+    public LoggerUser() {
     }
 
     public LoggerUser(String userid, String action, String type, String relateid, String relatename) {
@@ -33,6 +40,10 @@ public class LoggerUser implements Serializable{
         this.type = type;
         this.relateid = relateid;
         this.relatename = relatename;
+    }
+
+    public Integer getId() {
+        return id;
     }
 
     public void setId(Integer id) {
@@ -47,11 +58,11 @@ public class LoggerUser implements Serializable{
         this.userid = userid;
     }
 
-    public Timestamp getTime() {
+    public String getTime() {
         return time;
     }
 
-    public void setTime(Timestamp time) {
+    public void setTime(String time) {
         this.time = time;
     }
 
@@ -87,6 +98,38 @@ public class LoggerUser implements Serializable{
         this.relatename = relatename;
     }
 
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getRiqi() {
+        return this.time.substring(0,10);
+    }
+
+    public void setRiqi(String riqi) {
+        this.riqi = this.time.substring(0,10);
+    }
+
+    public String getShijian() {
+        return this.time.substring(11,19);
+    }
+
+    public void setShijian(String shijian) {
+        this.shijian = this.time.substring(11,18);
+    }
+
+    public String getRolename() {
+        return rolename;
+    }
+
+    public void setRolename(String rolename) {
+        this.rolename = rolename;
+    }
+
     @Override
     public String toString() {
         return "LoggerUser{" +
@@ -97,6 +140,7 @@ public class LoggerUser implements Serializable{
                 ", type='" + type + '\'' +
                 ", relateid='" + relateid + '\'' +
                 ", relatename='" + relatename + '\'' +
+                ", username='" + username + '\'' +
                 '}';
     }
 }

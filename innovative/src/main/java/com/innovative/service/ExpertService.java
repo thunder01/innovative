@@ -113,6 +113,7 @@ public class ExpertService {
      * @param params 新增参数
      * @return
      */
+	@Transactional
     public boolean addExpert(Map<String, Object> params) {
     	boolean flag=expertDao.addExpert(params) > 0;
         return flag;
@@ -182,7 +183,7 @@ public class ExpertService {
 
 
 
-
+	@Transactional
 	public boolean deleteExpert(String id) {
 		if(null == id || "".equals(id)){
 			return false;

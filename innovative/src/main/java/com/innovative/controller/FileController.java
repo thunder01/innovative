@@ -9,15 +9,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.innovative.bean.FileLog;
+import com.innovative.bean.*;
+import com.innovative.dao.LoggerUserDao;
 import com.innovative.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.innovative.bean.FileBean;
-import com.innovative.bean.TechnicalReport;
-import com.innovative.bean.User;
 import com.innovative.utils.BaseController;
 import com.innovative.utils.JsonResult;
 
@@ -36,6 +34,8 @@ public class FileController extends BaseController {
 	private IntegralService integralService;
 	@Autowired
 	private FileLogService fileLogService;
+	@Autowired
+	private LoggerUserDao loggerUserDao;
 
 	/**
 	 *
@@ -60,8 +60,11 @@ public class FileController extends BaseController {
     		modname="file";
     	PrintWriter print ;
        try {
-    	   boolean flag = fileservice.uploadFile(FileData,modname,userid,type,request);
-    	   print  = res.getWriter();
+		   LoggerUser loggerUser=new LoggerUser(userid,"上传","文件","",modname);
+		   loggerUserDao.addLog(loggerUser);
+
+		   boolean flag = fileservice.uploadFile(FileData,modname,userid,type,request);
+		   print  = res.getWriter();
     	   print.write(flag+"");
     	   print.flush();
     	   print.close();

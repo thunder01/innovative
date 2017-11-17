@@ -23,10 +23,11 @@
 		</JDBC>
 	</Appenders>
 	<Loggers>
-        <Logger name="com.innovative" level="INFO">
+        <Logger name="com.innovative" level="INFO" additivity="false">
             <AppenderRef ref="Console"/>
         </Logger>
         <Root level="WARN">
+			<AppenderRef ref="Console"/>
             <AppenderRef ref="RFC 5424"/>
         </Root>
     </Loggers>
