@@ -159,7 +159,7 @@ public class TechnicalReportService {
         //新增新的文件
         fileDao.updateFile(technicalReport.getId());
 
-        //查询技术报告修改后的内容
+        /*//查询技术报告修改后的内容
         TechnicalReport technicalReport1=technicalReportDao.getTechnicalReportById(technicalReport.getId());
         //查询对应的科技专栏id
         String sectionId=sectionsService.getIdByFirstId(technicalReport.getId(),"1");
@@ -174,7 +174,7 @@ public class TechnicalReportService {
         sections.setUpdateBy(technicalReport1.getUpdatedBy());
         sections.setImgid(technicalReport1.getPictures());
         sectionsService.updateSection(sections);
-
+*/
         LoggerUser loggerUser=new LoggerUser(MDC.get("userid"),"修改","技术报告",technicalReport.getId(),technicalReport.getName());
         loggerUserDao.addLog(loggerUser);
 
@@ -189,9 +189,9 @@ public class TechnicalReportService {
 		//删除上传的附件
 		fileDao.deleteFile(id);
 
-        //删除科技专栏
+       /* //删除科技专栏
         String sectionId=sectionsService.getIdByFirstId(id,"1");
-        sectionsService.deleteSection(sectionId);
+        sectionsService.deleteSection(sectionId);*/
 
         LoggerUser loggerUser=new LoggerUser(MDC.get("userid"),"删除","技术报告",id,technicalReportDao.getTechnicalReportById(id).getName());
         loggerUserDao.addLog(loggerUser);

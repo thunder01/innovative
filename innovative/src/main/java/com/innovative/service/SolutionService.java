@@ -153,7 +153,7 @@ public class SolutionService {
     	fileDao.updateFile(solution.getId());
         int result = solutionDao.updateSolution(solution);
 
-        //查询修改后的方案信息
+        /*//查询修改后的方案信息
         Solution solution1=solutionDao.getSolutionById(solution.getId());
         //查询对应的科技专栏id
         String sectionId=sectionsService.getIdByFirstId(solution.getId(),"2");
@@ -168,7 +168,7 @@ public class SolutionService {
         sections.setCotent(solution1.getContent());
         sections.setUpdateBy(solution1.getUpdatedBy());
         sections.setImgid(solution1.getPictures());
-        sectionsService.updateSection(sections);
+        sectionsService.updateSection(sections);*/
 
         LoggerUser loggerUser=new LoggerUser(MDC.get("userid"),"修改","方案",solution.getId(),solution.getName());
         loggerUserDao.addLog(loggerUser);
@@ -184,9 +184,9 @@ public class SolutionService {
 		//删除上传的附件
 		fileDao.deleteFile(id);
 
-		//删除科技专栏
+		/*//删除科技专栏
         String sectionId=sectionsService.getIdByFirstId(id,"2");
-        sectionsService.deleteSection(sectionId);
+        sectionsService.deleteSection(sectionId);*/
 
         LoggerUser loggerUser=new LoggerUser(MDC.get("userid"),"删除","方案",id,solutionDao.getSolutionById(id).getName());
         loggerUserDao.addLog(loggerUser);
