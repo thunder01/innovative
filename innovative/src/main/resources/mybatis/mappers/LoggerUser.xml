@@ -4,8 +4,22 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.innovative.dao.LoggerUserDao">
+    <!--添加用户日志-->
     <insert id="addLog" parameterType="LoggerUser">
         INSERT INTO "xacx_logger_user" ("userid","time","action","type","relateid","relatename")
         VALUES (#{userid},now(),#{action},#{type},#{relateid},#{relatename})
     </insert>
+
+    <!--查询用户日志-->
+    <select id="findLog" parameterType="map" resultType="LoggerUser">
+        SELECT a.*,b.username,d."RoleName" FROM "xacx_logger_user" a,"xacx_user" b,"app_userrole" c,"app_role" d
+        WHERE a.userid=b.pernr and b.pernr=c."UserId" and c."RoleId"=d."RoleId"
+        order by "time" DESC
+        limit #{pageSize} offset #{startIndex}
+    </select>
+
+    <!--总条数-->
+    <select id="totalcount" resultType="int">
+        SELECT COUNT (*) FROM xacx_logger_user
+    </select>
 </mapper>

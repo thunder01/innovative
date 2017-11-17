@@ -1,14 +1,8 @@
 package com.innovative.service;
 
 import com.google.common.collect.Lists;
-import com.innovative.bean.FileBean;
-import com.innovative.bean.Sections;
-import com.innovative.bean.TechSectionsApprouver;
-import com.innovative.bean.TechSectionsCollection;
-import com.innovative.dao.FileDao;
-import com.innovative.dao.SectionsDao;
-import com.innovative.dao.TechSectionsApprouverDao;
-import com.innovative.dao.TechSectionsCollectionDao;
+import com.innovative.bean.*;
+import com.innovative.dao.*;
 import com.innovative.utils.Config;
 import com.innovative.utils.JsonResult;
 import com.innovative.utils.Misc;
@@ -36,8 +30,10 @@ import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 科技专栏
@@ -59,11 +55,14 @@ public class SectionsService {
     TechSectionsCollectionDao techSectionsCollectionDao;
     @Autowired
     FileDao fileDao;
+    @Autowired
+	LoggerUserDao loggerUserDao;
 /**
  * 添加科技专栏
  * @param sections
  * @return
  */
+	@Transactional
 	public boolean addSection(Sections sections) {
 		//根据图片的id查出图片的URL
 		String imgId=sections.getImgid();
@@ -98,6 +97,10 @@ public class SectionsService {
 			@SuppressWarnings("unused")
 			IndexResponse response=client.prepareIndex("sections_index","sections",sections.getId()).setSource(builder).get();
 		}
+
+		LoggerUser loggerUser=new LoggerUser(MDC.get("userid"),"上传","科技专题",sections.getId(),sections.getTitle());
+		loggerUserDao.addLog(loggerUser);
+
 		return flag;
 	}
 /**
@@ -105,6 +108,7 @@ public class SectionsService {
  * @param sections
  * @return
  */
+	@Transactional
 	public boolean updateSection(Sections sections) {
 		Sections sectionOld = sectionsDao.getSectionById(sections.getId());
 		// 先修改数据库
@@ -158,6 +162,9 @@ public class SectionsService {
 				}	
 			}		
 		}
+
+		LoggerUser loggerUser=new LoggerUser(MDC.get("userid"),"修改","科技专题",sections.getId(),sections.getTitle());
+		loggerUserDao.addLog(loggerUser);
 		return flag;
 	}
 	/**
@@ -227,7 +234,11 @@ public class SectionsService {
 	 * @param id
 	 * @return
 	 */
+	@Transactional
 	public boolean deleteSection(String id) {
+		LoggerUser loggerUser=new LoggerUser(MDC.get("userid"),"删除","科技专题",id,sectionsDao.getSectionById(id).getTitle());
+		loggerUserDao.addLog(loggerUser);
+
 		// 先从数据库中删除
 		boolean flag=sectionsDao.deleteSection(id);
 		if (flag) {
@@ -424,6 +435,7 @@ public class SectionsService {
      * @param techSectionsApprouver
      * @return
      */
+    @Transactional
 	public Sections addApprouver(TechSectionsApprouver techSectionsApprouver) {
 		int todayIsApprouver = techSectionsApprouverDao.isTodayApprouverTechInfornaion(techSectionsApprouver.getApprouverBy(), techSectionsApprouver.getSectionId());
 		if(todayIsApprouver == 0){
@@ -431,6 +443,10 @@ public class SectionsService {
 			techSectionsApprouverDao.insertTechApprouver(techSectionsApprouver);
 			//点赞次数加1
 			sectionsDao.updateSectionApprouverNum(techSectionsApprouver.getSectionId());
+
+			LoggerUser loggerUser=new LoggerUser(MDC.get("userid"),"点赞","科技专题",techSectionsApprouver.getSectionId(),sectionsDao.getSectionById(techSectionsApprouver.getSectionId()).getTitle());
+			loggerUserDao.addLog(loggerUser);
+
 			return sectionsDao.getSectionByIdAndUserid(techSectionsApprouver.getSectionId(),techSectionsApprouver.getApprouverBy()) ;  
 		}else{
 			return null;
@@ -442,12 +458,17 @@ public class SectionsService {
 	 * @param techSectionsCollection
 	 * @return
 	 */
+	@Transactional
 	public boolean collectionTechSection(TechSectionsCollection techSectionsCollection) {
 		int isCollection = techSectionsCollectionDao.isCollectionSections(techSectionsCollection.getCollectBy(), techSectionsCollection.getSectionId());
 		if(isCollection == 0){
 			Sections sections = sectionsDao.getSectionById(techSectionsCollection.getSectionId());
 			messageService.insertMessage(sections.getCreateBy(), techSectionsCollection.getId(), Config.KJ_ZL_SSH, 1);
 			messageService.updateMsgCount(sections.getCreateBy());
+
+			LoggerUser loggerUser=new LoggerUser(MDC.get("userid"),"收藏","科技专题",techSectionsCollection.getSectionId(),sectionsDao.getSectionById(techSectionsCollection.getSectionId()).getTitle());
+			loggerUserDao.addLog(loggerUser);
+
 			return techSectionsCollectionDao.insertTechSectionsCollection(techSectionsCollection);
 		}else{
 			return false;

@@ -124,6 +124,7 @@ public class AssociationService {
      * @param association 修改参数
      * @return
      */
+    @Transactional
     public boolean updateAssociation(Association association) {
     	 fileDao.updateFile(association.getId());
     	 int flag=associationDao.updateAssociation(association);
@@ -140,6 +141,7 @@ public class AssociationService {
      * @param id
      * @return
      */
+    @Transactional
 	public boolean deleteAssociation(String id) {
 		// TODO Auto-generated method stub
 		if(null == id || "".equals(id)){

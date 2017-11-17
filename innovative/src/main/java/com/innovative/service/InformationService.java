@@ -2,16 +2,8 @@ package com.innovative.service;
 
 
 import com.google.common.collect.Lists;
-import com.innovative.bean.FileBean;
-import com.innovative.bean.Information;
-import com.innovative.bean.Sections;
-import com.innovative.bean.TechInformationApprouver;
-import com.innovative.bean.TechInformationCollection;
-import com.innovative.dao.FileDao;
-import com.innovative.dao.InformationDao;
-import com.innovative.dao.SectionsDao;
-import com.innovative.dao.TechInformationApprouverDao;
-import com.innovative.dao.TechInformationCollectionDao;
+import com.innovative.bean.*;
+import com.innovative.dao.*;
 import com.innovative.utils.Config;
 import com.innovative.utils.JsonResult;
 import com.innovative.utils.Misc;
@@ -38,6 +30,7 @@ import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -69,11 +62,14 @@ public class InformationService {
     private TechInformationCollectionDao techInformationCollectiondao;
     @Autowired
     private FileDao fileDao;
+    @Autowired
+	private LoggerUserDao loggerUserDao;
 /**
  * 添加科技资讯
  * @param sections
  * @return
  */
+	@Transactional
 	public boolean addInformation(Information information) {
 		//根据图片的id查出图片的URL
 		String imgId=information.getImgid();
@@ -110,7 +106,9 @@ public class InformationService {
 			@SuppressWarnings("unused")
 			IndexResponse response=client.prepareIndex("information_index","information",information.getId()).setSource(builder).get();
     	}
-    	
+
+    	LoggerUser loggerUser=new LoggerUser(MDC.get("userid"),"上传","科技资讯",information.getId(),information.getTitle());
+    	loggerUserDao.addLog(loggerUser);
 		return flag;
 	}
 /**
@@ -118,6 +116,7 @@ public class InformationService {
  * @param sections
  * @return
  */
+	@Transactional
 	public boolean updateInformation(Information information) {
 		Information informationOld = informationDao.getInformationById(information.getId(), information.getUpdateBy());
 		// 先修改数据库中的科技资讯信息
@@ -169,7 +168,9 @@ public class InformationService {
 				
 			}
 		}
-		
+
+		LoggerUser loggerUser=new LoggerUser(MDC.get("userid"),"修改","科技资讯",information.getId(),information.getTitle());
+		loggerUserDao.addLog(loggerUser);
 		return flag;
 	}
 	/**
@@ -232,7 +233,11 @@ public class InformationService {
 	 * @param id
 	 * @return
 	 */
+	@Transactional
 	public boolean deleteInformation(String id) {
+		LoggerUser loggerUser=new LoggerUser(MDC.get("userid"),"删除","科技资讯",id,informationDao.getById(id).getTitle());
+		loggerUserDao.addLog(loggerUser);
+
 		// 先从数据库中删除
 		boolean flag=informationDao.deleteInformation(id);
 		//若是删除成功，则再从索引库中删除
@@ -427,6 +432,10 @@ public class InformationService {
 			techInformationApprouverDao.insertTechInfornaionApprouver(techInformationApprouver);
 			//点赞次数加1
 			informationDao.updateInformationApprouverNum(techInformationApprouver.getInformationId());
+
+			LoggerUser loggerUser=new LoggerUser(MDC.get("userid"),"点赞","科技资讯",techInformationApprouver.getInformationId(),
+					informationDao.getInformationById(techInformationApprouver.getInformationId(),MDC.get("userid")).getTitle());
+			loggerUserDao.addLog(loggerUser);
 			return informationDao.getInformationById(techInformationApprouver.getInformationId(),techInformationApprouver.getApprouverBy());
 		}else{
 			return null;
@@ -449,6 +458,9 @@ public class InformationService {
 		messageService.insertMessage(information.getCreateBy(), techInformationCollection.getId(), Config.KJ_ZX_SSH, 1);
 		messageService.updateMsgCount(information.getCreateBy());
 		//增加收藏记录
+		LoggerUser loggerUser=new LoggerUser(MDC.get("userid"),"收藏","科技资讯",techInformationCollection.getInformationId(),
+				informationDao.getInformationById(techInformationCollection.getInformationId(),MDC.get("userid")).getTitle());
+		loggerUserDao.addLog(loggerUser);
 		return techInformationCollectiondao.insertTechInformationCollection(techInformationCollection);
 	}else{
 		return false;

@@ -129,6 +129,7 @@ public class EquipmentService {
      * @param equipment 参数bean
      * @return
      */
+    @Transactional
     public boolean updateEquipment(Equipment equipment) {
     	fileDao.updateFile(equipment.getId());
         int result = equipmentDao.updateEquipment(equipment);
@@ -139,6 +140,7 @@ public class EquipmentService {
         return result > 0 ;
     }
 
+    @Transactional
 	public boolean deleteEquipment(String id) {
 		// TODO Auto-generated method stub
 				if(null == id || "".equals(id)){

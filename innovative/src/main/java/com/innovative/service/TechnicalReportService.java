@@ -181,6 +181,7 @@ public class TechnicalReportService {
         return result > 0 ;
     }
 
+    @Transactional
 	public boolean deleteTechnicalReport(String id) {
 		if(null == id || "".equals(id)){
 			return false;
