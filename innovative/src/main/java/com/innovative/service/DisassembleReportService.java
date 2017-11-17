@@ -3,18 +3,22 @@ package com.innovative.service;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.innovative.bean.Demand;
 import com.innovative.bean.DisassembleReport;
 import com.innovative.bean.FileBean;
+import com.innovative.bean.LoggerUser;
 import com.innovative.bean.Message;
 import com.innovative.bean.Order;
 import com.innovative.bean.User;
 import com.innovative.dao.DemandDao;
 import com.innovative.dao.DisassembleReportDao;
 import com.innovative.dao.FileDao;
+import com.innovative.dao.LoggerUserDao;
 import com.innovative.dao.MessageDao;
 import com.innovative.dao.OrderDao;
 import com.innovative.dao.UserDao;
@@ -41,6 +45,8 @@ public class DisassembleReportService {
 	private FileDao fileDao;
 	@Autowired
 	private MessageService messageService;
+	@Autowired
+    LoggerUserDao loggerUserDao;
 	/**
 	 * 拆解报告上传之后，将上传记录添加到数据库，并向消息表添加一条记录
 	 * @param repor 拆解报告信息
@@ -133,7 +139,10 @@ public class DisassembleReportService {
 		List<FileBean> listFiles=fileDao.getFileById(field, "disassemble");
 		DisassembleReport report = reportDao.getDisassembleReportById(disassembleReport.getId());//根据id查询拆解报告
 		report.setList(listFiles);
-		
+		Order order = orderDao.getOrderById(report.getOrder_id());
+		Demand demand = demandDao.getDemand(order.getDemandId());
+		LoggerUser loggerUser=new LoggerUser(MDC.get("userid"),"修改","拆解报告",demand.getId()+"",demand.getName());
+        loggerUserDao.addLog(loggerUser);
 		map.put("result", result);
 		map.put("item",report);
 		map.put("orderid", report.getOrder_id());
@@ -271,6 +280,8 @@ public class DisassembleReportService {
 			/*根据订单id查询需求id*/
 			int projectId=orderDao.getDemandIdByOrderId(orderid);
 			Demand demand = demandDao.getDemand(projectId);
+			LoggerUser loggerUser=new LoggerUser(MDC.get("userid"),"上传","拆解报告",demand.getId()+"",demand.getName());
+            loggerUserDao.addLog(loggerUser);
 			map.put("demand", demand);
 			map.put("result",result);
 			map.put("orderid", orderid);

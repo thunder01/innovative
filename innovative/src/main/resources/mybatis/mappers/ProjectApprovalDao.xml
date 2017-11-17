@@ -34,6 +34,9 @@
 	
 	<!-- 添加立项表单 -->
 	<insert id="addProjectApproval" parameterType="ProjectApproval">
+		<selectKey resultType="int" keyProperty="id" order="AFTER">
+            SELECT currval('xacx_project_approval_v2_id_seq'::regclass)
+        </selectKey>
 		INSERT INTO xacx_project_approval_v2 (order_id,source_status,post_status,proname,pronum,eoms,demander,contact,demand_bg,demand_core,demand_count,
 		coopmodel,require,cost,completion,remark,create_by,create_date,keyword) 
 		VALUES(#{order_id},0,0,#{proname},#{pronum},#{eoms},#{demander},#{contact},#{demand_bg},
