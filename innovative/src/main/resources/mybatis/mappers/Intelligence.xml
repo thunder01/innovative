@@ -115,9 +115,19 @@
             status='1'
         </where>
     </select>
-    
+    <!-- 我的情报下单 -->
     <select id="getMyIntelligence" parameterType="map" resultMap="intelligenceMap">
-    	SELECT * FROM xacx_intelligence WHERE create_by=#{createBy} limit #{pageSize} offset #{startIndex}
+    	SELECT * FROM xacx_intelligence WHERE create_by=#{createBy} AND status in ('1','2') ORDER BY create_date DESC limit #{pageSize} offset #{startIndex}
+    </select>
+    <select id="getCountMyIntelligence" parameterType="string" resultType="int">
+    	SELECT COUNT(*) FROM xacx_intelligence WHERE create_by=#{createBy} AND status in ('1','2')
+    </select>
+     <!-- 我的情报接单-->
+    <select id="getJieDan" parameterType="map" resultMap="intelligenceMap">
+    	SELECT * FROM xacx_intelligence WHERE userid=#{userid} AND status='2' ORDER BY create_date DESC limit #{pageSize} offset #{startIndex}
+    </select>
+    <select id="getCountJieDan" parameterType="string" resultType="int">
+    	SELECT COUNT(*) FROM xacx_intelligence WHERE userid=#{userid} AND status='2'
     </select>
     <!--客户评价-->
     <insert id="addScore" parameterType="Score">

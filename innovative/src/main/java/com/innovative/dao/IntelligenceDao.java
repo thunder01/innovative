@@ -66,4 +66,10 @@ public interface IntelligenceDao {
      * @return
      */
     List<Intelligence> getMyIntelligence(@Param("startIndex") int startIndex, @Param("pageSize") int pageSize,@Param("createBy") String createBy);
+    
+    int getCountMyIntelligence(String createBy);
+    
+    List<Intelligence> getJieDan(@Param("startIndex") int startIndex, @Param("pageSize") int pageSize,@Param("userid") String userid);
+    
+    int getCountJieDan(String userid);
 }

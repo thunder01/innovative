@@ -2,8 +2,12 @@ package com.innovative.bean;
 
 import java.io.Serializable;
 
-public class Intelligence{
-    private  int id;//uuid
+public class Intelligence implements Serializable{
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private  int id;//uuid
     private  String name;//项目名称
     private  String demand;//需求方
     private  String tell;//联系方式

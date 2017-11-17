@@ -18,7 +18,6 @@ import com.innovative.bean.Message;
 import com.innovative.bean.MsgCount;
 import com.innovative.bean.User;
 import com.innovative.dao.IntegralDao;
-import com.innovative.dao.IntelligenceDao;
 import com.innovative.dao.MsgCountDao;
 import com.innovative.service.DemandService;
 import com.innovative.service.IntelligenceService;
@@ -126,6 +125,19 @@ public class MyMessageController {
 	public JsonResult myIntelligence(@RequestParam(name="offset",defaultValue="0") Integer offset,@PathVariable(name="userid") String userid){
 		Integer pageNum = offset/10+1;
 		Map<String, Object> map = intelligenceService.getMyIntelligence(userid, pageNum);
+		return new JsonResult(true, map);
+	}
+	/**
+	 * 我的情报接单
+	 * @param offset
+	 * @param userid
+	 * @return
+	 */
+	@RequestMapping(value = "/myJieDan/{userid}",method = RequestMethod.GET)
+	@ResponseBody
+	public JsonResult myJieDan(@RequestParam(name="offset",defaultValue="0") Integer offset,@PathVariable(name="userid") String userid){
+		Integer pageNum = offset/10+1;
+		Map<String, Object> map = intelligenceService.getMyJieDan(userid, pageNum);
 		return new JsonResult(true, map);
 	}
 	
