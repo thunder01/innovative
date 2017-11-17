@@ -289,7 +289,7 @@ System.out.println(s.toString());
         System.out.println(getDays());
         System.out.println(getAfterDayWeek("3"));
 
-        System.out.println(getBeforeDayDate("5"));
+        System.out.println(getBeforeDayDate("1"));
         System.out.println(getAfterDayDate("1"));
     }
 

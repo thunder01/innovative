@@ -4,23 +4,11 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.innovative.dao.StatisticsDao">
-    <resultMap id="associationsMap" type="com.innovative.bean.Association">
+    <resultMap id="associationsMap" type="com.innovative.bean.Tages">
         <result  property="tags"  column="Tags"  typeHandler="com.innovative.mybatisHandler.ArrayTypeHandler"/>
     </resultMap>
-    <resultMap id="expertMap" type="com.innovative.bean.Expert">
-        <result  property="tags"  column="Tags"  typeHandler="com.innovative.mybatisHandler.ArrayTypeHandler"/>
-    </resultMap>
-    <resultMap id="organizationMap" type="com.innovative.bean.Organization">
-        <result  property="tags"  column="Tags"  typeHandler="com.innovative.mybatisHandler.ArrayTypeHandler"/>
-    </resultMap>
-    <resultMap id="technicalMap" type="com.innovative.bean.TechnicalReport">
-        <result  property="tags"  column="Tags"  typeHandler="com.innovative.mybatisHandler.ArrayTypeHandler"/>
-    </resultMap>
-    <resultMap id="solutionMap" type="com.innovative.bean.Solution">
-        <result  property="tags"  column="Tags"  typeHandler="com.innovative.mybatisHandler.ArrayTypeHandler"/>
-    </resultMap>
-    <resultMap id="equipMap" type="com.innovative.bean.Equipment">
-        <result  property="tags"  column="Tags"  typeHandler="com.innovative.mybatisHandler.ArrayTypeHandler"/>
+    <resultMap id="staticMap" type="com.innovative.bean.Static">
+        <result  property="statics"  column="statics"/>
     </resultMap>
     <!--资源数量-->
     <select id="queryAssociations" resultType="int">
@@ -108,20 +96,24 @@
     <!--标签归类-->
     <select id="selectAssociations" resultMap="associationsMap">
         select "Tags" from "Associations" GROUP BY "Tags"
-    </select>
-    <select id="selectExperts" resultMap="expertMap">
+        UNION
         select "Tags" from "Experts" GROUP BY "Tags"
-    </select>
-    <select id="selectOrganizations" resultMap="organizationMap">
+        UNION
         select "Tags" from "Organizations" GROUP BY "Tags"
-    </select>
-    <select id="selectTechnicalReports" resultMap="technicalMap">
+        UNION
         select "Tags" from "TechnicalReports" GROUP BY "Tags"
-    </select>
-    <select id="selectSolutions" resultMap="solutionMap">
+        UNION
         select "Tags" from "Solutions" GROUP BY "Tags"
-    </select>
-    <select id="selectEquipments" resultMap="equipMap">
+        UNION
         select "Tags" from "Equipments" GROUP BY "Tags"
+    </select>
+    <!--添加数据统计表-->
+     <insert id="addStatis"  parameterType="String">
+       INSERT INTO "xacx_static"("statics","date")
+         VALUES(#{json},now());
+     </insert>
+    <!--根据时间查询内容-->
+    <select id="timeStatic" resultMap="staticMap">
+        select statics from "xacx_static" where "date" like'${date}%'
     </select>
 </mapper>

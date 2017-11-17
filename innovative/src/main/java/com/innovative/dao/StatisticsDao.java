@@ -26,11 +26,8 @@ public interface StatisticsDao {
     int queryIntell();
     int queryIntellNumber(@Param("date") String date);
     int queryGetUserNumber(@Param("date") String date);
-    List<Association> selectAssociations();
-    List<Expert> selectExperts();
-    List<Organization> selectOrganizations();
-    List<TechnicalReport> selectTechnicalReports();
-    List<Solution> selectSolutions();
-    List<Equipment> selectEquipments();
+    List<Tages> selectAssociations();
+    int addStatis(@Param("json") String json);
+    List<Static> timeStatic(@Param("date") String date);
 
 }

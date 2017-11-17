@@ -117,22 +117,16 @@ public class StatisticsService {
     /**
      * 标签分类
      */
-    public List<Association> selectAssociations(){
+    public List<Tages> selectAssociations(){
         return statisticsDao.selectAssociations();
     };
-    public List<Expert> selectExperts(){
-        return statisticsDao.selectExperts();
-    };
-    public List<Organization> selectOrganizations(){
-        return statisticsDao.selectOrganizations();
-    };
-    public List<TechnicalReport> selectTechnicalReports(){
-        return statisticsDao.selectTechnicalReports();
-    };
-    public List<Solution> selectSolutions(){
-        return statisticsDao.selectSolutions();
-    };
-    public List<Equipment> selectEquipments(){
-        return statisticsDao.selectEquipments();
-    };
+    /**
+     * 添加数据内容表
+     */
+    public  boolean addStatis(String  json){
+        return  statisticsDao.addStatis(json)>0?true:false;
+    }
+    public  List<Static> timeStatic(String date){
+        return  statisticsDao.timeStatic(date);
+    }
 }
