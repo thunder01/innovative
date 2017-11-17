@@ -2,7 +2,6 @@ package com.innovative.service;
 
 import com.innovative.bean.FeedBack;
 import com.innovative.bean.Intelligence;
-import com.innovative.bean.Order;
 import com.innovative.bean.Score;
 import com.innovative.dao.IntelligenceDao;
 import com.innovative.utils.PageInfo;
@@ -113,8 +112,24 @@ public class IntelligenceService {
     	PageInfo pageInfo=new PageInfo();
         pageInfo.setCurrentPageNum(pageNum);
     	List<Intelligence> list = dao.getMyIntelligence(pageInfo.getStartIndex(), pageInfo.getPageSize(), createBy);
+    	int count =dao.getCountMyIntelligence(createBy);
+    	map.put("limit", pageInfo.getPageSize());
+    	map.put("count", count);
     	map.put("item", list);
+    	
         return  map;
+    }
+    
+    public Map<String, Object> getMyJieDan(String userid,Integer pageNum){
+    	Map<String, Object> map = new HashMap<>();
+    	PageInfo pageInfo=new PageInfo();
+        pageInfo.setCurrentPageNum(pageNum);
+        List<Intelligence> list = dao.getJieDan(pageInfo.getStartIndex(), pageInfo.getPageSize(), userid);
+        int count =dao.getCountJieDan(userid);
+        map.put("limit", pageInfo.getPageSize());
+    	map.put("count", count);
+    	map.put("item", list);
+        return map;
     }
     /**
      * 添加客户评分

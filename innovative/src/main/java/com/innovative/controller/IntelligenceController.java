@@ -121,7 +121,7 @@ public class IntelligenceController {
         messageService.updateMessage(user.getUserId(),mess.getId());
         messageService.updateMsgCount(user.getUserId());
 //发给下单人一个消息
-        messageService.insertMessage(intelligences.getCreateBy(), intelligence.getId()+"", "3", 2);
+        messageService.insertMessage(intelligences.getCreateBy(), intelligence.getId()+"", "3", 1);
         messageService.updateMsgCount(intelligences.getCreateBy());
         return  new JsonResult(code,message);
     }
