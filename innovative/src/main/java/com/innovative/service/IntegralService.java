@@ -102,11 +102,13 @@ public class IntegralService {
 			result =integralDao.addIntegral(integral);
 			break;
 		case 5://创新资源详情页进入次数>5次，奖励上传人50分。（待定）
-			int count = integralResourceDao.getCountByResourceId(resource_id);
+			int count = integralDao.getCountByResource_id(resource_id);
+			count = count +1;
 			if(count==5){
-				integral.setContent("创新资源详情页进入次数超过5次");
+				integral.setContent("您的创新资源详情页被查看的次数超过5次");
 				integral.setIntegral(50);
 			}else {
+				integral.setContent("当日您的创新资源详情被查看"+count+"次");
 				integral.setIntegral(0);
 			}
 			result = integralDao.addIntegral(integral);
