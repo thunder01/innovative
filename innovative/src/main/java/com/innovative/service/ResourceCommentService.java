@@ -6,17 +6,10 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import com.innovative.bean.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.innovative.bean.Association;
-import com.innovative.bean.Equipment;
-import com.innovative.bean.Expert;
-import com.innovative.bean.Organization;
-import com.innovative.bean.ResourceComment;
-import com.innovative.bean.Solution;
-import com.innovative.bean.TechnicalReport;
-import com.innovative.bean.User;
 import com.innovative.dao.AssociationDao;
 import com.innovative.dao.EquipmentDao;
 import com.innovative.dao.ExpertDao;
@@ -188,4 +181,5 @@ public class ResourceCommentService {
 		map.put("comments", list);
 		return map;
 	}
+
 }
