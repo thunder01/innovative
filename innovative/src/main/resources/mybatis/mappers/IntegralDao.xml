@@ -83,4 +83,9 @@
 		SELECT count(userid) FROM xacx_integral WHERE create_date BETWEEN CURRENT_DATE+1 AND TO_DATE(TO_CHAR(now(),'YYYY-MM') ,'YYYY-MM') 
 		AND userid=#{userid} AND integral!=0
 	</select>
+	<!-- 获得当前资源创新进入的次数 -->
+	<select id="getCountByResource_id" parameterType="string" resultType="int">
+		SELECT COUNT(*) FROM xacx_integral WHERE create_date BETWEEN CURRENT_DATE AND CURRENT_DATE+1 
+		AND resource_id = #{resource_id}		
+	</select>
 </mapper>
