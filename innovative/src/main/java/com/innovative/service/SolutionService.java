@@ -137,7 +137,7 @@ public class SolutionService {
      */
     @Transactional
     public boolean updateSolution(Solution solution) {
-    	 //删除之前的文件
+        //删除之前的文件
         fileDao.deleteFiles(solution.getId(),"programFile");
         //新增新的文件
     	fileDao.updateFile(solution.getId());
@@ -181,10 +181,11 @@ public class SolutionService {
 		//删除上传的附件
 		fileDao.deleteFile(id);
 
-		/*//删除科技专栏
-        String sectionId=sectionsService.getIdByFirstId(id,"2");
-        sectionsService.deleteSection(sectionId);*/
-
+        //删除科技专栏
+        String sectionid=sectionsService.getIdByFirstId(id,"2");
+        if (sectionid!=null&&!("".equals(sectionid))){
+            sectionsService.deleteSection(sectionid);
+        }
         LoggerUser loggerUser=new LoggerUser(MDC.get("userid"),"删除","方案",id,solutionDao.getSolutionById(id).getName());
         loggerUserDao.addLog(loggerUser);
 		return solutionDao.deleteSolution(id);
