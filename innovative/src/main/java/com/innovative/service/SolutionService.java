@@ -111,29 +111,20 @@ public class SolutionService {
     public boolean insertSolution(Solution solution) {
 
         int result = solutionDao.insertSolution(solution);
-        //添加到科技专栏
-        Sections sections=new Sections();
-        sections.setTitle(solution.getName());
-        sections.setResource("内部资源/方案");
-        sections.setTime(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
-        sections.setSectors(solution.getSectors());
-        sections.setTags(solution.getTags());
-        sections.setResume(solution.getSummary());
-        sections.setCotent(solution.getContent());
-        sections.setCreateBy(solution.getCreatedBy());
-        sections.setImgid(solution.getPictures());
-        sections.setFirstid(solution.getId());
-        sections.setType("2");
-        sectionsService.addSection(sections);
-        //设置为审批通过
-        String sectionId=sectionsService.getIdByFirstId(solution.getId(),"2");
-        sections.setState("1");
-        sections.setId(sectionId);
-        sectionsService.updateSection(sections);
         //增加成功
         if(result>0){
-        	integralService.managerIntegral(11, solution.getCreatedBy(), solution.getId());
-        	LoggerUser loggerUser=new LoggerUser(MDC.get("userid"),"上传","方案",solution.getId(),solution.getName());
+            //添加到科技专栏
+            Sections sections=tranSolutionToSection(solution);
+            sectionsService.addSection(sections);
+            //设置为审批通过
+            String sectionId=sectionsService.getIdByFirstId(solution.getId(),"2");
+            sections.setState("1");
+            sections.setId(sectionId);
+            sectionsService.updateSection(sections);
+            //添加积分
+            integralService.managerIntegral(11, solution.getCreatedBy(), solution.getId());
+        	//添加日志
+            LoggerUser loggerUser=new LoggerUser(MDC.get("userid"),"上传","方案",solution.getId(),solution.getName());
         	loggerUserDao.addLog(loggerUser);
         }
 		 return fileDao.updateFile(solution.getId());
@@ -141,7 +132,6 @@ public class SolutionService {
 
     /**
      * 修改技术报告信息
-     *
      * @param solution 参数集合
      * @return
      */
@@ -153,25 +143,32 @@ public class SolutionService {
     	fileDao.updateFile(solution.getId());
         int result = solutionDao.updateSolution(solution);
 
-        /*//查询修改后的方案信息
-        Solution solution1=solutionDao.getSolutionById(solution.getId());
-        //查询对应的科技专栏id
-        String sectionId=sectionsService.getIdByFirstId(solution.getId(),"2");
-        //修改科技专栏
-        System.err.print("xiugai"+solution1);
-        Sections sections=new Sections();
-        sections.setId(sectionId);
-        sections.setTitle(solution1.getName());
-        sections.setSectors(solution1.getSectors());
-        sections.setTags(solution1.getTags());
-        sections.setResume(solution1.getSummary());
-        sections.setCotent(solution1.getContent());
-        sections.setUpdateBy(solution1.getUpdatedBy());
-        sections.setImgid(solution1.getPictures());
-        sectionsService.updateSection(sections);*/
+        //若技术方案修改成功，再修改科技专栏
+        if (result>0){
+            //查询修改后的方案信息
+            Solution solution1=solutionDao.getSolutionById(solution.getId());
+            //查询对应的科技专栏id
+            String sectionId=sectionsService.getIdByFirstId(solution.getId(),"2");
 
-        LoggerUser loggerUser=new LoggerUser(MDC.get("userid"),"修改","方案",solution.getId(),solution.getName());
-        loggerUserDao.addLog(loggerUser);
+            if (sectionId!=null&&!("".equals(sectionId))){
+                //修改科技专栏
+                System.err.print("xiugai"+solution1);
+                Sections sections=tranSolutionToSection(solution1);
+                sections.setId(sectionId);
+                sectionsService.updateSection(sections);
+            }else {
+                //添加科技资讯
+                Sections sections=tranSolutionToSection(solution1);
+                sectionsService.addSection(sections);
+                //设置为审批通过
+                sections.setState("1");
+                sections.setId(sectionId);
+                sectionsService.updateSection(sections);
+            }
+
+            LoggerUser loggerUser=new LoggerUser(MDC.get("userid"),"修改","方案",solution.getId(),solution.getName());
+            loggerUserDao.addLog(loggerUser);
+        }
 
         return result > 0 ;
     }
@@ -192,4 +189,26 @@ public class SolutionService {
         loggerUserDao.addLog(loggerUser);
 		return solutionDao.deleteSolution(id);
 	}
+
+    /**
+     * 把技术方案信息封装到科技专栏实体
+     * @param solution
+     * @return
+     */
+    private Sections tranSolutionToSection(Solution solution){
+        Sections sections=new Sections();
+        sections.setTitle(solution.getName());
+        sections.setResource("内部资源/方案");
+        sections.setTime(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+        sections.setSectors(solution.getSectors());
+        sections.setTags(solution.getTags());
+        sections.setResume(solution.getSummary());
+        sections.setCotent(solution.getContent());
+        sections.setCreateBy(solution.getCreatedBy());
+        sections.setImgid(solution.getPictures());
+        sections.setFirstid(solution.getId());
+        sections.setType("2");
+
+        return  sections;
+    }
 }
