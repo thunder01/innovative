@@ -56,14 +56,14 @@ public interface IntegralDao {
 	 * @param userid
 	 * @return
 	 */
-	public List<Integral> getThisDayIntegralDetail(@Param("userid")String userid,@Param("startIndex") Integer startIndex, @Param("pageSize") Integer pageSize);
+	//public List<Integral> getThisDayIntegralDetail(@Param("userid")String userid,@Param("startIndex") Integer startIndex, @Param("pageSize") Integer pageSize);
 	public int getCountThisDay(String userid);
 	/**
 	 * 获取用户7天内的积分明细
 	 * @param userid
 	 * @return
 	 */
-	public List<Integral> getThisWeekIntegralDetail(@Param("userid")String userid,@Param("startIndex") Integer startIndex, @Param("pageSize") Integer pageSize);
+	//public List<Integral> getThisWeekIntegralDetail(@Param("userid")String userid,@Param("startIndex") Integer startIndex, @Param("pageSize") Integer pageSize);
 	public int getCountThisWeek(String userid);
 	/**
 	 * 获取用户本月的积分明细
@@ -72,6 +72,7 @@ public interface IntegralDao {
 	 */
 	public List<Integral> getThisMonthIntegralDetail(@Param("userid")String userid,@Param("startIndex") Integer startIndex, @Param("pageSize") Integer pageSize);
 	public int getCountThisMonth(String userid);
+	public  int sumCount(String userid);
 	/**
 	 * type=5的创新资源的当天的进入次数resource_id即uuid不会重复  
 	 * @param resource_id

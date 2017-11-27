@@ -7,17 +7,19 @@ public class FileLog {
     private String userid;
     private int numbers;
     private String type;
+    private String userId;
 
     public FileLog() {
     }
 
-    public FileLog(int id, String createDate, String fileName, String userid, int numbers, String type) {
+    public FileLog(int id, String createDate, String fileName, String userid, int numbers, String type,String userId) {
         this.id = id;
         this.createDate = createDate;
         this.fileName = fileName;
         this.userid = userid;
         this.numbers = numbers;
         this.type = type;
+        this.userId=userId;
     }
 
     public int getId() {
@@ -66,5 +68,13 @@ public class FileLog {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }

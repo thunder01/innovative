@@ -179,28 +179,23 @@ public class IntegralService {
 		PageInfo pageInfo=new PageInfo();
         pageInfo.setCurrentPageNum(pageNum);
 		Map<String, Object> map = new HashMap<>();
-		if(type==1){//1当天
-			List<Integral> list = integralDao.getThisDayIntegralDetail(userid, pageInfo.getStartIndex(), pageInfo.getPageSize());
-			int totalCount = integralDao.getCountThisDay(userid);
-			map.put("totalCount",totalCount);
-			map.put("items", list);
-		}
-		if(type==1){//2七天内
-			List<Integral> list = integralDao.getThisWeekIntegralDetail(userid, pageInfo.getStartIndex(), pageInfo.getPageSize());
-			int totalCount = integralDao.getCountThisWeek(userid);
-			map.put("totalCount",totalCount);
-			map.put("items", list);
-		}
-		if(type==1){//3本月内
+			//List<Integral> datelist = integralDao.getThisDayIntegralDetail(userid, pageInfo.getStartIndex(), pageInfo.getPageSize());
+			int datetotalCount = integralDao.getCountThisDay(userid);
+			map.put("datetotalCount",datetotalCount);//当日数量
+			//map.put("items", datelist);
+			//List<Integral> weeklist = integralDao.getThisWeekIntegralDetail(userid, pageInfo.getStartIndex(), pageInfo.getPageSize());
+			int weektotalCount = integralDao.getCountThisWeek(userid);
+			map.put("weektotalCount",weektotalCount);//当周数量
+			//map.put("items", weeklist);
 			List<Integral> list = integralDao.getThisMonthIntegralDetail(userid, pageInfo.getStartIndex(), pageInfo.getPageSize());
-			int totalCount = integralDao.getCountThisMonth(userid);
-			map.put("totalCount",totalCount);
-			map.put("items", list);
-		}
-        map.put("Count", pageInfo.getPageSize());
-        map.put("itemCount", pageInfo.getPageSize());
-        map.put("offset", pageInfo.getStartIndex());
-        map.put("limit", pageInfo.getPageSize());
+			int mouthtotalCount = integralDao.getCountThisMonth(userid);
+			map.put("mouthtotalCount",mouthtotalCount);//当月数量
+			map.put("items",list);//积分明细list
+            map.put("sum",integralDao.sumCount(userid));//总共数量
+            map.put("Count", pageInfo.getPageSize());
+            map.put("itemCount", pageInfo.getPageSize());
+            map.put("offset", pageInfo.getStartIndex());
+            map.put("limit", pageInfo.getPageSize());
 		return map;
 	}
 	

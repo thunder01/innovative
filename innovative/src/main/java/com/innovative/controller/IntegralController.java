@@ -20,7 +20,7 @@ public class IntegralController {
 	private IntegralService integralService;
 	
 	/**
-	 * 获取积分详情：type：1当天、2七天内、3本月的
+	 * 获取所有积分详情
 	 * @param userid
 	 * @param type
 	 * @param offset
