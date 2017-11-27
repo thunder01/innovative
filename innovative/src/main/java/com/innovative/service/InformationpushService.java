@@ -417,4 +417,17 @@ public Informationpush getApprouverByIdForMessage(String id, String cookieValue)
 }
 
 
+
+
+/**
+ * 删除推特信息收藏的推特信息
+ * @param id
+ * @return
+ */
+public boolean deleteCollectInformationpush(String id) {
+	// TODO Auto-generated method stub
+	return collectionDao.deleteCollectInformationpush(id);
+}
+
+
 }

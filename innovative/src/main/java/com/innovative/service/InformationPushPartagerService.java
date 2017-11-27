@@ -116,6 +116,18 @@ public Informationpush getInformationpushPartagersByIdForMessage(String id, Stri
 
 
 
+/**
+ * 删除分享的推特信息
+ * @param id
+ * @return
+ */
+public boolean deletePartagerInformationpush(String id) {
+	// TODO Auto-generated method stub
+	return informationPushPartagerDao.deletePartagerInformationpush(id);
+}
+
+
+
 
 
 

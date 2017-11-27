@@ -36,14 +36,26 @@
 		WHERE "Id" =  #{id};
 	</select>
 
+  
     <!--根据查询条件获取列表-->
     <select id="getSolutionListByCondition" resultMap="solutionMap">
         SELECT "Name","Summary","Content","Pictures","Sectors","Tags","Rank","Id","File","CreatedAt","UpdatedAt" ,f."url",f."refId",f."refType",f."filename" FROM "Solutions" e
           LEFT JOIN "xacx_file" f on f."refId" = e."Id" and f."refType" = 'programFile' and f."sign" = 'add'
         <where>
-            <if test="sectors != null and sectors != ''">
-                AND "Sectors" @> '${sectors}'
-            </if>
+              1=1
+			<if test="sectors!='{null}' and sectors!='{}'and sectors!='{NULL}' and sectors!='{undefined}' and sectors!='' and sectors!=null">
+				and e."Sectors" @> '${sectors}' 
+			</if>
+			<if test="key1!='%%' and key1!='%null%'  and key1!='%undefined%'">
+				and (
+					e."Summary" LIKE #{key1} or 
+					e."Content" LIKE #{key1} 
+					<if test="key2!='{}' and key2!='{null}' and key2!='{undefined}'">
+					 OR e."Sectors" @> '${key2}'
+					</if>
+					)
+			</if>
+			and "Deleted" = 'f' AND "IsActive" = 't'
         </where>
         order by e."UpdatedAt"  DESC 
         limit #{pageSize} offset #{startIndex}
@@ -53,10 +65,20 @@
     <select id="getCountByCondition" resultType="int">
         SELECT COUNT("Id") FROM "Solutions"
         <where>
-            <if test="sectors != null and sectors != ''">
-              "Sectors" @> '${sectors}'    AND
-            </if>
-             "Deleted" = 'f' AND "IsActive" = 't'
+               1=1
+			<if test="sectors!='{null}' and sectors!='{}'and sectors!='{NULL}' and sectors!='{undefined}' and sectors!='' and sectors!=null">
+				and "Sectors" @> '${sectors}' 
+			</if>
+			<if test="key1!='%%' and key1!='%null%'  and key1!='%undefined%'">
+				and (
+					"Summary" LIKE #{key1} or 
+					"Content" LIKE #{key1} 
+					<if test="key2!='{}' and key2!='{null}' and key2!='{undefined}'">
+					 OR "Sectors" @> '${key2}'
+					</if>
+					)
+			</if>
+            and "Deleted" = 'f' AND "IsActive" = 't'
         </where>
     </select>
 

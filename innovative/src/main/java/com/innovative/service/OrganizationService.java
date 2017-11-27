@@ -64,17 +64,20 @@ public class OrganizationService {
      * 创新资源列表页（根据行业领域查询对应机构的列表页）
      * @param pageNum 页数（默认为1）
      * @param sectors 
+     * @param keyword 
      * @return
      */
-    public Map<String, Object> getOrganizationList(Integer pageNum, String sectors){
+    public Map<String, Object> getOrganizationList(Integer pageNum, String sectors, String keyword){
 
         if (!StringUtils.isEmpty(sectors)) {
             sectors = "{" + sectors + "}";
         }
+        String key1 = "%" + keyword + "%".trim();
+	    String key2 = "{" + keyword + "}".trim();
         PageInfo pageInfo = new PageInfo();
         pageInfo.setCurrentPageNum(pageNum);
 
-        List<Organization> organizations = organizationDao.getOrganizationList( pageInfo.getStartIndex(), pageInfo.getPageSize(),sectors);
+        List<Organization> organizations = organizationDao.getOrganizationList( pageInfo.getStartIndex(), pageInfo.getPageSize(),sectors,key1,key2);
         for (Organization or : organizations){
         	if(null ==  or || "".equals(or.getId()))
         		continue;
@@ -82,7 +85,7 @@ public class OrganizationService {
   		   if(url != null && url.size() > 0 )
   			   or.setLogo( url.get(0));
         }
-        int totalCount = organizationDao.getTotalCount(sectors);
+        int totalCount = organizationDao.getTotalCount(sectors,key1,key2);
 
         Map<String, Object> map = new HashMap<>();
         map.put("items", organizations);

@@ -61,14 +61,28 @@
 	<select id="getExpertLists" resultMap="expertMap">
 		SELECT * FROM "Experts" e  LEFT JOIN "xacx_file" f on f."refId" = e."Id" and f."refType" = 'expertFile' and f."sign" = 'add'
 		<where>
-			<if test="sectors!=null and sectors!=''">
-				e."Sectors" @> '${sectors}' AND
+		  1=1
+			<if test="sectors!=null and sectors!='' and sectors!='{undefined}' and sectors!='{null}'">
+				and e."Sectors" @> '${sectors}' 
 			</if>
-			"Deleted" = 'f' AND "IsActive" = 't'
+			<if test="key1!='%%' and key1!='%null%'  and key1!='%undefined%'">
+				and (
+					e."Name" LIKE #{key1} or 
+					e."Unit" LIKE #{key1} or
+					e."ResearchDirection" LIKE #{key1} or
+					e."Education" LIKE #{key1} or
+					e."JobTitle" LIKE #{key1}
+					<if test="key2!='{}' and key2!='{null}' and key2!='{undefined}'">
+					 OR e."Sectors" @> '${key2}'
+					</if>
+					)
+			</if>
+			 and "Deleted" = 'f' AND "IsActive" = 't'
 		</where>
 		order by (case when e."Px" is null then 0 else e."Px" end)  DESC  ,e."HFactor" DESC ,e."UpdatedAt" DESC
 		limit #{pageSize} offset #{startIndex}
 	</select>
+
 
 
 
@@ -86,13 +100,25 @@
 	<select id="getTotalCountNum" resultType="int">
 		SELECT count(1) FROM "Experts"
 		<where>
-			<if test="sectors!=null and sectors!=''">
-				"Sectors" @> '${sectors}' AND
+			1=1
+			<if test="sectors!=null and sectors!='' and sectors!='{undefined}' and sectors!='{null}'">
+				and "Sectors" @> '${sectors}' 
 			</if>
-			 "Deleted" = 'f' AND "IsActive" = 't'
+			<if test="key1!='%%' and key1!='%null%'  and key1!='%undefined%'">
+				and (
+					"Name" LIKE #{key1} or 
+					"Unit" LIKE #{key1} or
+					"ResearchDirection" LIKE #{key1} or
+					"Education" LIKE #{key1} or
+					"JobTitle" LIKE #{key1} 
+					<if test="key2!='{}' and key2!='{null}' and key2!='{undefined}'">
+					 OR "Sectors" @> '${key2}'
+					</if>
+					)
+			</if>
+			 and "Deleted" = 'f' AND "IsActive" = 't'
 		</where>
 	</select>
-
 
 
 	<!--添加专家信息-->

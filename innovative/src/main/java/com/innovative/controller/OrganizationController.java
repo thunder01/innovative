@@ -65,7 +65,7 @@ public class OrganizationController extends BaseController {
     		 sectors = organization.getSectors()[0];
        boolean flag = organizationService.deleteOrganization(organization.getId());
         if (flag) {
-            return new JsonResult(true, organizationService.getOrganizationList(1,sectors));
+            return new JsonResult(true, organizationService.getOrganizationList(1,sectors,""));
         }
         return new JsonResult(false, "参数不合法");
     }
@@ -80,13 +80,11 @@ public class OrganizationController extends BaseController {
      * @return
      */
     @RequestMapping(value = "/getOrganizationList", method = RequestMethod.GET)
-    public JsonResult getOrganizationList(@RequestParam(name="offset" ,defaultValue="0") Integer offset,@RequestParam(name="sectors",required=false) String sectors){
+    public JsonResult getOrganizationList(@RequestParam(name="offset" ,defaultValue="0") Integer offset,@RequestParam(name="sectors",required=false) String sectors,@RequestParam(name="keyword",required=false) String keyword){
 
     	Integer page = offset/(new PageInfo().getPageSize()) +1;
-        return new JsonResult(true, organizationService.getOrganizationList(page,sectors));
+        return new JsonResult(true, organizationService.getOrganizationList(page,sectors,keyword));
     }
-
-
 
 
 

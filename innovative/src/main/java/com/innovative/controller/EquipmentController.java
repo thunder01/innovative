@@ -68,7 +68,7 @@ public class EquipmentController {
     		 sectors = equipment.getSectors()[0];
        boolean flag = equipmentService.deleteEquipment(equipment.getId());
         if (flag) {
-            return new JsonResult(true, equipmentService.getEquipmentListByCondition( 1,sectors));
+            return new JsonResult(true, equipmentService.getEquipmentListByCondition( 1,sectors,""));
         }
         return new JsonResult(false, "参数不合法");
     }
@@ -82,11 +82,11 @@ public class EquipmentController {
      * @return
      */
     @RequestMapping(value = "/getListByCondition", method = RequestMethod.GET)
-    public JsonResult getEquipmentListByCondition(@RequestParam(name="offset" ,defaultValue="0") Integer offset,@RequestParam(name="sectors",required=false) String sectors) {
+    public JsonResult getEquipmentListByCondition(@RequestParam(name="offset" ,defaultValue="0") Integer offset,@RequestParam(name="sectors",required=false) String sectors,@RequestParam(name="keyword",required=false) String keyword) {
 
     	Integer page = offset/(new PageInfo().getPageSize()) +1;
 
-        return new JsonResult(true, equipmentService.getEquipmentListByCondition( page,sectors));
+        return new JsonResult(true, equipmentService.getEquipmentListByCondition( page,sectors,keyword));
     }
 
     /**

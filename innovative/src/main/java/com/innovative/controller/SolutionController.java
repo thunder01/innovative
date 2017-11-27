@@ -66,7 +66,7 @@ public class SolutionController {
     		 sectors = solution.getSectors()[0];
        boolean flag = solutionService.deleteSolution(solution.getId());
         if (flag) {
-            return new JsonResult(true, solutionService.getSolutionListByCondition( 1,sectors));
+            return new JsonResult(true, solutionService.getSolutionListByCondition( 1,sectors,""));
         }
         return new JsonResult(false, "参数不合法");
     }
@@ -80,11 +80,12 @@ public class SolutionController {
      * @return
      */
     @RequestMapping(value = "/getListByCondition", method = RequestMethod.GET)
-    public JsonResult getSolutionByCondition(@RequestParam(name="offset",defaultValue="0") Integer offset,@RequestParam(name="sectors",required=false) String sectors) {
+    public JsonResult getSolutionByCondition(@RequestParam(name="offset",defaultValue="0") Integer offset,@RequestParam(name="sectors",required=false) String sectors,@RequestParam(name="keyword",required=false) String keyword) {
 
     	Integer page = offset/(new PageInfo().getPageSize()) +1;
-        return new JsonResult(true, solutionService.getSolutionListByCondition( page,sectors));
+        return new JsonResult(true, solutionService.getSolutionListByCondition( page,sectors,keyword));
     }
+
 
     /**
      * 新增方案

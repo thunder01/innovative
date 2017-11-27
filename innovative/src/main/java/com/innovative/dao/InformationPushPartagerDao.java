@@ -95,6 +95,14 @@ public interface InformationPushPartagerDao {
 	 */
 	Informationpush getInformationpushPartagersByIdForMessage(@Param("id")String id, @Param("userid")String userid);
 	
+	
+	/**
+	 * 删除分享的推特信息
+	 * @param id
+	 * @return
+	 */
+	boolean deletePartagerInformationpush(@Param("id")String id);
+	
 
 
 

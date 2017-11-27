@@ -42,14 +42,24 @@
 	</select>
 	
 
+	
 	<!--根据查询条件获取列表-->
 	<select id="getAssociationList" resultMap="associationMap">
 		SELECT * FROM "Associations" e LEFT JOIN "xacx_file" f on f."refId" = e."Id" and f."refType" = 'indusinfoFile' and f."sign" = 'add'
 		<where>
-			<if test="sectors!=null and sectors!=''">
-				 "Sectors" @> '${sectors}' and
+		1=1
+			<if test="sectors!='{null}' and sectors!='{}'and sectors!='{NULL}' and sectors!='{undefined}' and sectors!='' and sectors!=null">
+				  and (e."Sectors" @> '${sectors}') 
 			</if>
-			 e."Deleted" = 'f' AND e."IsActive" = 't'
+			<if test="key1!='%%' and key1!='%null%'  and key1!='%undefined%'">
+				and (
+					e."Name" LIKE #{key1} or 
+					e."Introduction" LIKE #{key1} or
+					e."Nature" LIKE #{key1} or
+					e."Contact" LIKE #{key1} 
+					)
+			</if>
+			and  e."Deleted" = 'f' AND e."IsActive" = 't'
 		</where>
 		order by e."UpdatedAt"  DESC 
 		limit #{pageSize} offset #{startIndex}
@@ -57,18 +67,26 @@
 
 
 
+
 	<!--查询行业领域搜索条件的总条数-->
 	<select id="getTotalCount" resultType="int">
 		SELECT count(1) FROM "Associations"
 		<where>
-			<if test="sectors!=null and sectors!=''">
-				"Sectors" @> '${sectors}' and
+			1=1
+			<if test="sectors!='{null}' and sectors!='{}'and sectors!='{NULL}' and sectors!='{undefined}' and sectors!='' and sectors!=null">
+				  and ("Sectors" @> '${sectors}') 
 			</if>
-			 "Deleted" = 'f' AND "IsActive" = 't'
+			<if test="key1!='%%' and key1!='%null%'  and key1!='%undefined%'">
+				and (
+					"Name" LIKE #{key1} or 
+					"Introduction" LIKE #{key1} or
+					"Nature" LIKE #{key1} or
+					"Contact" LIKE #{key1} 
+					)
+			</if>
+			and  "Deleted" = 'f' AND "IsActive" = 't'
 		</where>
 	</select>
-
-
 
 
 

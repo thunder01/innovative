@@ -42,14 +42,27 @@
 
 
 
+	
 	<!--根据查询条件获取列表-->
 	<select id="getOrganizationList"  resultMap="organizationMap">
 		SELECT * FROM "Organizations"  e LEFT JOIN "xacx_file" f on f."refId" = e."Id" and f."refType" = 'addunionFile' and f."sign" = 'add'
 		<where>
-			<if test="sectors!=null and sectors!=''">
-				 "Sectors" @> '${sectors}' and
+			 1=1
+			<if test="sectors!='{null}' and sectors!='{}'and sectors!='{NULL}' and sectors!='{undefined}' and sectors!='' and sectors!=null">
+				and e."Sectors" @> '${sectors}' 
 			</if>
-			 e."Deleted" = 'f' AND e."IsActive" = 't'
+			<if test="key1!='%%' and key1!='%null%'  and key1!='%undefined%'">
+				and (
+					e."Name" LIKE #{key1} or 
+					e."Introduction" LIKE #{key1} or
+					e."Nature" LIKE #{key1} or
+					e."Contact" LIKE #{key1} 
+					<if test="key2!='{}' and key2!='{null}' and key2!='{undefined}'">
+					 OR e."Sectors" @> '${key2}'
+					</if>
+					)
+			</if>
+			and e."Deleted" = 'f' AND e."IsActive" = 't'
 		</where>
 		order by e."UpdatedAt"  DESC 
 		limit #{pageSize} offset #{startIndex}
@@ -60,10 +73,22 @@
 	<select id="getTotalCount" resultType="int">
 		SELECT count(1) FROM "Organizations"
 		<where>
-			<if test="sectors!=null and sectors!=''">
-				"Sectors" @> '${sectors}' and
+			 1=1
+			<if test="sectors!='{null}' and sectors!='{}'and sectors!='{NULL}' and sectors!='{undefined}' and sectors!='' and sectors!=null">
+				and "Sectors" @> '${sectors}' 
 			</if>
-			 "Deleted" = 'f' AND "IsActive" = 't'
+			<if test="key1!='%%' and key1!='%null%'  and key1!='%undefined%'">
+				and (
+					"Name" LIKE #{key1} or 
+					"Introduction" LIKE #{key1} or
+					"Nature" LIKE #{key1} or
+					"Contact" LIKE #{key1} 
+					<if test="key2!='{}' and key2!='{null}' and key2!='{undefined}'">
+					 OR "Sectors" @> '${key2}'
+					</if>
+					)
+			</if>
+			and  "Deleted" = 'f' AND "IsActive" = 't'
 		</where>
 	</select>
 

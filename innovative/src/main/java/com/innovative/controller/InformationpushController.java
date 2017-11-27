@@ -276,6 +276,23 @@ public class InformationpushController extends BaseController {
      }
      
     
+     /**
+      * 根据id删除用户收藏信息
+      * @param id 协会id
+      * @return
+      */
+     @RequestMapping(value = "/deleteCollectInformationpush", method = RequestMethod.POST)
+     @ResponseBody
+     public JsonResult deleteCollectInformationpush(@RequestBody CollectionPush collectionPush,HttpServletRequest req) {
+
+        boolean flag = informationpushService.deleteCollectInformationpush(collectionPush.getId());
+         if (flag) {
+             return new JsonResult(true,"删除成功!");
+         }
+         return new JsonResult(false, "参数不合法");
+         
+     }
+    
     
 
 

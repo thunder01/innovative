@@ -4,7 +4,7 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.innovative.dao.InformationPushPartagerDao">
 
-	<resultMap id="informationPushPartagerMap" type="InformationPushPartager">
+		<resultMap id="informationPushPartagerMap" type="InformationPushPartager">
 	  <id property="id" column="id" />
 	  <result property="partagerBy" column="partagerBy"/> <!-- 分享时间 -->
 	  <result property="partagerAt" column="partagerAt"/><!-- 分享人 -->
@@ -55,7 +55,7 @@
 		  <!--获取用户的所有分享-->
 	<select id="getInformationpushPartagersByUserid" resultType="map">
 		
-		SELECT part."partagerAt",part."partagerBy",part."pushId",pu."title",pu."cotent",us."username" FROM "xacx_information_push_partager" part 
+		SELECT part.id, part."partagerAt",part."partagerBy",part."pushId",pu."title",pu."cotent",us."username" FROM "xacx_information_push_partager" part 
 		join xacx_information_push pu on pu."id" = part."pushId"
 		 join xacx_user us on us."pernr" = part."partagerBy"
 		WHERE "partagerBy" =  #{partagerBy}
@@ -85,4 +85,12 @@
 		left join xacx_user  us on us.pernr =co."partagerBy"
  		where    co.id =#{id} and pu."comentBy" = #{userid}
 	</select>
+	
+		<!--删除分享的推特信息-->
+	<delete id="deletePartagerInformationpush" parameterType="map">
+		delete from "xacx_information_push_partager"
+		<where>
+			 "id"=#{id}
+		</where>
+	</delete>
 </mapper>
