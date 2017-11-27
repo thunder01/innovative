@@ -155,15 +155,16 @@ public class ExpertService {
 
 
 
-
-	public Map<String, Object> getExpertLists(Integer page, String sectors) {
+    public Map<String, Object> getExpertLists(Integer page, String sectors, String keyword) {
 		 if (!StringUtils.isEmpty(sectors)) {
 	            sectors = "{" + sectors + "}";
 	        }
+		 String key1 = "%" + keyword + "%".trim();
+	     String key2 = "{" + keyword + "}".trim();
 		 PageInfo pageInfo = new PageInfo();
 	       pageInfo.setCurrentPageNum(page);
-	       List<Expert> experts = expertDao.getExpertLists( pageInfo.getStartIndex(), pageInfo.getPageSize(),sectors);
-	       int totalCount = expertDao.getTotalCountNum(sectors);
+	       List<Expert> experts = expertDao.getExpertLists( pageInfo.getStartIndex(), pageInfo.getPageSize(),sectors,key1,key2);
+	       int totalCount = expertDao.getTotalCountNum(sectors,key1,key2);
 	       for(Expert e: experts){
 	        	if(e==null || "".equals(e.getId()))
 	        		continue;

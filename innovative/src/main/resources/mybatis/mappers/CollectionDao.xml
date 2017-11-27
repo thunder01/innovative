@@ -21,8 +21,8 @@
        <collection property="collectionPushlist" ofType="com.innovative.bean.CollectionPush">  
            <result property="id" column="cid"/>
 		   <result property="collectAt" column="collectAt"/>
-		  <result property="collectBy" column="collectBy"/>
-		  <result property="collectByC" column="collectByC"/>
+		   <result property="collectBy" column="collectBy"/>
+		   <result property="collectByC" column="collectByC"/>
        </collection> 
 	</resultMap> 
 
@@ -75,6 +75,13 @@
  		where    co.id =#{id} and pu."comentBy" = #{userid}
 	</select>
 	
+	<!--删除收藏信息-->
+	<delete id="deleteCollectInformationpush" parameterType="map">
+		delete from "xacx_information_push_collection"
+		<where>
+			 "id"=#{id}
+		</where>
+	</delete>
 
 
 </mapper>

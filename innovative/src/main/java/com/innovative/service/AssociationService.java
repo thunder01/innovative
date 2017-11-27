@@ -67,17 +67,18 @@ public class AssociationService {
      * 行业协会列表页
      * @param pageNum 页数（默认为1）
      * @param sectors 
+     * @param keyword 
      * @return
      */
-    public Map<String, Object> getAssociationList(Integer pageNum, String sectors){
+    public Map<String, Object> getAssociationList(Integer pageNum, String sectors, String keyword){
 
-        if (!StringUtils.isEmpty(sectors)) {
-            sectors = "{" + sectors + "}";
-        }
+         sectors = "{" + sectors + "}";
+        String key1 = "%" + keyword + "%".trim();
+	     String key2 = "{" + keyword + "}".trim();
         PageInfo pageInfo = new PageInfo();
         pageInfo.setCurrentPageNum(pageNum);
 
-        List<Association> associations = associationDao.getAssociationList( pageInfo.getStartIndex(), pageInfo.getPageSize(),sectors);
+        List<Association> associations = associationDao.getAssociationList( pageInfo.getStartIndex(), pageInfo.getPageSize(),sectors,key1,key2);
         for(Association ass : associations){
         	if(ass.getId()==null || "".equals(ass.getId()))
         		continue;
@@ -85,7 +86,7 @@ public class AssociationService {
   		   if(urllist != null && urllist.size() > 0 )
   			 ass.setLogo( urllist.get(0));
         }
-        int totalCount = associationDao.getTotalCount(sectors);
+        int totalCount = associationDao.getTotalCount(sectors,key1,key2);
 
         Map<String, Object> map = new HashMap<>();
         map.put("items", associations);
@@ -96,6 +97,7 @@ public class AssociationService {
         map.put("limit", pageInfo.getPageSize());
         return map;
     }
+
 
 
 

@@ -62,15 +62,17 @@ public class TechnicalReportService {
      *
      * @param pageNum  页码
      * @param sectors 
+     * @param keyword 
      * @return
      */
-    public Map<String, Object> getTechnicalReportListByCondition(int pageNum, String sectors) {
+    public Map<String, Object> getTechnicalReportListByCondition(int pageNum, String sectors, String keyword) {
 
 
         if (!StringUtils.isEmpty(sectors)) {
             sectors = "{" + sectors + "}";
         }
-
+        String key1 = "%" + keyword + "%".trim();
+	     String key2 = "{" + keyword + "}".trim();
         //获取分页信息
         PageInfo pageInfo = new PageInfo();
         pageInfo.setCurrentPageNum(pageNum);
@@ -78,7 +80,7 @@ public class TechnicalReportService {
         int limit = pageInfo.getPageSize();
 
         //分页条件查询
-        List<TechnicalReport> items = technicalReportDao.getTechnicalReportListByCondition(offset, limit,sectors);
+        List<TechnicalReport> items = technicalReportDao.getTechnicalReportListByCondition(offset, limit,sectors,key1,key2);
         for(TechnicalReport te : items){
         	if(null == te || "".equals(te.getId()))
         		continue;
@@ -86,7 +88,7 @@ public class TechnicalReportService {
    		   if(url != null && url.size() > 0 )
    			   te.setPictures(url.get(0));
         }
-        int totalCount = technicalReportDao.getCountByCondition(sectors);
+        int totalCount = technicalReportDao.getCountByCondition(sectors,key1,key2);
 
         //数据组装
         Map<String, Object> map = new HashMap<>();
@@ -100,7 +102,6 @@ public class TechnicalReportService {
         return map;
 
     }
-
     /**
      * 新增技术报告,同时将信息添加到科技专栏表中。
      *

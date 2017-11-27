@@ -62,14 +62,17 @@ public class SolutionService {
      *
      * @param pageNum  页码
      * @param sectors 
+     * @param keyword 
      * @return
      */
-    public Map<String, Object> getSolutionListByCondition(int pageNum, String sectors) {
+    public Map<String, Object> getSolutionListByCondition(int pageNum, String sectors, String keyword) {
 
 
     	  if (!StringUtils.isEmpty(sectors)) {
               sectors = "{" + sectors + "}";
           }
+    	 String key1 = "%" + keyword + "%".trim();
+ 	     String key2 = "{" + keyword + "}".trim();
 
         //获取分页信息
         PageInfo pageInfo = new PageInfo();
@@ -78,7 +81,7 @@ public class SolutionService {
         int limit = pageInfo.getPageSize();
 
         //分页条件查询
-        List<Solution> items = solutionDao.getSolutionListByCondition( offset, limit,sectors);
+        List<Solution> items = solutionDao.getSolutionListByCondition( offset, limit,sectors,key1,key2);
         for(Solution so : items){
         	if(null == so|| "".equals(so.getId()))
         		continue;
@@ -86,7 +89,7 @@ public class SolutionService {
   		   if(urllist != null && urllist.size() > 0 )
   			   so.setPictures(urllist.get(0));
         }
-        int totalCount = solutionDao.getCountByCondition(sectors);
+        int totalCount = solutionDao.getCountByCondition(sectors,key1,key2);
 
         //数据组装
         Map<String, Object> map = new HashMap<>();

@@ -64,7 +64,7 @@ public class AssociationController extends BaseController {
     		 sectors = association.getSectors()[0];
        boolean flag = associationService.deleteAssociation(association.getId());
         if (flag) {
-            return new JsonResult(true, associationService.getAssociationList( 1,sectors));
+            return new JsonResult(true, associationService.getAssociationList( 1,sectors,""));
         }
         return new JsonResult(false, "参数不合法");
     }
@@ -80,9 +80,9 @@ public class AssociationController extends BaseController {
      * @return
      */
     @RequestMapping(value = "/getAssociationList", method = RequestMethod.GET)
-    public JsonResult getAssociationList(@RequestParam(name="offset",defaultValue="0") Integer offset,@RequestParam(name="sectors",required=false) String sectors) {
+    public JsonResult getAssociationList(@RequestParam(name="offset",defaultValue="0") Integer offset,@RequestParam(name="sectors",required=false) String sectors,@RequestParam(name="keyword",required=false) String keyword) {
     	Integer page = offset/(new PageInfo().getPageSize()) +1;
-        return new JsonResult(true, associationService.getAssociationList( page,sectors));
+        return new JsonResult(true, associationService.getAssociationList( page,sectors,keyword));
     }
 
 

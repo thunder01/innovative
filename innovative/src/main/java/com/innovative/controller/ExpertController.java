@@ -70,7 +70,7 @@ public class ExpertController extends BaseController {
 
        boolean flag = expertService.deleteExpert(expert.getId());
         if (flag) {
-            return new JsonResult(true, expertService.getExpertLists(1,sectors));
+            return new JsonResult(true, expertService.getExpertLists(1,sectors,""));
         }
         return new JsonResult(false, "参数不合法");
     }
@@ -86,9 +86,9 @@ public class ExpertController extends BaseController {
      * @return
      */
     @RequestMapping(value = "/getExpertList", method = RequestMethod.GET)
-    public JsonResult getExpertList(@RequestParam(name="offset",defaultValue="0" ) Integer offset,@RequestParam(name="sectors",required=false) String sectors) {
+    public JsonResult getExpertList(@RequestParam(name="offset",defaultValue="0" ) Integer offset,@RequestParam(name="sectors",required=false) String sectors,@RequestParam(name="keyword",required=false) String keyword) {
     	Integer page = offset/(new PageInfo().getPageSize()) +1;
-        return new JsonResult(true, expertService.getExpertLists(page,sectors));
+        return new JsonResult(true, expertService.getExpertLists(page,sectors,keyword));
     }
 
 

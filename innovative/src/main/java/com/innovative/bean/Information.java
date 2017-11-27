@@ -21,9 +21,9 @@ public class Information implements Serializable {
 	private String[] sectors;//领域
 	private String[] tags;//标签
 	private String cotent;//内容
-	private Timestamp createAt;//创建时间
+	private String createAt;//创建时间
 	private String createBy;//创建人
-	private Timestamp updateAt;//更新时间
+	private String updateAt;//更新时间
 	private String updateBy;//更新人
 	private String updateByC;//更新人
 	private String state;//科技资讯的审批状态 0 未通过 1 通过  2 待审批
@@ -101,13 +101,6 @@ public class Information implements Serializable {
 		this.cotent = cotent;
 	}
 
-	public Timestamp getCreateAt() {
-		return createAt;
-	}
-
-	public void setCreateAt(Timestamp createAt) {
-		this.createAt = createAt;
-	}
 
 	public String getCreateBy() {
 		return createBy;
@@ -117,14 +110,7 @@ public class Information implements Serializable {
 		this.createBy = createBy;
 	}
 
-	public Timestamp getUpdateAt() {
-		return updateAt;
-	}
-
-	public void setUpdateAt(Timestamp updateAt) {
-		this.updateAt = updateAt;
-	}
-
+	
 	public String getUpdateBy() {
 		return updateBy;
 	}
@@ -196,6 +182,23 @@ public class Information implements Serializable {
 
 	public void setImgUrl(String imgUrl) {
 		this.imgUrl = imgUrl;
+	}
+	
+
+	public String getCreateAt() {
+		return createAt;
+	}
+
+	public void setCreateAt(String createAt) {
+		this.createAt = createAt;
+	}
+
+	public String getUpdateAt() {
+		return updateAt;
+	}
+
+	public void setUpdateAt(String updateAt) {
+		this.updateAt = updateAt;
 	}
 
 	@Override

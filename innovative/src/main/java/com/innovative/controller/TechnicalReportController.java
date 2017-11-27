@@ -67,7 +67,7 @@ public class TechnicalReportController {
     		 sectors = technicalReport.getSectors()[0];
        boolean flag = technicalReportService.deleteTechnicalReport(technicalReport.getId());
         if (flag) {
-            return new JsonResult(true, technicalReportService.getTechnicalReportListByCondition( 1,sectors));
+            return new JsonResult(true, technicalReportService.getTechnicalReportListByCondition( 1,sectors,""));
         }
         return new JsonResult(false, "参数不合法");
     }
@@ -81,12 +81,11 @@ public class TechnicalReportController {
      * @return
      */
     @RequestMapping(value = "/getListByCondition", method = RequestMethod.GET)
-    public JsonResult getTechnicalReportListByCondition(@RequestParam(name="offset" , defaultValue="0") Integer offset,@RequestParam(name="sectors",required=false) String sectors) {
+    public JsonResult getTechnicalReportListByCondition(@RequestParam(name="offset" , defaultValue="0") Integer offset,@RequestParam(name="sectors",required=false) String sectors,@RequestParam(name="keyword",required=false) String keyword) {
 
     	Integer page = offset/(new PageInfo().getPageSize()) +1;
-        return new JsonResult(true, technicalReportService.getTechnicalReportListByCondition( page,sectors));
+        return new JsonResult(true, technicalReportService.getTechnicalReportListByCondition( page,sectors,keyword));
     }
-
     /**
      * 新增技术报告
      *

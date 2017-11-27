@@ -56,21 +56,22 @@ public class EquipmentService {
 		return equipment;
 
     }
-
     /**
      * 分页条件查询设备list
      *
      * @param pageNum  页码
      * @param sectors 
+     * @param keyword 
      * @return
      */
-    public Map<String, Object> getEquipmentListByCondition(int pageNum, String sectors) {
+    public Map<String, Object> getEquipmentListByCondition(int pageNum, String sectors, String keyword) {
 
 
         if (!StringUtils.isEmpty(sectors)) {
             sectors = "{" + sectors + "}";
         }
-
+        String key1 = "%" + keyword + "%".trim();
+	    String key2 = "{" + keyword + "}".trim();
         //获取分页信息
         PageInfo pageInfo = new PageInfo();
         pageInfo.setCurrentPageNum(pageNum);
@@ -78,7 +79,7 @@ public class EquipmentService {
         int limit = pageInfo.getPageSize();
 
         //分页条件查询
-        List<Equipment> items = equipmentDao.getEquipmentListByCondition( offset, limit,sectors);
+        List<Equipment> items = equipmentDao.getEquipmentListByCondition( offset, limit,sectors,key1,key2);
         for(Equipment e: items){
         	if(null==e || "".equals(e.getId()))
         		continue;
@@ -86,7 +87,7 @@ public class EquipmentService {
   		   if(urllist != null && urllist.size() > 0 )
   			  e.setPicture( urllist.get(0));
         }
-        int totalCount = equipmentDao.getCountByCondition(sectors);
+        int totalCount = equipmentDao.getCountByCondition(sectors,key1,key2);
 
         //数据组装
         Map<String, Object> map = new HashMap<>();
@@ -102,6 +103,7 @@ public class EquipmentService {
         return map;
 
     }
+
 
     /**
      * 新增设备

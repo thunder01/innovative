@@ -65,7 +65,13 @@ public interface CollectionDao {
 	 * @return
 	 */
 	Informationpush getCollectInformationForMessage(@Param("id")String id, @Param("userid")String userid);
-	
 
+	/**
+	 * 删除收藏的推特信息
+	 * @param id 收藏id
+	 * @return
+	 */
+	boolean deleteCollectInformationpush(@Param("id")String id);
+	
 
 }

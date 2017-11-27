@@ -70,12 +70,10 @@ public interface ExpertDao {
 
 
 
-	List<Expert> getExpertLists(@Param("startIndex") int startIndex, @Param("pageSize") int pageSize,  @Param("sectors")String sectors);
 
 
 
 
-	int getTotalCountNum(@Param("sectors")String sectors);
 
 
 
@@ -86,6 +84,13 @@ public interface ExpertDao {
 	 */
 	boolean deleteExpert(String id);
 
+
+
+
+	List<Expert> getExpertLists(@Param("startIndex") int startIndex, @Param("pageSize") int pageSize,  @Param("sectors")String sectors, @Param("key1")String key1, @Param("key2")String key2);
+
+
+	int getTotalCountNum(@Param("sectors")String sectors, @Param("key1")String key1, @Param("key2")String key2);
 
 
 

@@ -113,7 +113,20 @@ public class InformationPushPartagerController extends BaseController {
 
 
 
-
+      /**
+       * 根据id删除分享的推特信息
+       * @param informationPushPartager
+       * @return
+       */
+       @RequestMapping(value = "/deletePartagerInformationpush", method = RequestMethod.POST)
+       @ResponseBody 
+       public JsonResult deletePartagerInformationpush(@RequestBody InformationPushPartager informationPushPartager) {
+          boolean flag = informationpushPartagerService.deletePartagerInformationpush(informationPushPartager.getId());
+           if (flag) {
+               return new JsonResult(true, "已删除");
+           }
+           return new JsonResult(false, "参数不合法");
+       }
 
 
 

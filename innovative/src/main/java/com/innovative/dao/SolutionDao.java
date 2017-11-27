@@ -21,17 +21,22 @@ public interface SolutionDao {
      * @param startIndex 开始条数
      * @param pageSize   展示条数
      * @param sectors 
+     * @param key2 
+     * @param key1 
      * @return
      */
-    List<Solution> getSolutionListByCondition(@Param("startIndex") int startIndex, @Param("pageSize") int pageSize, @Param("sectors")String sectors);
+    List<Solution> getSolutionListByCondition(@Param("startIndex") int startIndex, @Param("pageSize") int pageSize, @Param("sectors")String sectors, @Param("key1")String key1, @Param("key2")String key2);
 
     /**
      * 查询满足条件的总条数
      * @param sectors 
+     * @param key2 
+     * @param key1 
      *
      * @return
      */
-    int getCountByCondition(@Param("sectors")String sectors);
+    int getCountByCondition(@Param("sectors")String sectors, @Param("key1")String key1, @Param("key2")String key2);
+
 
     /**
      * 新增技术报告
