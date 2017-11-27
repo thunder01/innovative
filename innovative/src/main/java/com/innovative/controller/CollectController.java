@@ -57,7 +57,6 @@ public class CollectController {
 	 */
 	@RequestMapping(value="/findCollection/{id}",method=RequestMethod.GET)
 	public JsonResult findCollection(@PathVariable("id") Integer id){
-		System.out.println(id);
 		return new JsonResult(true, collectService.findCollectionById(id));
 	}
 }

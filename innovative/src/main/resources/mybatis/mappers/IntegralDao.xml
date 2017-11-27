@@ -76,8 +76,10 @@
 	
 	<!-- 获取用户本月的积分明细 -->
 	<select id="getThisMonthIntegralDetail" parameterType="map" resultMap="integralMap">
-		SELECT * FROM xacx_integral WHERE create_date BETWEEN CURRENT_DATE+1 AND TO_DATE(TO_CHAR(now(),'YYYY-MM') ,'YYYY-MM') 
-		AND userid=#{userid} AND integral!=0 ORDER BY create_date DESC LIMIT #{pageSize} OFFSET #{startIndex}
+		select gral.*,file.filename from xacx_integral gral LEFT JOIN xacx_file file on gral.resource_id=file."refId"
+		<where>
+			userid=#{userid} AND integral!=0 ORDER BY create_date DESC LIMIT #{pageSize} OFFSET #{startIndex}
+		</where>
 	</select>
 	<select id="getCountThisMonth" parameterType="string" resultType="int">
 		SELECT count(userid) FROM xacx_integral WHERE create_date BETWEEN CURRENT_DATE+1 AND TO_DATE(TO_CHAR(now(),'YYYY-MM') ,'YYYY-MM') 
@@ -87,5 +89,8 @@
 	<select id="getCountByResource_id" parameterType="string" resultType="int">
 		SELECT COUNT(*) FROM xacx_integral WHERE create_date BETWEEN CURRENT_DATE AND CURRENT_DATE+1 
 		AND resource_id = #{resource_id}		
+	</select>
+	<select id="sumCount" resultType="int">
+		select sum(integral) from xacx_integral where userid=#{userid}
 	</select>
 </mapper>

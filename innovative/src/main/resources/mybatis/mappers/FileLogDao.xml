@@ -10,7 +10,7 @@
     </resultMap>
 	<insert id="addFileLog" parameterType="com.innovative.bean.FileLog">
         INSERT INTO "xacx_filelog"("create_date","fileName","userid","numbers","type")
-        VALUES(now(),#{fileName},#{userid},#{numbers},#{type})
+        VALUES(now(),#{fileName},#{userId},#{numbers},#{type})
     </insert>
     <select id="queryList" resultMap="fileMap">
         SELECT "id","fileName","numbers" FROM "xacx_filelog"

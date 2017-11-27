@@ -104,15 +104,12 @@ public class FileController extends BaseController {
 	/**
 	 *
 	 * @param fileLog
-	 * @param request
+	 * @param
 	 * @return
 	 */
 
     @RequestMapping(value = "/downfile",method =RequestMethod.POST)
-	public JsonResult downFile(@RequestBody FileLog fileLog,HttpServletRequest request){
-		HttpSession session=request.getSession();
-		User user= (User) session.getAttribute("userId");
-		fileLog.setUserid(user.getUserId());
+	public JsonResult downFile(@RequestBody FileLog fileLog){
 		fileLog.setNumbers(1);
 		FileLog fileLog1=fileLogService.queryList(fileLog.getFileName());
 		if (fileLog1!=null&&fileLog1.getFileName().equals(fileLog.getFileName())){

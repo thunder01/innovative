@@ -297,6 +297,7 @@ public class OrderService {
 	 * @param order
 	 * @return
 	 */
+	@Transactional
 	public Map<String, Object> projectGrade(Order order){
 		Map<String, Object> map=new HashMap<>();
 		Order o = orderDao.getOrderById(order.getId());
