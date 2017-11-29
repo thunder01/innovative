@@ -44,7 +44,7 @@ public class OrganizationService {
     		Organization organization =	organizationDao.getOrganization(id);
     		if(organization!=null){
     			//文件图片我们都改到一张专门的表来存储
-    		   List<String> url = fileDao.getPhotoByMOdAndId(id, "expertPhoto");
+    		   List<String> url = fileDao.getPhotoByMOdAndId(id, "addunionPhoto");
     		   if(url != null && url.size() > 0 )
     			   organization.setLogo( url.get(0));
         		List<Map<String,Object>> statusList = codeItemUtil.getCodeItemList("EXPERT_COOPERSTATUS",organization.getCooperationStatus());
@@ -81,7 +81,7 @@ public class OrganizationService {
         for (Organization or : organizations){
         	if(null ==  or || "".equals(or.getId()))
         		continue;
-        	 List<String> url = fileDao.getPhotoByMOdAndId(or.getId(), "expertPhoto");
+        	 List<String> url = fileDao.getPhotoByMOdAndId(or.getId(), "addunionPhoto");
   		   if(url != null && url.size() > 0 )
   			   or.setLogo( url.get(0));
         }
