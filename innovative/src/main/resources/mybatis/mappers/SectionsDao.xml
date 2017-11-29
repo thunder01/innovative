@@ -169,8 +169,9 @@
 	<select id="getSectionByIdAndUserid" parameterType="map" resultMap="sectionsMap">
 
      
- 		SELECT "id", "resource", "title", "time", "resume", "sectors", "tags", "cotent", "createAt", 
-		  "createBy", "updateAt", "updateBy", "state" ,"approuverNum" , "imgid", "count","imgurl", us.username updateByC,e.todayIsApprouver,co.isCollection
+ 		
+	SELECT info."id", "resource", "title", "time", "resume", "sectors", "tags", "cotent", info."createAt", 
+		  info."createBy", info."updateAt", info."updateBy", info."state" ,"approuverNum" , "imgid", "count","imgurl", us.username updateByC,e.todayIsApprouver,co.isCollection
 		FROM "xacx_tech_sections" info
 		 left join 
 		(SELECT count(*) todayIsApprouver,"sectionId" FROM "xacx_tech_section_approuver" where "approuverBy" = #{userid}

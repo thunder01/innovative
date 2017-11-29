@@ -133,7 +133,7 @@
 	<insert id="addForExpert" parameterType="Expert" >
 		INSERT INTO "Experts"
 		( "Id","Avatar", "Contact", "CooperationStatus", "CreatedAt", "CreatedBy", "Deleted", "DeletedAt", "DeletedBy", "Education", "HFactor", "IsActive", "JobTitle", "Name", "Rank", "ResearchAchievement", "ResearchDirection", "Resume", "RowVersion", "Sectors", "Tags", "Unit", "UpdatedAt", "UpdatedBy", "File")
-		VALUES ( #{id},'${avatar}', #{contact}, #{cooperationStatus}, now(), #{createdBy}, false, now(), #{createdBy}, #{education}, #{hFactor}, #{isActive}, #{jobTitle}, #{name}, #{rank}, #{researchAchievement}, #{researchDirection}, #{resume}, #{rowVersion},
+		VALUES ( #{id},'${avatar}', #{contact}, #{cooperationStatus}, now(), #{createdBy}, false, now(), #{createdBy}, #{education}, #{hFactor}, true, #{jobTitle}, #{name}, #{rank}, #{researchAchievement}, #{researchDirection}, #{resume}, #{rowVersion},
 	
 	<choose>
 		<when test="sectors != null">
