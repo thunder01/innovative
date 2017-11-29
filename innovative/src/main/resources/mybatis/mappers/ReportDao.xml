@@ -32,8 +32,8 @@
 		VALUES(#{order_id},#{demand_name},#{title},#{content},
 		<choose>
             <when test="sector != null">
-                <foreach item="sector" collection="sector" separator="," open="'{" close="},'" index="">
-                    ${sector}
+                <foreach item="sectoritem" collection="sector" separator="," open="'{" close="},'" index="">
+                    ${sectoritem}
                 </foreach>
             </when>
             <otherwise>'{}'</otherwise>
@@ -71,8 +71,8 @@
 		fileid=#{fileid},
 		<choose>
             <when test="sector != null">
-                <foreach item="sector" collection="sector" separator="," open="'{" close="}'" index="">
-                    ${sector}
+                <foreach item="sectoritem" collection="sector" separator="," open="'{" close="}'" index="">
+                    ${sectoritem}
                 </foreach>
             </when>
             <otherwise>'{}'</otherwise>
