@@ -9,7 +9,7 @@
 		<result property="demand_name" column="demand_name"/>
 		<result property="title" column="title"/>
 		<result property="content" column="content"/>
-		<result property="sector" column="sector"/>
+		<result property="sector" column="sector" typeHandler="com.innovative.mybatisHandler.ArrayTypeHandler"/>
 		<result property="lable" column="lable" typeHandler="com.innovative.mybatisHandler.ArrayTypeHandler"/>
 		<result property="abstracts" column="abstracts"/>
 		<result property="type" column="type"/>
@@ -29,7 +29,17 @@
 			SELECT currval('xacx_report_v2_id_seq'::regclass)
 		</selectKey>
 		INSERT INTO xacx_report_v2(order_id,demand_name,title,content,sector,abstracts,type,fileid,create_date,create_by,delete_status,lable) 
-		VALUES(#{order_id},#{demand_name},#{title},#{content},#{sector},#{abstracts},#{type},#{fileid},now(),#{create_by},0,
+		VALUES(#{order_id},#{demand_name},#{title},#{content},
+		<choose>
+            <when test="sector != null">
+                <foreach item="sector" collection="sector" separator="," open="'{" close="},'" index="">
+                    ${sector}
+                </foreach>
+            </when>
+            <otherwise>'{}'</otherwise>
+        </choose>
+		
+		#{abstracts},#{type},#{fileid},now(),#{create_by},0,
 		 <choose>
             <when test="lable != null">
                 <foreach item="lable" collection="lable" separator="," open="'{" close="}'" index="">
@@ -58,7 +68,16 @@
             <otherwise>'{}'</otherwise>
         </choose> 
 		,abstracts=#{abstracts},
-		fileid=#{fileid},sector=#{sector},late_date=now(),late_by=#{late_by} WHERE id=#{id}
+		fileid=#{fileid},
+		<choose>
+            <when test="sector != null">
+                <foreach item="sector" collection="sector" separator="," open="'{" close="}'" index="">
+                    ${sector}
+                </foreach>
+            </when>
+            <otherwise>'{}'</otherwise>
+        </choose> 
+		,late_date=now(),late_by=#{late_by} WHERE id=#{id}
 	</update>
 	
 	<!-- 通过报告id查询报告 -->
