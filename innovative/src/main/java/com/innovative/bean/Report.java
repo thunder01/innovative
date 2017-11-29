@@ -19,7 +19,7 @@ public class Report implements Serializable{
 	private String demand_name;//需求名
 	private String title;//标题
 	private String content;//内容信息
-	private String sector;//行业领域
+	private String[] sector;//行业领域
 	private String[] lable;//标签信息
 	private String abstracts;//摘要信息
 	private String type;//报告的类型，方案线索1、寻源报告2、会议记录3、出差报告4、问题记录5、项目总结6
@@ -79,11 +79,12 @@ public class Report implements Serializable{
 		this.content = content;
 	}
 
-	public String getSector() {
+	
+	public String[] getSector() {
 		return sector;
 	}
 
-	public void setSector(String sector) {
+	public void setSector(String[] sector) {
 		this.sector = sector;
 	}
 
