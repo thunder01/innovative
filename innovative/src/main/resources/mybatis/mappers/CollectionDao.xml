@@ -43,7 +43,7 @@
 	
 	  <!--获取用户的所有收藏-->
 	<select id="getCollectionlist" resultType="map">
-		select * from COLLECT_LIST
+		select * from collect_lists
 
 	 	where "collectBy" = #{collectBy} and "collectAt" is not Null   ORDER by "collectAt" DESC
 		
@@ -52,7 +52,7 @@
 	</select>
 	<!-- 获取该用户总条数 -->
 	<select id="getTotalCountByUser" resultType="Integer">
-		select count(1) from COLLECT_LIST
+		select count(1) from collect_lists
 		 where "collectBy" = #{collectBy}  
 	</select>
 	
