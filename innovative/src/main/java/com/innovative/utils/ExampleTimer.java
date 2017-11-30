@@ -16,7 +16,7 @@ public class ExampleTimer {
     private StatisticsService statisticsService;
     @Autowired
     private FullTextQueryService fullTextQueryService;
-    @Scheduled(cron="0 0 2 * * ?")
+    @Scheduled(cron="0 53 12 * * ?")
     @Transactional
     public void timerRate() {
         Map<String,Object> map=new HashMap<>();
@@ -157,6 +157,7 @@ public class ExampleTimer {
         List<Object> lists=new LinkedList<>();
         List<Tages> selectAssociations=statisticsService.selectAssociations();
         for (int i=0;i<selectAssociations.size();i++){
+
             if (selectAssociations.get(i).getTags()!=null&&!selectAssociations.get(i).getTags().equals("{}")){
                 String []a=selectAssociations.get(i).getTags();
                 for (int aarry=0;aarry<a.length;aarry++){

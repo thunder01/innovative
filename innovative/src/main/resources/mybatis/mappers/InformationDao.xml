@@ -23,7 +23,7 @@
 	  <result property="isCollection" column="isCollection"/>
 	  <result property="imgid" column="imgid"/>
 	  <result property="count" column="count"/>
-	  <result property="imgUrl" column="imgurl"/>
+	  <result property="imgUrl" column="imgurl" typeHandler="com.innovative.mybatisHandler.ArrayTypeHandler"/>
 	</resultMap> 
 	
     <!--将图片保存到服务器，将记录保存到数据库-->

@@ -32,7 +32,7 @@ public class Information implements Serializable {
 	private int isCollection; //则个科技资讯是否已经收藏
 	private String imgid;//图片id
 	private int count;//阅读量
-	private String imgUrl;//图片的URL
+	private String[] imgUrl;//图片的URL
 	
     public Information() {
     }
@@ -176,11 +176,11 @@ public class Information implements Serializable {
 	}
 
 	
-	public String getImgUrl() {
+	public String[] getImgUrl() {
 		return imgUrl;
 	}
 
-	public void setImgUrl(String imgUrl) {
+	public void setImgUrl(String[] imgUrl) {
 		this.imgUrl = imgUrl;
 	}
 	
@@ -208,7 +208,7 @@ public class Information implements Serializable {
 				+ cotent + ", createAt=" + createAt + ", createBy=" + createBy + ", updateAt=" + updateAt
 				+ ", updateBy=" + updateBy + ", updateByC=" + updateByC + ", state=" + state + ", approuverNum="
 				+ approuverNum + ", todayIsApprouver=" + todayIsApprouver + ", isCollection=" + isCollection
-				+ ", imgid=" + imgid + ", count=" + count + ", imgUrl=" + imgUrl + "]";
+				+ ", imgid=" + imgid + ", count=" + count + ", imgUrl=" + Arrays.toString(imgUrl) + "]";
 	}
 
 	
