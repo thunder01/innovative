@@ -36,7 +36,7 @@
                     ${sectoritem}
                 </foreach>
             </when>
-            <otherwise>'{}'</otherwise>
+            <otherwise>'{}',</otherwise>
         </choose>
 		
 		#{abstracts},#{type},#{fileid},now(),#{create_by},0,
