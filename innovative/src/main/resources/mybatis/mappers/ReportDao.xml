@@ -32,7 +32,7 @@
 		VALUES(#{order_id},#{demand_name},#{title},#{content},
 		<choose>
             <when test="sector != null">
-                <foreach item="sectoritem" collection="sector" separator="," open="'{" close="},'" index="">
+                <foreach item="sectoritem" collection="sector" separator="," open="'{" close="}'," index="">
                     ${sectoritem}
                 </foreach>
             </when>
