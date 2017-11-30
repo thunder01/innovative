@@ -137,4 +137,12 @@ public class IntelligenceService {
     public  boolean addScore(Score score){
         return  dao.addScore(score)>0 ?true:false;
     }
+
+    /**
+     * 数量总数
+     * @return
+     */
+    public  int getTotalCounts(){
+        return  dao.getTotalCounts();
+    }
 }

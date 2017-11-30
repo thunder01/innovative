@@ -10,10 +10,8 @@ import com.innovative.utils.Misc;
 import com.innovative.utils.PageInfo;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+
 import org.elasticsearch.action.admin.indices.exists.indices.IndicesExistsRequest;
 import org.elasticsearch.action.admin.indices.exists.indices.IndicesExistsResponse;
 import org.elasticsearch.action.admin.indices.mapping.put.PutMappingRequest;
@@ -66,7 +64,7 @@ public class InformationService {
 	private LoggerUserDao loggerUserDao;
 /**
  * 添加科技资讯
- * @param sections
+ * @param
  * @return
  */
 	@Transactional
@@ -75,14 +73,18 @@ public class InformationService {
 		String imgId=information.getImgid();
 		//更新图片状态为add
 		fileDao.updateFile(imgId);
+		List<String>imageList=new LinkedList<>();
 		List<FileBean> listFile=fileDao.getFileById(imgId, "information");
-		System.out.println(listFile);
-		if (!listFile.isEmpty()) {			
-			information.setImgUrl(listFile.get(0).getUrl());
+		if (!listFile.isEmpty()) {
+			for (int i=0;i<listFile.size();i++){
+				imageList.add(listFile.get(i).getUrl());
+			}
+		information.setImgUrl(imageList.toArray(new String[listFile.size()]));
 		}
 		
 		// 先添加到数据库
 		information.setId(Misc.base58Uuid());
+
 		boolean flag=informationDao.addInformation(information);
 		//数据库添加成功后，再添加索引库
     	if (flag) {
@@ -113,7 +115,7 @@ public class InformationService {
 	}
 /**
  * 修改科技资讯
- * @param sections
+ * @param
  * @return
  */
 	@Transactional

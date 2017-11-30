@@ -30,11 +30,13 @@ public class IntelligenceController {
     @RequestMapping(value = "/getOder",method = RequestMethod.GET)
     public JsonResult getOder(){
         String oderNumber="";
+        int total=service.getTotalCounts();
         long no=0;
         SimpleDateFormat sdf=new SimpleDateFormat("yyyyMM");
         String nowdate = sdf.format(new Date());
         no=Long.parseLong(nowdate)*10000;
         no+=getNo();
+        no=no+total;
         String oderNo=no+"";
         String oder=oderNo.substring(0,6);
         String code=oderNo.substring(6,10);
