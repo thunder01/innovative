@@ -69,6 +69,7 @@
         </choose> 
 		,abstracts=#{abstracts},
 		fileid=#{fileid},
+		sector=
 		<choose>
             <when test="sector != null">
                 <foreach item="sectoritem" collection="sector" separator="," open="'{" close="}'" index="">
