@@ -134,9 +134,9 @@ public class SectionsService {
 						.field("sectors",section2.getSectors())
 						.field("tags",section2.getTags())
 						.field("cotent",section2.getCotent())
-						.field("createAt",sdf.format(section2.getCreateAt()))
+						.field("createAt",section2.getCreateAt())//sdf.format(section2.getCreateAt())
 						.field("createBy",section2.getCreateBy())
-						.field("updateAt",sdf.format(section2.getUpdateAt()))
+						.field("updateAt",section2.getUpdateAt())//sdf.format(section2.getUpdateAt())
 						.field("updateBy",section2.getUpdateBy())
 						.field("state",section2.getState())
 						.field("imgUrl",section2.getImgUrl())
@@ -350,8 +350,8 @@ public class SectionsService {
     						.endObject()
     						//创建时间
     						.startObject("createAt")
-	    						.field("type","date")
-								.field("format","yyyy-MM-dd HH:mm:ss")
+	    						.field("type","text")
+								.field("analyzer","ik_max_word")
     						.endObject()
     						//创建人
     						.startObject("createBy")
@@ -360,8 +360,8 @@ public class SectionsService {
     						.endObject()
     						//修改时间
     						.startObject("updateAt")
-    							.field("type","date")
-    							.field("format","yyyy-MM-dd HH:mm:ss")
+    							.field("type","text")
+    							.field("analyzer","ik_max_word")
     						.endObject()
     						//修改人
     						.startObject("updateBy")

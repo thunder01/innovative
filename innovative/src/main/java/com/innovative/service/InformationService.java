@@ -143,9 +143,9 @@ public class InformationService {
 						.field("sectors",info.getSectors())
 						.field("tags",info.getTags())
 						.field("cotent",info.getCotent())
-						.field("createAt",sdf.format(info.getCreateAt()))
+						.field("createAt",info.getCreateAt())//sdf.format(info.getCreateAt())
 						.field("createBy",info.getCreateBy())
-						.field("updateAt",sdf.format(info.getUpdateAt()))
+						.field("updateAt",info.getUpdateAt())//sdf.format(info.getUpdateAt())
 						.field("updateBy",info.getUpdateBy())
 						.field("state",info.getState())
 						.field("imgUrl",info.getImgUrl())
@@ -351,8 +351,8 @@ public class InformationService {
     						.endObject()
     						//创建时间
     						.startObject("createAt")
-	    						.field("type","date")
-								.field("format","yyyy-MM-dd HH:mm:ss")
+	    						.field("type","text")
+								.field("analyzer","ik_max_word")
     						.endObject()
     						//创建人
     						.startObject("createBy")
@@ -361,8 +361,8 @@ public class InformationService {
     						.endObject()
     						//修改时间
     						.startObject("updateAt")
-    							.field("type","date")
-    							.field("format","yyyy-MM-dd HH:mm:ss")
+    							.field("type","text")
+    							.field("analyzer","ik_max_word")
     						.endObject()
     						//修改人
     						.startObject("updateBy")
