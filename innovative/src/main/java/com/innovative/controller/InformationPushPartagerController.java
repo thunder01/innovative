@@ -88,7 +88,7 @@ public class InformationPushPartagerController extends BaseController {
      * @param id 推特id
      * @return
      */
-    @RequestMapping(value = "/getInformationpushPartagersByUserid", method = RequestMethod.GET)
+    @RequestMapping(value = "/getInformationpushPartagersByUserid/{userid}", method = RequestMethod.GET)
     public JsonResult getInformationpushPartagers(@RequestParam(name="offset",defaultValue="0" ) Integer offset,HttpServletRequest req) {
     	String partagerBy = CookiesUtil.getCookieValue(req,"user_name");
     	 Integer page = offset/(new PageInfo().getPageSize()) +1;
