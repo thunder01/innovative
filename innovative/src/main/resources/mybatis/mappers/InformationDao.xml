@@ -48,7 +48,16 @@
 			</when>
 			<otherwise>'{}',</otherwise>
 		</choose>
-         #{cotent}, now(), #{createBy}, now(), #{updateBy},'2',#{imgid},0,#{imgUrl});
+         #{cotent}, now(), #{createBy}, now(), #{updateBy},'0',#{imgid},0,
+         <choose>
+			<when test="imgUrl != null">
+				<foreach item="url" collection="imgUrl" separator="," open="'{" close="}'" index="">  
+			      ${url}
+			    </foreach>  
+			</when>
+			<otherwise>'{}'</otherwise>
+		</choose>
+         );
 
     </insert>
     
@@ -103,7 +112,15 @@
 				"imgid"=#{imgid},
 			</if>
 			<if test="imgUrl!=null and imgUrl!=''">
-				"imgurl"=#{imgUrl},
+			"imgurl"=
+				<choose>
+				<when test="imgUrl != null">
+					<foreach item="url" collection="imgUrl" separator="," open="'{" close="}'," index="">  
+				      ${url}
+				    </foreach>  
+				</when>
+				<otherwise>'{}',</otherwise>
+			</choose>
 			</if>
 				"updateAt"=now()
 		</set>
