@@ -54,7 +54,7 @@
 				 e."Sectors" @> '${sectors}'
 			</if>
 		</where>
-		order by (case when e."Px" is null then 0 else e."Px" end)  DESC ,e."UpdatedAt" DESC ,e."HFactor" DESC
+		order by e."HFactor" DESC ,e."UpdatedAt" DESC 
 		limit #{pageSize} offset #{startIndex}
 	</select>
 	<!--根据查询条件获取列表-->
@@ -79,7 +79,7 @@
 			</if>
 			 and "Deleted" = 'f' AND "IsActive" = 't'
 		</where>
-		order by (case when e."Px" is null then 0 else e."Px" end)  DESC  ,e."HFactor" DESC ,e."UpdatedAt" DESC
+		order by e."HFactor" DESC ,e."UpdatedAt" DESC
 		limit #{pageSize} offset #{startIndex}
 	</select>
 
