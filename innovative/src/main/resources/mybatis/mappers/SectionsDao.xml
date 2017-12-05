@@ -122,13 +122,13 @@
 	
 	<!--根据查询条件获取列表-->
 	<select id="getSectionsLists" resultMap="sectionsMap">
-		SELECT "id", "resource", "title", "time", "resume", "sectors", "tags", "cotent", "createAt", "createBy", "updateAt", "updateBy", "state", "imgid", "count","imgurl" FROM "xacx_tech_sections"
+		SELECT * FROM sections_list
 		<where>
 			<if test="state!=null and state!=''">
 				"state" = #{state}
 			</if>
 		</where>
-		order by "createAt" DESC
+		order by "updateAt" DESC
 		limit #{pageSize} offset #{startIndex}
 	</select>
 
@@ -136,7 +136,7 @@
 
 	<!--查询行业领域搜索条件的总条数-->
 	<select id="getTotalCountNum" resultType="int">
-		SELECT count(*) FROM "xacx_tech_sections"
+		SELECT count(*) FROM sections_list
 		<where>
 			<if test="state!=null and state!=''">
 				"state" = #{state}
