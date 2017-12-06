@@ -156,8 +156,13 @@ public class IntelligenceController {
     public  JsonResult addfeedback(@RequestBody FeedBack feedBack){
         boolean code=false;
         String message="添加失败";
+        Intelligence intelligence=service.getIntelligence(feedBack.getIntellId());
         if (service.addfeedback(feedBack)){
             code=true;
+            System.out.println(">>>>>>>>>>>>>"+intelligence.getCreateBy());
+            System.out.println("<<<<<<<<<<<<<"+feedBack.getId());
+            messageService.insertMessage(intelligence.getCreateBy(), feedBack.getId()+"","14", 3);
+            messageService.updateMsgCount(intelligence.getCreateBy());
             message="添加成功";
         }
         return new JsonResult(code,message);
@@ -192,12 +197,42 @@ public class IntelligenceController {
      * @return
      */
     @RequestMapping(value = "/addScore",method = RequestMethod.POST)
-    public  JsonResult addScore(@RequestBody Score score){
+    public  JsonResult addScore(@RequestBody Score score,HttpServletRequest request){
         boolean code=false;
+        HttpSession session=request.getSession();
+        User user= (User) session.getAttribute("userId");
         String message="添加失败";
         if (service.addScore(score)){
             code=true;
             message="添加成功";
+//            //添加已办内容
+//            messageService.insertMessage(user.getUserId(), score.getIntellId()+"","15", 2);
+//            messageService.updateMsgCount(user.getUserId());
+        }
+        return new JsonResult(code,message);
+    }
+    /**
+     * 情报确认
+     */
+    @RequestMapping(value = "/updateFack",method = RequestMethod.POST)
+    @Transactional
+    public  JsonResult updateFack(@RequestBody FeedBack feedBack,HttpServletRequest request){
+        boolean code=false;
+        HttpSession session=request.getSession();
+        User user= (User) session.getAttribute("userId");
+        String message="添加失败";
+        if (service.updateFack(feedBack)){
+            code=true;
+            message="添加成功";
+            //添加已办内容
+            messageService.insertMessage(user.getUserId(), feedBack.getId()+"","14", 2);
+            messageService.updateMsgCount(user.getUserId());
+            //给情报工程师待办通知
+            Intelligence intelligence=service.getIntelligence(feedBack.getIntellId());
+            System.out.println("!!!!!!!!!!!"+intelligence.getUserid());
+            messageService.insertMessage(intelligence.getUserid(), intelligence.getId()+"","14", 3);
+            messageService.updateMsgCount(intelligence.getUserid());
+
         }
         return new JsonResult(code,message);
     }

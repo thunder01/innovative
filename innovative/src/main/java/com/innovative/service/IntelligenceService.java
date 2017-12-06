@@ -145,4 +145,10 @@ public class IntelligenceService {
     public  int getTotalCounts(){
         return  dao.getTotalCounts();
     }
+    /**
+     * 情报确认
+     */
+    public  boolean updateFack(FeedBack feedBack){
+        return dao.updateFack(feedBack)>0?true:false;
+    }
 }
