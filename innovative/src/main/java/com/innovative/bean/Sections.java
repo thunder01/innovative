@@ -31,9 +31,18 @@ public class Sections implements Serializable {
 	private String imgUrl;//图片的URL
 	private String firstid;//一期技术报告、方案的id
 	private String type;//1 技术报告 2 方案
+	private String types;//1 技术报告 2 方案
 	
     public Sections() {
     }
+
+	public String getTypes() {
+		return types;
+	}
+
+	public void setTypes(String types) {
+		this.types = types;
+	}
 
 	public String getId() {
 		return id;
