@@ -457,8 +457,10 @@ public class InformationService {
 	if(iscollect == 0){
 		//增加科技资讯收藏消息
 		Information information = informationDao.getById(techInformationCollection.getInformationId());
-		messageService.insertMessage(information.getCreateBy(), techInformationCollection.getId(), Config.KJ_ZX_SSH, 1);
-		messageService.updateMsgCount(information.getCreateBy());
+		if (null!=information.getCreateBy()&&!"".equals(information.getCreateBy())){
+			messageService.insertMessage(information.getCreateBy(), techInformationCollection.getId(), Config.KJ_ZX_SSH, 1);
+			messageService.updateMsgCount(information.getCreateBy());
+		}
 		//增加收藏记录
 		LoggerUser loggerUser=new LoggerUser(MDC.get("userid"),"收藏","科技资讯",techInformationCollection.getInformationId(),
 				informationDao.getInformationById(techInformationCollection.getInformationId(),MDC.get("userid")).getTitle());

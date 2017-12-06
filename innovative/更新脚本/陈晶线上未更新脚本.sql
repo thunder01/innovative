@@ -95,3 +95,27 @@ SELECT  push."id" pushid,push."cotent",push."title",push."comentBy",u.username c
    select sec."id" pushid,sec.cotent cotent,sec.title title,sec."createBy" comentBy,su.username comentByC ,tesec."collectBy" collectBy,tesec."collectAt" collectAt,'sections' type1 from xacx_tech_sections_collection tesec
     join xacx_tech_sections sec on sec."id" = tesec."sectionId"
     left join xacx_user su on su.pernr = sec."createBy"
+    
+    --关于科技专栏视图
+    
+  
+create or REPLACE VIEW sections_list	 as
+
+SELECT  sec."id",sec."title",sec."resume",COALESCE(sec.imgurl, '') as imgurl,sec.sectors,sec.tags, sec."state",sec."updateAt" ,'sections' AS types
+   
+
+		FROM "xacx_tech_sections"  sec  
+
+	 UNION all
+
+    
+
+  select solu."Id" id,solu."Name" title,solu."Content" resume,COALESCE(solu."File",file."url") as imgurl,solu."Sectors",solu."Tags" ,'1' "state" ,solu."UpdatedAt"  updateAt,'Solutions' AS types from "Solutions" solu
+   left join xacx_file file on file."refId" = solu."Id" and file."refType" = 'programPhoto' and file."sign" = 'add'
+
+  union 
+
+   
+  select solu."Id" id,solu."Name" title,solu."Content" resume,COALESCE(solu."File",file."url") as imgurl ,solu."Sectors",solu."Tags",'1' "state" ,solu."UpdatedAt"  updateAt,'Reports' AS types from "TechnicalReports" solu
+   left join xacx_file file on file."refId" = solu."Id" and file."refType" = 'reportPhoto' and file."sign" = 'add'
+

@@ -27,6 +27,7 @@
 	  <result property="imgUrl" column="imgurl"/>
 	  <result property="firstid" column="firstid"/>
       <result property="type" column="type"/>
+       <result property="types" column="types"/>
 	</resultMap> 
 	
     <!--添加科技专栏信息-->
