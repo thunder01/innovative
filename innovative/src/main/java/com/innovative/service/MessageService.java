@@ -1,16 +1,6 @@
 package com.innovative.service;
 
-import com.innovative.bean.Demand;
-import com.innovative.bean.Information;
-import com.innovative.bean.Informationpush;
-import com.innovative.bean.Intelligence;
-import com.innovative.bean.Message;
-import com.innovative.bean.MsgCount;
-import com.innovative.bean.Order;
-import com.innovative.bean.Sections;
-import com.innovative.bean.TechInformationCollection;
-import com.innovative.bean.TechSectionsCollection;
-import com.innovative.bean.User;
+import com.innovative.bean.*;
 import com.innovative.dao.ApprouverDao;
 import com.innovative.dao.CollectionDao;
 import com.innovative.dao.DemandDao;
@@ -198,7 +188,7 @@ public class MessageService {
 						techInformationCollection.setInformation(information);
 						m.setObject(techInformationCollection);
 					}
-					if("13".equals(m.getType())){//13科技专栏收藏 
+					if("13".equals(m.getType())){//13科技专栏收藏
 						TechSectionsCollection techSectionsCollection = techSectionsCollectionDao.getById(m.getProid());
 						Sections sections = sectionsDao.getSectionById(techSectionsCollection.getSectionId());
 						techSectionsCollection.setSections(sections);
@@ -238,6 +228,14 @@ public class MessageService {
 						Intelligence intelligence = intelligenceDao.getIntelligence(Integer.parseInt(m.getProid()));
 						m.setObject(intelligence);
 					}
+					if("14".equals(m.getType())){//14 情报反馈
+						List<FeedBack> feedBack = intelligenceDao.getfeedBacks(Integer.parseInt(m.getProid()));
+						m.setObject(feedBack.get(0));
+					}
+//					if("15".equals(m.getType())){//14 客户评价
+//						Intelligence intelligence=intelligenceDao.getIntelligence(Integer.parseInt(m.getProid()));
+//						m.setObject(intelligence);
+//					}
 				}
 				map.put("items", list);
 				map.put("msgCount", msg);
@@ -269,6 +267,10 @@ public class MessageService {
 					if("3".equals(m.getType())){//3情报
 						Intelligence intelligence = intelligenceDao.getIntelligence(Integer.parseInt(m.getProid()));
 						m.setObject(intelligence);
+					}
+					if("14".equals(m.getType())){//14 情报反馈
+						List<FeedBack> feedBack = intelligenceDao.getfeedBacks(Integer.parseInt(m.getProid()));
+						m.setObject(feedBack.get(0));
 					}
 				}
 				map.put("items", list);

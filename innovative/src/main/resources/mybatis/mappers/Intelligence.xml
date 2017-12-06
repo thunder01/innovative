@@ -28,6 +28,8 @@
         <result property="title" column="title"/>
         <result property="content" column="content"/>
         <result property="path" column="path"/>
+        <result property="intellId" column="intellid"/>
+        <result property="status" column="status"/>
         <collection property="filelist" ofType="FileBean">
             <result property="refId" column="refId"/>
             <result property="refType" column="refType"/>
@@ -84,6 +86,9 @@
      </update>
     <!--情报反馈-->
     <insert id="addfeedback" parameterType="FeedBack">
+        <selectKey resultType="int" keyProperty="id" order="AFTER">
+            SELECT currval('xacx_feedback_id_seq'::regclass)
+        </selectKey>
         INSERT INTO xacx_feedback ("title","content","intellid","path")
         VALUES(#{title},#{content},#{intellId},#{path})
     </insert>
@@ -97,16 +102,13 @@
     <!--根据id查询情报内容-->
      <select id="getfeedBacks"  resultMap="feedBackMap">
          SELECT
-         ca."id",
-         ca.title,
-         ca."content",
+         ca.*,
          f.filename,
          f.url,
-         ca."path",
          f."refId"
          FROM
          xacx_feedback ca
-         LEFT JOIN xacx_file f ON ca."path" = f."refId" and ca.intellid=#{id}
+         LEFT JOIN xacx_file f ON ca."path" = f."refId"  and ca.id=#{id}
      </select>
     <!-- 总数-->
     <select id="getTotalCounts" resultType="int">
@@ -133,4 +135,8 @@
     <insert id="addScore" parameterType="Score">
         INSERT INTO "xacx_intelligence_score" ("workpoints","score","contents","intellId") VALUES(#{workpoints},#{score},#{contents},#{intellId})
     </insert>
+    <!--情报确认-->
+    <update id="updateFack" parameterType="FeedBack">
+        UPDATE xacx_feedback SET status=#{status} where id=#{id}
+    </update>
 </mapper>

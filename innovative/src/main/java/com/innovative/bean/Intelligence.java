@@ -12,7 +12,7 @@ public class Intelligence implements Serializable{
     private  String name;//项目名称
     private  String demand;//需求方
     private  String tell;//联系方式
-    private  String status;//状态
+    private  String status;//状态1.通过2.已接单。3.不通过
     private  String number;//定制次数
     private  String frequency;//定制频率
     private  String startdate;//日期起

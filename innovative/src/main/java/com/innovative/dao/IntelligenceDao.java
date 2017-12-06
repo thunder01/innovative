@@ -51,7 +51,7 @@ public interface IntelligenceDao {
     /**
      * 客户确认
      */
-    int update(FeedBack feedBack);
+    int updateFack(FeedBack feedBack);
     /**
      * 总数
      */
