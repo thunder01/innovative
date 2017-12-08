@@ -23,8 +23,8 @@
 	
 	<!-- 添加一个评论 -->
 	<insert id="addResourceComment" useGeneratedKeys="true" keyProperty="id" parameterType="ResourceComment">
-		INSERT INTO xacx_resource_comment(type,resource_id,comment,comment_date,comment_by,comment_username,status,deleted)
-		VALUES(#{type},#{resource_id},#{comment},now(),#{comment_by},#{comment_username},0,0)
+		INSERT INTO xacx_resource_comment(type,resource_id,comment,comment_by,comment_username,status,deleted)
+		VALUES(#{type},#{resource_id},#{comment},#{comment_by},#{comment_username},0,0)
 	</insert>
 	
 	<!-- 打赏一个评论 -->
