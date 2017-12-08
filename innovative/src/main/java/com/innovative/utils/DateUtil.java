@@ -282,6 +282,21 @@ public class DateUtil {
         return dataStr;
     }
 
+    /**
+     * 每个月第一天
+     * @return
+     */
+    public  static String getFirstDay(){
+        Calendar cale = null;
+        cale = Calendar.getInstance();
+        cale.add(Calendar.MONTH, 0);
+        cale.set(Calendar.DAY_OF_MONTH, 1);
+        String firstday = sdfDay.format(cale.getTime());
+        return  firstday;
+    }
+
+
+
     public static void main(String[] args) {
         String[] s = {"1","2"};
 System.out.println(s.toString());
@@ -291,6 +306,7 @@ System.out.println(s.toString());
 
         System.out.println(getBeforeDayDate("1"));
         System.out.println(getAfterDayDate("1"));
+        System.out.println("每个月第一天"+getFirstDay());
     }
 
 }
