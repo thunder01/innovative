@@ -184,7 +184,7 @@ public class ResourceCommentService {
 	/**
 	 * 获取资源库的留言(根据类型区别资源库)
 	 */
-	public Map<String, Object> getCommentList(String type,Integer page) {
+	public Map<String, Object> getCommentList(Integer type,Integer page) {
 		PageInfo pageInfo = new PageInfo();
         pageInfo.setCurrentPageNum(page);
 		List<ResourceComment> list = resourceCommentDao.getCommentList(type,pageInfo.getPageSize(),pageInfo.getStartIndex());

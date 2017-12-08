@@ -19,6 +19,7 @@
         <result property="deleted" column="deleted"/>
         <result property="delete_by" column="delete_by"/>
         <result property="delete_date" column="delete_date"/>
+        <result property="name" column="name"/>
     </resultMap>
 	
 	<!-- 添加一个评论 -->
