@@ -77,7 +77,7 @@ public class ResourceCommentController {
 	 * @return
 	 */
 	@RequestMapping(value = "/getCommentList/{type}", method = RequestMethod.GET)
-	public JsonResult getCommentList(@RequestParam(name="offset",defaultValue="0") Integer offset,@PathVariable(name = "type") String type){
+	public JsonResult getCommentList(@RequestParam(name="offset",defaultValue="0") Integer offset,@PathVariable(name = "type") Integer type){
 		Integer page = offset/(new PageInfo().getPageSize()) +1;
 		Map<String, Object> map = resourceCommentService.getCommentList(type,page);
 		return new JsonResult(true, map);

@@ -53,13 +53,13 @@ public interface ResourceCommentDao {
 	 * @param pageSize 
 	 * @return
 	 */
-	public List<ResourceComment> getCommentList(@Param("type")String type, @Param("pageSize")int pageSize, @Param("startIndex")int startIndex);
+	public List<ResourceComment> getCommentList(@Param("type")Integer type, @Param("pageSize")int pageSize, @Param("startIndex")int startIndex);
 	/**
 	 * 
 	 * @param type   类型 类型1专家、2合作机构、3行业协会、4技术报告、5方案、6一起设备
 	 * @return
 	 */
-	public int getCommentListCount(@Param("type")String type);
+	public int getCommentListCount(@Param("type")Integer type);
 	
 	
 }

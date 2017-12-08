@@ -23,16 +23,18 @@ public class ResourceComment {
 	private Integer deleted;
 	private String delete_by;
 	private String delete_date;
+	private String name;//资源库标题
 	
 	private Object object;
 	
 	public ResourceComment() {
-		super();
 	}
+
+
 
 	public ResourceComment(Integer id, Integer type, String resource_id, String comment, String comment_date,
 			String comment_by, String comment_username, Integer status, String enjoy_date, String enjoy_by,
-			String enjoy_username, Integer deleted, String delete_by, String delete_date, Object object) {
+			String enjoy_username, Integer deleted, String delete_by, String delete_date, String name, Object object) {
 		super();
 		this.id = id;
 		this.type = type;
@@ -48,8 +50,23 @@ public class ResourceComment {
 		this.deleted = deleted;
 		this.delete_by = delete_by;
 		this.delete_date = delete_date;
+		this.name = name;
 		this.object = object;
 	}
+
+
+
+	public String getName() {
+		return name;
+	}
+
+
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+
 
 	public Integer getId() {
 		return id;
