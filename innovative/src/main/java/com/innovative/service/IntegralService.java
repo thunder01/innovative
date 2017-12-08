@@ -6,6 +6,7 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import com.innovative.utils.DateUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -187,10 +188,11 @@ public class IntegralService {
 			int weektotalCount = integralDao.getCountThisWeek(userid);
 			map.put("weektotalCount",weektotalCount);//当周数量
 			//map.put("items", weeklist);
-			List<Integral> list = integralDao.getThisMonthIntegralDetail(userid, pageInfo.getStartIndex(), pageInfo.getPageSize());
-			int mouthtotalCount = integralDao.getCountThisMonth(userid);
+			List<Integral> list = integralDao.getSumIntegralDetail(userid, pageInfo.getStartIndex(), pageInfo.getPageSize());
+			int mouthtotalCount = integralDao.getCountThisMonth(userid, DateUtil.getFirstDay());
 			map.put("mouthtotalCount",mouthtotalCount);//当月数量
 			map.put("items",list);//积分明细list
+		    map.put("totalCount",integralDao.gettotalCount(userid));
             map.put("sum",integralDao.sumCount(userid));//总共数量
             map.put("Count", pageInfo.getPageSize());
             map.put("itemCount", pageInfo.getPageSize());

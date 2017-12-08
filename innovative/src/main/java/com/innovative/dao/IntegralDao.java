@@ -71,7 +71,9 @@ public interface IntegralDao {
 	 * @return
 	 */
 	public List<Integral> getThisMonthIntegralDetail(@Param("userid")String userid,@Param("startIndex") Integer startIndex, @Param("pageSize") Integer pageSize);
-	public int getCountThisMonth(String userid);
+	public List<Integral> getSumIntegralDetail(@Param("userid")String userid,@Param("startIndex") Integer startIndex, @Param("pageSize") Integer pageSize);
+	public  int gettotalCount(String userid);
+	public int getCountThisMonth(@Param("userid") String userid,@Param("startDate") String startDate);
 	public  int sumCount(String userid);
 	/**
 	 * type=5的创新资源的当天的进入次数resource_id即uuid不会重复  

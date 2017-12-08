@@ -56,11 +56,11 @@
 	
 	<!-- 获取用户当天的积分明细 -->
 	<select id="getThisDayIntegralDetail" parameterType="map" resultMap="integralMap">
-		SELECT * FROM xacx_integral WHERE create_date BETWEEN CURRENT_DATE AND CURRENT_DATE+1 
+		SELECT * FROM xacx_integral WHERE create_date BETWEEN CURRENT_DATE AND CURRENT_DATE+1
 		AND userid=#{userid} AND integral!=0 ORDER BY create_date DESC LIMIT #{pageSize} OFFSET #{startIndex}
 	</select>
 	<select id="getCountThisDay" parameterType="string" resultType="int">
-		SELECT COUNT(userid) FROM xacx_integral WHERE create_date BETWEEN CURRENT_DATE AND CURRENT_DATE+1 
+		SELECT COUNT(userid) FROM xacx_integral WHERE create_date BETWEEN CURRENT_DATE AND CURRENT_DATE+1
 		AND userid=#{userid} AND integral!=0
 	</select>
 	
@@ -81,8 +81,22 @@
 			userid=#{userid} AND integral!=0 ORDER BY create_date DESC LIMIT #{pageSize} OFFSET #{startIndex}
 		</where>
 	</select>
-	<select id="getCountThisMonth" parameterType="string" resultType="int">
-		SELECT count(userid) FROM xacx_integral WHERE create_date BETWEEN CURRENT_DATE+1 AND TO_DATE(TO_CHAR(now(),'YYYY-MM') ,'YYYY-MM') 
+	<!-- 获取用户总的积分明细 -->
+	<select id="getSumIntegralDetail" parameterType="map" resultMap="integralMap">
+		select gral.* from xacx_integral gral
+		<where>
+			userid=#{userid} AND integral!=0 ORDER BY create_date DESC LIMIT #{pageSize} OFFSET #{startIndex}
+		</where>
+	</select>
+	<!-- 获取用户的积分明细的数量 -->
+	<select id="gettotalCount" resultType="int">
+		select count(1) from xacx_integral gral
+		<where>
+			userid=#{userid} AND integral!=0
+		</where>
+	</select>
+	<select id="getCountThisMonth" resultType="int">
+		SELECT count(1) FROM xacx_integral WHERE to_char(create_date, 'yyyy-MM-dd') BETWEEN #{startDate} AND to_char(now(), 'yyyy-MM-dd')
 		AND userid=#{userid} AND integral!=0
 	</select>
 	<!-- 获得当前资源创新进入的次数 -->
