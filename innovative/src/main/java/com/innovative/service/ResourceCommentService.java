@@ -181,5 +181,18 @@ public class ResourceCommentService {
 		map.put("comments", list);
 		return map;
 	}
+	/**
+	 * 获取资源库的留言(根据类型区别资源库)
+	 */
+	public Map<String, Object> getCommentList(String type,Integer page) {
+		PageInfo pageInfo = new PageInfo();
+        pageInfo.setCurrentPageNum(page);
+		List<ResourceComment> list = resourceCommentDao.getCommentList(type,pageInfo.getPageSize(),pageInfo.getStartIndex());
+		int totalCount = resourceCommentDao.getCommentListCount(type);
+		Map<String, Object> map = new HashMap<>();
+		map.put("count", totalCount);
+		map.put("comments", list);
+		return map;
+	}
 
 }

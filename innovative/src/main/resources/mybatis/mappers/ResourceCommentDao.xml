@@ -23,8 +23,8 @@
 	
 	<!-- 添加一个评论 -->
 	<insert id="addResourceComment" useGeneratedKeys="true" keyProperty="id" parameterType="ResourceComment">
-		INSERT INTO xacx_resource_comment(type,resource_id,comment,comment_date,comment_by,comment_username,status,deleted)
-		VALUES(#{type},#{resource_id},#{comment},now(),#{comment_by},#{comment_username},0,0)
+		INSERT INTO xacx_resource_comment(type,resource_id,comment,comment_by,comment_username,status,deleted)
+		VALUES(#{type},#{resource_id},#{comment},#{comment_by},#{comment_username},0,0)
 	</insert>
 	
 	<!-- 打赏一个评论 -->
@@ -52,5 +52,32 @@
 	<!-- 通过id查询评论信息 -->
 	<select id="getResourceComment" parameterType="int" resultMap="resourceCommentMap">
 		SELECT * FROM xacx_resource_comment WHERE id= #{id}
+	</select>
+	
+	<select id="getCommentList" parameterType="map" resultMap="resourceCommentMap">
+	  	select com."type",com.resource_id,com."comment",com.comment_date,us.username comment_by,
+		CASE WHEN com."type"='1' THEN e."Name"
+		     WHEN  com."type"='2' THEN org."Name"
+		     WHEN  com."type"='3' THEN ass."Name"
+				 WHEN  com."type"='4' THEN te."Name"
+				 WHEN  com."type"='5' THEN so."Name"
+				 WHEN  com."type"='6' THEN equ."Name"
+				 ELSE 'other' 
+		 END as "name"
+		from xacx_resource_comment com 
+		  left join xacx_user us on us.pernr= com.comment_by
+		  left join "Experts" e on e."Id" = com.resource_id
+		  left join "Associations" ass on ass."Id" = com.resource_id
+		  left join "Organizations" org on org."Id" = com.resource_id
+		  left join "Equipments" equ on equ."Id" = com.resource_id
+		  left join "Solutions" so on so."Id" = com.resource_id
+		  left join "TechnicalReports" te on te."Id" = com.resource_id
+		 where com.type =#{type}
+	LIMIT #{pageSize} OFFSET #{startIndex}
+	</select>
+	
+		<!-- 查询不同资源类型的资源的总数 -->
+	<select id="getCommentListCount" parameterType="map" resultType="int">
+		SELECT COUNT(*) FROM xacx_resource_comment WHERE type=#{type} 
 	</select>
 </mapper>

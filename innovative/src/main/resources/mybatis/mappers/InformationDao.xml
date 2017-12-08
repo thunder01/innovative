@@ -160,7 +160,7 @@
 				"state" = #{state}
 			</if>
 		</where>
-		order by "createAt" DESC
+		order by "state" asc,"createAt" DESC
 		limit #{pageSize} offset #{startIndex}
 	</select>
 	

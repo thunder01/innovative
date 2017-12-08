@@ -68,4 +68,18 @@ public class ResourceCommentController {
 		Map<String, Object> map = resourceCommentService.getComments(type, resource_id, pageNum);
 		return new JsonResult(true, map);
 	}
+	
+	/**
+	 * 后台获取所有的资源评论
+	 * @param offset
+	 * @param type
+	 * @param resource_id
+	 * @return
+	 */
+	@RequestMapping(value = "/getCommentList/{type}", method = RequestMethod.GET)
+	public JsonResult getCommentList(@RequestParam(name="offset",defaultValue="0") Integer offset,@PathVariable(name = "type") String type){
+		Integer page = offset/(new PageInfo().getPageSize()) +1;
+		Map<String, Object> map = resourceCommentService.getCommentList(type,page);
+		return new JsonResult(true, map);
+	}
 }

@@ -129,7 +129,7 @@
 				"state" = #{state}
 			</if>
 		</where>
-		order by "updateAt" DESC
+		order by "state" asc, "updateAt" DESC
 		limit #{pageSize} offset #{startIndex}
 	</select>
 
